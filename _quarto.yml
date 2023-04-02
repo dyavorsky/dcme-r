@@ -2,13 +2,24 @@ project:
   type: book
 
 book:
-  title: "dcms-r"
-  author: "Jane Doe"
-  date: "4/2/2023"
+  title: "R Companion to Discrete Choice Methods with Simulation"
+  author: "Dan Yavorsky"
+  date: "1/1/2023"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - 01_intro.qmd
+    - 03_logit.qmd
+    - 04_gev.qmd
+    - 05_probit.qmd
+    - 06_mixed_logit.qmd
+    - 07_variations.qmd
+    - 08_maximization.qmd
+    - 09_densities.qmd
+    - 10_sim_estimation.qmd
+    - 11_indiv_params.qmd
+    - 12_bayesian.qmd
+    - 13_endogeneity.qmd
+    - 14_em_algo.qmd
     - references.qmd
 
 bibliography: references.bib
