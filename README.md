@@ -1,4 +1,6 @@
-# R Companion to Ken Train's Discrete Choice Methods with Simulation
+# R Companion to 
+
+### Ken Train's Discrete Choice Methods with Simulation
 
 This is a work in progress and (quite obviously) is extremely preliminary.
 
