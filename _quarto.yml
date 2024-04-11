@@ -5,6 +5,7 @@ book:
   title: "R Companion to Discrete Choice Methods with Simulation"
   author: "Dan Yavorsky"
   date: "1/1/2023"
+  url: dcms-r.danyavorsky.com
   chapters:
     - index.qmd
     - 01_intro.qmd
