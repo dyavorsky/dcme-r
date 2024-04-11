@@ -1,35 +1,50 @@
 project:
   type: book
-
-book:
-  title: "R Companion to Discrete Choice Methods with Simulation"
-  author: "Dan Yavorsky"
-  date: "2024"
-  url: dcms-r.danyavorsky.com
-  chapters:
-    - index.qmd
-    - 01_intro.qmd
-    - 03_logit.qmd
-    - 04_gev.qmd
-    - 05_probit.qmd
-    - 06_mixed_logit.qmd
-    - 07_variations.qmd
-    - 08_maximization.qmd
-    - 09_densities.qmd
-    - 10_sim_estimation.qmd
-    - 11_indiv_params.qmd
-    - 12_bayesian.qmd
-    - 13_endogeneity.qmd
-    - 14_em_algo.qmd
-    - references.qmd
-
-bibliography: references.bib
+  output-dir: docs
 
 format:
   html:
+    toc: true
     theme: cosmo
   pdf:
     documentclass: scrreprt
+
+execute:
+  freeze: auto
+  keep-md: false
+
+resources:
+  - CNAME
+
+book:
+  title: "R Companion to Discrete Choice Methods with Simulation"
+  author: 
+    - name: "Dan Yavorsky"
+      orcid: 0000-0003-4095-6405
+      email: dyavorsky@gmail.com
+  date: last-modified
+  site-url: dcms-r.danyavorsky.com
+  repo-url: https://github.com/dyavorsky/dcms-r
+  reader-mode: true
+  bread-crumbs: false
+  chapters:
+    - index.qmd
+    - chapters/01_intro.qmd
+    - chapters/03_logit.qmd
+    - chapters/04_gev.qmd
+    - chapters/05_probit.qmd
+    - chapters/06_mixed_logit.qmd
+    - chapters/07_variations.qmd
+    - chapters/08_maximization.qmd
+    - chapters/09_densities.qmd
+    - chapters/10_sim_estimation.qmd
+    - chapters/11_indiv_params.qmd
+    - chapters/12_bayesian.qmd
+    - chapters/13_endogeneity.qmd
+    - chapters/14_em_algo.qmd
+    - chapters/references.qmd
+
+bibliography: references.bib
 
 
 
