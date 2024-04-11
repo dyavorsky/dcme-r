@@ -4,7 +4,7 @@ project:
 book:
   title: "R Companion to Discrete Choice Methods with Simulation"
   author: "Dan Yavorsky"
-  date: "1/1/2023"
+  date: "2024"
   url: dcms-r.danyavorsky.com
   chapters:
     - index.qmd

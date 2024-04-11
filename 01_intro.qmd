@@ -2,8 +2,6 @@
 
 This is a book created from markdown and executable code.
 
-See @knuth84 for additional discussion of literate programming.
+It's the R Companion to the book _Discrete Choice Methods with Simulation_ (@train2009).
 
-```{r}
-1 + 1
-```
+

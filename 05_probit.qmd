@@ -1,9 +1,4 @@
-# Introduction
+# Probit
 
-This is a book created from markdown and executable code.
+add
 
-See @knuth84 for additional discussion of literate programming.
-
-```{r}
-1 + 1
-```
