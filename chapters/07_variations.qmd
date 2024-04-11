@@ -1,3 +1,3 @@
-# Variation on a Theme
+# Variation on a Theme {#sec-variations}
 
 add

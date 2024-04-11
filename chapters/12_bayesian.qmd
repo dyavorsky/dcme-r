@@ -1,4 +1,4 @@
-# Bayesian Procedures
+# Bayesian Procedures {#sec-bayesian}
 
 add
 

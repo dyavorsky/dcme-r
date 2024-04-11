@@ -5,7 +5,9 @@ project:
 format:
   html:
     toc: true
-    theme: cosmo
+    theme: 
+      light: cosmo
+      dark: darkly
   pdf:
     documentclass: scrreprt
 
@@ -25,24 +27,43 @@ book:
   date: last-modified
   site-url: dcms-r.danyavorsky.com
   repo-url: https://github.com/dyavorsky/dcms-r
-  reader-mode: true
-  bread-crumbs: false
+  repo-actions: edit
+  bread-crumbs: true
+
+  sidebar:
+    search: true
+    style: "docked"
+    border: true
+
   chapters:
     - index.qmd
-    - chapters/01_intro.qmd
-    - chapters/03_logit.qmd
-    - chapters/04_gev.qmd
-    - chapters/05_probit.qmd
-    - chapters/06_mixed_logit.qmd
-    - chapters/07_variations.qmd
-    - chapters/08_maximization.qmd
-    - chapters/09_densities.qmd
-    - chapters/10_sim_estimation.qmd
-    - chapters/11_indiv_params.qmd
-    - chapters/12_bayesian.qmd
-    - chapters/13_endogeneity.qmd
-    - chapters/14_em_algo.qmd
-    - chapters/references.qmd
+
+    - part: "Introduction"
+      chapters: 
+      - chapters/01_intro.qmd
+      - chapters/02_properties.qmd
+
+    - part: "Behavioral Models"
+      chapters:
+      - chapters/03_logit.qmd
+      - chapters/04_gev.qmd
+      - chapters/05_probit.qmd
+      - chapters/06_mixed_logit.qmd
+      - chapters/07_variations.qmd
+      - chapters/08_maximization.qmd
+
+    - part: "Estimation"
+      chapters:
+      - chapters/09_densities.qmd
+      - chapters/10_sim_estimation.qmd
+      - chapters/11_indiv_params.qmd
+      - chapters/12_bayesian.qmd
+      - chapters/13_endogeneity.qmd
+      - chapters/14_em_algo.qmd
+      - chapters/references.qmd
+
+  appendices:
+   - chapters/appendix.qmd
 
 bibliography: references.bib
 
