@@ -1,0 +1,188 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "R Companion to Discrete Choice Methods with Simulation",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "chapters/01_intro.html",
+    "href": "chapters/01_intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code.\nIt’s the R Companion to the book Discrete Choice Methods with Simulation (Train (2009)).\n\n\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with Simulation. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02_properties.html",
+    "href": "chapters/02_properties.html",
+    "title": "2  Properties of Discrete Choice Models",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Introduction",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Properties of Discrete Choice Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03_logit.html",
+    "href": "chapters/03_logit.html",
+    "title": "3  Logit",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Logit</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_gev.html",
+    "href": "chapters/04_gev.html",
+    "title": "4  GEV",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>GEV</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_probit.html",
+    "href": "chapters/05_probit.html",
+    "title": "5  Probit",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Probit</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_mixed_logit.html",
+    "href": "chapters/06_mixed_logit.html",
+    "title": "6  Mixed Logit",
+    "section": "",
+    "text": "add ```",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Mixed Logit</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_variations.html",
+    "href": "chapters/07_variations.html",
+    "title": "7  Variation on a Theme",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Variation on a Theme</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_maximization.html",
+    "href": "chapters/08_maximization.html",
+    "title": "8  Numerical Maximization",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Behavioral Models",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Numerical Maximization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_densities.html",
+    "href": "chapters/09_densities.html",
+    "title": "9  Drawing from Densities",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_sim_estimation.html",
+    "href": "chapters/10_sim_estimation.html",
+    "title": "10  Simulation-Assisted Estimation",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Simulation-Assisted Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_indiv_params.html",
+    "href": "chapters/11_indiv_params.html",
+    "title": "11  Individual-Level Parameters",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Individual-Level Parameters</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_bayesian.html",
+    "href": "chapters/12_bayesian.html",
+    "title": "12  Bayesian Procedures",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Bayesian Procedures</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_endogeneity.html",
+    "href": "chapters/13_endogeneity.html",
+    "title": "13  Endogeneity",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Endogeneity</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_em_algo.html",
+    "href": "chapters/14_em_algo.html",
+    "title": "14  EM Algorithms",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Estimation",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>EM Algorithms</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/references.html",
+    "href": "chapters/references.html",
+    "title": "References",
+    "section": "",
+    "text": "Train, Kenneth E. 2009. Discrete Choice Methods with\nSimulation. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.",
+    "crumbs": [
+      "Estimation",
+      "References"
+    ]
+  },
+  {
+    "objectID": "chapters/appendix.html",
+    "href": "chapters/appendix.html",
+    "title": "Appendix A — Appendix",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Appendix</span>"
+    ]
+  }
+]
