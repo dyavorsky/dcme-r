@@ -29,6 +29,7 @@ book:
   repo-url: https://github.com/dyavorsky/dcms-r
   repo-actions: edit
   bread-crumbs: true
+  downloads: [pdf]
 
   sidebar:
     search: true
