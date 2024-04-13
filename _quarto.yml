@@ -24,7 +24,7 @@ book:
     - name: "Dan Yavorsky"
       orcid: 0000-0003-4095-6405
       email: dyavorsky@gmail.com
-  date: last-modified
+  #date: last-modified
   site-url: dcms-r.danyavorsky.com
   repo-url: https://github.com/dyavorsky/dcms-r
   repo-actions: edit
