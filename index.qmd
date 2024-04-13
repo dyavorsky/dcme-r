@@ -6,7 +6,11 @@ It's a mantra that my mentors instilled in me in graduate school, and one that I
 
 This is something you learn to do in graduate school. But no one teaches it to you! Instead, it's a skill that students develop independently and inefficiently between classes and assignment due dates. There is a tremendous imbalance between how immensely important this skill is and the lack of time and instruction dedicated to it.[^1] That imbalance is the motivation for this book.
 
-[^1]: What I'm talking about is the field of statistical computing. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas @mcelreath2018.
+To emphasize this point, page 2 of the preface to @train2009 indicates that "Whenever appropriate, researchers should use availabale codes rather than writing their own. However, the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An imporatant goal of the book is to teach these skills as an integral part of the exposition of the models themselves." Then @train2009 exposits 286 additional pages on choice modeling without providing a single line of code. I am almost univerally enthusiastic, positive, and supportive about Train's book, but this is the one area where the book falls short.[^2] What is "not that difficult" for Train is immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty.
+
+[^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas @mcelreath2018.
+
+[^2]: Train provides Matlab code on his website. In addition, there is some pseudo-code on page 5. But most often, the reader gets a treatment similar to that on page 84: "Computer routines are available in commercial software packages for estimating nested models by maximum likelihood. Hensher and Greene (2002) provide a guide for nested logits using available software." This simply does not achieve the important goal to teach computation and programming skills as an integral part of the choice models.
 
 ## How to read this book
 
@@ -18,17 +22,17 @@ In addition, I strongly encourage you write or copy the code as you work though 
 
 ## Prerequisites
 
-This book is intended for a narrow audience, predominently graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read @train2009 and thought "how would I code that?"
+This book is intended for a narrow audience, predominently graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read @train2009 and thought _how would I code that?_
 
-I assume you are reasonably familiar with R, a freely available software environment for statistical computing and graphics. I also assume you have taken statistics or econometrics courses that introduced the method of maximum likelihood, Bayesian statistics, and limited dependent variable regression models. 
+I assume you are reasonably familiar with R, a freely available software environment for statistical computing and graphics. I also assume you have taken statistics or econometrics courses that introduced the method of maximum likelihood, Bayesian statistics, and limited dependent variable regression models. You don't need to be an expert in these methods or models, but I assume you have at least encountered them before.
 
 ## Acknowledgments
 
-add:
+I am immensely greatful to the teams that work on the R-Project, those at Posit who provide RStudio and Quarto, and the related communities of developers, academics, and R users. The free tools they provide and the welcoming communities they have established are both exceptional.
 
-- R, Posit, Quarto, Sawtooth, and related communities
-- Ken, Ella, Peter, Eric, Prachi
-- Alison, Zach, Ben
+I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, and Keith Chrzan. I have learned so much from their guidance and often their written work. 
+
+Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their patience.
 
 ## Colophon
 
