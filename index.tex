@@ -175,6 +175,22 @@
 \newcommand{\y}{\mathbf{y}}
 \KOMAoption{captions}{tableheading}
 \makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
 \@ifpackageloaded{bookmark}{}{\usepackage{bookmark}}
 \makeatother
 \makeatletter
@@ -255,6 +271,14 @@
 
 \markboth{Welcome}{Welcome}
 
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, colback=white, breakable, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, leftrule=.75mm, coltitle=black, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, toprule=.15mm, arc=.35mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}]
+
+This is an early draft. The book is incomplete. Every aspect of it is
+subject to change. Many things might be incorrect. Are you sure you want
+to read this yet?
+
+\end{tcolorbox}
+
 \begin{quote}
 You don't understand it, until you have coded it.
 \end{quote}
@@ -269,37 +293,40 @@ model, you need to be able to simulate data from the model, and then
 take that simulated data to an estimation routine that enables you to
 recover the parameters of interest.
 
-This is something you learn to do in graduate school. But no one teaches
-it to you! Instead, it's a skill that students develop independently and
-inefficiently between classes and assignment due dates. There is a
-tremendous imbalance between how immensely important this skill is and
-the lack of time and instruction dedicated to it.\footnote{In this
-  context, a \emph{closed-form expression} means a way of writing the
-  integral so that the anti-derivative sign is not part of solution. For
-  example, the closed for expression of \(\int x \, dx\) is \(x^2/2\)
+This is something you learn to do in graduate school. But, unless you
+have one of the most caring and pedagogical advisors, no one teaches it
+to you! Instead, it's a skill that students develop independently and
+inefficiently between classes and assignment due dates or, in my case,
+after I was knee-deep in my dissertation research. There is a tremendous
+imbalance between how immensely important this skill is and the lack of
+time and instruction dedicated to it.\footnote{In this context, a
+  \emph{closed-form expression} means a way of writing the integral so
+  that the anti-derivative sign is not part of solution. For example,
+  the integral \(\int x \, dx\) has the closed for expression \(x^2/2\)
   plus some constant. We will see later that the Extreme Value
   distribution is often chosen for \(f\) predominently because it leads
   to a closed for expression for the choice probability \(p(y|x)\).}
 That imbalance is the motivation for this book.
 
-Indeed, Train and I align in our thinking: ``Whenever appropriate,
-researchers should use availabale codes rather than writing their own.
-However, the true value of the new approach to choice modeling is the
-ability to create tailor-made models. The computation and programming
-steps that are needed to implement a new model are usually not
-difficult. An important goal of the book is to teach these skills as an
-integral part of the exposition of the models themselves.'' To that end,
-Train provides pseudo-code throughout his book and makes Matlab code
-available on his website. This text takes it a step further.
+Indeed, Train and I align in our thinking: ``\ldots the true value of
+the new approach to choice modeling is the ability to create tailor-made
+models. The computation and programming steps that are needed to
+implement a new model are usually not difficult. An important goal of
+the book is to teach these skills as an integral part of the exposition
+of the models themselves.''\footnote{More precisely,
+  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5)\vert_{0.5}^1 = 0.25\).}
+To that end, Train provides pseudo-code throughout his book and
+generously makes Matlab code available on his website.
 
-What is ``not that difficult'' for an experienced researcher can be
-immensely difficult for a typical graduate student. The aim of this book
-is to ease that difficulty. I demonstrate R code alongside the math. You
-will see Train's pseudo-code transformed into working R code. No
-mysteries will remain. To quote Quintilian, Cobbett, Cooke, and many
-others: my goal is to take you through the process of programming the
-simulation and estimation of discrete choice models not so that you can
-understand, but so that you cannot possibly misunderstand.
+This text takes it a step further. What is ``not that difficult'' for an
+experienced researcher can be immensely difficult for a typical graduate
+student. The aim of this book is to ease that difficulty. I demonstrate
+R code alongside the math. You will see Train's pseudo-code transformed
+into working R code. No mysteries will remain. To quote Quintilian,
+Cobbett, Cooke, and many others: my goal is to take you through the
+process of programming the simulation and estimation of discrete choice
+models not so that you can understand, but so that you cannot possibly
+misunderstand.
 
 \section*{How to read this book}\label{how-to-read-this-book}
 \addcontentsline{toc}{section}{How to read this book}
@@ -338,13 +365,57 @@ of the multinomial logit and its extended family of related models. In
 other words, someone who read Train (2009) and thought \emph{how would I
 code that?}
 
-I assume you are reasonably familiar with R, a freely available software
-environment for statistical computing and graphics. I also assume you
-have taken statistics or econometrics courses that introduced the method
-of maximum likelihood, Bayesian statistics, and limited dependent
-variable regression models. You don't need to be an expert in these
-methods or models, but I assume you have at least encountered them
-before.
+We will simulate data from the statistical models and then estimate the
+parameters of those models from the simulated data. We will do all of
+this in R, a freely available software environment for statistical
+computing and graphics. As a result, I assume you are reasonably
+familiar with R. If not, there is a tremendous set of free online R
+resources collected and organized at \url{https://www.bigbookofr.com/}.
+Popular books include \href{https://r4ds.hadley.nz/}{R for Data Science}
+and \href{https://adv-r.hadley.nz/}{Advanced R}.
+
+I also assume you have taken introductory statistics or econometrics
+courses, as the concepts and techniques taught there are foundational
+for understanding and estimating the discrete choice models covered by
+Train (2009). In particular, you should have no uncertainty about the
+difference between a model, the estimator, and the estimate. To briefly
+review:
+
+\begin{itemize}
+\tightlist
+\item
+  a \emph{model} is the set of mathematical assumptions about how data
+  are generated,
+\item
+  the \emph{estimator} (or equivalently, the estimation routine) is an
+  algorithm or function of the data, and
+\item
+  the \emph{estimate} is the result of applying the estimator to a
+  particular dataset.
+\end{itemize}
+
+In my experience, students are often given a model and estimator, after
+which much time in the classroom is spent deriving properties of the
+estimator for that particular model, and then a homework assignment asks
+students to implement the estimator on a dataset to find an estimate.
+This approach puts almost no emphasis on the specification of the model
+or the choice of estimator. For example, should part of the model be
+specified as \(\beta_0 + \beta_1x_1\) or should it be
+\(\beta_0 + \beta_1x_1 + \beta_2x_2\)? And once we have specified a
+model, should we estimate it via least squares, the method of moments,
+maximum likelihood, a Bayesian approach, or some other way?
+
+If my description captures your experience in introductory statistics
+and econometrics courses and you would like to review key ideas, I
+highly recommend
+\href{https://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458}{Abramovich
+\& Ritov} on the topic of mathematical statistics,
+\href{https://www.amazon.com/Course-Econometrics-Arthur-S-Goldberger/dp/0674175441}{Golderberger}
+and
+\href{https://www.amazon.com/Guide-Econometrics-6th-Peter-Kennedy/dp/1405182571/}{Kennedy}
+for econometrics, and
+\href{https://xcelab.net/rm/statistical-rethinking/}{McElreath} for
+Bayesian statistics.
 
 \section*{Acknowledgments}\label{acknowledgments}
 \addcontentsline{toc}{section}{Acknowledgments}
@@ -361,6 +432,10 @@ and (although we have yet to meet) Kenneth Train as well as the folks
 that tolerate me through my consulting work, including Prachi Bhalerao,
 June Wu, Chris Diener, and Keith Chrzan. I have learned so much from
 their guidance and often their written work.
+
+Special thanks go to generous people who reviewed and assisted with
+drafts of this book, including Darren Aeillo, Kalyan Rallabandi, and
+Geoff Zheng.
 
 Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their
 patience and support.
@@ -381,6 +456,25 @@ combine text and executible code.
 \part{Introduction}
 
 \chapter{Introduction}\label{sec-introduction}
+
+It is instructive to start with the first sentence of Train (2009)
+Section 1.3, ``Discrete choice analysis consists of two interrelated
+tasks: \textbf{specification} of the behavioral model and
+\textbf{estimation} of the parameters of that model'' (emphasis added).
+In particular, chapters 1 and 2 of Train (2009) only specify models;
+there is not even a hint of model estimation. And since I follow Train
+(2009), we too begin with a focus on model specification.
+
+Let me be clear: many students will see \(y\) and \(x\) later in this
+section and immediate think about ``fitting'' a regression model; that
+is, they assume they have data that they will put into an estimation
+routine to find estimates of the parameters of the model. We are not
+there yet! At this early stage in the book, we are only specifying
+models; that is, listing sets of assumptions about data generating
+processes and exploring the implications of those assumptions. There is
+no data yet. There might be parameters introduced in our choice of
+model, but even if so, we are not estimating those parameters yet. Have
+patience, we will eventually do these things.
 
 \section{Recap of Train Ch. 1}\label{recap-of-train-ch.-1}
 
@@ -410,34 +504,41 @@ For certain special choices of \(h\) and \(f\), a closed-form expression
 for the integral is available.\footnote{In this context, a
   \emph{closed-form expression} means a way of writing the integral so
   that the anti-derivative sign is not part of solution. For example,
-  the closed for expression of \(\int x \, dx\) is \(x^2/2\) plus some
-  constant. We will see later that the Extreme Value distribution is
-  often chosen for \(f\) predominently because it leads to a closed for
-  expression for the choice probability \(p(y|x)\).} But more generally,
-for almost any choice of \(h\) and \(f\), we can approximate the
-integral through simulation. Train provides psuedo code on how to do so:
+  the integral \(\int x \, dx\) has the closed for expression \(x^2/2\)
+  plus some constant. We will see later that the Extreme Value
+  distribution is often chosen for \(f\) predominently because it leads
+  to a closed for expression for the choice probability \(p(y|x)\).} But
+more generally, for almost any choice of \(h\) and \(f\), we can
+approximate the integral through simulation. Train provides psuedo code
+on how to do so:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
-  Take a draw of \(\varepsilon\) from \(f(\varepsilon)\). Label this
-  draw \(\varepsilon^1\), where the superscript denotes that itis the
-  first draw.
+  Repeat the following two steps many (\(r=1, \ldots, R\)) times:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Draw \(\varepsilon^r\) from \(f(\varepsilon)\).
+  \item
+    Determine whether \(h(x,\varepsilon^r) = y\). If so, set \(I^r=1\);
+    else set \(I^r=0\).
+  \end{itemize}
 \item
-  Determine whether \(h(x,\varepsilon^1) = y\) with this value of
-  \(\varepsilon\). If so, create \(I^1=1\); otherwise set \(I^1=0\).
-\item
-  Repeat steps 1 and 2 many times, for a total of \(R\) draws. The
-  indicator for each draw is laveled \(I^r\) for \(r=1, \ldots, R\).
+  Average the \(R\) values of \(I^r\)
 \end{enumerate}
+
+Next we look at two examples where we use this procedure to approximate
+the \(p(y|x)\) integral.
 
 \section{A Simple Example}\label{sec-simple_example}
 
-Let's set up a toy example to demonstrate how simulation can approximate
-the integral. Suppose \(x=0.5\) and \(\varepsilon\) is uniformly
-distributed between \(-1\) and \(1\). Define \(h(x, \varepsilon)\) to
-be:
+Let's first set up a toy example to demonstrate how simulation can
+approximate the \(p(y|x)\) integral. Suppose \(x=0.5\) and
+\(\varepsilon\) is uniformly distributed between \(-1\) and \(1\).
+Define \(h(x, \varepsilon)\) to be:
 
 \begin{equation}\phantomsection\label{eq-h_uniform}{
 h(x, \varepsilon) = 
@@ -451,9 +552,10 @@ h(x, \varepsilon) =
 We'll focus on the outcome \(y=2\). You can probably intuit that the
 \(p(y=2 | x) = 0.25\) since only one quarter of the time will
 \(\varepsilon\) be sufficiently positive to make
-\(x + \varepsilon > 1\). Nevertheless, let's approximate the integral
-representation of \(p(y=2|x)\) through simulation to ensure we
-understand the process.
+\(x + \varepsilon > 1\).\footnote{More precisely,
+  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5)\vert_{0.5}^1 = 0.25\).}
+Nevertheless, let's approximate the integral representation of
+\(p(y=2|x)\) through simulation to ensure we understand the process.
 
 To walk you through the code, we first set a seed so that the
 pseudo-random numbers generated by \texttt{runif()} can be replicated
@@ -463,8 +565,8 @@ vector \texttt{I} to hold our results. The simulation occurs via a
 \texttt{for()} loop where each time through the loop we take a draw of
 \(\varepsilon\), calculate \(0.5 + \varepsilon\) and check whether that
 sum is greater than one. If so, then \(h(x,\varepsilon)=2\) matching the
-value of \(y\) for the choice probability we want to assess
-(\(p(y=2|x)\)) and thus we store a \(1\) in the \(r^\textrm{th}\)
+value of \(y\) for the choice probability we want to assess --- i.e.,
+\(p(y=2|x)\) --- and thus we store a \(1\) in the \(r^\textrm{th}\)
 position of \texttt{I}; otherwise we store a 0.
 
 \begin{Shaded}
@@ -487,13 +589,13 @@ position of \texttt{I}; otherwise we store a 0.
 [1] 0.258
 \end{verbatim}
 
-The simulated value 0.26 is close to exact value 0.25 and can be made
+The simulated value 0.258 is close to exact value 0.25 and can be made
 closer by increasing the number of draws used in the simulation.
 
 R users will recognize that we can simplify the code by taking advantage
-of R's vectorized functions and it's conversion of boolean values to 0/1
+of R's vectorized functions and its conversion of boolean values to 0/1
 when used in mathematical operations. Here is a shorter implementation
-of the simulation. Whether it's ``better'' code is a matter of
+of the simulation; whether it's ``better'' code is a matter of
 preference.
 
 \begin{Shaded}
@@ -509,10 +611,96 @@ preference.
 \end{verbatim}
 
 That's it. If you can generate pseudo-random draws from the density
-\(f\) and you know \(h\), this simulation requires only a handful of
-lines of code.
+\(f\) and you know \(h\), approximating a choice probability by
+simulation requires only a handful of lines of code.
 
 \section{A Binary Logit Model Example}\label{sec-binary_logit}
+
+As an example of a model with a complete closed-form solution, Train
+provides the binary logit model.
+
+The ``binary'' part refers to the aspect of the model whereby the
+decision maker does one of two things; they either take an action
+\(y=1\) or not \(y=0\). To tie this model into a framework of behavior,
+we start with a utility function \(U\). In Train's specific example,
+utility is specified as
+
+\begin{equation}\phantomsection\label{eq-u_binlogit}{
+U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = \mathbf{x}'\boldsymbol{\beta}+ \varepsilon
+}\end{equation}
+
+where \(\mathbf{x}\) is a vector of observable information,
+\(\boldsymbol{\beta}\) is a vector of parameters that through the
+functional form \(\mathbf{x}'\boldsymbol{\beta}\) effectively serve as
+weights on the \(\mathbf{x}\) variables, and \(\varepsilon\) is a scalar
+index collecting the value of information used by the decision maker but
+unobserved to the researcher.
+
+In this model, the threshold for action is 0. That is, we can specify
+\(h\) as:
+
+\begin{equation}\phantomsection\label{eq-h_binlogit}{
+h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = 
+    \begin{cases}
+        0  & \text{if } U \le 0 \\
+        1  & \text{if } U > 0 
+    \end{cases}
+}\end{equation}
+
+The ``logit'' part of the model's name refers to the choice of \(f\). We
+have assumed \(f\) is the logistic distribution:
+
+\begin{equation}\phantomsection\label{eq-bin_logistic_dist}{
+f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
+}\end{equation}
+
+Having specified \(h\) and \(f\), let's choose some values for
+\(\mathbf{x}\) and \(\boldsymbol{\beta}\) and use simulation to
+approximate the integral for \(p(y|\mathbf{x},\bfbbeta)\). Let's pick
+\(\mathbf{x}=(0.5, 2)\) and \(\boldsymbol{\beta}=(3,-1)\). We know from
+the closed-form solution to this model that, with these values of
+\(\mathbf{x}\) and \(\boldsymbol{\beta}\), the probability the decision
+maker takes action is:
+
+\begin{equation}\phantomsection\label{eq-binlogit_example}{
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\boldsymbol{\beta}'\mathbf{x}}}{1 + e^{\boldsymbol{\beta}'\mathbf{x}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
+}\end{equation}
+
+We can approximate this integral as before. Below I use
+\texttt{rlogis()} to take \texttt{R=1,000} draws from the binary
+logistic distribution, and we approximate the integral with the
+proportion of times \(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon > 0\):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{2345}\NormalTok{)}
+\NormalTok{R }\OtherTok{\textless{}{-}} \DecValTok{1000}
+
+\NormalTok{x    }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\DecValTok{2}\NormalTok{)}
+\NormalTok{beta }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+
+\NormalTok{U }\OtherTok{\textless{}{-}} \FunctionTok{as.vector}\NormalTok{(x }\SpecialCharTok{\%*\%}\NormalTok{ beta) }\SpecialCharTok{+} \FunctionTok{rlogis}\NormalTok{(R)}
+\FunctionTok{mean}\NormalTok{(U }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.364
+\end{verbatim}
+
+Our simulated value 0.364 approximates the exact value of the integral
+0.378.
+
+\section{Key Learnings}\label{key-learnings}
+
+The core learning from this chapter is that with discrete choice models
+our focus is on the \emph{probability} of outcome \(y\). That outcome
+result from the distribution of unobserved factors
+\(\boldsymbol{\varepsilon}\) and the behavior model \(h\) that relates
+\(y\) to \((\mathbf{x}, \boldsymbol{\varepsilon})\). The probability
+\(p(y|x)\) can occasionally and for only very special choices of \(f\)
+and \(h\) be written in closed form, but for almost any choice of \(f\)
+and \(h\) we can simulate \(p(y|x)\).
 
 \chapter{Properties of Discrete Choice Models}\label{sec-properties}
 
