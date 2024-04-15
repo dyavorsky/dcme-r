@@ -20,27 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -91,6 +105,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -285,7 +328,15 @@ div.csl-indent {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#recap-of-train-ch.-1" id="toc-recap-of-train-ch.-1" class="nav-link active" data-scroll-target="#recap-of-train-ch.-1"><span class="header-section-number">1.1</span> Recap of Train Ch. 1</a></li>
+  <li><a href="#sec-simple_example" id="toc-sec-simple_example" class="nav-link" data-scroll-target="#sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</a></li>
+  <li><a href="#sec-binary_logit" id="toc-sec-binary_logit" class="nav-link" data-scroll-target="#sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcms-r/edit/main/chapters/01_intro.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -309,15 +360,77 @@ div.csl-indent {
 </header>
 
 
-<p>This is a book created from markdown and executable code.</p>
-<p>It’s the R Companion to the book <em>Discrete Choice Methods with Simulation</em> (<span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>).</p>
-
-
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-train2009" class="csl-entry" role="listitem">
-Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+<section id="recap-of-train-ch.-1" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="recap-of-train-ch.-1"><span class="header-section-number">1.1</span> Recap of Train Ch. 1</h2>
+<p>Train denotes the outcome in any given situation as <span class="math inline">\(y\)</span>, determined by some observable factors collected in the vector <span class="math inline">\(\mathbf{x}\)</span> and some unobservable factors collected in the vector <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. The factors (<span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) relate to the agent’s choice (<span class="math inline">\(y\)</span>) through a function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. We assume for the moment that we know <span class="math inline">\(h(\cdot)\)</span> and that <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are length-one vectors (i.e., scalars) denoted <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Since we do not observe <span class="math inline">\(\varepsilon\)</span>, we can’t predit <span class="math inline">\(y\)</span> exactly. Instead, we focus on the probability of <span class="math inline">\(y\)</span>, that is:</p>
+<p><span id="eq-int_indicator"><span class="math display">\[
+\begin{align}
+p(y|x)
+&amp;= \Pr \left( \varepsilon \textrm{ such that } h(x,\varepsilon)=y \right) \\
+&amp;= \Pr \left( I \left[ h(x,\varepsilon)=y \right] = 1 \right) \\
+&amp;= \int I \left[ h(x,\varepsilon)=y \right] f(\varepsilon) \, d\varepsilon
+\end{align}
+\tag{1.1}\]</span></span></p>
+<p>For certain special choices of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, a closed-form expression for the integral is available.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> But more generally, for almost any choice of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, we can approximate the integral through simulation. Train provides psuedo code on how to do so:</p>
+<ol type="1">
+<li>Take a draw of <span class="math inline">\(\varepsilon\)</span> from <span class="math inline">\(f(\varepsilon)\)</span>. Label this draw <span class="math inline">\(\varepsilon^1\)</span>, where the superscript denotes that itis the first draw.</li>
+<li>Determine whether <span class="math inline">\(h(x,\varepsilon^1) = y\)</span> with this value of <span class="math inline">\(\varepsilon\)</span>. If so, create <span class="math inline">\(I^1=1\)</span>; otherwise set <span class="math inline">\(I^1=0\)</span>.</li>
+<li>Repeat steps 1 and 2 many times, for a total of <span class="math inline">\(R\)</span> draws. The indicator for each draw is laveled <span class="math inline">\(I^r\)</span> for <span class="math inline">\(r=1, \ldots, R\)</span>.</li>
+</ol>
+</section>
+<section id="sec-simple_example" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</h2>
+<p>Let’s set up a toy example to demonstrate how simulation can approximate the integral. Suppose <span class="math inline">\(x=0.5\)</span> and <span class="math inline">\(\varepsilon\)</span> is uniformly distributed between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>. Define <span class="math inline">\(h(x, \varepsilon)\)</span> to be:</p>
+<p><span id="eq-h_uniform"><span class="math display">\[
+h(x, \varepsilon) =
+    \begin{cases}
+        0  &amp; \text{if } x + \varepsilon &lt; 0 \\
+        1  &amp; \text{if } x + \varepsilon \in [0,1] \\
+        2  &amp; \text{if } x + \varepsilon &gt; 1
+    \end{cases}
+\tag{1.2}\]</span></span></p>
+<p>We’ll focus on the outcome <span class="math inline">\(y=2\)</span>. You can probably intuit that the <span class="math inline">\(p(y=2 | x) = 0.25\)</span> since only one quarter of the time will <span class="math inline">\(\varepsilon\)</span> be sufficiently positive to make <span class="math inline">\(x + \varepsilon &gt; 1\)</span>. Nevertheless, let’s approximate the integral representation of <span class="math inline">\(p(y=2|x)\)</span> through simulation to ensure we understand the process.</p>
+<p>To walk you through the code, we first set a seed so that the pseudo-random numbers generated by <code>runif()</code> can be replicated exactly each time the code is run (even on different computers). We then specify that we will use 1,000 draws in the simulation and we create an vector <code>I</code> to hold our results. The simulation occurs via a <code>for()</code> loop where each time through the loop we take a draw of <span class="math inline">\(\varepsilon\)</span>, calculate <span class="math inline">\(0.5 + \varepsilon\)</span> and check whether that sum is greater than one. If so, then <span class="math inline">\(h(x,\varepsilon)=2\)</span> matching the value of <span class="math inline">\(y\)</span> for the choice probability we want to assess (<span class="math inline">\(p(y=2|x)\)</span>) and thus we store a <span class="math inline">\(1\)</span> in the <span class="math inline">\(r^\textrm{th}\)</span> position of <code>I</code>; otherwise we store a 0.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">length=</span>R)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    eps  <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    h    <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> eps </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    I[r] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(h <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(I)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.258</code></pre>
 </div>
 </div>
+<p>The simulated value 0.26 is close to exact value 0.25 and can be made closer by increasing the number of draws used in the simulation.</p>
+<p>R users will recognize that we can simplify the code by taking advantage of R’s vectorized functions and it’s conversion of boolean values to 0/1 when used in mathematical operations. Here is a shorter implementation of the simulation. Whether it’s “better” code is a matter of preference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( <span class="fu">runif</span>(R, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">&gt;</span> <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.258</code></pre>
+</div>
+</div>
+<p>That’s it. If you can generate pseudo-random draws from the density <span class="math inline">\(f\)</span> and you know <span class="math inline">\(h\)</span>, this simulation requires only a handful of lines of code.</p>
+</section>
+<section id="sec-binary_logit" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</h2>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>In this context, a <em>closed-form expression</em> means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the closed for expression of <span class="math inline">\(\int x \, dx\)</span> is <span class="math inline">\(x^2/2\)</span> plus some constant. We will see later that the Extreme Value distribution is often chosen for <span class="math inline">\(f\)</span> predominently because it leads to a closed for expression for the choice probability <span class="math inline">\(p(y|x)\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -890,4 +1003,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcms-r/edit/main/chapters/01_intro.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyavorsky/dcms-r/edit/main/chapters/01_intro.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>

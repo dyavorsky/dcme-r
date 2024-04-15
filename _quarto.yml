@@ -10,6 +10,10 @@ format:
       dark: darkly
   pdf:
     documentclass: scrreprt
+    pdf-engine: pdflatex
+    mathspec: true
+    include-in-header:
+      - "latex-header.tex"
 
 execute:
   freeze: auto

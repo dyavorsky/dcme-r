@@ -6,11 +6,12 @@ It's a mantra that my mentors instilled in me in graduate school, and one that I
 
 This is something you learn to do in graduate school. But no one teaches it to you! Instead, it's a skill that students develop independently and inefficiently between classes and assignment due dates. There is a tremendous imbalance between how immensely important this skill is and the lack of time and instruction dedicated to it.[^1] That imbalance is the motivation for this book.
 
-To emphasize this point, page 2 of the preface to @train2009 indicates that "Whenever appropriate, researchers should use availabale codes rather than writing their own. However, the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An imporatant goal of the book is to teach these skills as an integral part of the exposition of the models themselves." Then @train2009 exposits 286 additional pages on choice modeling without providing a single line of code. I am almost univerally enthusiastic, positive, and supportive about Train's book, but this is the one area where the book falls short.[^2] What is "not that difficult" for Train is immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty.
+Indeed, Train and I align in our thinking: "Whenever appropriate, researchers should use availabale codes rather than writing their own. However, the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An important goal of the book is to teach these skills as an integral part of the exposition of the models themselves." To that end, Train provides pseudo-code throughout his book and makes Matlab code available on his website. This text takes it a step further. 
+
+What is "not that difficult" for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see Train's pseudo-code transformed into working R code. No mysteries will remain. To quote Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.
 
 [^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas @mcelreath2018.
 
-[^2]: Train provides Matlab code on his website. In addition, there is some pseudo-code on page 5. But most often, the reader gets a treatment similar to that on page 84: "Computer routines are available in commercial software packages for estimating nested models by maximum likelihood. Hensher and Greene (2002) provide a guide for nested logits using available software." This simply does not achieve the important goal to teach computation and programming skills as an integral part of the choice models.
 
 ## How to read this book
 
@@ -32,8 +33,8 @@ I am immensely greatful to the teams that work on the R-Project, those at Posit 
 
 I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, and Keith Chrzan. I have learned so much from their guidance and often their written work. 
 
-Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their patience.
+Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their patience and support.
 
 ## Colophon
 
-An online version of this book is available at <https://dcms-r.danyavorsky.com>. The source of the book is available at <https://github.com/dyavorsky/dcms-r>. The book is authored using [Quarto](https://quarto.org), an open-source scientific and technical publishing system that makes it easy to create articles, presentations, websites, book and other publications that combine text and executible code.
+An online version of this book is available at <https://dcms-r.danyavorsky.com>. The source of the book is available at <https://github.com/dyavorsky/dcms-r>. The book is authored using [Quarto](https://quarto.org), an open-source scientific and technical publishing system that makes it easy to create articles, presentations, websites, books, and other publications that combine text and executible code.
