@@ -271,7 +271,7 @@
 
 \markboth{Welcome}{Welcome}
 
-\begin{tcolorbox}[enhanced jigsaw, opacityback=0, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, bottomrule=.15mm, colback=white, breakable, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, leftrule=.75mm, coltitle=black, bottomtitle=1mm, toptitle=1mm, titlerule=0mm, toprule=.15mm, arc=.35mm, opacitybacktitle=0.6, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}]
+\begin{tcolorbox}[enhanced jigsaw, breakable, bottomtitle=1mm, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, coltitle=black, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, toptitle=1mm, colback=white, titlerule=0mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, arc=.35mm]
 
 This is an early draft. The book is incomplete. Every aspect of it is
 subject to change. Many things might be incorrect. Are you sure you want
@@ -656,11 +656,11 @@ f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
 
 Having specified \(h\) and \(f\), let's choose some values for
 \(\mathbf{x}\) and \(\boldsymbol{\beta}\) and use simulation to
-approximate the integral for \(p(y|\mathbf{x},\bfbbeta)\). Let's pick
-\(\mathbf{x}=(0.5, 2)\) and \(\boldsymbol{\beta}=(3,-1)\). We know from
-the closed-form solution to this model that, with these values of
-\(\mathbf{x}\) and \(\boldsymbol{\beta}\), the probability the decision
-maker takes action is:
+approximate the integral for \(p(y|\mathbf{x},\boldsymbol{\beta})\).
+Let's pick \(\mathbf{x}=(0.5, 2)\) and \(\boldsymbol{\beta}=(3,-1)\). We
+know from the closed-form solution to this model that, with these values
+of \(\mathbf{x}\) and \(\boldsymbol{\beta}\), the probability the
+decision maker takes action is:
 
 \begin{equation}\phantomsection\label{eq-binlogit_example}{
 p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\boldsymbol{\beta}'\mathbf{x}}}{1 + e^{\boldsymbol{\beta}'\mathbf{x}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
