@@ -11,19 +11,21 @@ It's a mantra that my mentors instilled in me in graduate school, and one that I
 
 This is something you learn to do in graduate school. But, unless you have one of the most caring and pedagogical advisors, no one teaches it to you! Instead, it's a skill that students develop independently and inefficiently between classes and assignment due dates or, in my case, after I was knee-deep in my dissertation research. There is a tremendous imbalance between how immensely important this skill is and the lack of time and instruction dedicated to it.[^1] That imbalance is the motivation for this book.
 
-Indeed, Train and I align in our thinking: "...the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An important goal of the book is to teach these skills as an integral part of the exposition of the models themselves."[^2] To that end, Train provides pseudo-code throughout his book and generously makes Matlab code available on his website. 
+I address this gap in the specific domain of Discrete Choice Modeling. I do so alongside Kenneth Train's masterful text _Discrete Choice Methods with Simulation_ (Second Edition) freely available online at <https://eml.berkeley.edu/books/choice2.html>. 
 
-This text takes it a step further. What is "not that difficult" for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see Train's pseudo-code transformed into working R code. No mysteries will remain. To quote Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.
+Train and I align in our thinking: 
 
-[^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas @mcelreath2018.
+> "...the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An important goal of the book is to teach these skills as an integral part of the exposition of the models themselves."[^2] 
 
-[^2]: @train2009 pg 2.
+What is "not that difficult" for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see Train's pseudo-code transformed into working R code. No mysteries will remain. The goal, in fact, is to provide you with much of the same instruction that Train's students received when taking his course. To quote Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.
+
+[^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas in @mcelreath2018.
+
+[^2]: @train2009 pg 2. Train provides pseudo-code throughout his book and generously makes Matlab code available on his website.
 
 ## How to read this book
 
-As the title suggests, the structure, topics, and organization of this book parallel Kenneth Train's masterful text _Discrete Choice Methods with Simulation_ (Second Edition) freely available online at <https://eml.berkeley.edu/books/choice2.html>. 
-
-You should read --- or most likely, re-read --- one chapter from @train2009 and then read and work through the corresponding chapter here, alternating between our texts. Do not simply read this book from start to finish without frequenly returning to @train2009. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process. 
+As the title suggests, the structure, topics, and organization of this book parallel @train2009. You should read --- or most likely, re-read --- one chapter from @train2009 and then read and work through the corresponding chapter here, alternating between our texts. Do not simply read this book from start to finish without frequenly returning to @train2009. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process. 
 
 In addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I'm not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.
 
@@ -39,7 +41,7 @@ I also assume you have taken introductory statistics or econometrics courses, as
  - the _estimator_ (or equivalently, the estimation routine) is an algorithm or function of the data, and
  - the _estimate_ is the result of applying the estimator to a particular dataset.
 
-In my experience, students are often given a model and estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model, and then a homework assignment asks students to implement the estimator on a dataset to find an estimate. This approach puts almost no emphasis on the specification of the model or the choice of estimator. For example, should part of the model be specified as $\beta_0 + \beta_1x_1$ or should it be $\beta_0 + \beta_1x_1 + \beta_2x_2$? And once we have specified a model, should we estimate it via least squares, the method of moments, maximum likelihood, a Bayesian approach, or some other way?
+In my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model, and then a homework assignment asks students to implement the estimator on a dataset to find an estimate. This approach puts almost no emphasis on the specification of the model or the choice of estimator. For example, should part of the model be specified as $\beta_0 + \beta_1x_1$ or should it be $\beta_0 + \beta_1x_1 + \beta_2x_2$? And once we have specified a model, should we estimate it via least squares, the method of moments, maximum likelihood, a Bayesian approach, or some other way?
 
 If my description captures your experience in introductory statistics and econometrics courses and you would like to review key ideas, I highly recommend [Abramovich & Ritov](https://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458) on the topic of mathematical statistics, [Golderberger](https://www.amazon.com/Course-Econometrics-Arthur-S-Goldberger/dp/0674175441) and [Kennedy](https://www.amazon.com/Guide-Econometrics-6th-Peter-Kennedy/dp/1405182571/) for econometrics, and [McElreath](https://xcelab.net/rm/statistical-rethinking/) for Bayesian statistics.
 
@@ -48,7 +50,7 @@ If my description captures your experience in introductory statistics and econom
 
 I am immensely greatful to the teams that work on the R-Project, those at Posit who provide RStudio and Quarto, and the related communities of developers, academics, and R users. The free tools they provide and the welcoming communities they have established are both exceptional.
 
-I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, and Keith Chrzan. I have learned so much from their guidance and often their written work. 
+I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, Keith Chrzan, and the hosts and attendees of Sawtooth Software's annual Analytics and Insights Summit. I have learned so much from these researcher's guidance and often their written work. 
 
 Special thanks go to generous people who reviewed and assisted with drafts of this book, including Darren Aeillo, Kalyan Rallabandi, and Geoff Zheng.
 

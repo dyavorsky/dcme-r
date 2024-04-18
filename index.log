@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.4.13)  16 APR 2024 13:00
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.4.17)  18 APR 2024 15:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1025,15 +1025,15 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 308.
 [3
 
-{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc}{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 387.
+{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/fontawesome5/fa5free1.enc}{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}] [4]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 391.
 (c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [4] [5{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6]
+) [5{c:/Users/DanYavorsky/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}] [6]
 part I.
 Package scrkbase Info: You've told me to use the font selection of the element
 (scrkbase)             `partprefix' that is an alias of element `partnumber'
-(scrkbase)              on input line 456.
+(scrkbase)              on input line 461.
 [7
 
 ]
@@ -1061,14 +1061,14 @@ See the amsmath package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.500 \end{align}
+l.505 \end{align}
                   
 Here is how much of TeX's memory you used:
- 37118 strings out of 476003
- 752392 string characters out of 5788383
- 1937496 words of memory out of 5000000
+ 37122 strings out of 476003
+ 752436 string characters out of 5788383
+ 1938496 words of memory out of 5000000
  58445 multiletter control sequences out of 15000+600000
- 701813 words of font info for 239 fonts, out of 8000000 for 9000
+ 701973 words of font info for 241 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  108i,8n,107p,10900b,947s stack positions out of 10000i,1000n,20000p,200000b,200000s
 

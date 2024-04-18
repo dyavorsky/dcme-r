@@ -382,7 +382,7 @@ window.Quarto = {
 
 
 <p>It is instructive to start with the first sentence of <span class="citation" data-cites="train2009">Train (<a href="#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 1.3, “Discrete choice analysis consists of two interrelated tasks: <strong>specification</strong> of the behavioral model and <strong>estimation</strong> of the parameters of that model” (emphasis added). In particular, chapters 1 and 2 of <span class="citation" data-cites="train2009">Train (<a href="#ref-train2009" role="doc-biblioref">2009</a>)</span> only specify models; there is not even a hint of model estimation. And since I follow <span class="citation" data-cites="train2009">Train (<a href="#ref-train2009" role="doc-biblioref">2009</a>)</span>, we too begin with a focus on model specification.</p>
-<p>Let me be clear: many students will see <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> later in this section and immediate think about “fitting” a regression model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There is no data yet. There might be parameters introduced in our choice of model, but even if so, we are not estimating those parameters yet. Have patience, we will eventually do these things.</p>
+<p>Let me be clear: many students will see <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> later in this section and immediate think about “fitting” a regression model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There is no data yet. There might be parameters introduced in our choice of model, but even if so, we are not yet estimating those parameters. Have patience, we will eventually do these things.</p>
 <section id="recap-of-train-ch.-1" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="recap-of-train-ch.-1"><span class="header-section-number">1.1</span> Recap of Train Ch. 1</h2>
 <p>Train denotes the outcome in any given situation as <span class="math inline">\(y\)</span>, determined by some observable factors collected in the vector <span class="math inline">\(\mathbf{x}\)</span> and some unobservable factors collected in the vector <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. The factors (<span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) relate to the agent’s choice (<span class="math inline">\(y\)</span>) through a function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. We assume for the moment that we know <span class="math inline">\(h(\cdot)\)</span> and that <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are length-one vectors (i.e., scalars) denoted <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span>.</p>
@@ -399,10 +399,10 @@ p(y|x)
 <ol type="1">
 <li>Repeat the following two steps many (<span class="math inline">\(r=1, \ldots, R\)</span>) times:
 <ul>
-<li>Draw <span class="math inline">\(\varepsilon^r\)</span> from <span class="math inline">\(f(\varepsilon)\)</span>.</li>
-<li>Determine whether <span class="math inline">\(h(x,\varepsilon^r) = y\)</span>. If so, set <span class="math inline">\(I^r=1\)</span>; else set <span class="math inline">\(I^r=0\)</span>.</li>
+<li>Draw <span class="math inline">\(\varepsilon^{(r)}\)</span> from <span class="math inline">\(f(\varepsilon)\)</span>.</li>
+<li>Determine whether <span class="math inline">\(h(x,\varepsilon^{(r)}) = y\)</span>. If so, set <span class="math inline">\(I^{(r)}=1\)</span>; else set <span class="math inline">\(I^{(r)}=0\)</span>.</li>
 </ul></li>
-<li>Average the <span class="math inline">\(R\)</span> values of <span class="math inline">\(I^r\)</span></li>
+<li>Average the <span class="math inline">\(R\)</span> values of <span class="math inline">\(I^{(r)}\)</span></li>
 </ol>
 <p>Next we look at two examples where we use this procedure to approximate the <span class="math inline">\(p(y|x)\)</span> integral.</p>
 </section>
@@ -450,11 +450,11 @@ h(x, \varepsilon) =
 <section id="sec-binary_logit" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</h2>
 <p>As an example of a model with a complete closed-form solution, Train provides the binary logit model.</p>
-<p>The “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action <span class="math inline">\(y=1\)</span> or not <span class="math inline">\(y=0\)</span>. To tie this model into a framework of behavior, we start with a utility function <span class="math inline">\(U\)</span>. In Train’s specific example, utility is specified as</p>
+<p>The “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (<span class="math inline">\(y=1\)</span>) or not (<span class="math inline">\(y=0\)</span>). To tie this model into a framework of behavior, we start with a utility function <span class="math inline">\(U\)</span>. In Train’s specific example, utility is specified as</p>
 <p><span id="eq-u_binlogit"><span class="math display">\[
 U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = \mathbf{x}'\boldsymbol{\beta}+ \varepsilon
 \tag{1.3}\]</span></span></p>
-<p>where <span class="math inline">\(\mathbf{x}\)</span> is a vector of observable information, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of parameters that through the functional form <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span> effectively serve as weights on the <span class="math inline">\(\mathbf{x}\)</span> variables, and <span class="math inline">\(\varepsilon\)</span> is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher.</p>
+<p>where <span class="math inline">\(\mathbf{x}\)</span> is a vector of observable explanatory variables, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of parameters that through the functional form <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span> effectively serve as weights on the covariates, and <span class="math inline">\(\varepsilon\)</span> is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher.</p>
 <p>In this model, the threshold for action is 0. That is, we can specify <span class="math inline">\(h\)</span> as:</p>
 <p><span id="eq-h_binlogit"><span class="math display">\[
 h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
@@ -463,15 +463,15 @@ h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
         1  &amp; \text{if } U &gt; 0
     \end{cases}
 \tag{1.4}\]</span></span></p>
-<p>The “logit” part of the model’s name refers to the choice of <span class="math inline">\(f\)</span>. We have assumed <span class="math inline">\(f\)</span> is the logistic distribution:</p>
+<p>The “logit” part of the model’s name refers to the choice of <span class="math inline">\(f\)</span>. The binary logit model assumes <span class="math inline">\(f\)</span> is the logistic distribution:</p>
 <p><span id="eq-bin_logistic_dist"><span class="math display">\[
 f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
 \tag{1.5}\]</span></span></p>
-<p>Having specified <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, let’s choose some values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span> and use simulation to approximate the integral for <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span>. Let’s pick <span class="math inline">\(\mathbf{x}=(0.5, 2)\)</span> and <span class="math inline">\(\boldsymbol{\beta}=(3,-1)\)</span>. We know from the closed-form solution to this model that, with these values of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>, the probability the decision maker takes action is:</p>
+<p>Having specified <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, let’s choose some values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span> and use simulation to approximate the integral for <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span>. Let’s pick <span class="math inline">\(\mathbf{x}=(0.5, 2)\)</span> and <span class="math inline">\(\boldsymbol{\beta}=(3,-1)\)</span> such that <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\)</span>. We know from the closed-form solution to this model that, with these values of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>, the probability the decision maker takes action is:</p>
 <p><span id="eq-binlogit_example"><span class="math display">\[
-p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\boldsymbol{\beta}'\mathbf{x}}}{1 + e^{\boldsymbol{\beta}'\mathbf{x}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}'\boldsymbol{\beta}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
 \tag{1.6}\]</span></span></p>
-<p>We can approximate this integral as before. Below I use <code>rlogis()</code> to take <code>R=1,000</code> draws from the binary logistic distribution, and we approximate the integral with the proportion of times <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon &gt; 0\)</span>:</p>
+<p>We can approximate this integral as before. Below I use <code>rlogis()</code> to take <code>R=1000</code> draws from the binary logistic distribution, and we approximate the integral with the proportion of times <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon\)</span> is greater than <span class="math inline">\(0\)</span>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2345</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
@@ -489,7 +489,7 @@ p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\boldsymbol{\beta}'\mathbf{x}
 </section>
 <section id="key-learnings" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">1.4</span> Key Learnings</h2>
-<p>The core learning from this chapter is that with discrete choice models our focus is on the <em>probability</em> of outcome <span class="math inline">\(y\)</span>. That outcome result from the distribution of unobserved factors <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and the behavior model <span class="math inline">\(h\)</span> that relates <span class="math inline">\(y\)</span> to <span class="math inline">\((\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. The probability <span class="math inline">\(p(y|x)\)</span> can occasionally and for only very special choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span> be written in closed form, but for almost any choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span> we can simulate <span class="math inline">\(p(y|x)\)</span>.</p>
+<p>The core learning from this chapter is that with discrete choice models our focus is on the <em>probability</em> of outcome <span class="math inline">\(y\)</span>. That outcome results from the distribution <span class="math inline">\(f\)</span> of unobserved factors <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and the behavior model <span class="math inline">\(h\)</span> that relates <span class="math inline">\(y\)</span> to <span class="math inline">\((\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. The probability <span class="math inline">\(p(y|x)\)</span> can occasionally be written in closed form for only very special choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span>, but for almost any choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span> we can simulate <span class="math inline">\(p(y|x)\)</span>.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -502,7 +502,7 @@ Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. Cambri
 <hr>
 <ol>
 <li id="fn1"><p>In this context, a <em>closed-form expression</em> means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral <span class="math inline">\(\int x \, dx\)</span> has the closed for expression <span class="math inline">\(x^2/2\)</span> plus some constant. We will see later that the Extreme Value distribution is often chosen for <span class="math inline">\(f\)</span> predominently because it leads to a closed for expression for the choice probability <span class="math inline">\(p(y|x)\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>More precisely, <span class="math inline">\(p(y=2|x) = \Pr(\varepsilon &gt; 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5)\vert_{0.5}^1 = 0.25\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>More precisely, <span class="math inline">\(p(y=2|x) = \Pr(\varepsilon &gt; 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5\varepsilon)\vert_{0.5}^1 = 0.25\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

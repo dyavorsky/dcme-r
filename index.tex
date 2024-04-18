@@ -271,7 +271,7 @@
 
 \markboth{Welcome}{Welcome}
 
-\begin{tcolorbox}[enhanced jigsaw, breakable, bottomtitle=1mm, rightrule=.15mm, bottomrule=.15mm, colframe=quarto-callout-warning-color-frame, opacityback=0, colbacktitle=quarto-callout-warning-color!10!white, left=2mm, coltitle=black, leftrule=.75mm, opacitybacktitle=0.6, toprule=.15mm, toptitle=1mm, colback=white, titlerule=0mm, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, arc=.35mm]
+\begin{tcolorbox}[enhanced jigsaw, opacityback=0, bottomtitle=1mm, bottomrule=.15mm, colback=white, toptitle=1mm, breakable, opacitybacktitle=0.6, arc=.35mm, leftrule=.75mm, rightrule=.15mm, colframe=quarto-callout-warning-color-frame, title=\textcolor{quarto-callout-warning-color}{\faExclamationTriangle}\hspace{0.5em}{Warning}, colbacktitle=quarto-callout-warning-color!10!white, coltitle=black, left=2mm, toprule=.15mm, titlerule=0mm]
 
 This is an early draft. The book is incomplete. Every aspect of it is
 subject to change. Many things might be incorrect. Are you sure you want
@@ -308,25 +308,33 @@ time and instruction dedicated to it.\footnote{In this context, a
   to a closed for expression for the choice probability \(p(y|x)\).}
 That imbalance is the motivation for this book.
 
-Indeed, Train and I align in our thinking: ``\ldots the true value of
-the new approach to choice modeling is the ability to create tailor-made
-models. The computation and programming steps that are needed to
-implement a new model are usually not difficult. An important goal of
-the book is to teach these skills as an integral part of the exposition
-of the models themselves.''\footnote{More precisely,
-  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5)\vert_{0.5}^1 = 0.25\).}
-To that end, Train provides pseudo-code throughout his book and
-generously makes Matlab code available on his website.
+I address this gap in the specific domain of Discrete Choice Modeling. I
+do so alongside Kenneth Train's masterful text \emph{Discrete Choice
+Methods with Simulation} (Second Edition) freely available online at
+\url{https://eml.berkeley.edu/books/choice2.html}.
 
-This text takes it a step further. What is ``not that difficult'' for an
-experienced researcher can be immensely difficult for a typical graduate
-student. The aim of this book is to ease that difficulty. I demonstrate
-R code alongside the math. You will see Train's pseudo-code transformed
-into working R code. No mysteries will remain. To quote Quintilian,
-Cobbett, Cooke, and many others: my goal is to take you through the
-process of programming the simulation and estimation of discrete choice
-models not so that you can understand, but so that you cannot possibly
-misunderstand.
+Train and I align in our thinking:
+
+\begin{quote}
+``\ldots the true value of the new approach to choice modeling is the
+ability to create tailor-made models. The computation and programming
+steps that are needed to implement a new model are usually not
+difficult. An important goal of the book is to teach these skills as an
+integral part of the exposition of the models themselves.''\footnote{More
+  precisely,
+  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5\varepsilon)\vert_{0.5}^1 = 0.25\).}
+\end{quote}
+
+What is ``not that difficult'' for an experienced researcher can be
+immensely difficult for a typical graduate student. The aim of this book
+is to ease that difficulty. I demonstrate R code alongside the math. You
+will see Train's pseudo-code transformed into working R code. No
+mysteries will remain. The goal, in fact, is to provide you with much of
+the same instruction that Train's students received when taking his
+course. To quote Quintilian, Cobbett, Cooke, and many others: my goal is
+to take you through the process of programming the simulation and
+estimation of discrete choice models not so that you can understand, but
+so that you cannot possibly misunderstand.
 
 \section*{How to read this book}\label{how-to-read-this-book}
 \addcontentsline{toc}{section}{How to read this book}
@@ -334,16 +342,12 @@ misunderstand.
 \markright{How to read this book}
 
 As the title suggests, the structure, topics, and organization of this
-book parallel Kenneth Train's masterful text \emph{Discrete Choice
-Methods with Simulation} (Second Edition) freely available online at
-\url{https://eml.berkeley.edu/books/choice2.html}.
-
-You should read --- or most likely, re-read --- one chapter from Train
-(2009) and then read and work through the corresponding chapter here,
-alternating between our texts. Do not simply read this book from start
-to finish without frequenly returning to Train (2009). Doing so only
-deprives you of the intended experience and likely dramatically reduces
-the amount you will learn from the process.
+book parallel Train (2009). You should read --- or most likely, re-read
+--- one chapter from Train (2009) and then read and work through the
+corresponding chapter here, alternating between our texts. Do not simply
+read this book from start to finish without frequenly returning to Train
+(2009). Doing so only deprives you of the intended experience and likely
+dramatically reduces the amount you will learn from the process.
 
 In addition, I strongly encourage you write or copy the code as you work
 though this book. I would mandate this if I could, but I'm not sitting
@@ -394,13 +398,13 @@ review:
   particular dataset.
 \end{itemize}
 
-In my experience, students are often given a model and estimator, after
-which much time in the classroom is spent deriving properties of the
-estimator for that particular model, and then a homework assignment asks
-students to implement the estimator on a dataset to find an estimate.
-This approach puts almost no emphasis on the specification of the model
-or the choice of estimator. For example, should part of the model be
-specified as \(\beta_0 + \beta_1x_1\) or should it be
+In my experience, students are often given a model and an estimator,
+after which much time in the classroom is spent deriving properties of
+the estimator for that particular model, and then a homework assignment
+asks students to implement the estimator on a dataset to find an
+estimate. This approach puts almost no emphasis on the specification of
+the model or the choice of estimator. For example, should part of the
+model be specified as \(\beta_0 + \beta_1x_1\) or should it be
 \(\beta_0 + \beta_1x_1 + \beta_2x_2\)? And once we have specified a
 model, should we estimate it via least squares, the method of moments,
 maximum likelihood, a Bayesian approach, or some other way?
@@ -430,8 +434,9 @@ welcoming communities they have established are both exceptional.
 I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow,
 and (although we have yet to meet) Kenneth Train as well as the folks
 that tolerate me through my consulting work, including Prachi Bhalerao,
-June Wu, Chris Diener, and Keith Chrzan. I have learned so much from
-their guidance and often their written work.
+June Wu, Chris Diener, Keith Chrzan, and the hosts and attendees of
+Sawtooth Software's annual Analytics and Insights Summit. I have learned
+so much from these researcher's guidance and often their written work.
 
 Special thanks go to generous people who reviewed and assisted with
 drafts of this book, including Darren Aeillo, Kalyan Rallabandi, and
@@ -473,7 +478,7 @@ there yet! At this early stage in the book, we are only specifying
 models; that is, listing sets of assumptions about data generating
 processes and exploring the implications of those assumptions. There is
 no data yet. There might be parameters introduced in our choice of
-model, but even if so, we are not estimating those parameters yet. Have
+model, but even if so, we are not yet estimating those parameters. Have
 patience, we will eventually do these things.
 
 \section{Recap of Train Ch. 1}\label{recap-of-train-ch.-1}
@@ -521,13 +526,13 @@ on how to do so:
   \begin{itemize}
   \tightlist
   \item
-    Draw \(\varepsilon^r\) from \(f(\varepsilon)\).
+    Draw \(\varepsilon^{(r)}\) from \(f(\varepsilon)\).
   \item
-    Determine whether \(h(x,\varepsilon^r) = y\). If so, set \(I^r=1\);
-    else set \(I^r=0\).
+    Determine whether \(h(x,\varepsilon^{(r)}) = y\). If so, set
+    \(I^{(r)}=1\); else set \(I^{(r)}=0\).
   \end{itemize}
 \item
-  Average the \(R\) values of \(I^r\)
+  Average the \(R\) values of \(I^{(r)}\)
 \end{enumerate}
 
 Next we look at two examples where we use this procedure to approximate
@@ -553,7 +558,7 @@ We'll focus on the outcome \(y=2\). You can probably intuit that the
 \(p(y=2 | x) = 0.25\) since only one quarter of the time will
 \(\varepsilon\) be sufficiently positive to make
 \(x + \varepsilon > 1\).\footnote{More precisely,
-  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5)\vert_{0.5}^1 = 0.25\).}
+  \(p(y=2|x) = \Pr(\varepsilon > 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5\varepsilon)\vert_{0.5}^1 = 0.25\).}
 Nevertheless, let's approximate the integral representation of
 \(p(y=2|x)\) through simulation to ensure we understand the process.
 
@@ -621,19 +626,19 @@ provides the binary logit model.
 
 The ``binary'' part refers to the aspect of the model whereby the
 decision maker does one of two things; they either take an action
-\(y=1\) or not \(y=0\). To tie this model into a framework of behavior,
-we start with a utility function \(U\). In Train's specific example,
-utility is specified as
+(\(y=1\)) or not (\(y=0\)). To tie this model into a framework of
+behavior, we start with a utility function \(U\). In Train's specific
+example, utility is specified as
 
 \begin{equation}\phantomsection\label{eq-u_binlogit}{
 U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = \mathbf{x}'\boldsymbol{\beta}+ \varepsilon
 }\end{equation}
 
-where \(\mathbf{x}\) is a vector of observable information,
+where \(\mathbf{x}\) is a vector of observable explanatory variables,
 \(\boldsymbol{\beta}\) is a vector of parameters that through the
 functional form \(\mathbf{x}'\boldsymbol{\beta}\) effectively serve as
-weights on the \(\mathbf{x}\) variables, and \(\varepsilon\) is a scalar
-index collecting the value of information used by the decision maker but
+weights on the covariates, and \(\varepsilon\) is a scalar index
+collecting the value of information used by the decision maker but
 unobserved to the researcher.
 
 In this model, the threshold for action is 0. That is, we can specify
@@ -647,8 +652,8 @@ h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
     \end{cases}
 }\end{equation}
 
-The ``logit'' part of the model's name refers to the choice of \(f\). We
-have assumed \(f\) is the logistic distribution:
+The ``logit'' part of the model's name refers to the choice of \(f\).
+The binary logit model assumes \(f\) is the logistic distribution:
 
 \begin{equation}\phantomsection\label{eq-bin_logistic_dist}{
 f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
@@ -657,19 +662,22 @@ f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
 Having specified \(h\) and \(f\), let's choose some values for
 \(\mathbf{x}\) and \(\boldsymbol{\beta}\) and use simulation to
 approximate the integral for \(p(y|\mathbf{x},\boldsymbol{\beta})\).
-Let's pick \(\mathbf{x}=(0.5, 2)\) and \(\boldsymbol{\beta}=(3,-1)\). We
+Let's pick \(\mathbf{x}=(0.5, 2)\) and \(\boldsymbol{\beta}=(3,-1)\)
+such that
+\(\mathbf{x}'\boldsymbol{\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\). We
 know from the closed-form solution to this model that, with these values
 of \(\mathbf{x}\) and \(\boldsymbol{\beta}\), the probability the
 decision maker takes action is:
 
 \begin{equation}\phantomsection\label{eq-binlogit_example}{
-p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\boldsymbol{\beta}'\mathbf{x}}}{1 + e^{\boldsymbol{\beta}'\mathbf{x}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}'\boldsymbol{\beta}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
 }\end{equation}
 
 We can approximate this integral as before. Below I use
-\texttt{rlogis()} to take \texttt{R=1,000} draws from the binary
-logistic distribution, and we approximate the integral with the
-proportion of times \(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon > 0\):
+\texttt{rlogis()} to take \texttt{R=1000} draws from the binary logistic
+distribution, and we approximate the integral with the proportion of
+times \(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon\) is greater than
+\(0\):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -695,11 +703,11 @@ Our simulated value 0.364 approximates the exact value of the integral
 
 The core learning from this chapter is that with discrete choice models
 our focus is on the \emph{probability} of outcome \(y\). That outcome
-result from the distribution of unobserved factors
+results from the distribution \(f\) of unobserved factors
 \(\boldsymbol{\varepsilon}\) and the behavior model \(h\) that relates
 \(y\) to \((\mathbf{x}, \boldsymbol{\varepsilon})\). The probability
-\(p(y|x)\) can occasionally and for only very special choices of \(f\)
-and \(h\) be written in closed form, but for almost any choice of \(f\)
+\(p(y|x)\) can occasionally be written in closed form for only very
+special choices of \(f\) and \(h\), but for almost any choice of \(f\)
 and \(h\) we can simulate \(p(y|x)\).
 
 \chapter{Properties of Discrete Choice Models}\label{sec-properties}
