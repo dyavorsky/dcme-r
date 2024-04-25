@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>dcms-r.danyavorsky.com/index.html</loc>
-    <lastmod>2024-04-25T18:27:48.133Z</lastmod>
+    <lastmod>2024-04-25T19:01:08.232Z</lastmod>
   </url>
   <url>
     <loc>dcms-r.danyavorsky.com/chapters/01_intro.html</loc>
-    <lastmod>2024-04-25T18:42:50.664Z</lastmod>
+    <lastmod>2024-04-25T18:53:32.573Z</lastmod>
   </url>
   <url>
     <loc>dcms-r.danyavorsky.com/chapters/02_properties.html</loc>
@@ -67,5 +67,9 @@
   <url>
     <loc>dcms-r.danyavorsky.com/chapters/appendix.html</loc>
     <lastmod>2024-04-12T19:03:30.454Z</lastmod>
+  </url>
+  <url>
+    <loc>dcms-r.danyavorsky.com/R-Companion-to-Discrete-Choice-Methods-with-Simulation.pdf</loc>
+    <lastmod>2024-04-25T19:01:41.465Z</lastmod>
   </url>
 </urlset>

@@ -388,12 +388,12 @@ window.Quarto = {
 <p>Train denotes the outcome in any given situation as <span class="math inline">\(y\)</span>, determined by some observable factors collected in the vector <span class="math inline">\(\mathbf{x}\)</span> and some unobservable factors collected in the vector <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. The factors (<span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) relate to the agent’s choice (<span class="math inline">\(y\)</span>) through a function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. We assume for the moment that we know <span class="math inline">\(h(\cdot)\)</span> and that <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are length-one vectors (i.e., scalars) denoted <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span>.</p>
 <p>Since we do not observe <span class="math inline">\(\varepsilon\)</span>, we can’t predict <span class="math inline">\(y\)</span> exactly. Instead, we focus on the probability of <span class="math inline">\(y\)</span>, that is:</p>
 <p><span id="eq-int_indicator"><span class="math display">\[
-\begin{align}
+\begin{aligned}
 p(y|x)
 &amp;= \Pr \left( \varepsilon \textrm{ such that } h(x,\varepsilon)=y \right) \\
 &amp;= \Pr \left( I \left[ h(x,\varepsilon)=y \right] = 1 \right) \\
 &amp;= \int I \left[ h(x,\varepsilon)=y \right] f(\varepsilon) \, d\varepsilon
-\end{align}
+\end{aligned}
 \tag{1.1}\]</span></span></p>
 <p>For certain special choices of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, a closed-form expression<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> for the integral is available. But more generally, for almost any choice of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, we can approximate the integral through simulation. Train provides pseudo code on how to do so:</p>
 <ol type="1">

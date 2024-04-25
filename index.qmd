@@ -19,7 +19,7 @@ Train and I align in our thinking:
 
 What is "not that difficult" for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see Train's pseudo-code transformed into working R code. No mysteries will remain. The goal, in fact, is to provide you with much of the same instruction that Train's students received when taking his course. To borrow a quote Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.
 
-[^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. For a related text that emphasizes computational statistics, see @rizzo2019; and for a Bayesian perspective, see the "Bayesian Workflow" ideas in @mcelreath2018 and @gelman2020.
+[^1]: What I'm talking about is the field of _statistical computing_. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. See @rizzo2019 for a related text that emphasizes computational statistics, and @mcelreath2018 and @gelman2020 for a Bayesian perspective that emphasize a "Bayesian Workflow."
 
 [^2]: @train2009 pg 2. Train provides pseudo-code throughout his book and generously makes Matlab code available on his website.
 

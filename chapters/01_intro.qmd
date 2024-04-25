@@ -15,12 +15,12 @@ Train denotes the outcome in any given situation as $y$, determined by some obse
 Since we do not observe $\varepsilon$, we can't predict $y$ exactly. Instead, we focus on the probability of $y$, that is:
 
 $$
-\begin{align}
+\begin{aligned}
 p(y|x) 
 &= \Pr \left( \varepsilon \textrm{ such that } h(x,\varepsilon)=y \right) \\
 &= \Pr \left( I \left[ h(x,\varepsilon)=y \right] = 1 \right) \\
 &= \int I \left[ h(x,\varepsilon)=y \right] f(\varepsilon) \, d\varepsilon
-\end{align}
+\end{aligned}
 $$ {#eq-int_indicator}
 
 For certain special choices of $h$ and $f$, a closed-form expression[^1] for the integral is available. But more generally, for almost any choice of $h$ and $f$, we can approximate the integral through simulation. Train provides pseudo code on how to do so:
