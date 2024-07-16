@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Dan Yavorsky">
 
-<title>R Companion to Discrete Choice Methods with Simulation</title>
+<title>Discrete Choice Model Estimation with R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -91,7 +91,7 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -129,13 +129,13 @@ window.Quarto = {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
-        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
       </button>
     </div>
@@ -147,10 +147,10 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">R Companion to Discrete Choice Methods with Simulation</a> 
+      <a href="./">Discrete Choice Model Estimation with R</a> 
         <div class="sidebar-tools-main tools-wide">
-    <a href="https://github.com/dyavorsky/dcms-r" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
-    <a href="./R-Companion-to-Discrete-Choice-Methods-with-Simulation.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="https://github.com/dyavorsky/dcme-r" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+    <a href="./Discrete-Choice-Model-Estimation-with-R.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
     </div>
@@ -170,9 +170,9 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
  <span class="menu-text">Introduction</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -193,9 +193,9 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
  <span class="menu-text">Behavioral Models</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -240,9 +240,9 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
  <span class="menu-text">Estimation</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -293,9 +293,9 @@ window.Quarto = {
   </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
@@ -320,20 +320,19 @@ window.Quarto = {
   <ul>
   <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
   <ul class="collapse">
-  <li><a href="#how-to-read-this-book" id="toc-how-to-read-this-book" class="nav-link" data-scroll-target="#how-to-read-this-book">How to read this book</a></li>
   <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
   <li><a href="#acknowledgments" id="toc-acknowledgments" class="nav-link" data-scroll-target="#acknowledgments">Acknowledgments</a></li>
   <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcms-r/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">R Companion to Discrete Choice Methods with Simulation</h1>
+<h1 class="title">Discrete Choice Model Estimation with R</h1>
 </div>
 
 
@@ -374,36 +373,38 @@ Warning
 <blockquote class="blockquote">
 <p>You don’t understand it, until you have coded it.</p>
 </blockquote>
-<p>It’s a mantra that my mentors instilled in me in graduate school, and one that I propagate on my students today. I believe it in deeply. If you want to understand a statistical model, it is insufficient to interact with the model only through pen and paper, no matter how well you organize the subscripts or how masterfully you interweave elements of the Greek and Roman alphabets. To really understand a statistical model, you need to be able to simulate data from the model, and then take that simulated data to an estimation routine that enables you to recover the parameters of interest.</p>
-<p>This is something you learn to do in graduate school. But, unless you have one of the most caring and pedagogical advisers, no one teaches it to you! Instead, it’s a skill that students develop independently and inefficiently between classes and assignment due dates or, in my case, after I was knee-deep in my dissertation research. There is a tremendous imbalance between how immensely important this skill is and the lack of time and instruction dedicated to it.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That imbalance is the motivation for this book.</p>
+<p>It’s a mantra that my mentors instilled in me in graduate school, and one that I propagate on my students today. I believe it in deeply. If you want to understand a statistical model, it is insufficient to interact with the model only through pen and paper. No matter how well you organize the subscripts or how masterfully you interweave elements of the Greek and Roman alphabets, you won’t really “get it.” To deeply understand a statistical model, you need to be able to simulate data from the model, and then take that simulated data to an estimation routine that enables you to recover the parameters of interest.</p>
+<p>This is something you learn to do in graduate school. But, unless you have one of the most caring and pedagogical advisers, no one teaches it to you! Instead, it’s a skill that students develop independently and inefficiently between classes and assignment due dates or, in my case, after I was knee-deep in my dissertation research. There is a tremendous imbalance between how immensely important this skill is and the time and instruction dedicated to it.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That imbalance is the motivation for this book.</p>
 <p>I address this gap in the specific domain of Discrete Choice Modeling. I do so alongside Kenneth Train’s masterful text <em>Discrete Choice Methods with Simulation</em> (Second Edition) freely available online at <a href="https://eml.berkeley.edu/books/choice2.html" class="uri">https://eml.berkeley.edu/books/choice2.html</a>.</p>
 <p>Train and I align in our thinking:</p>
 <blockquote class="blockquote">
-<p>“…the true value of the new approach to choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An important goal of the book is to teach these skills as an integral part of the exposition of the models themselves.”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>“…the true value of [] choice modeling is the ability to create tailor-made models. The computation and programming steps that are needed to implement a new model are usually not difficult. An important goal [] is to teach these skills as an integral part of the exposition of the models themselves.”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 </blockquote>
-<p>What is “not that difficult” for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see Train’s pseudo-code transformed into working R code. No mysteries will remain. The goal, in fact, is to provide you with much of the same instruction that Train’s students received when taking his course. To borrow a quote Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.</p>
-<section id="how-to-read-this-book" class="level2">
-<h2 class="anchored" data-anchor-id="how-to-read-this-book">How to read this book</h2>
-<p>As the title suggests, the structure, topics, and organization of this book parallel <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>. You should read — or most likely, re-read — one chapter from <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> and then read and work through the corresponding chapter here, alternating between our texts. Do not simply read this book from start to finish without frequently returning to <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process.</p>
-<p>In addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.</p>
-</section>
+<p>What is “not that difficult” for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see the mathematical derivations and pseudo-code in <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> transformed into working R code. No mysteries will remain. A goal, in fact, is to provide you with much of the same instruction that Train’s students received when taking his course. To borrow a quote from Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of discrete choice models <em>not so that you can understand, but so that you cannot possibly misunderstand</em>.</p>
+<!-- 
+## How to read this book
+
+As the title suggests, the structure, topics, and organization of this book parallel @train2009. You should read --- or most likely, re-read --- one chapter from @train2009 and then read and work through the corresponding chapter here, alternating between our texts. Do not simply read this book from start to finish without frequently returning to @train2009. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process. 
+
+In addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I'm not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.
+-->
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
 <p>This book is intended for a narrow audience, predominantly graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> and thought <em>how would I code that?</em></p>
-<p>We will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. We will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a>. Popular books include <a href="https://r4ds.hadley.nz/"><span class="citation" data-cites="r4ds">Wickham, Cetinka-Rundel, and Grolemund (<span>2023</span>)</span></a> and <a href="https://adv-r.hadley.nz/"><span class="citation" data-cites="advr">Wickham (<span>2019</span>)</span></a>.</p>
-<p>I also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating the discrete choice models covered by <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>. In particular, you should have no uncertainty about the difference between a model, the estimator, and the estimate. To briefly review:</p>
+<p>We will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. And in fact, estimation of many models will require approximating one or more integrals through a second form of simulation (the one referenced in the title of Train’s book). We will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a>. Popular books include <a href="https://r4ds.hadley.nz/"><span class="citation" data-cites="r4ds">Wickham, Cetinka-Rundel, and Grolemund (<span>2023</span>)</span></a> and <a href="https://adv-r.hadley.nz/"><span class="citation" data-cites="advr">Wickham (<span>2019</span>)</span></a>.</p>
+<p>I also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating the discrete choice models covered by <span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:</p>
 <ul>
 <li>a <em>model</em> is the set of mathematical assumptions about how data are generated,</li>
-<li>the <em>estimator</em> (or equivalently, the estimation routine) is an algorithm or function of the data, and</li>
-<li>the <em>estimate</em> is the result of applying the estimator to a particular dataset.</li>
+<li>an <em>estimator</em> (or equivalently, the estimation routine) is an algorithm or function of the data, and</li>
+<li>an <em>estimate</em> is the result of applying the estimator to a particular dataset.</li>
 </ul>
-<p>In my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model, and then a homework assignment asks students to implement the estimator on a dataset to find an estimate. This approach puts almost no emphasis on the specification of the model or the choice of estimator. For example, should part of the model be specified as <span class="math inline">\(\beta_0 + \beta_1x_1\)</span> or should it be <span class="math inline">\(\beta_0 + \beta_1x_1 + \beta_2x_2\)</span>? And once we have specified a model, should we derive an estimator via least squares, the method of moments, maximum likelihood, a Bayesian approach, or some other way?</p>
-<p>If my description captures your experience in introductory statistics and econometrics courses and you would like to review key ideas, I highly recommend <a href="https://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458"><span class="citation" data-cites="abramovich2023">Abramovich and Ritov (<span>2023</span>)</span></a> on the topic of mathematical statistics, <a href="https://www.hup.harvard.edu/books/9780674175440"><span class="citation" data-cites="goldberger1991">Goldberger (<span>1991</span>)</span></a> and <a href="https://www.wiley.com/en-us/A+Guide+to+Econometrics,+6th+Edition-p-9781405182584"><span class="citation" data-cites="kennedy2008">Kennedy (<span>2008</span>)</span></a> for econometrics, and <a href="https://xcelab.net/rm/statistical-rethinking/"><span class="citation" data-cites="mcelreath2018">McElreath (<span>2018</span>)</span></a> and <a href="https://www.routledge.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955"><span class="citation" data-cites="bda3">Gelman et al. (<span>2013</span>)</span></a> for Bayesian statistics.</p>
+<p>In my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. This approach puts almost no emphasis on the specification of the model or the choice of estimator. For example, should part of the model be specified as <span class="math inline">\(\beta_0 + \beta_1x_1\)</span> or should it be <span class="math inline">\(\beta_0 + \beta_1x_1 + \beta_2x_2\)</span>? And once we have specified a model, should we derive an estimator via least squares, the method of moments, maximum likelihood, a Bayesian approach, or some other way?</p>
+<p>If my description captures your experience in introductory statistics and econometrics courses and you would like to review key ideas, I highly recommend <a href="https://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458"><span class="citation" data-cites="abramovich2023">Abramovich and Ritov (<span>2023</span>)</span></a> on the topic of mathematical statistics, <a href="https://www.hup.harvard.edu/books/9780674175440"><span class="citation" data-cites="goldberger1991">Goldberger (<span>1991</span>)</span></a> and <a href="https://www.wiley.com/en-us/A+Guide+to+Econometrics,+6th+Edition-p-9781405182584"><span class="citation" data-cites="kennedy2008">Kennedy (<span>2008</span>)</span></a> for econometrics, and <a href="https://xcelab.net/rm/statistical-rethinking/"><span class="citation" data-cites="mcelreath2018">McElreath (<span>2018</span>)</span></a> and <a href="https://www.routledge.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955"><span class="citation" data-cites="bda3">Gelman et al. (<span>2013</span>)</span></a> for Bayesian statistics. in this book, we will use Maximum Likelihood and Bayesian methods to estimate the parameters of the models discussed in the forthcoming chapters.</p>
 </section>
 <section id="acknowledgments" class="level2">
 <h2 class="anchored" data-anchor-id="acknowledgments">Acknowledgments</h2>
-<p>I am immensely grateful to the teams that work on the R-Project, those at Posit who provide RStudio and Quarto, and the related communities of developers, academics, and R users. The free tools they provide and the welcoming communities they have established are both exceptional.</p>
-<p>I also thank my academic mentors Ella Honka, Peter Rossi, Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, Keith Chrzan, and the hosts and attendees of Sawtooth Software’s annual Analytics and Insights Summit. I have learned so much from these researcher’s guidance and often their written work.</p>
+<p>I am immensely grateful to the teams that work on the R-Project, those at Posit who provide RStudio, Positron, and Quarto, and the related communities of developers, academics, and R users. The free tools they provide are exceptional and I use them daily. The welcoming communities they have established provide the necessary support humans need, be it technical troubleshooting or emotional encouragement.</p>
+<p>I also thank my academic mentors Ella Honka, Peter Rossi, and Eric Bradlow, and (although we have yet to meet) Kenneth Train as well as the folks that tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, Keith Chrzan, and the hosts and attendees of Sawtooth Software’s annual Analytics and Insights Summit. I have learned so much from these researcher’s guidance and often their written work.</p>
 <p>Special thanks go to generous people who reviewed and assisted with drafts of this book, including Darren Aeillo, Kalyan Rallabandi, and Geoff Zheng.</p>
 <p>Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their patience and support.</p>
 </section>
@@ -449,7 +450,7 @@ Wickham, Hadley, Mine Cetinka-Rundel, and Garrett Grolemund. 2023. <em>R for Dat
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>What I’m talking about is the field of <em>statistical computing</em>. My experience was that graduate students in economics, psychology, and business had little, if any, formal exposure to these ideas. See <span class="citation" data-cites="rizzo2019">Rizzo (<a href="chapters/references.html#ref-rizzo2019" role="doc-biblioref">2019</a>)</span> for a related text that emphasizes computational statistics, and <span class="citation" data-cites="mcelreath2018">McElreath (<a href="chapters/references.html#ref-mcelreath2018" role="doc-biblioref">2018</a>)</span> and <span class="citation" data-cites="gelman2020">Gelman et al. (<a href="chapters/references.html#ref-gelman2020" role="doc-biblioref">2020</a>)</span> for a Bayesian perspective that emphasize a “Bayesian Workflow.”<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>What I’m talking about is the field of <em>statistical computing</em>. My experience was that graduate students in economics, psychology, and business have little, if any, formal exposure to these ideas. See <span class="citation" data-cites="rizzo2019">Rizzo (<a href="chapters/references.html#ref-rizzo2019" role="doc-biblioref">2019</a>)</span> for a related text that emphasizes computational statistics, and <span class="citation" data-cites="mcelreath2018">McElreath (<a href="chapters/references.html#ref-mcelreath2018" role="doc-biblioref">2018</a>)</span> and <span class="citation" data-cites="gelman2020">Gelman et al. (<a href="chapters/references.html#ref-gelman2020" role="doc-biblioref">2020</a>)</span> for a Bayesian perspective that emphasize a “Bayesian Workflow.”<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p><span class="citation" data-cites="train2009">Train (<a href="chapters/references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> pg 2. Train provides pseudo-code throughout his book and generously makes Matlab code available on his website.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
@@ -634,18 +635,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -677,15 +667,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("dcms-r\.danyavorsky\.com");
+      var filterRegex = new RegExp("dcme-r\.danyavorsky\.com");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -1022,4 +1034,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyavorsky/dcms-r/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>

@@ -23,14 +23,14 @@ resources:
   - CNAME
 
 book:
-  title: "R Companion to Discrete Choice Methods with Simulation"
+  title: "Discrete Choice Model Estimation with R"
   author: 
     - name: "Dan Yavorsky"
       orcid: 0000-0003-4095-6405
       email: dyavorsky@gmail.com
   #date: last-modified
-  site-url: dcms-r.danyavorsky.com
-  repo-url: https://github.com/dyavorsky/dcms-r
+  site-url: dcme-r.danyavorsky.com
+  repo-url: https://github.com/dyavorsky/dcme-r
   repo-actions: edit
   bread-crumbs: true
   downloads: [pdf]

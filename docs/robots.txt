@@ -1,1 +1,1 @@
-Sitemap: dcms-r.danyavorsky.com/sitemap.xml
+Sitemap: dcme-r.danyavorsky.com/sitemap.xml
