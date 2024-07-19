@@ -1,0 +1,17 @@
+{
+  "hash": "bc0045c0c36a0a05caff375546167200",
+  "result": {
+    "engine": "knitr",
+    "markdown": "# Drawing from Densities {#sec-draws}\n\n## Pseudo-Random Numbers from Uniform Distribution\n\n## Inverse Transform Method\n\n$$\n\\begin{aligned}\nF_X(x) \n    &= \\Pr \\left(X \\le x \\right) \\\\\n    &= \\Pr \\left(T(U) \\le x \\right) \\\\\n    &= \\Pr \\left(U \\le T^{-1}(x) \\right) \\\\\n    &= T^{-1}(x)\n\\end{aligned}\n$$\n\n## Example: Exponential\n\n$$ F(y,\\lambda) = 1 - \\exp\\left( -\\lambda y \\right) \\hspace{1em} \\text{for} \\ y \\ge 0 $$\n\n$$ F^{-1}(u) = -\\log(1-u) / \\lambda $$\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 1e4\nlambda <- 0.3\nu <- runif(n)\ny <- -log(1-u)/lambda\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nx <- seq(from=0, to=ceiling(max(y)), length.out=100)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dexp(x,lambda), lwd=2)\n```\n\n::: {.cell-output-display}\n![](02_draws_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\n\n\n\n\n\n\n## Example: Gumbel\n\n$$ F(y) = \\exp \\left( -\\exp \\left( -y \\right) \\right) $$\n\n$$ F^{-1}(u) = -\\log(-log(u))  $$\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 1e4\nu <- runif(n)\ny <- -log(-log(u))\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nx <- seq(from=-3, to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=ordinal::dgumbel(x), lwd=2)\n```\n\n::: {.cell-output-display}\n![](02_draws_files/figure-html/unnamed-chunk-4-1.png){width=672}\n:::\n:::\n\n\n\n\n\n\n\n\n## Example: Logistic\n\n$$ F(y) = \\frac{1}{1+\\exp \\left( -x \\right)} $$\n\n$$ F^{-1}(u) = \\log(u) - \\log(1-u) $$\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 1e4\nu <- runif(n)\ny <- log(u) - log(1-u)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nx <- seq(from=floor(min(y)), to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dlogis(x), lwd=2)\n```\n\n::: {.cell-output-display}\n![](02_draws_files/figure-html/unnamed-chunk-6-1.png){width=672}\n:::\n:::\n\n\n\n\n\n\n\n\n## Example: Normal\n\n\n\n\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn <- 1e4\ny <- rnorm(n)\n\nu <- runif(n)\ny <- qnorm(u)\n```\n:::\n\n\n\n\n\n\n\n\n## Extensions: Multivariate Normal\n",
+    "supporting": [
+      "02_draws_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

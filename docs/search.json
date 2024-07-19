@@ -10,11 +10,21 @@
     ]
   },
   {
-    "objectID": "index.html#prerequisites",
-    "href": "index.html#prerequisites",
+    "objectID": "index.html#how-to-read-this-book",
+    "href": "index.html#how-to-read-this-book",
     "title": "Discrete Choice Model Estimation with R",
-    "section": "Prerequisites",
-    "text": "Prerequisites\nThis book is intended for a narrow audience, predominantly current or former graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read DCMS and thought how would I code that? Or someone who used nlogit while working through the second half of ACA and wants to “see under the hood” of its estimation routines.\nWe will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. Doing so will require us to generate random draws from distributions, approximate integrals with monte carlo simulation, maximize likelihood functions with optimization routines, and (when taking a Bayesian approach) explore posterior distributions with Markov Chain Monte Carlo methods.\nWe will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at https://www.bigbookofr.com/. Popular books include Wickham, Cetinka-Rundel, and Grolemund (2023) and Wickham (2019). If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.\nI also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating discrete choice models. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:\n\na model is the set of mathematical assumptions about how data are generated,\nan estimator (or equivalently, the estimation routine) is an algorithm or function of the data, and\nan estimate is the result of applying the estimator to a particular dataset.\n\nIn my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing ones skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.\nI’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, or a different estimation approach.\nIn this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend Abramovich and Ritov (2023) on the topic of mathematical statistics, Goldberger (1991) and Kennedy (2008) for econometrics, and McElreath (2018) and Gelman et al. (2013) for Bayesian statistics.",
+    "section": "How to read this book",
+    "text": "How to read this book\nThe active reader will benefit most from securing copies of DCMS and ACA alongside this book. While I introduce each model before diving into the associated programming, DCMS and ACA provide substantially more context regarding their development and use in economics and psychology. They also offer more thorough descriptions and derivations of the properties of the models. My recommendation is that you should read — or most likely, re-read — the referenced chapters from DCMS and ACA as we begin to explore each specific model, and then read and work through the corresponding chapter here, alternating between the texts. Do not simply read this book from start to finish without frequently returning to DCMS and/or ACA. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process.\nIn addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.",
+    "crumbs": [
+      "Welcome"
+    ]
+  },
+  {
+    "objectID": "index.html#intended-audience",
+    "href": "index.html#intended-audience",
+    "title": "Discrete Choice Model Estimation with R",
+    "section": "Intended Audience",
+    "text": "Intended Audience\nThis book is intended for a narrow audience, predominantly current or former graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read DCMS and thought how would I code that? Or someone who used nlogit while working through the second half of ACA and wants to “see under the hood” of its estimation routines.\nWe will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. Doing so will require us to generate random draws from distributions, approximate integrals with monte carlo simulation, maximize likelihood functions with optimization routines, and (when taking a Bayesian approach) explore posterior distributions with Markov Chain Monte Carlo methods.\nWe will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at https://www.bigbookofr.com/. Popular books include R for Data Science properly cited as Wickham, Cetinka-Rundel, and Grolemund (2023) and Advanced R properly cited as Wickham (2019). If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.\nI also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating discrete choice models. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:\n\na model is the set of mathematical assumptions about how data are generated,\nan estimator (or equivalently, the estimation routine) is an algorithm or function of the data, and\nan estimate is the result of applying the estimator to a particular dataset.\n\nIn my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing the student’s skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.\nI’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less-particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, a causal interpretation, or a different estimation approach.\nIn this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend Abramovich and Ritov (2023, link) on the topic of mathematical statistics, Goldberger (1991, link) and Kennedy (2008, link) for econometrics, and McElreath (2018, link) and Gelman et al. (2013, link) for Bayesian statistics. Bruce Hansen’s recently released two-volume series Hansen (2022b, link) and Hansen (2022a, link) on probability, statistics, and econometrics are an excellent set of alternative resources.",
     "crumbs": [
       "Welcome"
     ]
@@ -34,7 +44,7 @@
     "href": "index.html#colophon",
     "title": "Discrete Choice Model Estimation with R",
     "section": "Colophon",
-    "text": "Colophon\nAn online version of this book is available at https://dcme-r.danyavorsky.com. The source of the book is available at https://github.com/dyavorsky/dcme-r. The book is authored using Quarto, an open-source scientific and technical publishing system that makes it easy to create articles, presentations, websites, books, and other publications that combine text and executable code.\n\n\n\n\nAbramovich, Felix, and Ya’acov Ritov. 2023. Bayesian Statistics. CRC press.\n\n\nGelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, Aki Vehtari, and Donald B. Rubin. 2013. Bayesian Data Analysis. CRC press.\n\n\nGelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian Bürkner, and Martin Modrák. 2020. “Bayesian Workflow.” arXiv Preprint arXiv:2011.01808.\n\n\nGoldberger, Arthur S. 1991. A Course in Econometrics. Harvard University Press.\n\n\nHensher, David A., John M. Rose, and William H. Greene. 2015. Applied Choice Analysis. 2nd ed. Cambridge University Press.\n\n\nKennedy, Peter. 2008. A Guide to Econometrics. John Wiley & Sons.\n\n\nMcElreath, Richard. 2018. Statistical Rethinking: A Bayesian Course with Examples in r and Stan. Chapman; Hall/CRC.\n\n\nRizzo, Maria L. 2019. Statistical Computing with r. Chapman; Hall/CRC.\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with Simulation. 2nd ed. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.\n\n\nWickham, Hadley. 2019. Advanced r. 2nd ed. Chapman; Hall/CRC.\n\n\nWickham, Hadley, Mine Cetinka-Rundel, and Garrett Grolemund. 2023. R for Data Science. 2nd ed. O’Reilly Media.",
+    "text": "Colophon\nAn online version of this book is available at https://dcme-r.danyavorsky.com. The source of the book is available at https://github.com/dyavorsky/dcme-r. The book is authored using Quarto, an open-source scientific and technical publishing system that makes it easy to create articles, presentations, websites, books, and other publications that combine text and executable code.\n\n\n\n\nAbramovich, Felix, and Ya’acov Ritov. 2023. Bayesian Statistics. CRC press.\n\n\nGelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, Aki Vehtari, and Donald B. Rubin. 2013. Bayesian Data Analysis. CRC press.\n\n\nGelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian Bürkner, and Martin Modrák. 2020. “Bayesian Workflow.” arXiv Preprint arXiv:2011.01808.\n\n\nGoldberger, Arthur S. 1991. A Course in Econometrics. Harvard University Press.\n\n\nHansen, Bruce. 2022a. Econometrics. Princeton University Press.\n\n\n———. 2022b. Probability & Statistics for Economists. Princeton University Press.\n\n\nHensher, David A., John M. Rose, and William H. Greene. 2015. Applied Choice Analysis. 2nd ed. Cambridge University Press.\n\n\nKennedy, Peter. 2008. A Guide to Econometrics. John Wiley & Sons.\n\n\nMcElreath, Richard. 2018. Statistical Rethinking: A Bayesian Course with Examples in r and Stan. Chapman; Hall/CRC.\n\n\nRizzo, Maria L. 2019. Statistical Computing with r. Chapman; Hall/CRC.\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with Simulation. 2nd ed. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.\n\n\nWickham, Hadley. 2019. Advanced r. 2nd ed. Chapman; Hall/CRC.\n\n\nWickham, Hadley, Mine Cetinka-Rundel, and Garrett Grolemund. 2023. R for Data Science. 2nd ed. O’Reilly Media.",
     "crumbs": [
       "Welcome"
     ]
@@ -50,8 +60,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html",
-    "href": "chapters/01_intro.html",
+    "objectID": "chapters/01_choice.html",
+    "href": "chapters/01_choice.html",
     "title": "1  Introduction",
     "section": "",
     "text": "1.1 Recap of Train Ch. 1\nTrain denotes the outcome in any given choice situation as \\(y\\), determined by some observable factors collected in the vector \\(\\mathbf{x}\\) and some unobservable factors collected in the vector \\(\\boldsymbol{\\varepsilon}\\). The factors (\\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\)) relate to the agent’s choice (\\(y\\)) through a function \\(y = h(\\mathbf{x}, \\boldsymbol{\\varepsilon})\\). We assume for the moment that we know \\(h(\\cdot)\\) and that \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) are length-one vectors (i.e., scalars) denoted \\(x\\) and \\(\\varepsilon\\).\nSince we do not observe \\(\\varepsilon\\), we can’t predict \\(y\\) exactly. Instead, we focus on the probability of \\(y\\), that is:\n\\[\n\\begin{aligned}\np(y|x)\n&= \\Pr \\left( \\varepsilon \\textrm{ such that } h(x,\\varepsilon)=y \\right) \\\\\n&= \\Pr \\left( I \\left[ h(x,\\varepsilon)=y \\right] = 1 \\right) \\\\\n&= \\int I \\left[ h(x,\\varepsilon)=y \\right] f(\\varepsilon) \\, d\\varepsilon\n\\end{aligned}\n\\tag{1.1}\\]\nFor certain special choices of \\(h\\) and \\(f\\), a closed-form expression1 for the integral is available. But more generally, for almost any choice of \\(h\\) and \\(f\\), we can approximate the integral through simulation. Train provides pseudo code on how to do so:\nNext we look at two examples where we use this procedure to approximate the \\(p(y|x)\\) integral. The first example I made up. The second example is the binary logit model discussed by Train, but for which I’ll show you how to simulate the \\(p(y|x)\\) integral.",
@@ -61,8 +71,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html#recap-of-train-ch.-1",
-    "href": "chapters/01_intro.html#recap-of-train-ch.-1",
+    "objectID": "chapters/01_choice.html#recap-of-train-ch.-1",
+    "href": "chapters/01_choice.html#recap-of-train-ch.-1",
     "title": "1  Introduction",
     "section": "",
     "text": "Repeat the following two steps many (\\(r=1, \\ldots, R\\)) times:\n\nDraw \\(\\varepsilon^{(r)}\\) from \\(f(\\varepsilon)\\).\nDetermine whether \\(h(x,\\varepsilon^{(r)}) = y\\). If so, set \\(I^{(r)}=1\\); else set \\(I^{(r)}=0\\).\n\nAverage the \\(R\\) values of \\(I\\)",
@@ -72,8 +82,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html#sec-simple_example",
-    "href": "chapters/01_intro.html#sec-simple_example",
+    "objectID": "chapters/01_choice.html#sec-simple_example",
+    "href": "chapters/01_choice.html#sec-simple_example",
     "title": "1  Introduction",
     "section": "1.2 A Simple Example",
     "text": "1.2 A Simple Example\nLet’s first set up a toy example to demonstrate how simulation can approximate the \\(p(y|x)\\) integral. Suppose \\(x=0.5\\) and \\(\\varepsilon\\) is uniformly distributed between \\(-1\\) and \\(1\\). Define \\(h(x, \\varepsilon)\\) to be:\n\\[\nh(x, \\varepsilon) =\n    \\begin{cases}\n        0  & \\text{if } x + \\varepsilon &lt; 0 \\\\\n        1  & \\text{if } x + \\varepsilon \\in [0,1] \\\\\n        2  & \\text{if } x + \\varepsilon &gt; 1\n    \\end{cases}\n\\tag{1.2}\\]\nWe’ll focus on the outcome \\(y=2\\). You can probably intuit that the \\(p(y=2 | x) = 0.25\\) since only one quarter of the time will \\(\\varepsilon\\) be sufficiently positive to make \\(x + \\varepsilon &gt; 1\\).2 Nevertheless, let’s approximate the integral representation of \\(p(y=2|x)\\) through simulation to ensure we understand the process.\nTo walk you through the code, we first set a seed so that the pseudo-random numbers generated by runif() can be replicated exactly each time the code is run (even on different computers). We then specify that we will use 1,000 draws in the simulation and we create a vector I to hold our results. The simulation occurs via a for() loop where each time through the loop we take a draw of \\(\\varepsilon\\), calculate \\(0.5 + \\varepsilon\\) and check whether that sum is greater than one. If so, then \\(h(x,\\varepsilon)=2\\) matching the value of \\(y\\) for the choice probability we want to assess — i.e., \\(p(y=2|x)\\) — and thus we store a \\(1\\) in the \\(r^\\textrm{th}\\) position of I; otherwise we store a 0. We then average the values in I to get our approximation of \\(p(y=2|x)\\).\n\nset.seed(1234)\n\nR &lt;- 1000\nI &lt;- vector(length=R)\n\nfor(r in 1:R) {\n    eps  &lt;- runif(1, min=-1, max=1)\n    h    &lt;- 0.5 + eps \n    I[r] &lt;- as.integer(h &gt; 1)\n}\nmean(I)\n\n[1] 0.258\n\n\nThe simulated value 0.258 approximates the exact value 0.25 and can be made closer by increasing the number of draws used in the simulation.\nNotice that we took draws of \\(\\varepsilon\\) to empirical approximate the integral of \\(p(y|x)\\), but we should not think of these draws as “data” in the sense of a dataset. They are ancillary numbers generated from the distribution of \\(\\varepsilon\\) that we use to approximate the integral.\nR users will recognize that we can shorten the code by taking advantage of R’s vectorized functions and its conversion of boolean values to 0/1 when used in mathematical operations. Here is a shorter implementation of the simulation; whether it’s “better” code is a matter of preference.\n\nset.seed(1234)\nR &lt;- 1000\nmean( runif(R, min=-1, max=1) + 0.5 &gt; 1 )\n\n[1] 0.258\n\n\nThat’s it. If you can generate pseudo-random draws from the density \\(f\\) and you know \\(h\\), approximating a choice probability by simulation might only require a handful of lines of code.",
@@ -83,8 +93,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html#sec-binary_logit",
-    "href": "chapters/01_intro.html#sec-binary_logit",
+    "objectID": "chapters/01_choice.html#sec-binary_logit",
+    "href": "chapters/01_choice.html#sec-binary_logit",
     "title": "1  Introduction",
     "section": "1.3 A Binary Logit Model Example",
     "text": "1.3 A Binary Logit Model Example\nAs an example of a model with a complete closed-form solution, Train provides the binary logit model. In this example, we’ll let \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) be vectors of length two, and we’ll specify \\(h\\) and \\(f\\) as follows:\nThe “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (\\(y=1\\)) or not (\\(y=0\\)). To tie this model into a framework of behavior, we start with a utility function \\(U\\). In Train’s specific example, utility is specified as\n\\[\nU(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) = \\mathbf{x}'\\boldsymbol{\\beta}+ \\varepsilon\n\\tag{1.3}\\]\nwhere \\(\\mathbf{x}\\) is a vector of observable explanatory variables, \\(\\boldsymbol{\\beta}\\) is a vector of parameters that through the functional form \\(\\mathbf{x}'\\boldsymbol{\\beta}\\) effectively serve as weights on the covariates, and \\(\\varepsilon\\) is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher. Notice that we’re allowing \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) to be vectors in this example, whereas they were scalars (or equivalently length-one vectors) in the previous example.\nIn this model, the threshold for action is 0 because the decision maker takes action (\\(y=1\\)) when utility is positive; conversely, when utility is negative, the decision makes elects not to take the action (i.e., \\(y=0\\)). Therefore we can specify \\(h\\) as:\n\\[\nh(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) =\n    \\begin{cases}\n        0  & \\text{if} \\hspace{1ex} U(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) \\le 0 \\\\\n        1  & \\text{if} \\hspace{1ex} U(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) &gt; 0\n    \\end{cases}\n\\tag{1.4}\\]\nThe “logit” part of the model’s name refers to the choice of \\(f\\). The binary logit model assumes \\(f\\) is the logistic distribution:\n\\[\nf(\\varepsilon) = \\frac{e^{-\\varepsilon}}{(1+e^{-\\varepsilon})^2}\n\\tag{1.5}\\]\nHaving specified \\(h\\) and \\(f\\), let’s choose some values for \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\) and use simulation to approximate the integral for \\(p(y|\\mathbf{x},\\boldsymbol{\\beta})\\).3 Let’s pick \\(\\mathbf{x}=(0.5, 2)\\) and \\(\\boldsymbol{\\beta}=(3,-1)\\) such that \\(\\mathbf{x}'\\boldsymbol{\\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\\). We know from the closed-form solution to this model provided by Train that, with these values of \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\), the probability the decision maker takes action is:\n\\[\np(y=1 | \\mathbf{x}, \\boldsymbol{\\beta}) = \\frac{e^{\\mathbf{x}'\\boldsymbol{\\beta}}}{1 + e^{\\mathbf{x}'\\boldsymbol{\\beta}}} = \\frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407\n\\tag{1.6}\\]\nWe can approximate this integral as before. Below I use the function rlogis() to take R=1000 draws from the binary logistic distribution, and I approximate the integral with the proportion of times \\(\\mathbf{x}'\\boldsymbol{\\beta}+ \\varepsilon\\) is greater than the threshold for action (\\(0\\)):\n\nset.seed(2345)\nR &lt;- 1000\n\nx    &lt;- c(0.5, 2)\nbeta &lt;- c(3, -1)\n\nU &lt;- as.vector(x %*% beta) + rlogis(R)\nmean(U &gt; 0)\n\n[1] 0.364\n\n\nOur simulated value 0.364 approximates the exact value of the integral 0.378.",
@@ -94,8 +104,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html#key-learnings",
-    "href": "chapters/01_intro.html#key-learnings",
+    "objectID": "chapters/01_choice.html#key-learnings",
+    "href": "chapters/01_choice.html#key-learnings",
     "title": "1  Introduction",
     "section": "1.4 Key Learnings",
     "text": "1.4 Key Learnings\nThe key learning from this chapter is that with discrete choice models our focus is on the probability of the choie outcome \\(y\\) – that is, \\(p(y|x)\\). This choice outcome \\(y\\) results from the joint distribution \\(f\\) of unobserved factors \\(\\boldsymbol{\\varepsilon}\\) and the behavioral model \\(h\\) that relates \\(y\\) to \\(\\mathbf{x}\\) (and \\(\\boldsymbol{\\varepsilon}\\)). The probability of the choice outcome \\(p(y|x)\\) can be written in closed form for only very special choices of \\(f\\) and \\(h\\), but for almost any choice of \\(f\\) and \\(h\\) we can simulate \\(p(y|x)\\), as the two examples in this chapter demonstrate.\n\n\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with Simulation. 2nd ed. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.",
@@ -105,8 +115,8 @@
     ]
   },
   {
-    "objectID": "chapters/01_intro.html#footnotes",
-    "href": "chapters/01_intro.html#footnotes",
+    "objectID": "chapters/01_choice.html#footnotes",
+    "href": "chapters/01_choice.html#footnotes",
     "title": "1  Introduction",
     "section": "",
     "text": "In this context, a closed-form expression means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral \\(\\int x \\, dx\\) has the closed for expression \\(x^2/2\\) plus some constant. We will see later that the Extreme Value distribution is often chosen for \\(f\\) predominantly because it leads to a closed for expression for the choice probability \\(p(y|x)\\).↩︎\nMore precisely, \\(p(y=2|x) = \\Pr(x+\\varepsilon &gt; 1|x=0.5) = \\Pr(\\varepsilon &gt; 0.5) = \\int_{0.5}^1 f(\\varepsilon) d\\varepsilon = (0.5\\varepsilon)\\vert_{0.5}^1 = 0.25\\).↩︎\nOnly at the early stage of simulating data from a model to better understand the model do we pick values for \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\). Typically, \\(\\mathbf{x}\\) will part of the data you collect and \\(\\boldsymbol{\\beta}\\) will be parameters whose values you seek to estimate.↩︎",
@@ -116,146 +126,212 @@
     ]
   },
   {
-    "objectID": "chapters/02_properties.html",
-    "href": "chapters/02_properties.html",
-    "title": "2  Properties of Discrete Choice Models",
+    "objectID": "chapters/02_draws.html",
+    "href": "chapters/02_draws.html",
+    "title": "2  Drawing from Densities",
     "section": "",
-    "text": "add",
+    "text": "2.1 Pseudo-Random Numbers from Uniform Distribution",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Properties of Discrete Choice Models</span>"
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/03_logit.html",
-    "href": "chapters/03_logit.html",
-    "title": "3  Logit",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/02_draws.html#inverse-transform-method",
+    "href": "chapters/02_draws.html#inverse-transform-method",
+    "title": "2  Drawing from Densities",
+    "section": "2.2 Inverse Transform Method",
+    "text": "2.2 Inverse Transform Method\n\\[\n\\begin{aligned}\nF_X(x)\n    &= \\Pr \\left(X \\le x \\right) \\\\\n    &= \\Pr \\left(T(U) \\le x \\right) \\\\\n    &= \\Pr \\left(U \\le T^{-1}(x) \\right) \\\\\n    &= T^{-1}(x)\n\\end{aligned}\n\\]",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Logit</span>"
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/04_gev.html",
-    "href": "chapters/04_gev.html",
-    "title": "4  GEV",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/02_draws.html#example-exponential",
+    "href": "chapters/02_draws.html#example-exponential",
+    "title": "2  Drawing from Densities",
+    "section": "2.3 Example: Exponential",
+    "text": "2.3 Example: Exponential\n\\[ F(y,\\lambda) = 1 - \\exp\\left( -\\lambda y \\right) \\hspace{1em} \\text{for} \\ y \\ge 0 \\]\n\\[ F^{-1}(u) = -\\log(1-u) / \\lambda \\]\n\nn &lt;- 1e4\nlambda &lt;- 0.3\nu &lt;- runif(n)\ny &lt;- -log(1-u)/lambda\n\n\nx &lt;- seq(from=0, to=ceiling(max(y)), length.out=100)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dexp(x,lambda), lwd=2)",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>GEV</span>"
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/05_probit.html",
-    "href": "chapters/05_probit.html",
-    "title": "5  Probit",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/02_draws.html#example-gumbel",
+    "href": "chapters/02_draws.html#example-gumbel",
+    "title": "2  Drawing from Densities",
+    "section": "2.4 Example: Gumbel",
+    "text": "2.4 Example: Gumbel\n\\[ F(y) = \\exp \\left( -\\exp \\left( -y \\right) \\right) \\]\n\\[ F^{-1}(u) = -\\log(-log(u))  \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- -log(-log(u))\n\n\nx &lt;- seq(from=-3, to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=ordinal::dgumbel(x), lwd=2)",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Probit</span>"
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/06_mixed_logit.html",
-    "href": "chapters/06_mixed_logit.html",
-    "title": "6  Mixed Logit",
+    "objectID": "chapters/02_draws.html#example-logistic",
+    "href": "chapters/02_draws.html#example-logistic",
+    "title": "2  Drawing from Densities",
+    "section": "2.5 Example: Logistic",
+    "text": "2.5 Example: Logistic\n\\[ F(y) = \\frac{1}{1+\\exp \\left( -x \\right)} \\]\n\\[ F^{-1}(u) = \\log(u) - \\log(1-u) \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- log(u) - log(1-u)\n\n\nx &lt;- seq(from=floor(min(y)), to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dlogis(x), lwd=2)",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02_draws.html#example-normal",
+    "href": "chapters/02_draws.html#example-normal",
+    "title": "2  Drawing from Densities",
+    "section": "2.6 Example: Normal",
+    "text": "2.6 Example: Normal\n\nn &lt;- 1e4\ny &lt;- rnorm(n)\n\nu &lt;- runif(n)\ny &lt;- qnorm(u)",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02_draws.html#extensions-multivariate-normal",
+    "href": "chapters/02_draws.html#extensions-multivariate-normal",
+    "title": "2  Drawing from Densities",
+    "section": "2.7 Extensions: Multivariate Normal",
+    "text": "2.7 Extensions: Multivariate Normal",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/03_simdata.html",
+    "href": "chapters/03_simdata.html",
+    "title": "3  Simulating from a Model",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_mle.html",
+    "href": "chapters/04_mle.html",
+    "title": "4  Maximum Likelihood Estimation",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_optimization.html",
+    "href": "chapters/05_optimization.html",
+    "title": "5  Optimization",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_estimation.html",
+    "href": "chapters/06_estimation.html",
+    "title": "6  Estimation",
+    "section": "",
+    "text": "add",
+    "crumbs": [
+      "Logit",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Estimation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_programming.html",
+    "href": "chapters/07_programming.html",
+    "title": "7  Code Performance",
     "section": "",
     "text": "add ```",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Mixed Logit</span>"
+      "Logit",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Code Performance</span>"
     ]
   },
   {
-    "objectID": "chapters/07_variations.html",
-    "href": "chapters/07_variations.html",
-    "title": "7  Variation on a Theme",
+    "objectID": "chapters/08_bayes.html",
+    "href": "chapters/08_bayes.html",
+    "title": "8  Bayesian Approach",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Variation on a Theme</span>"
+      "Logit",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Bayesian Approach</span>"
     ]
   },
   {
-    "objectID": "chapters/08_maximization.html",
-    "href": "chapters/08_maximization.html",
-    "title": "8  Numerical Maximization",
+    "objectID": "chapters/09_probit.html",
+    "href": "chapters/09_probit.html",
+    "title": "9  Multinomial Probit",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Behavioral Models",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Numerical Maximization</span>"
+      "Probit",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Multinomial Probit</span>"
     ]
   },
   {
-    "objectID": "chapters/09_densities.html",
-    "href": "chapters/09_densities.html",
-    "title": "9  Drawing from Densities",
+    "objectID": "chapters/10_nested.html",
+    "href": "chapters/10_nested.html",
+    "title": "10  Nested Logit Model",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Drawing from Densities</span>"
+      "Probit",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Nested Logit Model</span>"
     ]
   },
   {
-    "objectID": "chapters/10_sim_estimation.html",
-    "href": "chapters/10_sim_estimation.html",
-    "title": "10  Simulation-Assisted Estimation",
+    "objectID": "chapters/11_gev.html",
+    "href": "chapters/11_gev.html",
+    "title": "11  GEV Logit",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Simulation-Assisted Estimation</span>"
+      "Probit",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>GEV Logit</span>"
     ]
   },
   {
-    "objectID": "chapters/11_indiv_params.html",
-    "href": "chapters/11_indiv_params.html",
-    "title": "11  Individual-Level Parameters",
+    "objectID": "chapters/12_simulation.html",
+    "href": "chapters/12_simulation.html",
+    "title": "12  Simulation-Assisted Estimation",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Individual-Level Parameters</span>"
+      "Mixed",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Simulation-Assisted Estimation</span>"
     ]
   },
   {
-    "objectID": "chapters/12_bayesian.html",
-    "href": "chapters/12_bayesian.html",
-    "title": "12  Bayesian Procedures",
+    "objectID": "chapters/13_latentclass.html",
+    "href": "chapters/13_latentclass.html",
+    "title": "13  Latent Class MNL Model",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Bayesian Procedures</span>"
+      "Mixed",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Latent Class MNL Model</span>"
     ]
   },
   {
-    "objectID": "chapters/13_endogeneity.html",
-    "href": "chapters/13_endogeneity.html",
-    "title": "13  Endogeneity",
+    "objectID": "chapters/14_mixed.html",
+    "href": "chapters/14_mixed.html",
+    "title": "14  Mixed Logit Model",
     "section": "",
     "text": "add",
     "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Endogeneity</span>"
-    ]
-  },
-  {
-    "objectID": "chapters/14_em_algo.html",
-    "href": "chapters/14_em_algo.html",
-    "title": "14  EM Algorithms",
-    "section": "",
-    "text": "add",
-    "crumbs": [
-      "Estimation",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>EM Algorithms</span>"
+      "Mixed",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Mixed Logit Model</span>"
     ]
   },
   {
@@ -263,9 +339,8 @@
     "href": "chapters/references.html",
     "title": "References",
     "section": "",
-    "text": "Abramovich, Felix, and Ya’acov Ritov. 2023. Bayesian\nStatistics. CRC press.\n\n\nGelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, Aki\nVehtari, and Donald B. Rubin. 2013. Bayesian Data Analysis. CRC\npress.\n\n\nGelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob\nCarpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian\nBürkner, and Martin Modrák. 2020. “Bayesian Workflow.”\narXiv Preprint arXiv:2011.01808.\n\n\nGoldberger, Arthur S. 1991. A Course in Econometrics. Harvard\nUniversity Press.\n\n\nKennedy, Peter. 2008. A Guide to Econometrics. John Wiley &\nSons.\n\n\nMcElreath, Richard. 2018. Statistical Rethinking: A Bayesian Course\nwith Examples in r and Stan. Chapman; Hall/CRC.\n\n\nRizzo, Maria L. 2019. Statistical Computing with r. Chapman;\nHall/CRC.\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with\nSimulation. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.\n\n\nWickham, Hadley. 2019. Advanced r. 2nd ed. Chapman; Hall/CRC.\n\n\nWickham, Hadley, Mine Cetinka-Rundel, and Garrett Grolemund. 2023. R\nfor Data Science. 2nd ed. O’Reilly Media.",
+    "text": "Abramovich, Felix, and Ya’acov Ritov. 2023. Bayesian\nStatistics. CRC press.\n\n\nGelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, Aki\nVehtari, and Donald B. Rubin. 2013. Bayesian Data Analysis. CRC\npress.\n\n\nGelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob\nCarpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian\nBürkner, and Martin Modrák. 2020. “Bayesian Workflow.”\narXiv Preprint arXiv:2011.01808.\n\n\nGoldberger, Arthur S. 1991. A Course in Econometrics. Harvard\nUniversity Press.\n\n\nHansen, Bruce. 2022a. Econometrics. Princeton University Press.\n\n\n———. 2022b. Probability & Statistics for Economists.\nPrinceton University Press.\n\n\nHensher, David A., John M. Rose, and William H. Greene. 2015.\nApplied Choice Analysis. 2nd ed. Cambridge University Press.\n\n\nKennedy, Peter. 2008. A Guide to Econometrics. John Wiley &\nSons.\n\n\nMcElreath, Richard. 2018. Statistical Rethinking: A Bayesian Course\nwith Examples in r and Stan. Chapman; Hall/CRC.\n\n\nRizzo, Maria L. 2019. Statistical Computing with r. Chapman;\nHall/CRC.\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with\nSimulation. 2nd ed. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.\n\n\nWickham, Hadley. 2019. Advanced r. 2nd ed. Chapman; Hall/CRC.\n\n\nWickham, Hadley, Mine Cetinka-Rundel, and Garrett Grolemund. 2023. R\nfor Data Science. 2nd ed. O’Reilly Media.",
     "crumbs": [
-      "Estimation",
       "References"
     ]
   },
@@ -278,16 +353,6 @@
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Appendix</span>"
-    ]
-  },
-  {
-    "objectID": "index.html#how-to-read-this-book",
-    "href": "index.html#how-to-read-this-book",
-    "title": "Discrete Choice Model Estimation with R",
-    "section": "How to read this book",
-    "text": "How to read this book\nThe active reader will benefit most from securing copies of DCMS and ACA alongside this book. While I introduce each model before diving into the associated programming, DCMS and ACA provide substantially more context regarding their development and use in economics and psychology. They also offer more thorough descriptions and derivations of the properties of the models. My recommendation is that you should read — or most likely, re-read — the referenced chapters from DCMS and ACA as we begin to explore each specific model, and then read and work through the corresponding chapter here, alternating between the texts. Do not simply read this book from start to finish without frequently returning to DCMS and/or ACA. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process.\nIn addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.",
-    "crumbs": [
-      "Welcome"
     ]
   }
 ]

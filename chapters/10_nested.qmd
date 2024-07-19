@@ -1,0 +1,3 @@
+# Nested Logit Model {#sec-nested}
+
+add

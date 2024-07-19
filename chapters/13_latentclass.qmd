@@ -1,0 +1,4 @@
+# Latent Class MNL Model {#sec-latent}
+
+add
+

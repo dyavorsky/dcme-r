@@ -1,0 +1,3 @@
+# Simulating from a Model {#sec-simdata}
+
+add

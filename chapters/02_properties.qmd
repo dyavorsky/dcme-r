@@ -1,3 +1,0 @@
-# Properties of Discrete Choice Models {#sec-properties}
-
-add

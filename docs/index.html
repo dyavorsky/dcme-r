@@ -51,7 +51,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./chapters/01_intro.html" rel="next">
+<link href="./chapters/01_choice.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -150,14 +150,8 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/01_intro.html" class="sidebar-item-text sidebar-link">
+  <a href="./chapters/01_choice.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/02_properties.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Properties of Discrete Choice Models</span></span></a>
   </div>
 </li>
       </ul>
@@ -165,7 +159,7 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Behavioral Models</span></a>
+ <span class="menu-text">Logit</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -173,38 +167,44 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/03_logit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Logit</span></span></a>
+  <a href="./chapters/02_draws.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/04_gev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">GEV</span></span></a>
+  <a href="./chapters/03_simdata.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simulating from a Model</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/05_probit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Probit</span></span></a>
+  <a href="./chapters/04_mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/06_mixed_logit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mixed Logit</span></span></a>
+  <a href="./chapters/05_optimization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Optimization</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/07_variations.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Variation on a Theme</span></span></a>
+  <a href="./chapters/06_estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Estimation</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/08_maximization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Numerical Maximization</span></span></a>
+  <a href="./chapters/07_programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Code Performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/08_bayes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Approach</span></span></a>
   </div>
 </li>
       </ul>
@@ -212,7 +212,7 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Estimation</span></a>
+ <span class="menu-text">Probit</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -220,44 +220,20 @@ div.csl-indent {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/09_densities.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></span></a>
+  <a href="./chapters/09_probit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multinomial Probit</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/10_sim_estimation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Simulation-Assisted Estimation</span></span></a>
+  <a href="./chapters/10_nested.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Nested Logit Model</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./chapters/11_indiv_params.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Individual-Level Parameters</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/12_bayesian.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Bayesian Procedures</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/13_endogeneity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Endogeneity</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/14_em_algo.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">EM Algorithms</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./chapters/references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
+  <a href="./chapters/11_gev.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">GEV Logit</span></span></a>
   </div>
 </li>
       </ul>
@@ -265,12 +241,47 @@ div.csl-indent {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Appendices</span></a>
+ <span class="menu-text">Mixed</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/12_simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simulation-Assisted Estimation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/13_latentclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Latent Class MNL Model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/14_mixed.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Mixed Logit Model</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapters/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapters/appendix.html" class="sidebar-item-text sidebar-link">
@@ -292,7 +303,7 @@ div.csl-indent {
   <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
   <ul class="collapse">
   <li><a href="#how-to-read-this-book" id="toc-how-to-read-this-book" class="nav-link" data-scroll-target="#how-to-read-this-book">How to read this book</a></li>
-  <li><a href="#prerequisites" id="toc-prerequisites" class="nav-link" data-scroll-target="#prerequisites">Prerequisites</a></li>
+  <li><a href="#intended-audience" id="toc-intended-audience" class="nav-link" data-scroll-target="#intended-audience">Intended Audience</a></li>
   <li><a href="#acknowledgments" id="toc-acknowledgments" class="nav-link" data-scroll-target="#acknowledgments">Acknowledgments</a></li>
   <li><a href="#colophon" id="toc-colophon" class="nav-link" data-scroll-target="#colophon">Colophon</a></li>
   </ul></li>
@@ -358,27 +369,27 @@ Warning
 <p>The active reader will benefit most from securing copies of DCMS and ACA alongside this book. While I introduce each model before diving into the associated programming, DCMS and ACA provide substantially more context regarding their development and use in economics and psychology. They also offer more thorough descriptions and derivations of the properties of the models. My recommendation is that you should read — or most likely, re-read — the referenced chapters from DCMS and ACA as we begin to explore each specific model, and then read and work through the corresponding chapter here, alternating between the texts. Do not simply read this book from start to finish without frequently returning to DCMS and/or ACA. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process.</p>
 <p>In addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.</p>
 </section>
-<section id="prerequisites" class="level2">
-<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<section id="intended-audience" class="level2">
+<h2 class="anchored" data-anchor-id="intended-audience">Intended Audience</h2>
 <p>This book is intended for a narrow audience, predominantly current or former graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read DCMS and thought <em>how would I code that?</em> Or someone who used <code>nlogit</code> while working through the second half of ACA and wants to “see under the hood” of its estimation routines.</p>
 <p>We will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. Doing so will require us to generate random draws from distributions, approximate integrals with monte carlo simulation, maximize likelihood functions with optimization routines, and (when taking a Bayesian approach) explore posterior distributions with Markov Chain Monte Carlo methods.</p>
-<p>We will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a>. Popular books include <a href="https://r4ds.hadley.nz/"><span class="citation" data-cites="r4ds">Wickham, Cetinka-Rundel, and Grolemund (<span>2023</span>)</span></a> and <a href="https://adv-r.hadley.nz/"><span class="citation" data-cites="advr">Wickham (<span>2019</span>)</span></a>. If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.</p>
+<p>We will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a>. Popular books include <a href="https://r4ds.hadley.nz/"><em>R for Data Science</em></a> properly cited as <span class="citation" data-cites="r4ds">Wickham, Cetinka-Rundel, and Grolemund (<a href="chapters/references.html#ref-r4ds" role="doc-biblioref">2023</a>)</span> and <a href="https://adv-r.hadley.nz/"><em>Advanced R</em></a> properly cited as <span class="citation" data-cites="advr">Wickham (<a href="chapters/references.html#ref-advr" role="doc-biblioref">2019</a>)</span>. If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.</p>
 <p>I also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating discrete choice models. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:</p>
 <ul>
 <li>a <em>model</em> is the set of mathematical assumptions about how data are generated,</li>
 <li>an <em>estimator</em> (or equivalently, the estimation routine) is an algorithm or function of the data, and</li>
 <li>an <em>estimate</em> is the result of applying the estimator to a particular dataset.</li>
 </ul>
-<p>In my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing ones skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.</p>
-<p>I’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, or a different estimation approach.</p>
-<p>In this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend <a href="https://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458"><span class="citation" data-cites="abramovich2023">Abramovich and Ritov (<span>2023</span>)</span></a> on the topic of mathematical statistics, <a href="https://www.hup.harvard.edu/books/9780674175440"><span class="citation" data-cites="goldberger1991">Goldberger (<span>1991</span>)</span></a> and <a href="https://www.wiley.com/en-us/A+Guide+to+Econometrics,+6th+Edition-p-9781405182584"><span class="citation" data-cites="kennedy2008">Kennedy (<span>2008</span>)</span></a> for econometrics, and <a href="https://xcelab.net/rm/statistical-rethinking/"><span class="citation" data-cites="mcelreath2018">McElreath (<span>2018</span>)</span></a> and <a href="https://www.routledge.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955"><span class="citation" data-cites="bda3">Gelman et al. (<span>2013</span>)</span></a> for Bayesian statistics.</p>
+<p>In my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing the student’s skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.</p>
+<p>I’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less-particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, a causal interpretation, or a different estimation approach.</p>
+<p>In this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend <span class="citation" data-cites="abramovich2023">Abramovich and Ritov (<a href="chapters/references.html#ref-abramovich2023" role="doc-biblioref">2023</a>, <a href="chapters/references.htmlhttps://www.routledge.com/Statistical-Theory-A-Concise-Introduction/Abramovich-Ritov/p/book/9781032007458" role="doc-biblioref">link</a>)</span> on the topic of mathematical statistics, <span class="citation" data-cites="goldberger1991">Goldberger (<a href="chapters/references.html#ref-goldberger1991" role="doc-biblioref">1991</a>, <a href="chapters/references.htmlhttps://www.hup.harvard.edu/books/9780674175440" role="doc-biblioref">link</a>)</span> and <span class="citation" data-cites="kennedy2008">Kennedy (<a href="chapters/references.html#ref-kennedy2008" role="doc-biblioref">2008</a>, <a href="chapters/references.htmlhttps://www.wiley.com/en-us/A+Guide+to+Econometrics,+6th+Edition-p-9781405182584" role="doc-biblioref">link</a>)</span> for econometrics, and <span class="citation" data-cites="mcelreath2018">McElreath (<a href="chapters/references.html#ref-mcelreath2018" role="doc-biblioref">2018</a>, <a href="chapters/references.htmlhttps://xcelab.net/rm/statistical-rethinking/" role="doc-biblioref">link</a>)</span> and <span class="citation" data-cites="bda3">Gelman et al. (<a href="chapters/references.html#ref-bda3" role="doc-biblioref">2013</a>, <a href="chapters/references.htmlhttps://www.routledge.com/Bayesian-Data-Analysis/Gelman-Carlin-Stern-Dunson-Vehtari-Rubin/p/book/9781439840955" role="doc-biblioref">link</a>)</span> for Bayesian statistics. Bruce Hansen’s recently released two-volume series <span class="citation" data-cites="hansen1">Hansen (<a href="chapters/references.html#ref-hansen1" role="doc-biblioref">2022b</a>, <a href="chapters/references.htmlhttps://users.ssc.wisc.edu/~bhansen/probability/" role="doc-biblioref">link</a>)</span> and <span class="citation" data-cites="hansen2">Hansen (<a href="chapters/references.html#ref-hansen2" role="doc-biblioref">2022a</a>, <a href="chapters/references.htmlhttps://users.ssc.wisc.edu/~bhansen/econometrics/" role="doc-biblioref">link</a>)</span> on probability, statistics, and econometrics are an excellent set of alternative resources.</p>
 </section>
 <section id="acknowledgments" class="level2">
 <h2 class="anchored" data-anchor-id="acknowledgments">Acknowledgments</h2>
 <p>I gratefully aknowledge the academic giants who pioneered and developed the field of Discrete Choice Analysis. The models offer flexible forms to study human behavior, the estimation methods are fascinating, their implementation usually proceeds from vexing to fun, and their application has been immensely useful in my consulting practice where I seek to help firms better understand consumers in order to improve consumer well-being and firm profitability.</p>
-<p>I am also immensely grateful to the teams that work on the R-Project, those at Posit who provide RStudio, Positron, and Quarto, and the related communities of developers, academics, and R users. The free tools they provide are exceptional and I use them daily. The welcoming communities they have established provide the necessary support humans need, be it technical troubleshooting or emotional encouragement.</p>
-<p>More personally, I would like to thank my academic mentors Ella Honka, Peter Rossi, and Eric Bradlow, as well as the folks that have or continue to tolerate me through my consulting work, including Prachi Bhalerao, June Wu, Chris Diener, Keith Chrzan, and the hosts and attendees of Sawtooth Software’s annual Analytics and Insights Summit. I have learned so much from these researcher’s guidance and often their work.</p>
-<p>Special thanks go to generous people who reviewed and assisted with drafts of this book, including Darren Aeillo, Kalyan Rallabandi, and Geoff Zheng.</p>
+<p>I am also immensely grateful to the teams that work on the <a href="https://www.r-project.org/">R-Project</a>, those at <a href="https://posit.co/">Posit</a> who provide <a href="https://posit.co/products/open-source/rstudio/">RStudio</a>, <a href="https://github.com/posit-dev/positron">Positron</a>, and <a href="https://quarto.org/">Quarto</a>, and the related communities of developers, academics, and R users. The free tools they provide are exceptional and I use them daily. The welcoming communities they have established provide the necessary support humans need, be it technical troubleshooting or emotional encouragement.</p>
+<p>More personally, I would like to thank my academic mentors <a href="https://www.anderson.ucla.edu/faculty-and-research/marketing/faculty/honka">Ella Honka</a>, <a href="https://www.anderson.ucla.edu/faculty-and-research/marketing/faculty/rossi">Peter Rossi</a>, and <a href="https://marketing.wharton.upenn.edu/profile/ebradlow/">Eric Bradlow</a>, as well as the folks that have or continue to tolerate me through my consulting work, including <a href="https://www.gbkcollective.com/team-profiles/prachibhalerao">Prachi Bhalerao</a>, <a href="https://www.bain.com/our-team/june-wu/">June Wu</a>, <a href="http://www.analytics-team.com/">Chris Diener</a>, <a href="https://sawtoothsoftware.com/consulting">Keith Chrzan</a>, and the hosts and attendees of <a href="https://sawtoothsoftware.com/">Sawtooth Software</a>’s annual Analytics and Insights Summit. I have learned so much from these researcher’s guidance and often their work.</p>
+<p>Special thanks go to generous people who reviewed and assisted with drafts of this book, including <a href="https://www.darrenaiello.com/">Darren Aeillo</a>, <a href="https://www.kalyanrallabandi.com/">Kalyan Rallabandi</a>, and <a href="https://www.geoff-zheng.com/">Geoff Zheng</a>.</p>
 <p>Unquestionably, my deepest thanks go to Alison, Zach, and Ben for their patience and support.</p>
 </section>
 <section id="colophon" class="level2">
@@ -398,6 +409,12 @@ Gelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob Carpenter
 </div>
 <div id="ref-goldberger1991" class="csl-entry" role="listitem">
 Goldberger, Arthur S. 1991. <em>A Course in Econometrics</em>. Harvard University Press.
+</div>
+<div id="ref-hansen2" class="csl-entry" role="listitem">
+Hansen, Bruce. 2022a. <em>Econometrics</em>. Princeton University Press.
+</div>
+<div id="ref-hansen1" class="csl-entry" role="listitem">
+———. 2022b. <em>Probability &amp; Statistics for Economists</em>. Princeton University Press.
 </div>
 <div id="ref-hrg2015" class="csl-entry" role="listitem">
 Hensher, David A., John M. Rose, and William H. Greene. 2015. <em>Applied Choice Analysis</em>. 2nd ed. Cambridge University Press.
@@ -1000,7 +1017,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   <div class="nav-page nav-page-previous">
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./chapters/01_intro.html" class="pagination-link" aria-label="Introduction">
+      <a href="./chapters/01_choice.html" class="pagination-link" aria-label="Introduction">
         <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

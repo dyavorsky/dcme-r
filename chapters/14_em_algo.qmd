@@ -1,3 +1,0 @@
-# EM Algorithms {#sec-em_algo}
-
-add

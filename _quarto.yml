@@ -45,27 +45,31 @@ book:
 
     - part: "Introduction"
       chapters: 
-      - chapters/01_intro.qmd
-      - chapters/02_properties.qmd
+      - chapters/01_choice.qmd
 
-    - part: "Behavioral Models"
+    - part: "Logit"
       chapters:
-      - chapters/03_logit.qmd
-      - chapters/04_gev.qmd
-      - chapters/05_probit.qmd
-      - chapters/06_mixed_logit.qmd
-      - chapters/07_variations.qmd
-      - chapters/08_maximization.qmd
+      - chapters/02_draws.qmd
+      - chapters/03_simdata.qmd
+      - chapters/04_mle.qmd
+      - chapters/05_optimization.qmd
+      - chapters/06_estimation.qmd
+      - chapters/07_programming.qmd
+      - chapters/08_bayes.qmd
 
-    - part: "Estimation"
+    - part: "Probit"
       chapters:
-      - chapters/09_densities.qmd
-      - chapters/10_sim_estimation.qmd
-      - chapters/11_indiv_params.qmd
-      - chapters/12_bayesian.qmd
-      - chapters/13_endogeneity.qmd
-      - chapters/14_em_algo.qmd
-      - chapters/references.qmd
+      - chapters/09_probit.qmd
+      - chapters/10_nested.qmd
+      - chapters/11_gev.qmd
+
+    - part: "Mixed"
+      chapters:
+      - chapters/12_simulation.qmd
+      - chapters/13_latentclass.qmd
+      - chapters/14_mixed.qmd
+
+    - chapters/references.qmd
 
   appendices:
    - chapters/appendix.qmd

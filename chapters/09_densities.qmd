@@ -1,3 +1,0 @@
-# Drawing from Densities {#sec-densities}
-
-add

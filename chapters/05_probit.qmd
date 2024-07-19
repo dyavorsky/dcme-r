@@ -1,4 +1,0 @@
-# Probit {#sec-probit}
-
-add
-

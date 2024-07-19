@@ -1,3 +1,0 @@
-# Endogeneity {#sec-endogeneity}
-
-add

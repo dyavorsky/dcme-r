@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Appendix A — Appendix – Discrete Choice Model Estimation with R</title>
+<title>1&nbsp; Introduction – Discrete Choice Model Estimation with R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -30,7 +84,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/references.html" rel="prev">
+<link href="../chapters/02_draws.html" rel="next">
+<link href="../index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -70,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -82,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix.html">Appendices</a></li><li class="breadcrumb-item"><a href="../chapters/appendix.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Appendix</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01_choice.html">Introduction</a></li><li class="breadcrumb-item"><a href="../chapters/01_choice.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -129,7 +213,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/01_choice.html" class="sidebar-item-text sidebar-link">
+  <a href="../chapters/01_choice.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
@@ -263,7 +347,7 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/appendix.html" class="sidebar-item-text sidebar-link active">
+  <a href="../chapters/appendix.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Appendix</span></span></a>
   </div>
 </li>
@@ -274,15 +358,24 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#recap-of-train-ch.-1" id="toc-recap-of-train-ch.-1" class="nav-link active" data-scroll-target="#recap-of-train-ch.-1"><span class="header-section-number">1.1</span> Recap of Train Ch. 1</a></li>
+  <li><a href="#sec-simple_example" id="toc-sec-simple_example" class="nav-link" data-scroll-target="#sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</a></li>
+  <li><a href="#sec-binary_logit" id="toc-sec-binary_logit" class="nav-link" data-scroll-target="#sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">1.4</span> Key Learnings</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/01_choice.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/appendix.html">Appendices</a></li><li class="breadcrumb-item"><a href="../chapters/appendix.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Appendix</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01_choice.html">Introduction</a></li><li class="breadcrumb-item"><a href="../chapters/01_choice.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title"><span id="sec-appendix" class="quarto-section-identifier">Appendix A — Appendix</span></h1>
+<h1 class="title"><span id="sec-choice" class="quarto-section-identifier"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></h1>
 </div>
 
 
@@ -299,9 +392,132 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>add</p>
+<p>It is instructive to start with the first sentence of <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 1.3, “Discrete choice analysis consists of two interrelated tasks: <strong>specification</strong> of the behavioral model and <strong>estimation</strong> of the parameters of that model” (emphasis added). In particular, chapters 1–7 of <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> only specify models; there is not even a hint of model estimation. And since I follow <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>, we too begin with a focus on model specification.</p>
+<p>Let me be clear: many students will see <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> later in this section and immediate think about “fitting” a model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There are no data yet. There will be parameters introduced in our choice of model specification, but we are not yet estimating those parameters. Have patience, we will eventually do these things.</p>
+<section id="recap-of-train-ch.-1" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="recap-of-train-ch.-1"><span class="header-section-number">1.1</span> Recap of Train Ch. 1</h2>
+<p>Train denotes the outcome in any given choice situation as <span class="math inline">\(y\)</span>, determined by some observable factors collected in the vector <span class="math inline">\(\mathbf{x}\)</span> and some unobservable factors collected in the vector <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. The factors (<span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) relate to the agent’s choice (<span class="math inline">\(y\)</span>) through a function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. We assume for the moment that we know <span class="math inline">\(h(\cdot)\)</span> and that <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are length-one vectors (i.e., scalars) denoted <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>Since we do not observe <span class="math inline">\(\varepsilon\)</span>, we can’t predict <span class="math inline">\(y\)</span> exactly. Instead, we focus on the probability of <span class="math inline">\(y\)</span>, that is:</p>
+<p><span id="eq-int_indicator"><span class="math display">\[
+\begin{aligned}
+p(y|x)
+&amp;= \Pr \left( \varepsilon \textrm{ such that } h(x,\varepsilon)=y \right) \\
+&amp;= \Pr \left( I \left[ h(x,\varepsilon)=y \right] = 1 \right) \\
+&amp;= \int I \left[ h(x,\varepsilon)=y \right] f(\varepsilon) \, d\varepsilon
+\end{aligned}
+\tag{1.1}\]</span></span></p>
+<p>For certain special choices of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, a closed-form expression<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> for the integral is available. But more generally, for almost any choice of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, we can approximate the integral through simulation. Train provides pseudo code on how to do so:</p>
+<ol type="1">
+<li>Repeat the following two steps many (<span class="math inline">\(r=1, \ldots, R\)</span>) times:
+<ul>
+<li>Draw <span class="math inline">\(\varepsilon^{(r)}\)</span> from <span class="math inline">\(f(\varepsilon)\)</span>.</li>
+<li>Determine whether <span class="math inline">\(h(x,\varepsilon^{(r)}) = y\)</span>. If so, set <span class="math inline">\(I^{(r)}=1\)</span>; else set <span class="math inline">\(I^{(r)}=0\)</span>.</li>
+</ul></li>
+<li>Average the <span class="math inline">\(R\)</span> values of <span class="math inline">\(I\)</span></li>
+</ol>
+<p>Next we look at two examples where we use this procedure to approximate the <span class="math inline">\(p(y|x)\)</span> integral. The first example I made up. The second example is the binary logit model discussed by Train, but for which I’ll show you how to simulate the <span class="math inline">\(p(y|x)\)</span> integral.</p>
+</section>
+<section id="sec-simple_example" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</h2>
+<p>Let’s first set up a toy example to demonstrate how simulation can approximate the <span class="math inline">\(p(y|x)\)</span> integral. Suppose <span class="math inline">\(x=0.5\)</span> and <span class="math inline">\(\varepsilon\)</span> is uniformly distributed between <span class="math inline">\(-1\)</span> and <span class="math inline">\(1\)</span>. Define <span class="math inline">\(h(x, \varepsilon)\)</span> to be:</p>
+<p><span id="eq-h_uniform"><span class="math display">\[
+h(x, \varepsilon) =
+    \begin{cases}
+        0  &amp; \text{if } x + \varepsilon &lt; 0 \\
+        1  &amp; \text{if } x + \varepsilon \in [0,1] \\
+        2  &amp; \text{if } x + \varepsilon &gt; 1
+    \end{cases}
+\tag{1.2}\]</span></span></p>
+<p>We’ll focus on the outcome <span class="math inline">\(y=2\)</span>. You can probably intuit that the <span class="math inline">\(p(y=2 | x) = 0.25\)</span> since only one quarter of the time will <span class="math inline">\(\varepsilon\)</span> be sufficiently positive to make <span class="math inline">\(x + \varepsilon &gt; 1\)</span>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Nevertheless, let’s approximate the integral representation of <span class="math inline">\(p(y=2|x)\)</span> through simulation to ensure we understand the process.</p>
+<p>To walk you through the code, we first set a seed so that the pseudo-random numbers generated by <code>runif()</code> can be replicated exactly each time the code is run (even on different computers). We then specify that we will use 1,000 draws in the simulation and we create a vector <code>I</code> to hold our results. The simulation occurs via a <code>for()</code> loop where each time through the loop we take a draw of <span class="math inline">\(\varepsilon\)</span>, calculate <span class="math inline">\(0.5 + \varepsilon\)</span> and check whether that sum is greater than one. If so, then <span class="math inline">\(h(x,\varepsilon)=2\)</span> matching the value of <span class="math inline">\(y\)</span> for the choice probability we want to assess — i.e., <span class="math inline">\(p(y=2|x)\)</span> — and thus we store a <span class="math inline">\(1\)</span> in the <span class="math inline">\(r^\textrm{th}\)</span> position of <code>I</code>; otherwise we store a 0. We then average the values in <code>I</code> to get our approximation of <span class="math inline">\(p(y=2|x)\)</span>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>I <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="at">length=</span>R)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    eps  <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    h    <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> eps </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    I[r] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(h <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(I)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.258</code></pre>
+</div>
+</div>
+<p>The simulated value 0.258 approximates the exact value 0.25 and can be made closer by increasing the number of draws used in the simulation.</p>
+<p>Notice that we took draws of <span class="math inline">\(\varepsilon\)</span> to empirical approximate the integral of <span class="math inline">\(p(y|x)\)</span>, but we should not think of these draws as “data” in the sense of a dataset. They are ancillary numbers generated from the distribution of <span class="math inline">\(\varepsilon\)</span> that we use to approximate the integral.</p>
+<p>R users will recognize that we can shorten the code by taking advantage of R’s vectorized functions and its conversion of boolean values to 0/1 when used in mathematical operations. Here is a shorter implementation of the simulation; whether it’s “better” code is a matter of preference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( <span class="fu">runif</span>(R, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">&gt;</span> <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.258</code></pre>
+</div>
+</div>
+<p>That’s it. If you can generate pseudo-random draws from the density <span class="math inline">\(f\)</span> and you know <span class="math inline">\(h\)</span>, approximating a choice probability by simulation might only require a handful of lines of code.</p>
+</section>
+<section id="sec-binary_logit" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</h2>
+<p>As an example of a model with a complete closed-form solution, Train provides the binary logit model. In this example, we’ll let <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> be vectors of length two, and we’ll specify <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span> as follows:</p>
+<p>The “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (<span class="math inline">\(y=1\)</span>) or not (<span class="math inline">\(y=0\)</span>). To tie this model into a framework of behavior, we start with a utility function <span class="math inline">\(U\)</span>. In Train’s specific example, utility is specified as</p>
+<p><span id="eq-u_binlogit"><span class="math display">\[
+U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = \mathbf{x}'\boldsymbol{\beta}+ \varepsilon
+\tag{1.3}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{x}\)</span> is a vector of observable explanatory variables, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of parameters that through the functional form <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span> effectively serve as weights on the covariates, and <span class="math inline">\(\varepsilon\)</span> is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher. Notice that we’re allowing <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> to be vectors in this example, whereas they were scalars (or equivalently length-one vectors) in the previous example.</p>
+<p>In this model, the threshold for action is 0 because the decision maker takes action (<span class="math inline">\(y=1\)</span>) when utility is positive; conversely, when utility is negative, the decision makes elects not to take the action (i.e., <span class="math inline">\(y=0\)</span>). Therefore we can specify <span class="math inline">\(h\)</span> as:</p>
+<p><span id="eq-h_binlogit"><span class="math display">\[
+h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
+    \begin{cases}
+        0  &amp; \text{if} \hspace{1ex} U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) \le 0 \\
+        1  &amp; \text{if} \hspace{1ex} U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) &gt; 0
+    \end{cases}
+\tag{1.4}\]</span></span></p>
+<p>The “logit” part of the model’s name refers to the choice of <span class="math inline">\(f\)</span>. The binary logit model assumes <span class="math inline">\(f\)</span> is the logistic distribution:</p>
+<p><span id="eq-bin_logistic_dist"><span class="math display">\[
+f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
+\tag{1.5}\]</span></span></p>
+<p>Having specified <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, let’s choose some values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span> and use simulation to approximate the integral for <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Let’s pick <span class="math inline">\(\mathbf{x}=(0.5, 2)\)</span> and <span class="math inline">\(\boldsymbol{\beta}=(3,-1)\)</span> such that <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\)</span>. We know from the closed-form solution to this model provided by Train that, with these values of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>, the probability the decision maker takes action is:</p>
+<p><span id="eq-binlogit_example"><span class="math display">\[
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}'\boldsymbol{\beta}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
+\tag{1.6}\]</span></span></p>
+<p>We can approximate this integral as before. Below I use the function <code>rlogis()</code> to take <code>R=1000</code> draws from the binary logistic distribution, and I approximate the integral with the proportion of times <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon\)</span> is greater than the threshold for action (<span class="math inline">\(0\)</span>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2345</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(x <span class="sc">%*%</span> beta) <span class="sc">+</span> <span class="fu">rlogis</span>(R)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.364</code></pre>
+</div>
+</div>
+<p>Our simulated value 0.364 approximates the exact value of the integral 0.378.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">1.4</span> Key Learnings</h2>
+<p>The key learning from this chapter is that with discrete choice models our focus is on the <em>probability</em> of the choie outcome <span class="math inline">\(y\)</span> – that is, <span class="math inline">\(p(y|x)\)</span>. This choice outcome <span class="math inline">\(y\)</span> results from the joint distribution <span class="math inline">\(f\)</span> of unobserved factors <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and the behavioral model <span class="math inline">\(h\)</span> that relates <span class="math inline">\(y\)</span> to <span class="math inline">\(\mathbf{x}\)</span> (and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>). The probability of the choice outcome <span class="math inline">\(p(y|x)\)</span> can be written in closed form for only very special choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span>, but for almost any choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span> we can simulate <span class="math inline">\(p(y|x)\)</span>, as the two examples in this chapter demonstrate.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>In this context, a <em>closed-form expression</em> means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral <span class="math inline">\(\int x \, dx\)</span> has the closed for expression <span class="math inline">\(x^2/2\)</span> plus some constant. We will see later that the Extreme Value distribution is often chosen for <span class="math inline">\(f\)</span> predominantly because it leads to a closed for expression for the choice probability <span class="math inline">\(p(y|x)\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>More precisely, <span class="math inline">\(p(y=2|x) = \Pr(x+\varepsilon &gt; 1|x=0.5) = \Pr(\varepsilon &gt; 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5\varepsilon)\vert_{0.5}^1 = 0.25\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Only at the early stage of simulating data from a model to better understand the model do we pick values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>. Typically, <span class="math inline">\(\mathbf{x}\)</span> will part of the data you collect and <span class="math inline">\(\boldsymbol{\beta}\)</span> will be parameters whose values you seek to estimate.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -870,11 +1086,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/references.html" class="pagination-link" aria-label="References">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">References</span>
+      <a href="../index.html" class="pagination-link" aria-label="Welcome">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../chapters/02_draws.html" class="pagination-link" aria-label="Drawing from Densities">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -882,4 +1101,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/appendix.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/01_choice.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>

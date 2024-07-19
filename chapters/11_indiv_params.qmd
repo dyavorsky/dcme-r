@@ -1,3 +1,0 @@
-# Individual-Level Parameters {#sec-indiv_parameters}
-
-add
