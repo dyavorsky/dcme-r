@@ -1,3 +1,37 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
 # Simulating from a Model {#sec-simdata}
 
-add
+<!-- Sources: DCMS Ch 1-2; Chapman 2013 (simulation-based conjoint teaching); gelman2020 Bayesian workflow for the fake-data ethos -->
+
+## Why Simulate?
+
+<!-- the book's mantra operationalized: if you can simulate from a model you understand its assumptions; simulated data is the only data where you know the right answer, making it the ultimate test of an estimation routine -->
+
+## The Anatomy of a Simulation Script
+
+<!-- the invariant recipe: (1) set constants/sizes, (2) choose true parameter values, (3) generate covariates, (4) draw unobservables from f, (5) compute utilities, (6) apply h to record outcomes; map each step to the notation of ch 1 -->
+
+## Example: Simulating Binary Logit Choices
+
+<!-- one decision-maker at a time; reuse the model from ch 1 but now generate y, not p(y|x) -->
+
+## Example: Simulating Binary Probit Choices
+
+<!-- identical script, one line changed (rlogis -> rnorm); the point: model assumptions live in specific lines of code -->
+
+## From One Choice to a Dataset
+
+<!-- N decision-makers, T choice situations each; storing X and y; foreshadow ch 4 on organization -->
+
+## Sanity Checks on Simulated Data
+
+<!-- do choice shares move with x as the model implies? plot p(y) against x'beta; catching bugs before estimation exists -->
+
+## The Simulate-and-Recover Workflow
+
+<!-- preview of the book's core loop: simulate with known theta -> estimate -> compare; we can't "recover" until ch 6, but state the workflow now as the destination -->
+
+## Key Learnings

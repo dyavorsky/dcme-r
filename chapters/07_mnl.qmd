@@ -1,0 +1,49 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Multinomial Logit Model {#sec-mnl}
+
+<!-- Sources: DCMS Ch 3; McFadden 2001 (EV1 foundations, history); Allenby-Kim-Rossi 2015 (derivation from direct utility with budget/outside good) -->
+
+## From Two Alternatives to Many
+
+<!-- J alternatives, one utility each; y is the index of the max; the workhorse model of the book -->
+
+## Random Utility and the Extreme Value Distribution
+
+<!-- U_j = x_j'beta + eps_j with eps iid EV1; why EV1: the closed form (state the max-stability logic, cite the derivation); the logistic connection to ch 1's binary model -->
+
+## The MNL Choice Probability
+
+<!-- the logit formula; softmax; probabilities from utilities in three lines of R -->
+
+## Properties and Implications
+
+### Independence from Irrelevant Alternatives
+
+<!-- odds ratios don't depend on other alternatives; red-bus/blue-bus; when IIA is fine and when it's fatal (sets up ch 10-13) -->
+
+### Substitution Patterns and Elasticities
+
+<!-- proportional substitution; brief -- full elasticity treatment in ch 21 -->
+
+## Identification
+
+### Only Utility Differences Matter
+
+<!-- level normalization: drop an ASC or difference against a base alternative -->
+
+### The Scale of Utility
+
+<!-- error variance normalization; why coefficients are only estimable up to scale; consequences for comparing models/datasets -->
+
+## Specification Choices
+
+<!-- ASCs; generic vs alternative-specific coefficients; individual-specific covariates require interaction with ASCs (connects to ch 4 data organization) -->
+
+## Simulating MNL Data
+
+<!-- extend the ch 3 recipe to J alternatives; the dataset we will estimate on for the next several chapters -->
+
+## Key Learnings

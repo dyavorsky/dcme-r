@@ -1,0 +1,57 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Extensions: Building Your Own Model {#sec-extensions}
+
+<!-- The chapter the book was written for: three worked demonstrations of the recipe. Sources: brazell-2006/diener-2006/hung-2025 x2 (no-choice/dual response); pachali-2022 (budget); train-2016 (flexible mixing) -->
+
+## The Recipe
+
+<!-- everything in this book was one loop: specify utility and error -> derive/simulate the choice probability -> build the likelihood or the sampler -> simulate data -> recover parameters -> only then, real data; a custom model is just a new pass through the loop -->
+
+## Extension 1: The No-Choice Option and Dual Response
+
+<!-- motivation: forced choice distorts demand estimates -->
+
+### Modeling "None"
+
+<!-- outside good as a zero-utility alternative with an ASC (Brazell); what the ASC absorbs -->
+
+### Dual-Response Designs and Their Likelihoods
+
+<!-- the two-stage question; DR-AnyMax vs DR-2Max likelihoods (Diener); the stacked-data trick that reuses our standard MNL code -->
+
+### What Changes in the Code
+
+<!-- walk the recipe: new likelihood, small edits to ch 8/17 code; simulate-and-recover -->
+
+## Extension 2: A Budget Constraint
+
+<!-- motivation: high-ticket categories; standard models overstate demand at high prices (Pachali) -->
+
+### The Model
+
+<!-- latent budget tau_n screens the choice set; utility responds to log(tau_n - p); sign-constrained heterogeneity -->
+
+### What Changes in the Code
+
+<!-- the likelihood gains a screening step; the hierarchy gains a budget layer; modify the ch 17 sampler -->
+
+## Extension 3: Flexible Mixing Distributions
+
+<!-- motivation: why should tastes be normal? (Train 2016: sometimes they're bimodal) -->
+
+### The Logit-Mixed Logit Model
+
+<!-- the mixing distribution itself gets a logit form over a grid; latent class as a special case -->
+
+### What Changes in the Code
+
+<!-- MSL with precomputed kernels; modify the ch 13 estimator -->
+
+## Where to Go from Here
+
+<!-- volumetric/Kuhn-Tucker demand (Allenby-Kim-Rossi 2015), WTP-space models, ordered/rank data, endogeneity; and the reader's own model, which does not exist yet -->
+
+## Key Learnings

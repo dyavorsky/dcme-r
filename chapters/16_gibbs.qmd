@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Gibbs Sampling and Hierarchical Models {#sec-gibbs}
+
+<!-- Sources: Hess & Daly Ch 22 (Lenk's blueprint: Gibbs -> HB regression -> data augmentation); Greene 2008 (Albert-Chib); Rao Ch 3 App 3 (Gibbs primer); rossi-1996 App A (code-ready conditionals) -->
+
+## Sampling by Blocks
+
+<!-- when the joint posterior is intractable but full conditionals are known densities, cycle through them; Gibbs as M-H with acceptance probability one (note, not derivation) -->
+
+### A Toy Example: The Bivariate Normal
+
+<!-- code the two-conditional Gibbs sampler; watch draws trace out the joint -->
+
+## Conjugacy
+
+<!-- normal prior + normal likelihood -> normal posterior (derive once, carefully); inverse-gamma/inverse-Wishart for variances and covariance matrices (state and use, cite derivations) -->
+
+## The Hierarchical Model
+
+<!-- the three-layer structure on the linear model first: y_n | beta_n; beta_n ~ N(bar-beta, Sigma); priors on bar-beta, Sigma -->
+
+### Shrinkage: Borrowing Strength
+
+<!-- each person's posterior pulls toward the population mean, more when their data are thin; the statistical answer to the incidental parameters problem of ch 14 -->
+
+### Gibbs for the Hierarchical Linear Model
+
+<!-- code all blocks: person-level betas, population mean, covariance; simulate-and-recover -->
+
+## Data Augmentation
+
+<!-- latent variables treated as parameters to sample; Albert-Chib binary probit as the canonical example: truncated normal utilities (ch 2's tool) make everything conjugate; code it -->
+
+## Metropolis-within-Gibbs
+
+<!-- when one conditional is non-conjugate (an MNL layer, say...), replace that block's draw with an M-H step; the exact architecture of the next chapter -->
+
+## Key Learnings

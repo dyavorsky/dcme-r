@@ -1,0 +1,37 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Relaxing IIA: Nested Logit and GEV Models {#sec-iia}
+
+<!-- Sources: DCMS Ch 4; McFadden 2001 (GEV generating functions); Greene 2008 §0.7; validation: mlogit nested logit -->
+
+## When Proportional Substitution Fails
+
+<!-- revisit red-bus/blue-bus with numbers; correlated unobserved utility across similar alternatives -->
+
+## The Nested Logit Model
+
+### Nests and the Dissimilarity Parameter
+
+<!-- grouping alternatives; lambda as within-nest correlation; RUM-consistency bounds on lambda -->
+
+### Choice Probabilities: Marginal times Conditional
+
+<!-- the two-level decomposition; inclusive value / log-sum -->
+
+## Simulating Nested Logit Data
+
+<!-- drawing correlated EV1 errors within nests; verify substitution patterns differ from MNL -->
+
+## Estimating the Nested Logit
+
+<!-- FIML with optim() on the full likelihood; two-step sequential estimation mentioned for history; testing lambda = 1 to recover MNL -->
+
+## Validation Against `mlogit`
+
+## The GEV Family
+
+<!-- the generating-function recipe (McFadden 2001); cross-nested, paired combinatorial, OGEV as a survey -- specify, don't estimate; the lesson: closed forms are available beyond MNL, at the price of modeling craft -->
+
+## Key Learnings

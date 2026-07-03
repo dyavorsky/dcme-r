@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Hierarchical Bayesian MNL {#sec-hb-mnl}
+
+<!-- The centerpiece. Sources: DCMS Ch 12 (complete pseudo-code); Train 2001 (adaptive M-H step, HB-vs-MSL); allenby-rossi-2006 (output presentation); rossi-1996 (covariates in the upper level); ben-akiva-2019 Ch 5-7; validation: bayesm rhierMnlRwMixture -->
+
+## The Model
+
+<!-- three layers written in full: MNL choice probabilities given beta_n; beta_n ~ N(bar-beta, Sigma) (optionally bar-beta = Delta z_n for observed drivers of taste); priors on bar-beta and Sigma; this is the mixed MNL of ch 13 wearing Bayesian clothes -->
+
+## The Sampler
+
+<!-- assemble from ch 16's parts: conjugate Gibbs draws for bar-beta and Sigma; a random-walk M-H step per person for beta_n (evaluating the ch 8 likelihood on that person's data); adaptive proposal scaling toward ~0.3 acceptance (Train 2001) -->
+
+## Coding the HB-MNL Sampler
+
+<!-- the full walkthrough, block by block; storage preallocation (ch 9); the complete R script assembled at the end -->
+
+## Running It
+
+<!-- burn-in, chain length, diagnostics per layer; which parameters mix slowly and why; run-time accounting vs ch 13's MSL -->
+
+## The Payoff: Individual-Level Posteriors
+
+<!-- each respondent's posterior distribution of beta_n; shrinkage visualized (per-person MLE vs conditional estimates of ch 14 vs HB posteriors on one plot); exact uncertainty statements per person -->
+
+## HB and MSL on the Same Data
+
+<!-- estimate ch 13's simulated dataset both ways; population parameters agree; only HB hands you the individuals natively; when each approach wins (Train 2001 scoreboard) -->
+
+## Validation Against `bayesm`
+
+<!-- rhierMnlRwMixture on the same data; mapping our notation to bayesm's -->
+
+## Practical Notes
+
+<!-- priors on Sigma matter more than you'd like (cite Allenby 2014 prior-tightening); sign constraints via log-reparameterization (price); label conventions for reporting (posterior of the mean vs the distribution of tastes) -->
+
+## Key Learnings

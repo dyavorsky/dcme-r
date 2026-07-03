@@ -1,0 +1,37 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Post-Estimation: Inference, WTP, and Market Simulation {#sec-postestimation}
+
+<!-- Sources: allenby-2014/2019 (WTP vs pseudo-WTP; economic valuation); chapman-2013 (practitioner pitfalls); cbc-handbook-2022 (importance, simulators, demand curves); DCMS derivatives/elasticities -->
+
+## Estimates Are Not Answers
+
+<!-- clients and coauthors ask about products and prices, not coefficients; this chapter turns draws and estimates into answers -->
+
+## Inference on Functions of Parameters
+
+<!-- classical: the delta method, and simulating from the asymptotic distribution (Krinsky-Robb); Bayesian: just transform the posterior draws -- one of the quiet superpowers of MCMC output -->
+
+## Willingness-to-Pay
+
+<!-- the ratio beta_k/beta_price and its distribution problems; pseudo-WTP vs true WTP via the log-sum (Allenby 2014: the 25-100x overstatement warning); WTP-space reparameterization mention -->
+
+## Attribute Importance
+
+<!-- range-based importance; its dependence on the design; report with care (Chapman) -->
+
+## Market Simulation
+
+<!-- share-of-preference from individual-level estimates; competitive scenarios; why preference share is not market share (Chapman); demand curves from a price sweep -->
+
+## Elasticities
+
+<!-- own- and cross-price; MNL's proportional cross-elasticities vs mixed/MNP patterns; compute from draws -->
+
+## Using Individual-Level Estimates
+
+<!-- targeting and segmentation on posterior means; averages hide the distribution -- always plot the heterogeneity; the ch 17 payoff cashed in -->
+
+## Key Learnings

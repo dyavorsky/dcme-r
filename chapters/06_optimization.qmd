@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Numerical Optimization {#sec-optimization}
+
+<!-- Sources: DCMS Ch 8 (Newton-Raphson/BHHH/BFGS with step-size logic); Hess & Daly Ch 21 (Bunch: definitive frequentist optimization survey) -->
+
+## Climbing a Hill You Cannot See
+
+<!-- iterative ascent: current position, direction, step size; all methods differ only in how they pick direction and step -->
+
+## Newton-Raphson
+
+<!-- derive from the quadratic approximation; code it by hand for the binary logit; watch the iterates converge -->
+
+## Quasi-Newton Methods: BHHH and BFGS
+
+<!-- avoiding the Hessian: outer product of scores (BHHH), secant updates (BFGS); when each is appropriate (DCMS Ch 8) -->
+
+## Numerical Derivatives
+
+<!-- finite differences; step-size pitfalls (Bunch); verifying analytic gradients numerically -- a habit we keep all book -->
+
+## R's Optimizers
+
+<!-- optim() (methods, control, hessian=TRUE), nlm(), maxLik; reading convergence codes; why we mostly use optim(method="BFGS") -->
+
+## Standard Errors from the Hessian
+
+<!-- invert the negative Hessian at the max; connect back to ch 5's information matrix; delta method mention (full treatment ch 21) -->
+
+## Practical Realities
+
+<!-- starting values, parameter scaling, local maxima and multiple starts, non-convergence triage -->
+
+## End-to-End: Simulate, Estimate, Recover
+
+<!-- the payoff of Part I: binary logit from ch 3 simulation through optim() to estimates with standard errors; the true parameters sit inside the confidence intervals -->
+
+## Key Learnings

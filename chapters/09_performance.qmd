@@ -1,0 +1,33 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Code Performance {#sec-performance}
+
+<!-- Sources: pkg-mixl.md (computational architecture for choice likelihoods); advr (profiling); placement rationale: the loglik gets called ~10^2 times by optim, ~10^4-10^5 times by MSL, ~10^5-10^6 times by MCMC -->
+
+## Why Speed Matters Now
+
+<!-- count the likelihood evaluations coming in ch 12-13 and 15-17; a 100x slowdown is the difference between a minute and a weekend -->
+
+## Measure First
+
+<!-- system.time(), bench/microbenchmark, profvis; never optimize what you haven't profiled -->
+
+## Vectorizing the MNL Log-Likelihood
+
+<!-- from the ch 8 loop version to matrix operations, step by step; benchmark each stage -->
+
+## Precompute What Doesn't Change
+
+<!-- build X matrices, index vectors, and choice indicators once outside the optimizer, not inside the likelihood -->
+
+## Memory Layout and Copies
+
+<!-- R's copy-on-modify; growing objects; preallocation (matters for MCMC storage in ch 15-17) -->
+
+## When R Isn't Enough
+
+<!-- a glimpse of Rcpp on the MNL loglik; when it's worth it and when it isn't (mixl's design as the industrial example) -->
+
+## Key Learnings

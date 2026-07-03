@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Latent Class MNL Model {#sec-latentclass}
+
+<!-- Sources: DCMS Ch 6 (latent class as discrete mixed logit) and Ch 14 (EM); Hess & Daly Ch 14; validation: gmnl -->
+
+## Heterogeneity Enters
+
+<!-- decision-makers differ; the first formal model of preference heterogeneity in the book: a finite number of preference types -->
+
+## The Latent Class Model
+
+<!-- class-specific betas, class shares; membership is unobserved -->
+
+## The Likelihood: A Panel Subtlety
+
+<!-- the mixture sits OUTSIDE the product over a person's choice situations: P(sequence) = sum_c pi_c * prod_t P_nt(beta_c); getting this wrong is the classic bug -->
+
+## Simulating Latent Class Data
+
+## Direct Maximization
+
+<!-- optim on the mixture likelihood; logit-transform the shares; label switching and local maxima -->
+
+## The EM Algorithm
+
+<!-- E-step: posterior class membership (Bayes' rule makes its first appearance -- foreshadow Part III); M-step: weighted MNL fits; code it and watch it climb -->
+
+## How Many Classes?
+
+<!-- BIC/AIC; multiple random starts; the answer is instrumental, not structural -->
+
+## Individual-Level Output
+
+<!-- posterior membership probabilities per person; a first, coarse version of "person-specific parameters" -->
+
+## Validation Against `gmnl`
+
+## Key Learnings

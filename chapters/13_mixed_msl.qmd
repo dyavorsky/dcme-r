@@ -1,0 +1,39 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Mixed MNL Model by MSL {#sec-mixed-msl}
+
+<!-- Sources: DCMS Ch 6 (esp §6.6 on MSL for mixed logit); McFadden-Train 2000 (Thm 1, estimation machinery); validation: mlogit/gmnl/mixl -->
+
+## Random Coefficients
+
+<!-- beta_n drawn from a population distribution; two readings of the same model: taste heterogeneity, or error components that break IIA; MMNL approximates any RUM (McFadden-Train Thm 1, stated not proved) -->
+
+## Choosing Mixing Distributions
+
+<!-- normal as default; lognormal for signed coefficients (price); triangular/uniform for bounded support; the choice is a modeling decision with consequences (cite Train 2016 for what's at stake) -->
+
+## The Mixed MNL Likelihood
+
+<!-- the panel structure again, now continuous: integrate over beta_n OUTSIDE the product over t (same lesson as ch 11); write the integral, then its simulator -->
+
+## Simulating Mixed MNL Data
+
+<!-- one extra line vs ch 7: draw beta_n per person via ch 2's Cholesky transform -->
+
+## Coding the Simulated Log-Likelihood
+
+<!-- draws per person, fixed across iterations; Cholesky parameterization to keep Sigma positive definite; wrap the vectorized ch 9 kernel -->
+
+## Estimation
+
+<!-- start values from the plain MNL; watch run times grow with draws and dimensions; uncorrelated vs correlated (K(K+1)/2 parameters) -->
+
+## Feeling the Strain
+
+<!-- an honest accounting: run time, fragile convergence with full covariance, and the estimates are population parameters -- where are the individual betas? sets up ch 14 -->
+
+## Validation Against `mlogit`, `gmnl`, and `mixl`
+
+## Key Learnings

@@ -1,0 +1,51 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Bayesian Estimation of the MNL {#sec-bayes-mnl}
+
+<!-- Sources: allenby-2004-hb-revolution.md (zero-prereq intro); allenby-rossi-2006 (practitioner intro); Hess & Daly Ch 22 (Lenk); mcelreath2018/bda3 for citations; DCMS Ch 12 opening -->
+
+## The Bayesian Mindset
+
+<!-- parameters as uncertain quantities; posterior proportional to prior times likelihood; contrast with the MLE view; same likelihood, different question -->
+
+## Priors
+
+<!-- what they encode; weakly informative defaults used in this book; sensitivity as a practice, not a fear -->
+
+## The Posterior Has No Closed Form Either
+
+<!-- for the MNL, the normalizing constant is intractable -- the same wall as ch 12, met with a different tool: sample from the posterior instead of maximizing it -->
+
+## Summarizing Distributions with Draws
+
+<!-- ch 2's skill repurposed: given posterior draws, means/quantiles/intervals are trivial; the entire output of Bayesian estimation is a matrix of draws -->
+
+## The Metropolis-Hastings Algorithm
+
+### The Idea
+
+<!-- wander over the posterior, accepting moves by relative height; only ratios needed, so the intractable constant cancels -->
+
+### A Toy Target First
+
+<!-- code M-H for a known 1-d density; watch the histogram converge to the truth -->
+
+### Why It Works
+
+<!-- detailed balance in one intuitive page, citations for the theory -->
+
+## M-H for the MNL
+
+<!-- the punchline of the book's design: the target evaluates `loglik_mnl()` from ch 8 plus a log-prior; random-walk proposals; tuning the step size and acceptance rate -->
+
+## MCMC Diagnostics
+
+<!-- trace plots, burn-in, autocorrelation and effective sample size, multiple chains and R-hat; what convergence failure looks like (deliberately break it) -->
+
+## Bayes Meets MLE
+
+<!-- posterior means vs ch 8's MLEs on the same data: nearly identical with diffuse priors (Bernstein-von Mises intuition, cite); so why bother? because this machinery scales to models MLE cannot reach -- next two chapters -->
+
+## Key Learnings

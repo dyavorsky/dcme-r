@@ -1,4 +1,13 @@
 # Appendix {#sec-appendix}
 
-add
+## R Packages for Discrete Choice
 
+<!-- survey with pointers: mlogit (canonical, data formats), gmnl (frequentist heterogeneity), mixl (speed), Rchoice (binary/ordered RP), bayesm (HB workhorse), apollo, Stan/brms; what this book's hand-coded estimators were validated against, chapter by chapter -->
+
+## Notation Glossary
+
+<!-- one table: every symbol, its meaning, and the chapter where it first appears -->
+
+## Common Numerical Errors and Their Symptoms
+
+<!-- optional quick-reference: overflow in exp, singular Hessians, perfect separation, non-convergence checklists -->

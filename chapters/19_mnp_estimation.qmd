@@ -1,0 +1,45 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Estimating the MNP {#sec-mnp-est}
+
+<!-- The capstone demonstration that model and estimation method are separate choices: one model, both toolkits. Sources: DCMS Ch 5 (AR, smoothed AR, GHK); mcculloch-rossi-1994 (3-block Gibbs); validation: bayesm rmnpGibbs -->
+
+## Route 1: Simulated Likelihood
+
+### The Accept-Reject Simulator and Its Flaws
+
+<!-- frequency simulator: not smooth, can be zero; smoothed (logit-kernel) AR as a patch -->
+
+### The GHK Simulator
+
+<!-- recursive conditioning with truncated normals (ch 2's tool again); code it step by step; verify against pmvnorm on small problems -->
+
+### MSL with GHK
+
+<!-- wrap GHK in ch 12's MSL machinery; estimate, recover; run-time and draw-count notes -->
+
+## Route 2: Bayesian Data Augmentation
+
+### Latent Utilities as Parameters
+
+<!-- augment with the utility vector per observation; conditional on utilities, everything is linear-normal (ch 16's world) -->
+
+### The McCulloch-Rossi Gibbs Sampler
+
+<!-- three blocks: truncated-normal utilities consistent with the observed choice / normal beta / Wishart on Sigma-inverse; code it -->
+
+### Identification Inside the Sampler
+
+<!-- sample unidentified, normalize by sigma_11 post hoc (McCulloch-Rossi); why this is legitimate -->
+
+## The Two Routes Compared
+
+<!-- same simulated data through both; estimates agree; contrast effort, run time, and what each hands you; no integral was ever computed on route 2 -->
+
+## Validation Against `bayesm`
+
+<!-- rmnpGibbs -->
+
+## Key Learnings

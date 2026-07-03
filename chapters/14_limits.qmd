@@ -1,0 +1,29 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Limits of Likelihood {#sec-limits}
+
+<!-- Pivot chapter: short, no new estimator. Sources: DCMS Ch 11 (conditional individual-level parameters); Train 2001 HB-vs-MSL; the honest-wall framing: MSL CAN estimate the mixed MNL's population parameters -- what it can't deliver gracefully is person-specific parameters -->
+
+## What We Actually Want
+
+<!-- targeting, segmentation, market simulators need each person's beta_n, not just the population mean and covariance; the marketing/conjoint payoff is individual-level -->
+
+## Why Not Estimate Each Person's Beta by MLE?
+
+<!-- T is small and fixed per person; the incidental parameters problem; a simulation demonstrating per-person MLE failure (some betas infinite -- perfect separation) -->
+
+## Conditioning on Choices: Individual Estimates After MSL
+
+<!-- DCMS Ch 11: h(beta_n | y_n) via Bayes' rule with the estimated population distribution as prior; compute conditional means by simulation; it works... -->
+
+## ...But It Creaks
+
+<!-- two-step logic with no exact inference; simulation error on top of estimation error; plug-in population parameters treated as known; and MSL itself strains (ch 13's accounting) -->
+
+## The Bayesian Road
+
+<!-- preview of Part III: treat beta_n as random quantities in one coherent model; MCMC replaces the optimizer; individual posteriors arrive natively, with exact finite-sample inference; and we already wrote the likelihood code it needs -->
+
+## Key Learnings

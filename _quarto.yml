@@ -43,31 +43,42 @@ book:
   chapters:
     - index.qmd
 
-    - part: "Introduction"
-      chapters: 
-      - chapters/01_choice.qmd
-
-    - part: "Logit"
+    - part: "Foundations"
       chapters:
+      - chapters/01_choice.qmd
       - chapters/02_draws.qmd
       - chapters/03_simdata.qmd
-      - chapters/04_mle.qmd
-      - chapters/05_optimization.qmd
-      - chapters/06_estimation.qmd
-      - chapters/07_programming.qmd
-      - chapters/08_bayes.qmd
+      - chapters/04_data.qmd
+      - chapters/05_likelihood.qmd
+      - chapters/06_optimization.qmd
 
-    - part: "Probit"
+    - part: "The MNL Family, by Likelihood"
       chapters:
-      - chapters/09_probit.qmd
-      - chapters/10_nested.qmd
-      - chapters/11_gev.qmd
+      - chapters/07_mnl.qmd
+      - chapters/08_mnl_mle.qmd
+      - chapters/09_performance.qmd
+      - chapters/10_iia.qmd
+      - chapters/11_latentclass.qmd
+      - chapters/12_msl.qmd
+      - chapters/13_mixed_msl.qmd
+      - chapters/14_limits.qmd
 
-    - part: "Mixed"
+    - part: "The MNL Family, by Bayes"
       chapters:
-      - chapters/12_simulation.qmd
-      - chapters/13_latentclass.qmd
-      - chapters/14_mixed.qmd
+      - chapters/15_bayes_mnl.qmd
+      - chapters/16_gibbs.qmd
+      - chapters/17_hb_mnl.qmd
+
+    - part: "Beyond Logit: The Multinomial Probit"
+      chapters:
+      - chapters/18_mnp.qmd
+      - chapters/19_mnp_estimation.qmd
+      - chapters/20_hb_mnp.qmd
+
+    - part: "Using and Extending the Models"
+      chapters:
+      - chapters/21_postestimation.qmd
+      - chapters/22_extensions.qmd
 
     - chapters/references.qmd
 

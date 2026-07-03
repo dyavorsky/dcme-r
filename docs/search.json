@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Discrete Choice Model Estimation with R",
     "section": "",
-    "text": "Welcome\nIt’s a mantra that my mentors instilled in me in graduate school, and one that I propagate on my students today. I believe it in deeply. If you want to understand a statistical model, it is insufficient to interact with the model only through pen and paper. No matter how well you organize the subscripts or how masterfully you interweave elements of the Greek and Roman alphabets, you won’t really “get it.” To deeply understand a statistical model, you need to be able to simulate data from the model, and then take that simulated data to an estimation routine that enables you to recover the parameters of interest.\nThis is something you learn to do in graduate school. But, unless you have one of the most caring and pedagogical advisers, no one teaches it to you! Instead, it’s a skill that students develop independently and inefficiently between classes and assignment due dates or, in my case, after I was knee-deep in my dissertation research. There is a tremendous imbalance between how immensely important this skill is and the time and instruction dedicated to it.1 That imbalance is the motivation for this book.\nI address this gap in the specific domain of Discrete Choice Modeling. I do so alongside both Kenneth Train’s masterful text Discrete Choice Methods with Simulation (Second Edition, 2009) freely available online at https://eml.berkeley.edu/books/choice2.html and the underappreciated tome Applied Choice Analysis by David Hensher, John Rose, and William Greene (Second Edition, 2015). These books are properly cited as Train (2009) and Hensher, Rose, and Greene (2015) but will hereafter be referred to as DCMS and ACA. I will reference them throughout.\nTrain and I align in our thinking:\nHowever, what is “usually not difficult” for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. You will see the mathematical derivations and pseudo-code from DCMS and ACA transformed into working R code. No mysteries will remain. To borrow a quote from Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of common discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.",
+    "text": "Welcome\nIt’s a mantra that my mentors instilled in me in graduate school, and one that I propagate on my students today. I believe it in deeply. If you want to understand a statistical model, it is insufficient to interact with the model only through pen and paper. No matter how well you organize the subscripts or how masterfully you interweave elements of the Greek and Roman alphabets, you won’t really “get it.” To deeply understand a statistical model, you need to be able to simulate data from the model, and then take that simulated data to an estimation routine that enables you to recover the parameters of interest.\nThis is something you learn to do in graduate school. But, unless you have one of the most caring and pedagogical advisers, no one teaches it to you! Instead, it’s a skill that students develop independently and inefficiently between classes and assignment due dates or, in my case, after I was knee-deep in my dissertation research. There is a tremendous imbalance between how immensely important this skill is and the time and instruction dedicated to it.1 That imbalance is the motivation for this book.\nI address this gap in the specific domain of Discrete Choice Modeling. This book stands on its own, but it did not develop in a vacuum: Kenneth Train’s masterful text Discrete Choice Methods with Simulation (Train 2009), freely available online at https://eml.berkeley.edu/books/choice2.html, and the underappreciated tome Applied Choice Analysis by David Hensher, John Rose, and William Greene (Hensher, Rose, and Greene 2015) both shaped my thinking, and I cite them (and others) regularly for readers who want deeper coverage of the models’ development, properties, and applications.\nTrain and I align in our thinking:\nHowever, what is “usually not difficult” for an experienced researcher can be immensely difficult for a typical graduate student. The aim of this book is to ease that difficulty. I demonstrate R code alongside the math. Every model in this book is developed from its mathematical statement all the way into working R code. No mysteries will remain. To borrow a quote from Quintilian, Cobbett, Cooke, and many others: my goal is to take you through the process of programming the simulation and estimation of common discrete choice models not so that you can understand, but so that you cannot possibly misunderstand.",
     "crumbs": [
       "Welcome"
     ]
@@ -14,7 +14,7 @@
     "href": "index.html#how-to-read-this-book",
     "title": "Discrete Choice Model Estimation with R",
     "section": "How to read this book",
-    "text": "How to read this book\nThe active reader will benefit most from securing copies of DCMS and ACA alongside this book. While I introduce each model before diving into the associated programming, DCMS and ACA provide substantially more context regarding their development and use in economics and psychology. They also offer more thorough descriptions and derivations of the properties of the models. My recommendation is that you should read — or most likely, re-read — the referenced chapters from DCMS and ACA as we begin to explore each specific model, and then read and work through the corresponding chapter here, alternating between the texts. Do not simply read this book from start to finish without frequently returning to DCMS and/or ACA. Doing so only deprives you of the intended experience and likely dramatically reduces the amount you will learn from the process.\nIn addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.",
+    "text": "How to read this book\nThis book tells one long story, and it is best read in order because the chapters build on one another — the code especially. In Part I, we assemble a foundation of computational tools: drawing from densities, simulating data from a model and recovering its parameters, organizing choice data, constructing likelihoods, and maximizing them numerically. In Part II, we put those tools to work on the multinomial logit (MNL) model and its likelihood-estimated extensions, climbing until we reach the limits of what maximum likelihood can deliver. Part III starts the climb again from the Bayesian side, building from the Metropolis-Hastings algorithm up to the hierarchical Bayesian MNL — the workhorse model of modern conjoint analysis and the centerpiece of this book. Part IV leaves the logit family for the multinomial probit, where both the classical and Bayesian toolkits get a capstone workout on a model with no closed-form choice probabilities. Part V turns to what comes after estimation — inference, willingness-to-pay, market simulation — and, finally, to extending these models into new, custom, tailored situations for your own research.\nWhen I introduce a model, I provide enough context to motivate and specify it, but my emphasis remains squarely on estimation. When you want a more thorough treatment of a model’s properties, history, or econometric subtleties, follow the citations; Train (2009) and Hensher, Rose, and Greene (2015) in particular reward the effort.\nIn addition, I strongly encourage you write or copy the code as you work though this book. I would mandate this if I could, but I’m not sitting there next to you and so I must settle for simply sharing my encouragement. Write the code. Play with the code. Break the code. Make it your own. That behavior is where deep understanding comes from, not from highlighting the occasional sentence or equation you find important.",
     "crumbs": [
       "Welcome"
     ]
@@ -24,7 +24,7 @@
     "href": "index.html#intended-audience",
     "title": "Discrete Choice Model Estimation with R",
     "section": "Intended Audience",
-    "text": "Intended Audience\nThis book is intended for a narrow audience, predominantly current or former graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read DCMS and thought how would I code that? Or someone who used nlogit while working through the second half of ACA and wants to “see under the hood” of its estimation routines.\nWe will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. Doing so will require us to generate random draws from distributions, approximate integrals with monte carlo simulation, maximize likelihood functions with optimization routines, and (when taking a Bayesian approach) explore posterior distributions with Markov Chain Monte Carlo methods.\nWe will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at https://www.bigbookofr.com/. Popular books include R for Data Science properly cited as Wickham, Cetinka-Rundel, and Grolemund (2023) and Advanced R properly cited as Wickham (2019). If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.\nI also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating discrete choice models. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:\n\na model is the set of mathematical assumptions about how data are generated,\nan estimator (or equivalently, the estimation routine) is an algorithm or function of the data, and\nan estimate is the result of applying the estimator to a particular dataset.\n\nIn my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing the student’s skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.\nI’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less-particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, a causal interpretation, or a different estimation approach.\nIn this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend Abramovich and Ritov (2023, link) on the topic of mathematical statistics, Goldberger (1991, link) and Kennedy (2008, link) for econometrics, and McElreath (2018, link) and Gelman et al. (2013, link) for Bayesian statistics. Bruce Hansen’s recently released two-volume series Hansen (2022b, link) and Hansen (2022a, link) on probability, statistics, and econometrics are an excellent set of alternative resources.",
+    "text": "Intended Audience\nThis book is intended for a narrow audience, predominantly current or former graduate students with an interest in discrete choice modelling who will find value from seeing and interacting with the programmatic implementation of the multinomial logit and its extended family of related models. In other words, someone who read Train (2009) and thought how would I code that? Or someone who has run mlogit in R or nlogit in Stata and wants to “see under the hood” of those estimation routines.\nWe will simulate data from the statistical models and then estimate the parameters of those models from the simulated data. Doing so will require us to generate random draws from distributions, approximate integrals with monte carlo simulation, maximize likelihood functions with optimization routines, and (when taking a Bayesian approach) explore posterior distributions with Markov Chain Monte Carlo methods.\nWe will do all of this in R, a freely available software environment for statistical computing and graphics. As a result, I assume you are reasonably familiar with R. If not, there is a tremendous set of free online R resources collected and organized at https://www.bigbookofr.com/. Popular books include R for Data Science properly cited as Wickham, Cetinka-Rundel, and Grolemund (2023) and Advanced R properly cited as Wickham (2019). If you are new to R or your familiarity with it has waned, you should consult these resources before proceeding here.\nI also assume you have taken introductory statistics or econometrics courses, as the concepts and techniques taught there are foundational for understanding and estimating discrete choice models. In particular, you should have no uncertainty about the difference between a model, an estimator, and an estimate. To briefly review:\n\na model is the set of mathematical assumptions about how data are generated,\nan estimator (or equivalently, the estimation routine) is an algorithm or function of the data, and\nan estimate is the result of applying the estimator to a particular dataset.\n\nIn my experience, students are often given a model and an estimator, after which much time in the classroom is spent deriving properties of the estimator for that particular model. Often a homework assignment follows which asks students to implement the estimator on a dataset to find an estimate. While this approach succeeds in developing the student’s skills and understanding of the particular estimator for the particular model, it does so with blinders on, obscurring consideration about the choice or specification of the model as well as the choice of estimator.\nI’m sure you can recall your introduction to linear regression where you were handed a model with a linear conditional mean and a Normally distributed “error” and told that you would estimate the parameters of the model via least squares. Hopefully this left you wondering about less-particular situations such as those with a non-continous outcome variable, a non-Normally distributed error term, a non-linear conditional mean, correlation between the observed covariates and the error, a causal interpretation, or a different estimation approach.\nIn this book, we will focus on models with non-continous outcome variables and we will use Maximum Likelihood and Bayesian methods to estimate the parameters of those models. If you would like to review key ideas from statistics and econometrics in preparation for tackling our discrete choice models with likelihood and Bayeian approaches, I highly recommend Abramovich and Ritov (2023, link) on the topic of mathematical statistics, Goldberger (1991, link) and Kennedy (2008, link) for econometrics, and McElreath (2018, link) and Gelman et al. (2013, link) for Bayesian statistics. Bruce Hansen’s recently released two-volume series Hansen (2022b, link) and Hansen (2022a, link) on probability, statistics, and econometrics are an excellent set of alternative resources.",
     "crumbs": [
       "Welcome"
     ]
@@ -54,7 +54,7 @@
     "href": "index.html#footnotes",
     "title": "Discrete Choice Model Estimation with R",
     "section": "",
-    "text": "What I’m referring to are select core skills from the fields of statistical computing and computational statistics. My experience was that graduate students in the social sciences – notably economics, psychology, and business – have little, if any, formal exposure to these ideas. See Rizzo (2019) for a related text that emphasizes computational statistics, and McElreath (2018) and Gelman et al. (2020) for a Bayesian perspective that emphasize a “Bayesian Workflow.”↩︎\nDCMS pg 2. Train provides pseudo-code throughout his book and generously makes Matlab code available on his website.↩︎",
+    "text": "What I’m referring to are select core skills from the fields of statistical computing and computational statistics. My experience was that graduate students in the social sciences – notably economics, psychology, and business – have little, if any, formal exposure to these ideas. See Rizzo (2019) for a related text that emphasizes computational statistics, and McElreath (2018) and Gelman et al. (2020) for a Bayesian perspective that emphasize a “Bayesian Workflow.”↩︎\nTrain (2009) pg 2. Train provides pseudo-code throughout his book and generously makes Matlab code available on his website.↩︎",
     "crumbs": [
       "Welcome"
     ]
@@ -62,67 +62,67 @@
   {
     "objectID": "chapters/01_choice.html",
     "href": "chapters/01_choice.html",
-    "title": "1  Introduction",
+    "title": "1  Choice Models and Simulation",
     "section": "",
-    "text": "1.1 Recap of Train Ch. 1\nTrain denotes the outcome in any given choice situation as \\(y\\), determined by some observable factors collected in the vector \\(\\mathbf{x}\\) and some unobservable factors collected in the vector \\(\\boldsymbol{\\varepsilon}\\). The factors (\\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\)) relate to the agent’s choice (\\(y\\)) through a function \\(y = h(\\mathbf{x}, \\boldsymbol{\\varepsilon})\\). We assume for the moment that we know \\(h(\\cdot)\\) and that \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) are length-one vectors (i.e., scalars) denoted \\(x\\) and \\(\\varepsilon\\).\nSince we do not observe \\(\\varepsilon\\), we can’t predict \\(y\\) exactly. Instead, we focus on the probability of \\(y\\), that is:\n\\[\n\\begin{aligned}\np(y|x)\n&= \\Pr \\left( \\varepsilon \\textrm{ such that } h(x,\\varepsilon)=y \\right) \\\\\n&= \\Pr \\left( I \\left[ h(x,\\varepsilon)=y \\right] = 1 \\right) \\\\\n&= \\int I \\left[ h(x,\\varepsilon)=y \\right] f(\\varepsilon) \\, d\\varepsilon\n\\end{aligned}\n\\tag{1.1}\\]\nFor certain special choices of \\(h\\) and \\(f\\), a closed-form expression1 for the integral is available. But more generally, for almost any choice of \\(h\\) and \\(f\\), we can approximate the integral through simulation. Train provides pseudo code on how to do so:\nNext we look at two examples where we use this procedure to approximate the \\(p(y|x)\\) integral. The first example I made up. The second example is the binary logit model discussed by Train, but for which I’ll show you how to simulate the \\(p(y|x)\\) integral.",
+    "text": "1.1 A Framework for Choice\nIt is instructive to start with the first sentence of Train (2009) Section 1.3, “Discrete choice analysis consists of two interrelated tasks: specification of the behavioral model and estimation of the parameters of that model” (emphasis added). Notably, chapters 1–7 of Train (2009) only specify models; there is not even a hint of model estimation. We too begin with a focus on model specification.\nLet me be clear: many students will see \\(y\\) and \\(x\\) later in this section and immediate think about “fitting” a model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There are no data yet. There will be parameters introduced in our choice of model specification, but we are not yet estimating those parameters. Have patience, we will eventually do these things.\nTrain denotes the outcome in any given choice situation as \\(y\\), determined by some observable factors collected in the vector \\(\\mathbf{x}\\) and some unobservable factors collected in the vector \\(\\boldsymbol{\\varepsilon}\\). The factors (\\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\)) relate to the agent’s choice (\\(y\\)) through a function \\(y = h(\\mathbf{x}, \\boldsymbol{\\varepsilon})\\). We assume for the moment that we know \\(h(\\cdot)\\) and that \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) are length-one vectors (i.e., scalars) denoted \\(x\\) and \\(\\varepsilon\\).\nSince we do not observe \\(\\varepsilon\\), we can’t predict \\(y\\) exactly. Instead, we focus on the probability of \\(y\\), that is:\n\\[\n\\begin{aligned}\np(y|x)\n&= \\Pr \\left( \\varepsilon \\textrm{ such that } h(x,\\varepsilon)=y \\right) \\\\\n&= \\Pr \\left( I \\left[ h(x,\\varepsilon)=y \\right] = 1 \\right) \\\\\n&= \\int I \\left[ h(x,\\varepsilon)=y \\right] f(\\varepsilon) \\, d\\varepsilon\n\\end{aligned}\n\\tag{1.1}\\]\nFor certain special choices of \\(h\\) and \\(f\\), a closed-form expression1 for the integral is available. But more generally, for almost any choice of \\(h\\) and \\(f\\), we can approximate the integral through simulation. Train provides pseudo code on how to do so:\nNext we look at two examples where we use this procedure to approximate the \\(p(y|x)\\) integral. The first example I made up. The second example is the binary logit model discussed by Train, but for which I’ll show you how to simulate the \\(p(y|x)\\) integral.",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
-    "objectID": "chapters/01_choice.html#recap-of-train-ch.-1",
-    "href": "chapters/01_choice.html#recap-of-train-ch.-1",
-    "title": "1  Introduction",
+    "objectID": "chapters/01_choice.html#a-framework-for-choice",
+    "href": "chapters/01_choice.html#a-framework-for-choice",
+    "title": "1  Choice Models and Simulation",
     "section": "",
     "text": "Repeat the following two steps many (\\(r=1, \\ldots, R\\)) times:\n\nDraw \\(\\varepsilon^{(r)}\\) from \\(f(\\varepsilon)\\).\nDetermine whether \\(h(x,\\varepsilon^{(r)}) = y\\). If so, set \\(I^{(r)}=1\\); else set \\(I^{(r)}=0\\).\n\nAverage the \\(R\\) values of \\(I\\)",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
     "objectID": "chapters/01_choice.html#sec-simple_example",
     "href": "chapters/01_choice.html#sec-simple_example",
-    "title": "1  Introduction",
+    "title": "1  Choice Models and Simulation",
     "section": "1.2 A Simple Example",
     "text": "1.2 A Simple Example\nLet’s first set up a toy example to demonstrate how simulation can approximate the \\(p(y|x)\\) integral. Suppose \\(x=0.5\\) and \\(\\varepsilon\\) is uniformly distributed between \\(-1\\) and \\(1\\). Define \\(h(x, \\varepsilon)\\) to be:\n\\[\nh(x, \\varepsilon) =\n    \\begin{cases}\n        0  & \\text{if } x + \\varepsilon &lt; 0 \\\\\n        1  & \\text{if } x + \\varepsilon \\in [0,1] \\\\\n        2  & \\text{if } x + \\varepsilon &gt; 1\n    \\end{cases}\n\\tag{1.2}\\]\nWe’ll focus on the outcome \\(y=2\\). You can probably intuit that the \\(p(y=2 | x) = 0.25\\) since only one quarter of the time will \\(\\varepsilon\\) be sufficiently positive to make \\(x + \\varepsilon &gt; 1\\).2 Nevertheless, let’s approximate the integral representation of \\(p(y=2|x)\\) through simulation to ensure we understand the process.\nTo walk you through the code, we first set a seed so that the pseudo-random numbers generated by runif() can be replicated exactly each time the code is run (even on different computers). We then specify that we will use 1,000 draws in the simulation and we create a vector I to hold our results. The simulation occurs via a for() loop where each time through the loop we take a draw of \\(\\varepsilon\\), calculate \\(0.5 + \\varepsilon\\) and check whether that sum is greater than one. If so, then \\(h(x,\\varepsilon)=2\\) matching the value of \\(y\\) for the choice probability we want to assess — i.e., \\(p(y=2|x)\\) — and thus we store a \\(1\\) in the \\(r^\\textrm{th}\\) position of I; otherwise we store a 0. We then average the values in I to get our approximation of \\(p(y=2|x)\\).\n\nset.seed(1234)\n\nR &lt;- 1000\nI &lt;- vector(length=R)\n\nfor(r in 1:R) {\n    eps  &lt;- runif(1, min=-1, max=1)\n    h    &lt;- 0.5 + eps \n    I[r] &lt;- as.integer(h &gt; 1)\n}\nmean(I)\n\n[1] 0.258\n\n\nThe simulated value 0.258 approximates the exact value 0.25 and can be made closer by increasing the number of draws used in the simulation.\nNotice that we took draws of \\(\\varepsilon\\) to empirical approximate the integral of \\(p(y|x)\\), but we should not think of these draws as “data” in the sense of a dataset. They are ancillary numbers generated from the distribution of \\(\\varepsilon\\) that we use to approximate the integral.\nR users will recognize that we can shorten the code by taking advantage of R’s vectorized functions and its conversion of boolean values to 0/1 when used in mathematical operations. Here is a shorter implementation of the simulation; whether it’s “better” code is a matter of preference.\n\nset.seed(1234)\nR &lt;- 1000\nmean( runif(R, min=-1, max=1) + 0.5 &gt; 1 )\n\n[1] 0.258\n\n\nThat’s it. If you can generate pseudo-random draws from the density \\(f\\) and you know \\(h\\), approximating a choice probability by simulation might only require a handful of lines of code.",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
     "objectID": "chapters/01_choice.html#sec-binary_logit",
     "href": "chapters/01_choice.html#sec-binary_logit",
-    "title": "1  Introduction",
+    "title": "1  Choice Models and Simulation",
     "section": "1.3 A Binary Logit Model Example",
     "text": "1.3 A Binary Logit Model Example\nAs an example of a model with a complete closed-form solution, Train provides the binary logit model. In this example, we’ll let \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) be vectors of length two, and we’ll specify \\(h\\) and \\(f\\) as follows:\nThe “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (\\(y=1\\)) or not (\\(y=0\\)). To tie this model into a framework of behavior, we start with a utility function \\(U\\). In Train’s specific example, utility is specified as\n\\[\nU(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) = \\mathbf{x}'\\boldsymbol{\\beta}+ \\varepsilon\n\\tag{1.3}\\]\nwhere \\(\\mathbf{x}\\) is a vector of observable explanatory variables, \\(\\boldsymbol{\\beta}\\) is a vector of parameters that through the functional form \\(\\mathbf{x}'\\boldsymbol{\\beta}\\) effectively serve as weights on the covariates, and \\(\\varepsilon\\) is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher. Notice that we’re allowing \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\varepsilon}\\) to be vectors in this example, whereas they were scalars (or equivalently length-one vectors) in the previous example.\nIn this model, the threshold for action is 0 because the decision maker takes action (\\(y=1\\)) when utility is positive; conversely, when utility is negative, the decision makes elects not to take the action (i.e., \\(y=0\\)). Therefore we can specify \\(h\\) as:\n\\[\nh(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) =\n    \\begin{cases}\n        0  & \\text{if} \\hspace{1ex} U(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) \\le 0 \\\\\n        1  & \\text{if} \\hspace{1ex} U(\\mathbf{x}, \\boldsymbol{\\beta}, \\varepsilon) &gt; 0\n    \\end{cases}\n\\tag{1.4}\\]\nThe “logit” part of the model’s name refers to the choice of \\(f\\). The binary logit model assumes \\(f\\) is the logistic distribution:\n\\[\nf(\\varepsilon) = \\frac{e^{-\\varepsilon}}{(1+e^{-\\varepsilon})^2}\n\\tag{1.5}\\]\nHaving specified \\(h\\) and \\(f\\), let’s choose some values for \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\) and use simulation to approximate the integral for \\(p(y|\\mathbf{x},\\boldsymbol{\\beta})\\).3 Let’s pick \\(\\mathbf{x}=(0.5, 2)\\) and \\(\\boldsymbol{\\beta}=(3,-1)\\) such that \\(\\mathbf{x}'\\boldsymbol{\\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\\). We know from the closed-form solution to this model provided by Train that, with these values of \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\), the probability the decision maker takes action is:\n\\[\np(y=1 | \\mathbf{x}, \\boldsymbol{\\beta}) = \\frac{e^{\\mathbf{x}'\\boldsymbol{\\beta}}}{1 + e^{\\mathbf{x}'\\boldsymbol{\\beta}}} = \\frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407\n\\tag{1.6}\\]\nWe can approximate this integral as before. Below I use the function rlogis() to take R=1000 draws from the binary logistic distribution, and I approximate the integral with the proportion of times \\(\\mathbf{x}'\\boldsymbol{\\beta}+ \\varepsilon\\) is greater than the threshold for action (\\(0\\)):\n\nset.seed(2345)\nR &lt;- 1000\n\nx    &lt;- c(0.5, 2)\nbeta &lt;- c(3, -1)\n\nU &lt;- as.vector(x %*% beta) + rlogis(R)\nmean(U &gt; 0)\n\n[1] 0.364\n\n\nOur simulated value 0.364 approximates the exact value of the integral 0.378.",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
     "objectID": "chapters/01_choice.html#key-learnings",
     "href": "chapters/01_choice.html#key-learnings",
-    "title": "1  Introduction",
+    "title": "1  Choice Models and Simulation",
     "section": "1.4 Key Learnings",
     "text": "1.4 Key Learnings\nThe key learning from this chapter is that with discrete choice models our focus is on the probability of the choie outcome \\(y\\) – that is, \\(p(y|x)\\). This choice outcome \\(y\\) results from the joint distribution \\(f\\) of unobserved factors \\(\\boldsymbol{\\varepsilon}\\) and the behavioral model \\(h\\) that relates \\(y\\) to \\(\\mathbf{x}\\) (and \\(\\boldsymbol{\\varepsilon}\\)). The probability of the choice outcome \\(p(y|x)\\) can be written in closed form for only very special choices of \\(f\\) and \\(h\\), but for almost any choice of \\(f\\) and \\(h\\) we can simulate \\(p(y|x)\\), as the two examples in this chapter demonstrate.\n\n\n\n\nTrain, Kenneth E. 2009. Discrete Choice Methods with Simulation. 2nd ed. Cambridge University Press. https://eml.berkeley.edu/books/choice2.html.",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
     "objectID": "chapters/01_choice.html#footnotes",
     "href": "chapters/01_choice.html#footnotes",
-    "title": "1  Introduction",
+    "title": "1  Choice Models and Simulation",
     "section": "",
     "text": "In this context, a closed-form expression means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral \\(\\int x \\, dx\\) has the closed for expression \\(x^2/2\\) plus some constant. We will see later that the Extreme Value distribution is often chosen for \\(f\\) predominantly because it leads to a closed for expression for the choice probability \\(p(y|x)\\).↩︎\nMore precisely, \\(p(y=2|x) = \\Pr(x+\\varepsilon &gt; 1|x=0.5) = \\Pr(\\varepsilon &gt; 0.5) = \\int_{0.5}^1 f(\\varepsilon) d\\varepsilon = (0.5\\varepsilon)\\vert_{0.5}^1 = 0.25\\).↩︎\nOnly at the early stage of simulating data from a model to better understand the model do we pick values for \\(\\mathbf{x}\\) and \\(\\boldsymbol{\\beta}\\). Typically, \\(\\mathbf{x}\\) will part of the data you collect and \\(\\boldsymbol{\\beta}\\) will be parameters whose values you seek to estimate.↩︎",
     "crumbs": [
-      "Introduction",
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "Foundations",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Choice Models and Simulation</span>"
     ]
   },
   {
@@ -130,75 +130,97 @@
     "href": "chapters/02_draws.html",
     "title": "2  Drawing from Densities",
     "section": "",
-    "text": "2.1 Pseudo-Random Numbers from Uniform Distribution",
+    "text": "2.1 Why We Need Draws",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#inverse-transform-method",
-    "href": "chapters/02_draws.html#inverse-transform-method",
+    "objectID": "chapters/02_draws.html#pseudo-random-numbers-from-the-uniform-distribution",
+    "href": "chapters/02_draws.html#pseudo-random-numbers-from-the-uniform-distribution",
     "title": "2  Drawing from Densities",
-    "section": "2.2 Inverse Transform Method",
-    "text": "2.2 Inverse Transform Method\n\\[\n\\begin{aligned}\nF_X(x)\n    &= \\Pr \\left(X \\le x \\right) \\\\\n    &= \\Pr \\left(T(U) \\le x \\right) \\\\\n    &= \\Pr \\left(U \\le T^{-1}(x) \\right) \\\\\n    &= T^{-1}(x)\n\\end{aligned}\n\\]",
+    "section": "2.2 Pseudo-Random Numbers from the Uniform Distribution",
+    "text": "2.2 Pseudo-Random Numbers from the Uniform Distribution",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#example-exponential",
-    "href": "chapters/02_draws.html#example-exponential",
+    "objectID": "chapters/02_draws.html#the-inverse-transform-method",
+    "href": "chapters/02_draws.html#the-inverse-transform-method",
     "title": "2  Drawing from Densities",
-    "section": "2.3 Example: Exponential",
-    "text": "2.3 Example: Exponential\n\\[ F(y,\\lambda) = 1 - \\exp\\left( -\\lambda y \\right) \\hspace{1em} \\text{for} \\ y \\ge 0 \\]\n\\[ F^{-1}(u) = -\\log(1-u) / \\lambda \\]\n\nn &lt;- 1e4\nlambda &lt;- 0.3\nu &lt;- runif(n)\ny &lt;- -log(1-u)/lambda\n\n\nx &lt;- seq(from=0, to=ceiling(max(y)), length.out=100)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dexp(x,lambda), lwd=2)",
+    "section": "2.3 The Inverse Transform Method",
+    "text": "2.3 The Inverse Transform Method\n\\[\n\\begin{aligned}\nF_X(x)\n    &= \\Pr \\left(X \\le x \\right) \\\\\n    &= \\Pr \\left(T(U) \\le x \\right) \\\\\n    &= \\Pr \\left(U \\le T^{-1}(x) \\right) \\\\\n    &= T^{-1}(x)\n\\end{aligned}\n\\]\n\n2.3.1 Example: Exponential\n\\[ F(y,\\lambda) = 1 - \\exp\\left( -\\lambda y \\right) \\hspace{1em} \\text{for} \\ y \\ge 0 \\]\n\\[ F^{-1}(u) = -\\log(1-u) / \\lambda \\]\n\nn &lt;- 1e4\nlambda &lt;- 0.3\nu &lt;- runif(n)\ny &lt;- -log(1-u)/lambda\n\n\nx &lt;- seq(from=0, to=ceiling(max(y)), length.out=100)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dexp(x,lambda), lwd=2)\n\n\n\n\n\n\n\n\n\n\n2.3.2 Example: Gumbel\n\\[ F(y) = \\exp \\left( -\\exp \\left( -y \\right) \\right) \\]\n\\[ F^{-1}(u) = -\\log(-log(u))  \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- -log(-log(u))\n\n\nx &lt;- seq(from=-3, to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=ordinal::dgumbel(x), lwd=2)\n\n\n\n\n\n\n\n\n\n\n2.3.3 Example: Logistic\n\\[ F(y) = \\frac{1}{1+\\exp \\left( -x \\right)} \\]\n\\[ F^{-1}(u) = \\log(u) - \\log(1-u) \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- log(u) - log(1-u)\n\n\nx &lt;- seq(from=floor(min(y)), to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dlogis(x), lwd=2)\n\n\n\n\n\n\n\n\n\n\n2.3.4 Example: Normal\n\nn &lt;- 1e4\ny &lt;- rnorm(n)\n\nu &lt;- runif(n)\ny &lt;- qnorm(u)",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#example-gumbel",
-    "href": "chapters/02_draws.html#example-gumbel",
+    "objectID": "chapters/02_draws.html#accept-reject-methods",
+    "href": "chapters/02_draws.html#accept-reject-methods",
     "title": "2  Drawing from Densities",
-    "section": "2.4 Example: Gumbel",
-    "text": "2.4 Example: Gumbel\n\\[ F(y) = \\exp \\left( -\\exp \\left( -y \\right) \\right) \\]\n\\[ F^{-1}(u) = -\\log(-log(u))  \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- -log(-log(u))\n\n\nx &lt;- seq(from=-3, to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=ordinal::dgumbel(x), lwd=2)",
+    "section": "2.4 Accept-Reject Methods",
+    "text": "2.4 Accept-Reject Methods",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#example-logistic",
-    "href": "chapters/02_draws.html#example-logistic",
+    "objectID": "chapters/02_draws.html#transforming-draws",
+    "href": "chapters/02_draws.html#transforming-draws",
     "title": "2  Drawing from Densities",
-    "section": "2.5 Example: Logistic",
-    "text": "2.5 Example: Logistic\n\\[ F(y) = \\frac{1}{1+\\exp \\left( -x \\right)} \\]\n\\[ F^{-1}(u) = \\log(u) - \\log(1-u) \\]\n\nn &lt;- 1e4\nu &lt;- runif(n)\ny &lt;- log(u) - log(1-u)\n\n\nx &lt;- seq(from=floor(min(y)), to=ceiling(max(y)), length.out=500)\nhist(y, freq=F, breaks=100)\nlines(x=x, y=dlogis(x), lwd=2)",
+    "section": "2.5 Transforming Draws",
+    "text": "2.5 Transforming Draws",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#example-normal",
-    "href": "chapters/02_draws.html#example-normal",
+    "objectID": "chapters/02_draws.html#the-multivariate-normal",
+    "href": "chapters/02_draws.html#the-multivariate-normal",
     "title": "2  Drawing from Densities",
-    "section": "2.6 Example: Normal",
-    "text": "2.6 Example: Normal\n\nn &lt;- 1e4\ny &lt;- rnorm(n)\n\nu &lt;- runif(n)\ny &lt;- qnorm(u)",
+    "section": "2.6 The Multivariate Normal",
+    "text": "2.6 The Multivariate Normal\n\n\n2.6.1 Example: Correlated Normal Draws",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
   {
-    "objectID": "chapters/02_draws.html#extensions-multivariate-normal",
-    "href": "chapters/02_draws.html#extensions-multivariate-normal",
+    "objectID": "chapters/02_draws.html#truncated-distributions",
+    "href": "chapters/02_draws.html#truncated-distributions",
     "title": "2  Drawing from Densities",
-    "section": "2.7 Extensions: Multivariate Normal",
-    "text": "2.7 Extensions: Multivariate Normal",
+    "section": "2.7 Truncated Distributions",
+    "text": "2.7 Truncated Distributions",
     "crumbs": [
-      "Logit",
+      "Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02_draws.html#quasi-random-draws",
+    "href": "chapters/02_draws.html#quasi-random-draws",
+    "title": "2  Drawing from Densities",
+    "section": "2.8 Quasi-Random Draws",
+    "text": "2.8 Quasi-Random Draws",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/02_draws.html#key-learnings",
+    "href": "chapters/02_draws.html#key-learnings",
+    "title": "2  Drawing from Densities",
+    "section": "2.9 Key Learnings",
+    "text": "2.9 Key Learnings",
+    "crumbs": [
+      "Foundations",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Drawing from Densities</span>"
     ]
   },
@@ -207,131 +229,1704 @@
     "href": "chapters/03_simdata.html",
     "title": "3  Simulating from a Model",
     "section": "",
-    "text": "add",
+    "text": "3.1 Why Simulate?",
     "crumbs": [
-      "Logit",
+      "Foundations",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/04_mle.html",
-    "href": "chapters/04_mle.html",
-    "title": "4  Maximum Likelihood Estimation",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#the-anatomy-of-a-simulation-script",
+    "href": "chapters/03_simdata.html#the-anatomy-of-a-simulation-script",
+    "title": "3  Simulating from a Model",
+    "section": "3.2 The Anatomy of a Simulation Script",
+    "text": "3.2 The Anatomy of a Simulation Script",
     "crumbs": [
-      "Logit",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Maximum Likelihood Estimation</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/05_optimization.html",
-    "href": "chapters/05_optimization.html",
-    "title": "5  Optimization",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#example-simulating-binary-logit-choices",
+    "href": "chapters/03_simdata.html#example-simulating-binary-logit-choices",
+    "title": "3  Simulating from a Model",
+    "section": "3.3 Example: Simulating Binary Logit Choices",
+    "text": "3.3 Example: Simulating Binary Logit Choices",
     "crumbs": [
-      "Logit",
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Optimization</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/06_estimation.html",
-    "href": "chapters/06_estimation.html",
-    "title": "6  Estimation",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#example-simulating-binary-probit-choices",
+    "href": "chapters/03_simdata.html#example-simulating-binary-probit-choices",
+    "title": "3  Simulating from a Model",
+    "section": "3.4 Example: Simulating Binary Probit Choices",
+    "text": "3.4 Example: Simulating Binary Probit Choices",
     "crumbs": [
-      "Logit",
-      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Estimation</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/07_programming.html",
-    "href": "chapters/07_programming.html",
-    "title": "7  Code Performance",
-    "section": "",
-    "text": "add ```",
+    "objectID": "chapters/03_simdata.html#from-one-choice-to-a-dataset",
+    "href": "chapters/03_simdata.html#from-one-choice-to-a-dataset",
+    "title": "3  Simulating from a Model",
+    "section": "3.5 From One Choice to a Dataset",
+    "text": "3.5 From One Choice to a Dataset",
     "crumbs": [
-      "Logit",
-      "<span class='chapter-number'>7</span>  <span class='chapter-title'>Code Performance</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/08_bayes.html",
-    "href": "chapters/08_bayes.html",
-    "title": "8  Bayesian Approach",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#sanity-checks-on-simulated-data",
+    "href": "chapters/03_simdata.html#sanity-checks-on-simulated-data",
+    "title": "3  Simulating from a Model",
+    "section": "3.6 Sanity Checks on Simulated Data",
+    "text": "3.6 Sanity Checks on Simulated Data",
     "crumbs": [
-      "Logit",
-      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Bayesian Approach</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/09_probit.html",
-    "href": "chapters/09_probit.html",
-    "title": "9  Multinomial Probit",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#the-simulate-and-recover-workflow",
+    "href": "chapters/03_simdata.html#the-simulate-and-recover-workflow",
+    "title": "3  Simulating from a Model",
+    "section": "3.7 The Simulate-and-Recover Workflow",
+    "text": "3.7 The Simulate-and-Recover Workflow",
     "crumbs": [
-      "Probit",
-      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Multinomial Probit</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/10_nested.html",
-    "href": "chapters/10_nested.html",
-    "title": "10  Nested Logit Model",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/03_simdata.html#key-learnings",
+    "href": "chapters/03_simdata.html#key-learnings",
+    "title": "3  Simulating from a Model",
+    "section": "3.8 Key Learnings",
+    "text": "3.8 Key Learnings",
     "crumbs": [
-      "Probit",
-      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Nested Logit Model</span>"
+      "Foundations",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Simulating from a Model</span>"
     ]
   },
   {
-    "objectID": "chapters/11_gev.html",
-    "href": "chapters/11_gev.html",
-    "title": "11  GEV Logit",
+    "objectID": "chapters/04_data.html",
+    "href": "chapters/04_data.html",
+    "title": "4  Organizing Choice Data",
     "section": "",
-    "text": "add",
+    "text": "4.1 The Shape of Choice Data",
     "crumbs": [
-      "Probit",
-      "<span class='chapter-number'>11</span>  <span class='chapter-title'>GEV Logit</span>"
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
     ]
   },
   {
-    "objectID": "chapters/12_simulation.html",
-    "href": "chapters/12_simulation.html",
-    "title": "12  Simulation-Assisted Estimation",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/04_data.html#wide-and-long-formats",
+    "href": "chapters/04_data.html#wide-and-long-formats",
+    "title": "4  Organizing Choice Data",
+    "section": "4.2 Wide and Long Formats",
+    "text": "4.2 Wide and Long Formats",
     "crumbs": [
-      "Mixed",
-      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Simulation-Assisted Estimation</span>"
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
     ]
   },
   {
-    "objectID": "chapters/13_latentclass.html",
-    "href": "chapters/13_latentclass.html",
-    "title": "13  Latent Class MNL Model",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/04_data.html#alternative-specific-and-individual-specific-variables",
+    "href": "chapters/04_data.html#alternative-specific-and-individual-specific-variables",
+    "title": "4  Organizing Choice Data",
+    "section": "4.3 Alternative-Specific and Individual-Specific Variables",
+    "text": "4.3 Alternative-Specific and Individual-Specific Variables",
     "crumbs": [
-      "Mixed",
-      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Latent Class MNL Model</span>"
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
     ]
   },
   {
-    "objectID": "chapters/14_mixed.html",
-    "href": "chapters/14_mixed.html",
-    "title": "14  Mixed Logit Model",
-    "section": "",
-    "text": "add",
+    "objectID": "chapters/04_data.html#coding-categorical-attributes",
+    "href": "chapters/04_data.html#coding-categorical-attributes",
+    "title": "4  Organizing Choice Data",
+    "section": "4.4 Coding Categorical Attributes",
+    "text": "4.4 Coding Categorical Attributes",
     "crumbs": [
-      "Mixed",
-      "<span class='chapter-number'>14</span>  <span class='chapter-title'>Mixed Logit Model</span>"
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_data.html#the-outside-option",
+    "href": "chapters/04_data.html#the-outside-option",
+    "title": "4  Organizing Choice Data",
+    "section": "4.5 The Outside Option",
+    "text": "4.5 The Outside Option",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_data.html#from-data-frame-to-likelihood-inputs",
+    "href": "chapters/04_data.html#from-data-frame-to-likelihood-inputs",
+    "title": "4  Organizing Choice Data",
+    "section": "4.6 From Data Frame to Likelihood Inputs",
+    "text": "4.6 From Data Frame to Likelihood Inputs",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_data.html#package-conventions",
+    "href": "chapters/04_data.html#package-conventions",
+    "title": "4  Organizing Choice Data",
+    "section": "4.7 Package Conventions",
+    "text": "4.7 Package Conventions",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/04_data.html#key-learnings",
+    "href": "chapters/04_data.html#key-learnings",
+    "title": "4  Organizing Choice Data",
+    "section": "4.8 Key Learnings",
+    "text": "4.8 Key Learnings",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Organizing Choice Data</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html",
+    "href": "chapters/05_likelihood.html",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "",
+    "text": "5.1 The Likelihood Function",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#independence-and-the-product-form",
+    "href": "chapters/05_likelihood.html#independence-and-the-product-form",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.2 Independence and the Product Form",
+    "text": "5.2 Independence and the Product Form",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#the-log-likelihood",
+    "href": "chapters/05_likelihood.html#the-log-likelihood",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.3 The Log-Likelihood",
+    "text": "5.3 The Log-Likelihood",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#example-the-binary-logit-log-likelihood-in-r",
+    "href": "chapters/05_likelihood.html#example-the-binary-logit-log-likelihood-in-r",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.4 Example: The Binary Logit Log-Likelihood in R",
+    "text": "5.4 Example: The Binary Logit Log-Likelihood in R",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#maximum-likelihood-estimation",
+    "href": "chapters/05_likelihood.html#maximum-likelihood-estimation",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.5 Maximum Likelihood Estimation",
+    "text": "5.5 Maximum Likelihood Estimation",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#the-score-the-hessian-and-the-information-matrix",
+    "href": "chapters/05_likelihood.html#the-score-the-hessian-and-the-information-matrix",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.6 The Score, the Hessian, and the Information Matrix",
+    "text": "5.6 The Score, the Hessian, and the Information Matrix",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#a-first-estimator-grid-search",
+    "href": "chapters/05_likelihood.html#a-first-estimator-grid-search",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.7 A First Estimator: Grid Search",
+    "text": "5.7 A First Estimator: Grid Search",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#why-grid-search-fails-at-scale",
+    "href": "chapters/05_likelihood.html#why-grid-search-fails-at-scale",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.8 Why Grid Search Fails at Scale",
+    "text": "5.8 Why Grid Search Fails at Scale",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/05_likelihood.html#key-learnings",
+    "href": "chapters/05_likelihood.html#key-learnings",
+    "title": "5  From Choice Data to Likelihood",
+    "section": "5.9 Key Learnings",
+    "text": "5.9 Key Learnings",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>From Choice Data to Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html",
+    "href": "chapters/06_optimization.html",
+    "title": "6  Numerical Optimization",
+    "section": "",
+    "text": "6.1 Climbing a Hill You Cannot See",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#newton-raphson",
+    "href": "chapters/06_optimization.html#newton-raphson",
+    "title": "6  Numerical Optimization",
+    "section": "6.2 Newton-Raphson",
+    "text": "6.2 Newton-Raphson",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#quasi-newton-methods-bhhh-and-bfgs",
+    "href": "chapters/06_optimization.html#quasi-newton-methods-bhhh-and-bfgs",
+    "title": "6  Numerical Optimization",
+    "section": "6.3 Quasi-Newton Methods: BHHH and BFGS",
+    "text": "6.3 Quasi-Newton Methods: BHHH and BFGS",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#numerical-derivatives",
+    "href": "chapters/06_optimization.html#numerical-derivatives",
+    "title": "6  Numerical Optimization",
+    "section": "6.4 Numerical Derivatives",
+    "text": "6.4 Numerical Derivatives",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#rs-optimizers",
+    "href": "chapters/06_optimization.html#rs-optimizers",
+    "title": "6  Numerical Optimization",
+    "section": "6.5 R’s Optimizers",
+    "text": "6.5 R’s Optimizers",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#standard-errors-from-the-hessian",
+    "href": "chapters/06_optimization.html#standard-errors-from-the-hessian",
+    "title": "6  Numerical Optimization",
+    "section": "6.6 Standard Errors from the Hessian",
+    "text": "6.6 Standard Errors from the Hessian",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#practical-realities",
+    "href": "chapters/06_optimization.html#practical-realities",
+    "title": "6  Numerical Optimization",
+    "section": "6.7 Practical Realities",
+    "text": "6.7 Practical Realities",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#end-to-end-simulate-estimate-recover",
+    "href": "chapters/06_optimization.html#end-to-end-simulate-estimate-recover",
+    "title": "6  Numerical Optimization",
+    "section": "6.8 End-to-End: Simulate, Estimate, Recover",
+    "text": "6.8 End-to-End: Simulate, Estimate, Recover",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/06_optimization.html#key-learnings",
+    "href": "chapters/06_optimization.html#key-learnings",
+    "title": "6  Numerical Optimization",
+    "section": "6.9 Key Learnings",
+    "text": "6.9 Key Learnings",
+    "crumbs": [
+      "Foundations",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Numerical Optimization</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html",
+    "href": "chapters/07_mnl.html",
+    "title": "7  The Multinomial Logit Model",
+    "section": "",
+    "text": "7.1 From Two Alternatives to Many",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#random-utility-and-the-extreme-value-distribution",
+    "href": "chapters/07_mnl.html#random-utility-and-the-extreme-value-distribution",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.2 Random Utility and the Extreme Value Distribution",
+    "text": "7.2 Random Utility and the Extreme Value Distribution",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#the-mnl-choice-probability",
+    "href": "chapters/07_mnl.html#the-mnl-choice-probability",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.3 The MNL Choice Probability",
+    "text": "7.3 The MNL Choice Probability",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#properties-and-implications",
+    "href": "chapters/07_mnl.html#properties-and-implications",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.4 Properties and Implications",
+    "text": "7.4 Properties and Implications\n\n7.4.1 Independence from Irrelevant Alternatives\n\n\n\n7.4.2 Substitution Patterns and Elasticities",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#identification",
+    "href": "chapters/07_mnl.html#identification",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.5 Identification",
+    "text": "7.5 Identification\n\n7.5.1 Only Utility Differences Matter\n\n\n\n7.5.2 The Scale of Utility",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#specification-choices",
+    "href": "chapters/07_mnl.html#specification-choices",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.6 Specification Choices",
+    "text": "7.6 Specification Choices",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#simulating-mnl-data",
+    "href": "chapters/07_mnl.html#simulating-mnl-data",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.7 Simulating MNL Data",
+    "text": "7.7 Simulating MNL Data",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/07_mnl.html#key-learnings",
+    "href": "chapters/07_mnl.html#key-learnings",
+    "title": "7  The Multinomial Logit Model",
+    "section": "7.8 Key Learnings",
+    "text": "7.8 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The Multinomial Logit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html",
+    "href": "chapters/08_mnl_mle.html",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "",
+    "text": "8.1 The MNL Log-Likelihood",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#coding-loglik_mnl",
+    "href": "chapters/08_mnl_mle.html#coding-loglik_mnl",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.2 Coding loglik_mnl()",
+    "text": "8.2 Coding loglik_mnl()",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#numerical-stability-the-log-sum-exp-trick",
+    "href": "chapters/08_mnl_mle.html#numerical-stability-the-log-sum-exp-trick",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.3 Numerical Stability: The Log-Sum-Exp Trick",
+    "text": "8.3 Numerical Stability: The Log-Sum-Exp Trick",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#the-analytic-gradient",
+    "href": "chapters/08_mnl_mle.html#the-analytic-gradient",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.4 The Analytic Gradient",
+    "text": "8.4 The Analytic Gradient",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#estimation-with-optim",
+    "href": "chapters/08_mnl_mle.html#estimation-with-optim",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.5 Estimation with optim()",
+    "text": "8.5 Estimation with optim()",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#assessing-fit",
+    "href": "chapters/08_mnl_mle.html#assessing-fit",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.6 Assessing Fit",
+    "text": "8.6 Assessing Fit",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#validation-against-mlogit",
+    "href": "chapters/08_mnl_mle.html#validation-against-mlogit",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.7 Validation Against mlogit",
+    "text": "8.7 Validation Against mlogit",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#a-full-simulate-and-recover-study",
+    "href": "chapters/08_mnl_mle.html#a-full-simulate-and-recover-study",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.8 A Full Simulate-and-Recover Study",
+    "text": "8.8 A Full Simulate-and-Recover Study",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/08_mnl_mle.html#key-learnings",
+    "href": "chapters/08_mnl_mle.html#key-learnings",
+    "title": "8  Estimating the MNL by Maximum Likelihood",
+    "section": "8.9 Key Learnings",
+    "text": "8.9 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Estimating the MNL by Maximum Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html",
+    "href": "chapters/09_performance.html",
+    "title": "9  Code Performance",
+    "section": "",
+    "text": "9.1 Why Speed Matters Now",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#measure-first",
+    "href": "chapters/09_performance.html#measure-first",
+    "title": "9  Code Performance",
+    "section": "9.2 Measure First",
+    "text": "9.2 Measure First",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#vectorizing-the-mnl-log-likelihood",
+    "href": "chapters/09_performance.html#vectorizing-the-mnl-log-likelihood",
+    "title": "9  Code Performance",
+    "section": "9.3 Vectorizing the MNL Log-Likelihood",
+    "text": "9.3 Vectorizing the MNL Log-Likelihood",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#precompute-what-doesnt-change",
+    "href": "chapters/09_performance.html#precompute-what-doesnt-change",
+    "title": "9  Code Performance",
+    "section": "9.4 Precompute What Doesn’t Change",
+    "text": "9.4 Precompute What Doesn’t Change",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#memory-layout-and-copies",
+    "href": "chapters/09_performance.html#memory-layout-and-copies",
+    "title": "9  Code Performance",
+    "section": "9.5 Memory Layout and Copies",
+    "text": "9.5 Memory Layout and Copies",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#when-r-isnt-enough",
+    "href": "chapters/09_performance.html#when-r-isnt-enough",
+    "title": "9  Code Performance",
+    "section": "9.6 When R Isn’t Enough",
+    "text": "9.6 When R Isn’t Enough",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/09_performance.html#key-learnings",
+    "href": "chapters/09_performance.html#key-learnings",
+    "title": "9  Code Performance",
+    "section": "9.7 Key Learnings",
+    "text": "9.7 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Code Performance</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html",
+    "href": "chapters/10_iia.html",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "",
+    "text": "10.1 When Proportional Substitution Fails",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#the-nested-logit-model",
+    "href": "chapters/10_iia.html#the-nested-logit-model",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.2 The Nested Logit Model",
+    "text": "10.2 The Nested Logit Model\n\n10.2.1 Nests and the Dissimilarity Parameter\n\n\n\n10.2.2 Choice Probabilities: Marginal times Conditional",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#simulating-nested-logit-data",
+    "href": "chapters/10_iia.html#simulating-nested-logit-data",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.3 Simulating Nested Logit Data",
+    "text": "10.3 Simulating Nested Logit Data",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#estimating-the-nested-logit",
+    "href": "chapters/10_iia.html#estimating-the-nested-logit",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.4 Estimating the Nested Logit",
+    "text": "10.4 Estimating the Nested Logit",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#validation-against-mlogit",
+    "href": "chapters/10_iia.html#validation-against-mlogit",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.5 Validation Against mlogit",
+    "text": "10.5 Validation Against mlogit",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#the-gev-family",
+    "href": "chapters/10_iia.html#the-gev-family",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.6 The GEV Family",
+    "text": "10.6 The GEV Family",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/10_iia.html#key-learnings",
+    "href": "chapters/10_iia.html#key-learnings",
+    "title": "10  Relaxing IIA: Nested Logit and GEV Models",
+    "section": "10.7 Key Learnings",
+    "text": "10.7 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Relaxing IIA: Nested Logit and GEV Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html",
+    "href": "chapters/11_latentclass.html",
+    "title": "11  The Latent Class MNL Model",
+    "section": "",
+    "text": "11.1 Heterogeneity Enters",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#the-latent-class-model",
+    "href": "chapters/11_latentclass.html#the-latent-class-model",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.2 The Latent Class Model",
+    "text": "11.2 The Latent Class Model",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#the-likelihood-a-panel-subtlety",
+    "href": "chapters/11_latentclass.html#the-likelihood-a-panel-subtlety",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.3 The Likelihood: A Panel Subtlety",
+    "text": "11.3 The Likelihood: A Panel Subtlety",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#simulating-latent-class-data",
+    "href": "chapters/11_latentclass.html#simulating-latent-class-data",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.4 Simulating Latent Class Data",
+    "text": "11.4 Simulating Latent Class Data",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#direct-maximization",
+    "href": "chapters/11_latentclass.html#direct-maximization",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.5 Direct Maximization",
+    "text": "11.5 Direct Maximization",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#the-em-algorithm",
+    "href": "chapters/11_latentclass.html#the-em-algorithm",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.6 The EM Algorithm",
+    "text": "11.6 The EM Algorithm",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#how-many-classes",
+    "href": "chapters/11_latentclass.html#how-many-classes",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.7 How Many Classes?",
+    "text": "11.7 How Many Classes?",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#individual-level-output",
+    "href": "chapters/11_latentclass.html#individual-level-output",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.8 Individual-Level Output",
+    "text": "11.8 Individual-Level Output",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#validation-against-gmnl",
+    "href": "chapters/11_latentclass.html#validation-against-gmnl",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.9 Validation Against gmnl",
+    "text": "11.9 Validation Against gmnl",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/11_latentclass.html#key-learnings",
+    "href": "chapters/11_latentclass.html#key-learnings",
+    "title": "11  The Latent Class MNL Model",
+    "section": "11.10 Key Learnings",
+    "text": "11.10 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>The Latent Class MNL Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html",
+    "href": "chapters/12_msl.html",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "",
+    "text": "12.1 Choice Probabilities Without Closed Forms",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#the-simulated-choice-probability",
+    "href": "chapters/12_msl.html#the-simulated-choice-probability",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.2 The Simulated Choice Probability",
+    "text": "12.2 The Simulated Choice Probability",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#the-simulated-log-likelihood-and-its-bias",
+    "href": "chapters/12_msl.html#the-simulated-log-likelihood-and-its-bias",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.3 The Simulated Log-Likelihood and Its Bias",
+    "text": "12.3 The Simulated Log-Likelihood and Its Bias",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#practical-rules-of-msl",
+    "href": "chapters/12_msl.html#practical-rules-of-msl",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.4 Practical Rules of MSL",
+    "text": "12.4 Practical Rules of MSL",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#better-draws-halton-and-antithetics",
+    "href": "chapters/12_msl.html#better-draws-halton-and-antithetics",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.5 Better Draws: Halton and Antithetics",
+    "text": "12.5 Better Draws: Halton and Antithetics",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#a-first-msl-estimation",
+    "href": "chapters/12_msl.html#a-first-msl-estimation",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.6 A First MSL Estimation",
+    "text": "12.6 A First MSL Estimation",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#relatives-msm-and-mss",
+    "href": "chapters/12_msl.html#relatives-msm-and-mss",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.7 Relatives: MSM and MSS",
+    "text": "12.7 Relatives: MSM and MSS",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/12_msl.html#key-learnings",
+    "href": "chapters/12_msl.html#key-learnings",
+    "title": "12  Maximum Simulated Likelihood",
+    "section": "12.8 Key Learnings",
+    "text": "12.8 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Maximum Simulated Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html",
+    "href": "chapters/13_mixed_msl.html",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "",
+    "text": "13.1 Random Coefficients",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#choosing-mixing-distributions",
+    "href": "chapters/13_mixed_msl.html#choosing-mixing-distributions",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.2 Choosing Mixing Distributions",
+    "text": "13.2 Choosing Mixing Distributions",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#the-mixed-mnl-likelihood",
+    "href": "chapters/13_mixed_msl.html#the-mixed-mnl-likelihood",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.3 The Mixed MNL Likelihood",
+    "text": "13.3 The Mixed MNL Likelihood",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#simulating-mixed-mnl-data",
+    "href": "chapters/13_mixed_msl.html#simulating-mixed-mnl-data",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.4 Simulating Mixed MNL Data",
+    "text": "13.4 Simulating Mixed MNL Data",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#coding-the-simulated-log-likelihood",
+    "href": "chapters/13_mixed_msl.html#coding-the-simulated-log-likelihood",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.5 Coding the Simulated Log-Likelihood",
+    "text": "13.5 Coding the Simulated Log-Likelihood",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#estimation",
+    "href": "chapters/13_mixed_msl.html#estimation",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.6 Estimation",
+    "text": "13.6 Estimation",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#feeling-the-strain",
+    "href": "chapters/13_mixed_msl.html#feeling-the-strain",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.7 Feeling the Strain",
+    "text": "13.7 Feeling the Strain",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#validation-against-mlogit-gmnl-and-mixl",
+    "href": "chapters/13_mixed_msl.html#validation-against-mlogit-gmnl-and-mixl",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.8 Validation Against mlogit, gmnl, and mixl",
+    "text": "13.8 Validation Against mlogit, gmnl, and mixl",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/13_mixed_msl.html#key-learnings",
+    "href": "chapters/13_mixed_msl.html#key-learnings",
+    "title": "13  The Mixed MNL Model by MSL",
+    "section": "13.9 Key Learnings",
+    "text": "13.9 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>The Mixed MNL Model by MSL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html",
+    "href": "chapters/14_limits.html",
+    "title": "14  The Limits of Likelihood",
+    "section": "",
+    "text": "14.1 What We Actually Want",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html#why-not-estimate-each-persons-beta-by-mle",
+    "href": "chapters/14_limits.html#why-not-estimate-each-persons-beta-by-mle",
+    "title": "14  The Limits of Likelihood",
+    "section": "14.2 Why Not Estimate Each Person’s Beta by MLE?",
+    "text": "14.2 Why Not Estimate Each Person’s Beta by MLE?",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html#conditioning-on-choices-individual-estimates-after-msl",
+    "href": "chapters/14_limits.html#conditioning-on-choices-individual-estimates-after-msl",
+    "title": "14  The Limits of Likelihood",
+    "section": "14.3 Conditioning on Choices: Individual Estimates After MSL",
+    "text": "14.3 Conditioning on Choices: Individual Estimates After MSL",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html#but-it-creaks",
+    "href": "chapters/14_limits.html#but-it-creaks",
+    "title": "14  The Limits of Likelihood",
+    "section": "14.4 …But It Creaks",
+    "text": "14.4 …But It Creaks",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html#the-bayesian-road",
+    "href": "chapters/14_limits.html#the-bayesian-road",
+    "title": "14  The Limits of Likelihood",
+    "section": "14.5 The Bayesian Road",
+    "text": "14.5 The Bayesian Road",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/14_limits.html#key-learnings",
+    "href": "chapters/14_limits.html#key-learnings",
+    "title": "14  The Limits of Likelihood",
+    "section": "14.6 Key Learnings",
+    "text": "14.6 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Likelihood",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The Limits of Likelihood</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html",
+    "href": "chapters/15_bayes_mnl.html",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "",
+    "text": "15.1 The Bayesian Mindset",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#priors",
+    "href": "chapters/15_bayes_mnl.html#priors",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.2 Priors",
+    "text": "15.2 Priors",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#the-posterior-has-no-closed-form-either",
+    "href": "chapters/15_bayes_mnl.html#the-posterior-has-no-closed-form-either",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.3 The Posterior Has No Closed Form Either",
+    "text": "15.3 The Posterior Has No Closed Form Either",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#summarizing-distributions-with-draws",
+    "href": "chapters/15_bayes_mnl.html#summarizing-distributions-with-draws",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.4 Summarizing Distributions with Draws",
+    "text": "15.4 Summarizing Distributions with Draws",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#the-metropolis-hastings-algorithm",
+    "href": "chapters/15_bayes_mnl.html#the-metropolis-hastings-algorithm",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.5 The Metropolis-Hastings Algorithm",
+    "text": "15.5 The Metropolis-Hastings Algorithm\n\n15.5.1 The Idea\n\n\n\n15.5.2 A Toy Target First\n\n\n\n15.5.3 Why It Works",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#m-h-for-the-mnl",
+    "href": "chapters/15_bayes_mnl.html#m-h-for-the-mnl",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.6 M-H for the MNL",
+    "text": "15.6 M-H for the MNL",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#mcmc-diagnostics",
+    "href": "chapters/15_bayes_mnl.html#mcmc-diagnostics",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.7 MCMC Diagnostics",
+    "text": "15.7 MCMC Diagnostics",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#bayes-meets-mle",
+    "href": "chapters/15_bayes_mnl.html#bayes-meets-mle",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.8 Bayes Meets MLE",
+    "text": "15.8 Bayes Meets MLE",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/15_bayes_mnl.html#key-learnings",
+    "href": "chapters/15_bayes_mnl.html#key-learnings",
+    "title": "15  Bayesian Estimation of the MNL",
+    "section": "15.9 Key Learnings",
+    "text": "15.9 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>15</span>  <span class='chapter-title'>Bayesian Estimation of the MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html",
+    "href": "chapters/16_gibbs.html",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "",
+    "text": "16.1 Sampling by Blocks",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#sampling-by-blocks",
+    "href": "chapters/16_gibbs.html#sampling-by-blocks",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "",
+    "text": "16.1.1 A Toy Example: The Bivariate Normal",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#conjugacy",
+    "href": "chapters/16_gibbs.html#conjugacy",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "16.2 Conjugacy",
+    "text": "16.2 Conjugacy",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#the-hierarchical-model",
+    "href": "chapters/16_gibbs.html#the-hierarchical-model",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "16.3 The Hierarchical Model",
+    "text": "16.3 The Hierarchical Model\n\n\n16.3.1 Shrinkage: Borrowing Strength\n\n\n\n16.3.2 Gibbs for the Hierarchical Linear Model",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#data-augmentation",
+    "href": "chapters/16_gibbs.html#data-augmentation",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "16.4 Data Augmentation",
+    "text": "16.4 Data Augmentation",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#metropolis-within-gibbs",
+    "href": "chapters/16_gibbs.html#metropolis-within-gibbs",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "16.5 Metropolis-within-Gibbs",
+    "text": "16.5 Metropolis-within-Gibbs",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/16_gibbs.html#key-learnings",
+    "href": "chapters/16_gibbs.html#key-learnings",
+    "title": "16  Gibbs Sampling and Hierarchical Models",
+    "section": "16.6 Key Learnings",
+    "text": "16.6 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>16</span>  <span class='chapter-title'>Gibbs Sampling and Hierarchical Models</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html",
+    "href": "chapters/17_hb_mnl.html",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "",
+    "text": "17.1 The Model",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#the-sampler",
+    "href": "chapters/17_hb_mnl.html#the-sampler",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.2 The Sampler",
+    "text": "17.2 The Sampler",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#coding-the-hb-mnl-sampler",
+    "href": "chapters/17_hb_mnl.html#coding-the-hb-mnl-sampler",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.3 Coding the HB-MNL Sampler",
+    "text": "17.3 Coding the HB-MNL Sampler",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#running-it",
+    "href": "chapters/17_hb_mnl.html#running-it",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.4 Running It",
+    "text": "17.4 Running It",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#the-payoff-individual-level-posteriors",
+    "href": "chapters/17_hb_mnl.html#the-payoff-individual-level-posteriors",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.5 The Payoff: Individual-Level Posteriors",
+    "text": "17.5 The Payoff: Individual-Level Posteriors",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#hb-and-msl-on-the-same-data",
+    "href": "chapters/17_hb_mnl.html#hb-and-msl-on-the-same-data",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.6 HB and MSL on the Same Data",
+    "text": "17.6 HB and MSL on the Same Data",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#validation-against-bayesm",
+    "href": "chapters/17_hb_mnl.html#validation-against-bayesm",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.7 Validation Against bayesm",
+    "text": "17.7 Validation Against bayesm",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#practical-notes",
+    "href": "chapters/17_hb_mnl.html#practical-notes",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.8 Practical Notes",
+    "text": "17.8 Practical Notes",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/17_hb_mnl.html#key-learnings",
+    "href": "chapters/17_hb_mnl.html#key-learnings",
+    "title": "17  The Hierarchical Bayesian MNL",
+    "section": "17.9 Key Learnings",
+    "text": "17.9 Key Learnings",
+    "crumbs": [
+      "The MNL Family, by Bayes",
+      "<span class='chapter-number'>17</span>  <span class='chapter-title'>The Hierarchical Bayesian MNL</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html",
+    "href": "chapters/18_mnp.html",
+    "title": "18  The Multinomial Probit Model",
+    "section": "",
+    "text": "18.1 Why Probit?",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#the-model",
+    "href": "chapters/18_mnp.html#the-model",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.2 The Model",
+    "text": "18.2 The Model",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#identification",
+    "href": "chapters/18_mnp.html#identification",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.3 Identification",
+    "text": "18.3 Identification",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#binary-probit-as-a-warm-up",
+    "href": "chapters/18_mnp.html#binary-probit-as-a-warm-up",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.4 Binary Probit as a Warm-up",
+    "text": "18.4 Binary Probit as a Warm-up",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#simulating-mnp-data",
+    "href": "chapters/18_mnp.html#simulating-mnp-data",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.5 Simulating MNP Data",
+    "text": "18.5 Simulating MNP Data",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#the-estimation-problem-ahead",
+    "href": "chapters/18_mnp.html#the-estimation-problem-ahead",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.6 The Estimation Problem Ahead",
+    "text": "18.6 The Estimation Problem Ahead",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/18_mnp.html#key-learnings",
+    "href": "chapters/18_mnp.html#key-learnings",
+    "title": "18  The Multinomial Probit Model",
+    "section": "18.7 Key Learnings",
+    "text": "18.7 Key Learnings",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>18</span>  <span class='chapter-title'>The Multinomial Probit Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html",
+    "href": "chapters/19_mnp_estimation.html",
+    "title": "19  Estimating the MNP",
+    "section": "",
+    "text": "19.1 Route 1: Simulated Likelihood",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html#route-1-simulated-likelihood",
+    "href": "chapters/19_mnp_estimation.html#route-1-simulated-likelihood",
+    "title": "19  Estimating the MNP",
+    "section": "",
+    "text": "19.1.1 The Accept-Reject Simulator and Its Flaws\n\n\n\n19.1.2 The GHK Simulator\n\n\n\n19.1.3 MSL with GHK",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html#route-2-bayesian-data-augmentation",
+    "href": "chapters/19_mnp_estimation.html#route-2-bayesian-data-augmentation",
+    "title": "19  Estimating the MNP",
+    "section": "19.2 Route 2: Bayesian Data Augmentation",
+    "text": "19.2 Route 2: Bayesian Data Augmentation\n\n19.2.1 Latent Utilities as Parameters\n\n\n\n19.2.2 The McCulloch-Rossi Gibbs Sampler\n\n\n\n19.2.3 Identification Inside the Sampler",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html#the-two-routes-compared",
+    "href": "chapters/19_mnp_estimation.html#the-two-routes-compared",
+    "title": "19  Estimating the MNP",
+    "section": "19.3 The Two Routes Compared",
+    "text": "19.3 The Two Routes Compared",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html#validation-against-bayesm",
+    "href": "chapters/19_mnp_estimation.html#validation-against-bayesm",
+    "title": "19  Estimating the MNP",
+    "section": "19.4 Validation Against bayesm",
+    "text": "19.4 Validation Against bayesm",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/19_mnp_estimation.html#key-learnings",
+    "href": "chapters/19_mnp_estimation.html#key-learnings",
+    "title": "19  Estimating the MNP",
+    "section": "19.5 Key Learnings",
+    "text": "19.5 Key Learnings",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>19</span>  <span class='chapter-title'>Estimating the MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/20_hb_mnp.html",
+    "href": "chapters/20_hb_mnp.html",
+    "title": "20  The Hierarchical Bayesian MNP",
+    "section": "",
+    "text": "20.1 The Model",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>The Hierarchical Bayesian MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/20_hb_mnp.html#the-sampler",
+    "href": "chapters/20_hb_mnp.html#the-sampler",
+    "title": "20  The Hierarchical Bayesian MNP",
+    "section": "20.2 The Sampler",
+    "text": "20.2 The Sampler",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>The Hierarchical Bayesian MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/20_hb_mnp.html#coding-the-hb-mnp-sampler",
+    "href": "chapters/20_hb_mnp.html#coding-the-hb-mnp-sampler",
+    "title": "20  The Hierarchical Bayesian MNP",
+    "section": "20.3 Coding the HB-MNP Sampler",
+    "text": "20.3 Coding the HB-MNP Sampler",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>The Hierarchical Bayesian MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/20_hb_mnp.html#hb-mnl-or-hb-mnp",
+    "href": "chapters/20_hb_mnp.html#hb-mnl-or-hb-mnp",
+    "title": "20  The Hierarchical Bayesian MNP",
+    "section": "20.4 HB-MNL or HB-MNP?",
+    "text": "20.4 HB-MNL or HB-MNP?",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>The Hierarchical Bayesian MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/20_hb_mnp.html#key-learnings",
+    "href": "chapters/20_hb_mnp.html#key-learnings",
+    "title": "20  The Hierarchical Bayesian MNP",
+    "section": "20.5 Key Learnings",
+    "text": "20.5 Key Learnings",
+    "crumbs": [
+      "Beyond Logit: The Multinomial Probit",
+      "<span class='chapter-number'>20</span>  <span class='chapter-title'>The Hierarchical Bayesian MNP</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html",
+    "href": "chapters/21_postestimation.html",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "",
+    "text": "21.1 Estimates Are Not Answers",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#inference-on-functions-of-parameters",
+    "href": "chapters/21_postestimation.html#inference-on-functions-of-parameters",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.2 Inference on Functions of Parameters",
+    "text": "21.2 Inference on Functions of Parameters",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#willingness-to-pay",
+    "href": "chapters/21_postestimation.html#willingness-to-pay",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.3 Willingness-to-Pay",
+    "text": "21.3 Willingness-to-Pay",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#attribute-importance",
+    "href": "chapters/21_postestimation.html#attribute-importance",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.4 Attribute Importance",
+    "text": "21.4 Attribute Importance",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#market-simulation",
+    "href": "chapters/21_postestimation.html#market-simulation",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.5 Market Simulation",
+    "text": "21.5 Market Simulation",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#elasticities",
+    "href": "chapters/21_postestimation.html#elasticities",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.6 Elasticities",
+    "text": "21.6 Elasticities",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#using-individual-level-estimates",
+    "href": "chapters/21_postestimation.html#using-individual-level-estimates",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.7 Using Individual-Level Estimates",
+    "text": "21.7 Using Individual-Level Estimates",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/21_postestimation.html#key-learnings",
+    "href": "chapters/21_postestimation.html#key-learnings",
+    "title": "21  Post-Estimation: Inference, WTP, and Market Simulation",
+    "section": "21.8 Key Learnings",
+    "text": "21.8 Key Learnings",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>21</span>  <span class='chapter-title'>Post-Estimation: Inference, WTP, and Market Simulation</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html",
+    "href": "chapters/22_extensions.html",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "",
+    "text": "22.1 The Recipe",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html#extension-1-the-no-choice-option-and-dual-response",
+    "href": "chapters/22_extensions.html#extension-1-the-no-choice-option-and-dual-response",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "22.2 Extension 1: The No-Choice Option and Dual Response",
+    "text": "22.2 Extension 1: The No-Choice Option and Dual Response\n\n\n22.2.1 Modeling “None”\n\n\n\n22.2.2 Dual-Response Designs and Their Likelihoods\n\n\n\n22.2.3 What Changes in the Code",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html#extension-2-a-budget-constraint",
+    "href": "chapters/22_extensions.html#extension-2-a-budget-constraint",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "22.3 Extension 2: A Budget Constraint",
+    "text": "22.3 Extension 2: A Budget Constraint\n\n\n22.3.1 The Model\n\n\n\n22.3.2 What Changes in the Code",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html#extension-3-flexible-mixing-distributions",
+    "href": "chapters/22_extensions.html#extension-3-flexible-mixing-distributions",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "22.4 Extension 3: Flexible Mixing Distributions",
+    "text": "22.4 Extension 3: Flexible Mixing Distributions\n\n\n22.4.1 The Logit-Mixed Logit Model\n\n\n\n22.4.2 What Changes in the Code",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html#where-to-go-from-here",
+    "href": "chapters/22_extensions.html#where-to-go-from-here",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "22.5 Where to Go from Here",
+    "text": "22.5 Where to Go from Here",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/22_extensions.html#key-learnings",
+    "href": "chapters/22_extensions.html#key-learnings",
+    "title": "22  Extensions: Building Your Own Model",
+    "section": "22.6 Key Learnings",
+    "text": "22.6 Key Learnings",
+    "crumbs": [
+      "Using and Extending the Models",
+      "<span class='chapter-number'>22</span>  <span class='chapter-title'>Extensions: Building Your Own Model</span>"
     ]
   },
   {
@@ -349,7 +1944,29 @@
     "href": "chapters/appendix.html",
     "title": "Appendix A — Appendix",
     "section": "",
-    "text": "add",
+    "text": "A.1 R Packages for Discrete Choice",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Appendix</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/appendix.html#notation-glossary",
+    "href": "chapters/appendix.html#notation-glossary",
+    "title": "Appendix A — Appendix",
+    "section": "A.2 Notation Glossary",
+    "text": "A.2 Notation Glossary",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Appendix</span>"
+    ]
+  },
+  {
+    "objectID": "chapters/appendix.html#common-numerical-errors-and-their-symptoms",
+    "href": "chapters/appendix.html#common-numerical-errors-and-their-symptoms",
+    "title": "Appendix A — Appendix",
+    "section": "A.3 Common Numerical Errors and Their Symptoms",
+    "text": "A.3 Common Numerical Errors and Their Symptoms",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Appendix</span>"

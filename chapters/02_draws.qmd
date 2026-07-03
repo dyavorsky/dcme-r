@@ -1,12 +1,24 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
 # Drawing from Densities {#sec-draws}
 
-## Pseudo-Random Numbers from Uniform Distribution
+<!-- Sources: DCMS Ch 9 (lit/notes/train-2009-dcms.md); Rchoice §2.3/§4 for draw-transformation formulas (lit/notes/pkg-rchoice.md); Rizzo for statistical computing background -->
 
-## Inverse Transform Method
+## Why We Need Draws
+
+<!-- draws appear three times in this book: simulating data from a model (ch 3), approximating integrals in MSL (ch 12), and exploring posteriors via MCMC (ch 15-17); everything reduces to uniform draws plus transformations -->
+
+## Pseudo-Random Numbers from the Uniform Distribution
+
+<!-- what a PRNG is (briefly); set.seed() and reproducibility; runif() -->
+
+## The Inverse Transform Method
 
 $$
 \begin{aligned}
-F_X(x) 
+F_X(x)
     &= \Pr \left(X \le x \right) \\
     &= \Pr \left(T(U) \le x \right) \\
     &= \Pr \left(U \le T^{-1}(x) \right) \\
@@ -14,7 +26,7 @@ F_X(x)
 \end{aligned}
 $$
 
-## Example: Exponential
+### Example: Exponential
 
 $$ F(y,\lambda) = 1 - \exp\left( -\lambda y \right) \hspace{1em} \text{for} \ y \ge 0 $$
 
@@ -33,7 +45,7 @@ hist(y, freq=F, breaks=100)
 lines(x=x, y=dexp(x,lambda), lwd=2)
 ```
 
-## Example: Gumbel
+### Example: Gumbel
 
 $$ F(y) = \exp \left( -\exp \left( -y \right) \right) $$
 
@@ -51,7 +63,7 @@ hist(y, freq=F, breaks=100)
 lines(x=x, y=ordinal::dgumbel(x), lwd=2)
 ```
 
-## Example: Logistic
+### Example: Logistic
 
 $$ F(y) = \frac{1}{1+\exp \left( -x \right)} $$
 
@@ -69,7 +81,7 @@ hist(y, freq=F, breaks=100)
 lines(x=x, y=dlogis(x), lwd=2)
 ```
 
-## Example: Normal
+### Example: Normal
 
 ```{r}
 n <- 1e4
@@ -79,4 +91,26 @@ u <- runif(n)
 y <- qnorm(u)
 ```
 
-## Extensions: Multivariate Normal
+## Accept-Reject Methods
+
+<!-- for densities without invertible CDFs; simple example; note MCMC (ch 15) as the eventual general-purpose answer -->
+
+## Transforming Draws
+
+<!-- location-scale: mu + sigma*z; lognormal via exp(z) (preview: price coefficients in ch 13); triangular/uniform via inverse transform; see Rchoice §2.3 for the standard menu -->
+
+## The Multivariate Normal
+
+<!-- Cholesky root: y = mu + L z; verify with empirical covariance; this exact operation reappears in ch 13 (correlated random coefficients) and ch 16-17 (hierarchical draws) -->
+
+### Example: Correlated Normal Draws
+
+## Truncated Distributions
+
+<!-- truncated normal via inverse-CDF on a restricted range; needed for data augmentation in ch 16 (Albert-Chib) and ch 19-20 (MNP Gibbs) -->
+
+## Quasi-Random Draws
+
+<!-- Halton sequences and antithetic draws; why coverage beats randomness for integration; DCMS Ch 9; used in ch 12-13 (MSL) -->
+
+## Key Learnings

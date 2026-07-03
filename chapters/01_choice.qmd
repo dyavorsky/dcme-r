@@ -2,13 +2,13 @@
 {{< include ../latex-header.tex >}}
 :::
 
-# Introduction {#sec-choice}
+# Choice Models and Simulation {#sec-choice}
 
-It is instructive to start with the first sentence of @train2009 Section 1.3, "Discrete choice analysis consists of two interrelated tasks: **specification** of the behavioral model and **estimation** of the parameters of that model" (emphasis added). In particular, chapters 1--7 of @train2009 only specify models; there is not even a hint of model estimation. And since I follow @train2009, we too begin with a focus on model specification.
+It is instructive to start with the first sentence of @train2009 Section 1.3, "Discrete choice analysis consists of two interrelated tasks: **specification** of the behavioral model and **estimation** of the parameters of that model" (emphasis added). Notably, chapters 1--7 of @train2009 only specify models; there is not even a hint of model estimation. We too begin with a focus on model specification.
 
 Let me be clear: many students will see $y$ and $x$ later in this section and immediate think about "fitting" a model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There are no data yet. There will be parameters introduced in our choice of model specification, but we are not yet estimating those parameters. Have patience, we will eventually do these things.
 
-## Recap of Train Ch. 1
+## A Framework for Choice
 
 Train denotes the outcome in any given choice situation as $y$, determined by some observable factors collected in the vector $\x$ and some unobservable factors collected in the vector $\beps$. The factors ($\x$ and $\beps$) relate to the agent's choice ($y$) through a function $y = h(\x, \beps)$. We assume for the moment that we know $h(\cdot)$ and that $\x$ and $\beps$ are length-one vectors (i.e., scalars) denoted $x$ and $\varepsilon$.
 

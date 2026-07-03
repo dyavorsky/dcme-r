@@ -2,63 +2,95 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>dcme-r.danyavorsky.com/index.html</loc>
-    <lastmod>2024-07-19T00:14:47.541Z</lastmod>
+    <lastmod>2026-07-03T19:35:06.323Z</lastmod>
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/chapters/01_choice.html</loc>
-    <lastmod>2024-07-18T03:37:55.857Z</lastmod>
+    <lastmod>2026-07-03T19:35:19.924Z</lastmod>
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/chapters/02_draws.html</loc>
-    <lastmod>2024-07-19T00:13:38.675Z</lastmod>
+    <lastmod>2026-07-03T20:05:57.096Z</lastmod>
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/chapters/03_simdata.html</loc>
-    <lastmod>2024-07-18T03:38:24.641Z</lastmod>
+    <lastmod>2026-07-03T20:06:06.061Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/04_mle.html</loc>
-    <lastmod>2024-07-18T03:38:55.429Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/04_data.html</loc>
+    <lastmod>2026-07-03T20:06:15.003Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/05_optimization.html</loc>
-    <lastmod>2024-07-18T03:39:25.435Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/05_likelihood.html</loc>
+    <lastmod>2026-07-03T20:06:25.511Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/06_estimation.html</loc>
-    <lastmod>2024-07-18T03:39:47.714Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/06_optimization.html</loc>
+    <lastmod>2026-07-03T20:06:31.416Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/07_programming.html</loc>
-    <lastmod>2024-07-18T03:40:17.324Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/07_mnl.html</loc>
+    <lastmod>2026-07-03T20:06:50.264Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/08_bayes.html</loc>
-    <lastmod>2024-07-18T03:40:32.466Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/08_mnl_mle.html</loc>
+    <lastmod>2026-07-03T20:06:58.707Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/09_probit.html</loc>
-    <lastmod>2024-07-18T03:40:51.027Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/09_performance.html</loc>
+    <lastmod>2026-07-03T20:07:05.291Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/10_nested.html</loc>
-    <lastmod>2024-07-18T03:41:57.036Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/10_iia.html</loc>
+    <lastmod>2026-07-03T20:07:12.366Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/11_gev.html</loc>
-    <lastmod>2024-07-18T03:42:25.974Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/11_latentclass.html</loc>
+    <lastmod>2026-07-03T20:07:21.634Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/12_simulation.html</loc>
-    <lastmod>2024-07-18T03:41:23.841Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/12_msl.html</loc>
+    <lastmod>2026-07-03T20:07:27.516Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/13_latentclass.html</loc>
-    <lastmod>2024-07-18T03:42:41.777Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/13_mixed_msl.html</loc>
+    <lastmod>2026-07-03T20:07:36.494Z</lastmod>
   </url>
   <url>
-    <loc>dcme-r.danyavorsky.com/chapters/14_mixed.html</loc>
-    <lastmod>2024-07-18T03:42:55.594Z</lastmod>
+    <loc>dcme-r.danyavorsky.com/chapters/14_limits.html</loc>
+    <lastmod>2026-07-03T20:07:44.865Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/15_bayes_mnl.html</loc>
+    <lastmod>2026-07-03T20:08:05.420Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/16_gibbs.html</loc>
+    <lastmod>2026-07-03T20:08:15.819Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/17_hb_mnl.html</loc>
+    <lastmod>2026-07-03T20:08:27.096Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/18_mnp.html</loc>
+    <lastmod>2026-07-03T20:08:33.679Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/19_mnp_estimation.html</loc>
+    <lastmod>2026-07-03T20:08:42.264Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/20_hb_mnp.html</loc>
+    <lastmod>2026-07-03T20:08:48.448Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/21_postestimation.html</loc>
+    <lastmod>2026-07-03T20:08:57.319Z</lastmod>
+  </url>
+  <url>
+    <loc>dcme-r.danyavorsky.com/chapters/22_extensions.html</loc>
+    <lastmod>2026-07-03T20:09:09.120Z</lastmod>
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/chapters/references.html</loc>
@@ -66,10 +98,10 @@
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/chapters/appendix.html</loc>
-    <lastmod>2024-04-12T19:03:30.454Z</lastmod>
+    <lastmod>2026-07-03T20:09:13.009Z</lastmod>
   </url>
   <url>
     <loc>dcme-r.danyavorsky.com/Discrete-Choice-Model-Estimation-with-R.pdf</loc>
-    <lastmod>2024-07-19T00:14:31.510Z</lastmod>
+    <lastmod>2026-07-03T22:50:29.539Z</lastmod>
   </url>
 </urlset>

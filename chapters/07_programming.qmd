@@ -1,4 +1,0 @@
-# Code Performance {#sec-bettercode}
-
-add
-```

@@ -1,0 +1,37 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Maximum Simulated Likelihood {#sec-msl}
+
+<!-- Sources: DCMS Ch 10 (MSL/MSM/MSS theory); McFadden-Train 2000 §3 (draw counts, asymptotics); Rchoice §2.3 (mechanics tutorial) -->
+
+## Choice Probabilities Without Closed Forms
+
+<!-- mixing distributions and correlated errors produce integrals with no formula; but ch 1 taught us to simulate integrals -- now we put that inside the likelihood -->
+
+## The Simulated Choice Probability
+
+<!-- average the closed-form kernel over R draws of the random piece; unbiasedness of the probability simulator -->
+
+## The Simulated Log-Likelihood and Its Bias
+
+<!-- log of an unbiased simulator is biased (Jensen); why it vanishes as R grows; the R-vs-N asymptotics headline (R/sqrt(N) -> infinity, McFadden-Train) stated plainly -->
+
+## Practical Rules of MSL
+
+<!-- fix the draws across optimizer iterations (chatter); how many draws; common random numbers -->
+
+## Better Draws: Halton and Antithetics
+
+<!-- reuse ch 2's quasi-random sections; coverage vs randomness demonstration; fewer Halton draws beat more pseudo-random ones -->
+
+## A First MSL Estimation
+
+<!-- smallest interesting example: binary logit with one random coefficient; code the simulated loglik, estimate, recover -->
+
+## Relatives: MSM and MSS
+
+<!-- method of simulated moments/scores in two paragraphs each; when they matter; citations -->
+
+## Key Learnings

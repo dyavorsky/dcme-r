@@ -1,0 +1,37 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Organizing Choice Data {#sec-data}
+
+<!-- Sources: pkg-mlogit.md (dfidx format, wide vs long); cbc-handbook-2022.md (worked CBC data example); diener-2006 (stacked dual-response data trick, for ch 22) -->
+
+## The Shape of Choice Data
+
+<!-- three indices: decision-maker n, choice situation t, alternative j; contrast with the one-row-per-observation data of a regression course -->
+
+## Wide and Long Formats
+
+<!-- one row per choice situation vs one row per alternative; how to convert; which computations each format makes easy -->
+
+## Alternative-Specific and Individual-Specific Variables
+
+<!-- x_ntj vs z_n; generic vs alternative-specific coefficients; where each enters utility and what each identifies (preview of ch 7 identification) -->
+
+## Coding Categorical Attributes
+
+<!-- dummy coding vs effects coding; reference levels; conjoint attribute-level conventions (cbc-handbook-2022) -->
+
+## The Outside Option
+
+<!-- coding a no-choice/none alternative: a row of zeros plus an ASC; why its utility is normalized; deeper treatment deferred to ch 22 -->
+
+## From Data Frame to Likelihood Inputs
+
+<!-- the target structure our estimation code consumes: y vector and X matrix (or list of matrices) with consistent index ordering; write helper functions we reuse for the rest of the book -->
+
+## Package Conventions
+
+<!-- mlogit's dfidx (alt/chid/id indexes); how our structure maps to it, so validation runs (ch 8 onward) are painless -->
+
+## Key Learnings

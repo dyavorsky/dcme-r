@@ -1,3 +1,0 @@
-# Multinomial Probit {#sec-probit}
-
-add

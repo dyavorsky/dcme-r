@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# Estimating the MNL by Maximum Likelihood {#sec-mnl-mle}
+
+<!-- Sources: DCMS Ch 3; Greene 2008; cbc-handbook-2022.md (fit statistics, worked example); pkg-mlogit.md (validation) -->
+
+## The MNL Log-Likelihood
+
+<!-- assemble from ch 5's principle and ch 7's probability; write it in summation and matrix form -->
+
+## Coding `loglik_mnl()`
+
+<!-- a clear loop version first, then the matrix version; THIS function is reused for the rest of the book (MSL wraps it, M-H evaluates it) -->
+
+## Numerical Stability: The Log-Sum-Exp Trick
+
+<!-- overflow in exp(); subtract the max; demonstrate the failure and the fix -->
+
+## The Analytic Gradient
+
+<!-- derive: X'(y - p); verify against numerical gradient; speed comparison -->
+
+## Estimation with `optim()`
+
+<!-- put ch 6's machinery to work; hessian=TRUE; standard errors and z-stats -->
+
+## Assessing Fit
+
+<!-- null log-likelihood, likelihood ratio test, McFadden's rho-squared, hit rates, AIC/BIC (cbc-handbook-2022 conventions) -->
+
+## Validation Against `mlogit`
+
+<!-- same data through mlogit; coefficients and standard errors match to reported precision; how to line up output -->
+
+## A Full Simulate-and-Recover Study
+
+<!-- many replications: sampling distribution of beta-hat, bias, coverage of confidence intervals; seeing asymptotic theory work -->
+
+## Key Learnings

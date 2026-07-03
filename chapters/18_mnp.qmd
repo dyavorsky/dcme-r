@@ -1,0 +1,33 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Multinomial Probit Model {#sec-mnp}
+
+<!-- Sources: DCMS Ch 5; mcculloch-rossi-1994 (identification); Greene 2008 §0.7 -->
+
+## Why Probit?
+
+<!-- normal errors with a free covariance matrix: correlated utilities and flexible substitution without inventing nests; the cost: no closed form, ever -->
+
+## The Model
+
+<!-- U = X beta + eps, eps ~ N(0, Omega); the choice probability as a (J-1)-dimensional normal integral over utility differences -->
+
+## Identification
+
+<!-- differencing against a base alternative; scale normalization (fix one diagonal element); count the free parameters in Omega; why identification is subtler here than in ch 7 (McCulloch-Rossi treatment) -->
+
+## Binary Probit as a Warm-up
+
+<!-- closed form via pnorm(); MLE with ch 6's tools in a page; everything hard about MNP is about J > 2 -->
+
+## Simulating MNP Data
+
+<!-- multivariate normal errors via ch 2's Cholesky; verify substitution patterns respond to Omega -->
+
+## The Estimation Problem Ahead
+
+<!-- evaluating the choice probability IS the obstacle; two roads: simulate the integral inside MLE (ch 19, route 1) or never compute it at all via data augmentation (ch 19, route 2) -->
+
+## Key Learnings

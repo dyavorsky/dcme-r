@@ -1,0 +1,25 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# The Hierarchical Bayesian MNP {#sec-hb-mnp}
+
+<!-- Sources: rossi-1996 (hierarchical MNP with demographics; App A conditionals); mcculloch-rossi-1994 §hierarchical extension -->
+
+## The Model
+
+<!-- person-level beta_n over the MNP kernel; upper level as in ch 17, optionally with covariates (beta_n = Delta z_n + v_n, Rossi et al. 1996); what the extra flexibility buys over HB-MNL -->
+
+## The Sampler
+
+<!-- ch 19's augmentation blocks nested inside ch 17's hierarchy; enumerate all blocks; note which are conjugate (all of them -- the beauty of augmentation here) -->
+
+## Coding the HB-MNP Sampler
+
+<!-- assembled from parts the reader has already written; simulate-and-recover -->
+
+## HB-MNL or HB-MNP?
+
+<!-- an honest cost-benefit: run time, mixing, parameter count in Sigma and Omega, and whether the application needs flexible substitution; guidance for practice -->
+
+## Key Learnings

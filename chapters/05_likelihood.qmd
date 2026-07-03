@@ -1,0 +1,41 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
+# From Choice Data to Likelihood {#sec-likelihood}
+
+<!-- Sources: Greene 2008 (binary choice MLE in full detail); Hansen/Abramovich for MLE theory citations; DCMS Ch 3 intro -->
+
+## The Likelihood Function
+
+<!-- the probability of the observed data as a function of the parameters; likelihood vs probability; the model (ch 1) supplies p(y|x,theta), the data supply y and x -->
+
+## Independence and the Product Form
+
+<!-- independence across decision-makers (and, for now, across choice situations); the likelihood as a product of choice probabilities; panel subtleties deferred to ch 11/13 -->
+
+## The Log-Likelihood
+
+<!-- why logs: products underflow, sums don't; monotone transform preserves the argmax; numerical demonstration of underflow in R -->
+
+## Example: The Binary Logit Log-Likelihood in R
+
+<!-- tiny dataset computed by hand, then a loglik(beta, y, X) function; evaluate at several beta values -->
+
+## Maximum Likelihood Estimation
+
+<!-- the estimator: argmax of the log-likelihood; brief statement of consistency, asymptotic normality, invariance with citations (not derivations) -->
+
+## The Score, the Hessian, and the Information Matrix
+
+<!-- gradient and curvature; why curvature at the max delivers standard errors (used in ch 6 and ch 8); analytic vs numerical derivatives preview -->
+
+## A First Estimator: Grid Search
+
+<!-- one-parameter binary logit; plot the log-likelihood curve, find the max by brute force; recover the true beta from ch 3's simulated data -- the first complete simulate-and-recover -->
+
+## Why Grid Search Fails at Scale
+
+<!-- curse of dimensionality; motivates ch 6 -->
+
+## Key Learnings

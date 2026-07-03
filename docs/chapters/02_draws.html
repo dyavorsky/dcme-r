@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.54">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -71,12 +71,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-8ea72dc5fed832574809a9c94082fbbb.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-b343bb23504f009ddf7b24643a6af19a.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-793f8d10441867c48bd9ff7da57d4687.min.css" rel="prefetch" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -146,7 +146,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/02_draws.html">Logit</a></li><li class="breadcrumb-item"><a href="../chapters/02_draws.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01_choice.html">Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/02_draws.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -185,7 +185,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Introduction</span></a>
+ <span class="menu-text">Foundations</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -194,20 +194,9 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/01_choice.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Choice Models and Simulation</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Logit</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/02_draws.html" class="sidebar-item-text sidebar-link active">
@@ -222,32 +211,79 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/04_mle.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Maximum Likelihood Estimation</span></span></a>
+  <a href="../chapters/04_data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Organizing Choice Data</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/05_optimization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Optimization</span></span></a>
+  <a href="../chapters/05_likelihood.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From Choice Data to Likelihood</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/06_estimation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Estimation</span></span></a>
+  <a href="../chapters/06_optimization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Numerical Optimization</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">The MNL Family, by Likelihood</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07_mnl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">The Multinomial Logit Model</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/07_programming.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Code Performance</span></span></a>
+  <a href="../chapters/08_mnl_mle.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Estimating the MNL by Maximum Likelihood</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/08_bayes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Approach</span></span></a>
+  <a href="../chapters/09_performance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Code Performance</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10_iia.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Relaxing IIA: Nested Logit and GEV Models</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/11_latentclass.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Latent Class MNL Model</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/12_msl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Maximum Simulated Likelihood</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/13_mixed_msl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">The Mixed MNL Model by MSL</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/14_limits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">The Limits of Likelihood</span></span></a>
   </div>
 </li>
       </ul>
@@ -255,7 +291,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Probit</span></a>
+ <span class="menu-text">The MNL Family, by Bayes</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -263,20 +299,20 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/09_probit.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multinomial Probit</span></span></a>
+  <a href="../chapters/15_bayes_mnl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Bayesian Estimation of the MNL</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/10_nested.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Nested Logit Model</span></span></a>
+  <a href="../chapters/16_gibbs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Gibbs Sampling and Hierarchical Models</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/11_gev.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">GEV Logit</span></span></a>
+  <a href="../chapters/17_hb_mnl.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">The Hierarchical Bayesian MNL</span></span></a>
   </div>
 </li>
       </ul>
@@ -284,7 +320,7 @@ window.Quarto = {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Mixed</span></a>
+ <span class="menu-text">Beyond Logit: The Multinomial Probit</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -292,20 +328,43 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/12_simulation.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simulation-Assisted Estimation</span></span></a>
+  <a href="../chapters/18_mnp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">The Multinomial Probit Model</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/13_latentclass.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Latent Class MNL Model</span></span></a>
+  <a href="../chapters/19_mnp_estimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Estimating the MNP</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/14_mixed.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Mixed Logit Model</span></span></a>
+  <a href="../chapters/20_hb_mnp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">The Hierarchical Bayesian MNP</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Using and Extending the Models</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/21_postestimation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Post-Estimation: Inference, WTP, and Market Simulation</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/22_extensions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Extensions: Building Your Own Model</span></span></a>
   </div>
 </li>
       </ul>
@@ -318,13 +377,13 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
  <span class="menu-text">Appendices</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/appendix.html" class="sidebar-item-text sidebar-link">
@@ -343,20 +402,31 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#pseudo-random-numbers-from-uniform-distribution" id="toc-pseudo-random-numbers-from-uniform-distribution" class="nav-link active" data-scroll-target="#pseudo-random-numbers-from-uniform-distribution"><span class="header-section-number">2.1</span> Pseudo-Random Numbers from Uniform Distribution</a></li>
-  <li><a href="#inverse-transform-method" id="toc-inverse-transform-method" class="nav-link" data-scroll-target="#inverse-transform-method"><span class="header-section-number">2.2</span> Inverse Transform Method</a></li>
-  <li><a href="#example-exponential" id="toc-example-exponential" class="nav-link" data-scroll-target="#example-exponential"><span class="header-section-number">2.3</span> Example: Exponential</a></li>
-  <li><a href="#example-gumbel" id="toc-example-gumbel" class="nav-link" data-scroll-target="#example-gumbel"><span class="header-section-number">2.4</span> Example: Gumbel</a></li>
-  <li><a href="#example-logistic" id="toc-example-logistic" class="nav-link" data-scroll-target="#example-logistic"><span class="header-section-number">2.5</span> Example: Logistic</a></li>
-  <li><a href="#example-normal" id="toc-example-normal" class="nav-link" data-scroll-target="#example-normal"><span class="header-section-number">2.6</span> Example: Normal</a></li>
-  <li><a href="#extensions-multivariate-normal" id="toc-extensions-multivariate-normal" class="nav-link" data-scroll-target="#extensions-multivariate-normal"><span class="header-section-number">2.7</span> Extensions: Multivariate Normal</a></li>
+  <li><a href="#why-we-need-draws" id="toc-why-we-need-draws" class="nav-link active" data-scroll-target="#why-we-need-draws"><span class="header-section-number">2.1</span> Why We Need Draws</a></li>
+  <li><a href="#pseudo-random-numbers-from-the-uniform-distribution" id="toc-pseudo-random-numbers-from-the-uniform-distribution" class="nav-link" data-scroll-target="#pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.2</span> Pseudo-Random Numbers from the Uniform Distribution</a></li>
+  <li><a href="#the-inverse-transform-method" id="toc-the-inverse-transform-method" class="nav-link" data-scroll-target="#the-inverse-transform-method"><span class="header-section-number">2.3</span> The Inverse Transform Method</a>
+  <ul class="collapse">
+  <li><a href="#example-exponential" id="toc-example-exponential" class="nav-link" data-scroll-target="#example-exponential"><span class="header-section-number">2.3.1</span> Example: Exponential</a></li>
+  <li><a href="#example-gumbel" id="toc-example-gumbel" class="nav-link" data-scroll-target="#example-gumbel"><span class="header-section-number">2.3.2</span> Example: Gumbel</a></li>
+  <li><a href="#example-logistic" id="toc-example-logistic" class="nav-link" data-scroll-target="#example-logistic"><span class="header-section-number">2.3.3</span> Example: Logistic</a></li>
+  <li><a href="#example-normal" id="toc-example-normal" class="nav-link" data-scroll-target="#example-normal"><span class="header-section-number">2.3.4</span> Example: Normal</a></li>
+  </ul></li>
+  <li><a href="#accept-reject-methods" id="toc-accept-reject-methods" class="nav-link" data-scroll-target="#accept-reject-methods"><span class="header-section-number">2.4</span> Accept-Reject Methods</a></li>
+  <li><a href="#transforming-draws" id="toc-transforming-draws" class="nav-link" data-scroll-target="#transforming-draws"><span class="header-section-number">2.5</span> Transforming Draws</a></li>
+  <li><a href="#the-multivariate-normal" id="toc-the-multivariate-normal" class="nav-link" data-scroll-target="#the-multivariate-normal"><span class="header-section-number">2.6</span> The Multivariate Normal</a>
+  <ul class="collapse">
+  <li><a href="#example-correlated-normal-draws" id="toc-example-correlated-normal-draws" class="nav-link" data-scroll-target="#example-correlated-normal-draws"><span class="header-section-number">2.6.1</span> Example: Correlated Normal Draws</a></li>
+  </ul></li>
+  <li><a href="#truncated-distributions" id="toc-truncated-distributions" class="nav-link" data-scroll-target="#truncated-distributions"><span class="header-section-number">2.7</span> Truncated Distributions</a></li>
+  <li><a href="#quasi-random-draws" id="toc-quasi-random-draws" class="nav-link" data-scroll-target="#quasi-random-draws"><span class="header-section-number">2.8</span> Quasi-Random Draws</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">2.9</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/02_draws.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/02_draws.html">Logit</a></li><li class="breadcrumb-item"><a href="../chapters/02_draws.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/01_choice.html">Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/02_draws.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title"><span id="sec-draws" class="quarto-section-identifier"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Drawing from Densities</span></span></h1>
 </div>
@@ -375,11 +445,17 @@ window.Quarto = {
 </header>
 
 
-<section id="pseudo-random-numbers-from-uniform-distribution" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="pseudo-random-numbers-from-uniform-distribution"><span class="header-section-number">2.1</span> Pseudo-Random Numbers from Uniform Distribution</h2>
+<!-- Sources: DCMS Ch 9 (lit/notes/train-2009-dcms.md); Rchoice §2.3/§4 for draw-transformation formulas (lit/notes/pkg-rchoice.md); Rizzo for statistical computing background -->
+<section id="why-we-need-draws" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="why-we-need-draws"><span class="header-section-number">2.1</span> Why We Need Draws</h2>
+<!-- draws appear three times in this book: simulating data from a model (ch 3), approximating integrals in MSL (ch 12), and exploring posteriors via MCMC (ch 15-17); everything reduces to uniform draws plus transformations -->
 </section>
-<section id="inverse-transform-method" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="inverse-transform-method"><span class="header-section-number">2.2</span> Inverse Transform Method</h2>
+<section id="pseudo-random-numbers-from-the-uniform-distribution" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.2</span> Pseudo-Random Numbers from the Uniform Distribution</h2>
+<!-- what a PRNG is (briefly); set.seed() and reproducibility; runif() -->
+</section>
+<section id="the-inverse-transform-method" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-inverse-transform-method"><span class="header-section-number">2.3</span> The Inverse Transform Method</h2>
 <p><span class="math display">\[
 \begin{aligned}
 F_X(x)
@@ -389,9 +465,8 @@ F_X(x)
     &amp;= T^{-1}(x)
 \end{aligned}
 \]</span></p>
-</section>
-<section id="example-exponential" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="example-exponential"><span class="header-section-number">2.3</span> Example: Exponential</h2>
+<section id="example-exponential" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="example-exponential"><span class="header-section-number">2.3.1</span> Example: Exponential</h3>
 <p><span class="math display">\[ F(y,\lambda) = 1 - \exp\left( -\lambda y \right) \hspace{1em} \text{for} \ y \ge 0 \]</span></p>
 <p><span class="math display">\[ F^{-1}(u) = -\log(1-u) / \lambda \]</span></p>
 <div class="cell">
@@ -413,8 +488,8 @@ F_X(x)
 </div>
 </div>
 </section>
-<section id="example-gumbel" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="example-gumbel"><span class="header-section-number">2.4</span> Example: Gumbel</h2>
+<section id="example-gumbel" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="example-gumbel"><span class="header-section-number">2.3.2</span> Example: Gumbel</h3>
 <p><span class="math display">\[ F(y) = \exp \left( -\exp \left( -y \right) \right) \]</span></p>
 <p><span class="math display">\[ F^{-1}(u) = -\log(-log(u))  \]</span></p>
 <div class="cell">
@@ -435,8 +510,8 @@ F_X(x)
 </div>
 </div>
 </section>
-<section id="example-logistic" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="example-logistic"><span class="header-section-number">2.5</span> Example: Logistic</h2>
+<section id="example-logistic" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="example-logistic"><span class="header-section-number">2.3.3</span> Example: Logistic</h3>
 <p><span class="math display">\[ F(y) = \frac{1}{1+\exp \left( -x \right)} \]</span></p>
 <p><span class="math display">\[ F^{-1}(u) = \log(u) - \log(1-u) \]</span></p>
 <div class="cell">
@@ -457,8 +532,8 @@ F_X(x)
 </div>
 </div>
 </section>
-<section id="example-normal" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="example-normal"><span class="header-section-number">2.6</span> Example: Normal</h2>
+<section id="example-normal" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="example-normal"><span class="header-section-number">2.3.4</span> Example: Normal</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
@@ -467,8 +542,32 @@ F_X(x)
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="extensions-multivariate-normal" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="extensions-multivariate-normal"><span class="header-section-number">2.7</span> Extensions: Multivariate Normal</h2>
+</section>
+<section id="accept-reject-methods" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="accept-reject-methods"><span class="header-section-number">2.4</span> Accept-Reject Methods</h2>
+<!-- for densities without invertible CDFs; simple example; note MCMC (ch 15) as the eventual general-purpose answer -->
+</section>
+<section id="transforming-draws" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="transforming-draws"><span class="header-section-number">2.5</span> Transforming Draws</h2>
+<!-- location-scale: mu + sigma*z; lognormal via exp(z) (preview: price coefficients in ch 13); triangular/uniform via inverse transform; see Rchoice §2.3 for the standard menu -->
+</section>
+<section id="the-multivariate-normal" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="the-multivariate-normal"><span class="header-section-number">2.6</span> The Multivariate Normal</h2>
+<!-- Cholesky root: y = mu + L z; verify with empirical covariance; this exact operation reappears in ch 13 (correlated random coefficients) and ch 16-17 (hierarchical draws) -->
+<section id="example-correlated-normal-draws" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="example-correlated-normal-draws"><span class="header-section-number">2.6.1</span> Example: Correlated Normal Draws</h3>
+</section>
+</section>
+<section id="truncated-distributions" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="truncated-distributions"><span class="header-section-number">2.7</span> Truncated Distributions</h2>
+<!-- truncated normal via inverse-CDF on a restricted range; needed for data augmentation in ch 16 (Albert-Chib) and ch 19-20 (MNP Gibbs) -->
+</section>
+<section id="quasi-random-draws" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="quasi-random-draws"><span class="header-section-number">2.8</span> Quasi-Random Draws</h2>
+<!-- Halton sequences and antithetic draws; why coverage beats randomness for integration; DCMS Ch 9; used in ch 12-13 (MSL) -->
+</section>
+<section id="key-learnings" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">2.9</span> Key Learnings</h2>
 
 
 </section>
@@ -700,8 +799,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -812,7 +909,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {
@@ -1040,8 +1136,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/01_choice.html" class="pagination-link" aria-label="Introduction">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      <a href="../chapters/01_choice.html" class="pagination-link" aria-label="Choice Models and Simulation">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Choice Models and Simulation</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
