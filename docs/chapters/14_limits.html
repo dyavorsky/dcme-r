@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,12 +422,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#what-we-actually-want" id="toc-what-we-actually-want" class="nav-link active" data-scroll-target="#what-we-actually-want"><span class="header-section-number">14.1</span> What We Actually Want</a></li>
-  <li><a href="#why-not-estimate-each-persons-beta-by-mle" id="toc-why-not-estimate-each-persons-beta-by-mle" class="nav-link" data-scroll-target="#why-not-estimate-each-persons-beta-by-mle"><span class="header-section-number">14.2</span> Why Not Estimate Each Person’s Beta by MLE?</a></li>
-  <li><a href="#conditioning-on-choices-individual-estimates-after-msl" id="toc-conditioning-on-choices-individual-estimates-after-msl" class="nav-link" data-scroll-target="#conditioning-on-choices-individual-estimates-after-msl"><span class="header-section-number">14.3</span> Conditioning on Choices: Individual Estimates After MSL</a></li>
-  <li><a href="#but-it-creaks" id="toc-but-it-creaks" class="nav-link" data-scroll-target="#but-it-creaks"><span class="header-section-number">14.4</span> …But It Creaks</a></li>
-  <li><a href="#the-bayesian-road" id="toc-the-bayesian-road" class="nav-link" data-scroll-target="#the-bayesian-road"><span class="header-section-number">14.5</span> The Bayesian Road</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">14.6</span> Key Learnings</a></li>
+  <li><a href="#attempt-one-a-likelihood-per-person" id="toc-attempt-one-a-likelihood-per-person" class="nav-link active" data-scroll-target="#attempt-one-a-likelihood-per-person"><span class="header-section-number">14.1</span> Attempt One: A Likelihood Per Person</a></li>
+  <li><a href="#attempt-two-condition-on-the-population" id="toc-attempt-two-condition-on-the-population" class="nav-link" data-scroll-target="#attempt-two-condition-on-the-population"><span class="header-section-number">14.2</span> Attempt Two: Condition on the Population</a></li>
+  <li><a href="#so-whats-missing" id="toc-so-whats-missing" class="nav-link" data-scroll-target="#so-whats-missing"><span class="header-section-number">14.3</span> So What’s Missing?</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">14.4</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/14_limits.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -370,31 +451,196 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Pivot chapter: short, no new estimator. Sources: DCMS Ch 11 (conditional individual-level parameters); Train 2001 HB-vs-MSL; the honest-wall framing: MSL CAN estimate the mixed MNL's population parameters -- what it can't deliver gracefully is person-specific parameters -->
-<section id="what-we-actually-want" class="level2" data-number="14.1">
-<h2 data-number="14.1" class="anchored" data-anchor-id="what-we-actually-want"><span class="header-section-number">14.1</span> What We Actually Want</h2>
-<!-- targeting, segmentation, market simulators need each person's beta_n, not just the population mean and covariance; the marketing/conjoint payoff is individual-level -->
+<p>This short chapter is a hinge. Part II climbed as far as maximum likelihood reaches: the mixed MNL of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> estimates an entire <em>population</em> of preferences — means, spreads, correlations — and does it well. But look carefully at what it delivers. Population parameters. Not <em>people</em>.</p>
+<p>For many research questions, population parameters are the answer. For the questions that dominate applied choice modeling, they are not. A firm running the laptop study doesn’t stop at “price sensitivity has mean <span class="math inline">\(-1.2\)</span> and standard deviation <span class="math inline">\(0.7\)</span>”; it wants to know <em>which respondents</em> are the price-insensitive premium seekers, to size that segment’s demand for a new configuration, to simulate a market where each simulated buyer behaves like a particular real one (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>). Personalization, targeting, segment-level demand — the deliverables of modern conjoint practice <span class="citation" data-cites="allenby2019">(<a href="references.html#ref-allenby2019" role="doc-biblioref">Allenby, Hardt, and Rossi 2019</a>)</span> — all need estimates of the individual <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s. This chapter asks whether maximum likelihood can produce them. The answer — <em>almost, awkwardly, without honest uncertainty</em> — is the reason Part III exists.</p>
+<section id="attempt-one-a-likelihood-per-person" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="attempt-one-a-likelihood-per-person"><span class="header-section-number">14.1</span> Attempt One: A Likelihood Per Person</h2>
+<p>The direct approach: every respondent gave us eight choices; eight choices carry information about that person’s preferences; so run the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> estimator <em>separately on each person’s data</em>. No population model at all — just 500 small MNL estimations.</p>
+<p>Load the mixed-logit study saved in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> (data, true individual coefficients, and the MSL estimates of the population parameters — everything this chapter needs):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mixed     <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/mixed_study.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>d         <span class="ot">&lt;-</span> mixed<span class="sc">$</span>data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>betas_true <span class="ot">&lt;-</span> mixed<span class="sc">$</span>betas_true          <span class="co"># the answer key: true beta_n, N x K</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> d)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(betas_true) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(X)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> d<span class="sc">$</span>choice</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(d[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> d<span class="sc">$</span>id</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>loglik_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {     <span class="co"># @sec-mnl-mle, unchanged</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>fit_one_person <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    rows <span class="ot">&lt;-</span> <span class="fu">which</span>(id <span class="sc">==</span> n)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    tid  <span class="ot">&lt;-</span> task_id[rows] <span class="sc">-</span> <span class="fu">min</span>(task_id[rows]) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), loglik_mnl, <span class="at">y =</span> y[rows], <span class="at">X =</span> X[rows, ], <span class="at">task_id =</span> tid,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">200</span>))<span class="sc">$</span>par</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>per_person <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>, fit_one_person))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(per_person) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Five hundred estimations later, compare the per-person price coefficients to the truth we smuggled out of the simulator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>summary_stats <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth    =</span> <span class="fu">summary</span>(betas_true[, <span class="st">"price"</span>]),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">per_person =</span> <span class="fu">summary</span>(per_person[, <span class="st">"price"</span>])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(summary_stats, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Min. 1st Qu. Median  Mean 3rd Qu.  Max.
+truth         -3.3    -1.7   -1.2  -1.2    -0.8   1.3
+per_person -1282.6   -27.3   -3.2 -23.3    -0.4 141.2</code></pre>
+</div>
+</div>
+<p>The true price coefficients span a civilized range around <span class="math inline">\(-1.2\)</span>. The per-person estimates span <em>tens or hundreds</em> in both directions. This is not a bug in our code; it is the estimator working as designed on a task it cannot do. Eight choices among three alternatives simply do not contain enough information to pin down six utility parameters, and the failure has two textbook faces:</p>
+<ul>
+<li><strong>Perfect separation.</strong> A respondent who happened to always choose the cheapest laptop is <em>perfectly explained</em> by <span class="math inline">\(\beta_{\text{price}} = -\infty\)</span>: their eight-task likelihood increases monotonically as the coefficient runs away, and <code>optim()</code> chases it until stopped by the iteration cap. With <span class="math inline">\(T = 8\)</span>, such respondents are not rare accidents; they are a sizable fraction of any sample.</li>
+<li><strong>The incidental parameters problem.</strong> Even without separation, there is a deeper pathology: when the number of parameters grows with the number of observations (six new parameters per respondent), the usual asymptotic guarantees of <a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a> never engage. More respondents give you more <em>parameters to estimate</em>, not more information per parameter; <span class="math inline">\(T\)</span> is what would need to grow, and <span class="math inline">\(T\)</span> is fixed by the survey. Per-person MLE is inconsistent in the dimension that matters.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_plot <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">beta =</span> <span class="fu">pmax</span>(<span class="fu">pmin</span>(per_person[, <span class="st">"price"</span>], <span class="dv">10</span>), <span class="sc">-</span><span class="dv">10</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">which =</span> <span class="st">"per-person MLE"</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">beta =</span> betas_true[, <span class="st">"price"</span>], <span class="at">which =</span> <span class="st">"truth"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(beta, <span class="at">fill =</span> which)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">60</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"grey30"</span>, <span class="st">"grey70"</span>)) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(beta[price]), <span class="at">y =</span> <span class="st">"count"</span>, <span class="at">fill =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-per-person-fail" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-per-person-fail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="14_limits_files/figure-html/fig-per-person-fail-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-per-person-fail-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.1: Per-person MLE price coefficients (clipped to ±10 for display) against the true distribution of price coefficients. Eight choices per person cannot support six free parameters: mass piles at extreme values as separation sends estimates toward infinity.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Verdict: treating each person’s coefficients as free parameters is a dead end — not “needs more data” but <em>structurally</em> dead, because the survey’s <span class="math inline">\(T\)</span> will never be large. Whatever produces individual estimates must let respondents share information.</p>
 </section>
-<section id="why-not-estimate-each-persons-beta-by-mle" class="level2" data-number="14.2">
-<h2 data-number="14.2" class="anchored" data-anchor-id="why-not-estimate-each-persons-beta-by-mle"><span class="header-section-number">14.2</span> Why Not Estimate Each Person’s Beta by MLE?</h2>
-<!-- T is small and fixed per person; the incidental parameters problem; a simulation demonstrating per-person MLE failure (some betas infinite -- perfect separation) -->
+<section id="attempt-two-condition-on-the-population" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="attempt-two-condition-on-the-population"><span class="header-section-number">14.2</span> Attempt Two: Condition on the Population</h2>
+<p>Which is exactly what the mixed logit already does — it just forgets to tell us about individuals. Recall its structure: <span class="math inline">\(\boldsymbol{\beta}_n\)</span> drawn from a population distribution <span class="math inline">\(f(\boldsymbol{\beta}\mid \boldsymbol{\theta})\)</span>, then choices from an MNL given <span class="math inline">\(\boldsymbol{\beta}_n\)</span>. The MSL estimate <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span> describes the population. But the model contains a sharper question we haven’t asked: <em>given</em> that person <span class="math inline">\(n\)</span> made the specific choices <span class="math inline">\(\mathbf{y}_n\)</span>, which parts of the population distribution are they likely to sit in?</p>
+<p>The answer is a conditional density, obtained — as in the E-step of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>, and this is no coincidence — by Bayes’ rule <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009</a>, Ch. 11)</span>:</p>
+<p><span id="eq-conditional-dist"><span class="math display">\[
+h(\boldsymbol{\beta}\mid \mathbf{y}_n, \hat{\boldsymbol{\theta}})
+= \frac{ \Pr(\mathbf{y}_n \mid \boldsymbol{\beta}) \, f(\boldsymbol{\beta}\mid \hat{\boldsymbol{\theta}}) }{ \int \Pr(\mathbf{y}_n \mid \boldsymbol{\beta}') \, f(\boldsymbol{\beta}' \mid \hat{\boldsymbol{\theta}}) \, d\boldsymbol{\beta}' }
+\tag{14.1}\]</span></span></p>
+<p>Read it with <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> eyes: <span class="math inline">\(f(\boldsymbol{\beta}\mid \hat{\boldsymbol{\theta}})\)</span> plays the role the class shares played (what people are like in general); the sequence probability <span class="math inline">\(\Pr(\mathbf{y}_n \mid \boldsymbol{\beta})\)</span> plays the class-specific likelihood (how well each candidate taste explains <em>this</em> person); the result upgrades the population distribution into a person-specific one. The continuous analogue of posterior class membership.</p>
+<p>Computing it is a two-line addition to machinery we already ran. The MSL estimation of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> already evaluates, for every person and every draw <span class="math inline">\(\boldsymbol{\beta}_n^{(r)}\)</span> from the estimated population, the sequence probability <span class="math inline">\(P_{nr} = \Pr(\mathbf{y}_n \mid \boldsymbol{\beta}_n^{(r)})\)</span> — note the subscripts: unlike the task-level <span class="math inline">\(P_{nt}\)</span>, this is the probability of person <span class="math inline">\(n\)</span>’s <em>whole sequence</em> under draw <span class="math inline">\(r\)</span>, i.e.&nbsp;<span class="math inline">\(P_{nr} = e^{\ell_{nr}}\)</span> in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>’s notation, and the weights <span class="math inline">\(P_{nr}/\sum_{r'} P_{nr'}\)</span> we are about to compute are <em>literally</em> the <span class="math inline">\(w_{nr}\)</span> of <a href="13_mixed_msl.html#eq-msl-grad" class="quarto-xref">Equation&nbsp;<span>13.4</span></a> — the Bayes-rule object that chapter promised this one would pick up. The <strong>conditional mean</strong> of <a href="#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a> follows by a move we already own. Write it out: <span class="math display">\[\mathrm{E}[\boldsymbol{\beta}\mid \mathbf{y}_n] = \int \boldsymbol{\beta}\, h(\boldsymbol{\beta}\mid \mathbf{y}_n, \hat{\boldsymbol{\theta}}) \, d\boldsymbol{\beta}= \frac{\int \boldsymbol{\beta}\, \Pr(\mathbf{y}_n \mid \boldsymbol{\beta}) \, f(\boldsymbol{\beta}\mid \hat{\boldsymbol{\theta}}) \, d\boldsymbol{\beta}}{\int \Pr(\mathbf{y}_n \mid \boldsymbol{\beta}') \, f(\boldsymbol{\beta}' \mid \hat{\boldsymbol{\theta}}) \, d\boldsymbol{\beta}'}\]</span> Numerator and denominator are both expectations <em>with respect to <span class="math inline">\(f\)</span></em> — exactly the kind of integral <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> taught us to simulate: draw from <span class="math inline">\(f\)</span>, average the integrand. Simulate both with the same draws <span class="math inline">\(\boldsymbol{\beta}_n^{(r)} \sim f(\cdot \mid \hat{\boldsymbol{\theta}})\)</span>, cancel the common <span class="math inline">\(1/R\)</span>, and the conditional mean becomes a <em>probability-weighted average of the draws</em> — each candidate taste weighted by how well it explains the person:</p>
+<p><span id="eq-conditional-mean"><span class="math display">\[
+\hat{\boldsymbol{\beta}}_n = \frac{\sum_r P_{nr} \, \boldsymbol{\beta}_n^{(r)}}{\sum_r P_{nr}}
+\tag{14.2}\]</span></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## rebuild the estimated-population draws and their weights, as in @sec-mixed-msl</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>theta_hat <span class="ot">&lt;-</span> mixed<span class="sc">$</span>theta_hat            <span class="co"># MSL estimates: means, log-sds</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rc        <span class="ot">&lt;-</span> mixed<span class="sc">$</span>rc                    <span class="co"># which coefficients are random</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>Z         <span class="ot">&lt;-</span> mixed<span class="sc">$</span>Z                     <span class="co"># the fixed draws used in estimation</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fu">dim</span>(Z)[<span class="dv">2</span>]; n_id <span class="ot">&lt;-</span> <span class="fu">max</span>(id)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>id_of_task <span class="ot">&lt;-</span> id[<span class="sc">!</span><span class="fu">duplicated</span>(task_id)]</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>bar <span class="ot">&lt;-</span> theta_hat[<span class="dv">1</span><span class="sc">:</span>K]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>s   <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta_hat[(K<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(K<span class="sc">+</span><span class="fu">length</span>(rc))])</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>lseq <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_id, R)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>beta_draws <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">rep</span>(bar, <span class="at">each =</span> n_id), <span class="fu">c</span>(n_id, R, K))</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    betas <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(bar, <span class="at">each =</span> n_id), n_id, K)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>        betas[, rc[jj]] <span class="ot">&lt;-</span> betas[, rc[jj]] <span class="sc">+</span> s[jj] <span class="sc">*</span> Z[, r, jj]</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    beta_draws[, r, ] <span class="ot">&lt;-</span> betas</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> betas[id, ])</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> (V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    lseq[, r] <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(logP[y <span class="sc">==</span> <span class="dv">1</span>], id_of_task))</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">apply</span>(lseq, <span class="dv">1</span>, max)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">exp</span>(lseq <span class="sc">-</span> M); w <span class="ot">&lt;-</span> w <span class="sc">/</span> <span class="fu">rowSums</span>(w)          <span class="co"># person-by-draw weights</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>beta_cond <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k) <span class="fu">rowSums</span>(w <span class="sc">*</span> beta_draws[, , k]))</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(beta_cond) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The moment of judgment — conditional means against the true individual coefficients:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">truth =</span> betas_true[, <span class="st">"price"</span>],</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cond  =</span> beta_cond[, <span class="st">"price"</span>]),</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(truth, cond)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.35</span>, <span class="at">size =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(true<span class="sc">~</span>beta[price]),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="fu">expression</span>(conditional<span class="sc">~</span>mean<span class="sc">~</span><span class="fu">hat</span>(beta)[price]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-conditional-vs-truth" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-conditional-vs-truth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="14_limits_files/figure-html/fig-conditional-vs-truth-1.png" class="img-fluid figure-img" width="528">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conditional-vs-truth-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14.2: Conditional individual-level price coefficients against each respondent’s true price coefficient. Correlation is strong; the systematic flattening relative to the 45-degree line is shrinkage — with eight tasks each, individual estimates rationally lean toward the population mean.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">correlation =</span> <span class="fu">cor</span>(betas_true[, <span class="st">"price"</span>], beta_cond[, <span class="st">"price"</span>]),</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd_truth =</span> <span class="fu">sd</span>(betas_true[, <span class="st">"price"</span>]),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">sd_conditional =</span> <span class="fu">sd</span>(beta_cond[, <span class="st">"price"</span>])), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   correlation       sd_truth sd_conditional 
+          0.49           0.71           0.22 </code></pre>
+</div>
+</div>
+<p>Night and day against Attempt One. The conditional means track the truth person by person (correlation around 0.49), with no explosions — the population density in <a href="#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a> acts as a leash that separation cannot outrun: a respondent who always chose cheapest is now assigned a price coefficient in the <em>plausible lower tail</em> of the population, not at infinity.</p>
+<p>And notice the figure’s second message: the cloud is <em>flatter</em> than the 45-degree line, and the conditional means’ spread is visibly smaller than the true spread. This compression is <strong>shrinkage</strong> — individual estimates pulled toward the population mean, more strongly the less information the person’s own choices carry. Far from a defect, shrinkage is the rational response to <span class="math inline">\(T = 8\)</span>: with thin personal data, the population is a better guide than the person’s noisy record, and the weighted average in <a href="#eq-conditional-mean" class="quarto-xref">Equation&nbsp;<span>14.2</span></a> makes precisely that trade.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Shrinkage is about to become a central character: the hierarchical models of Part III produce it automatically, and <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> will lay this chapter’s estimates alongside theirs.</p>
 </section>
-<section id="conditioning-on-choices-individual-estimates-after-msl" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="conditioning-on-choices-individual-estimates-after-msl"><span class="header-section-number">14.3</span> Conditioning on Choices: Individual Estimates After MSL</h2>
-<!-- DCMS Ch 11: h(beta_n | y_n) via Bayes' rule with the estimated population distribution as prior; compute conditional means by simulation; it works... -->
+<section id="so-whats-missing" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="so-whats-missing"><span class="header-section-number">14.3</span> So What’s Missing?</h2>
+<p>If conditional means work this well, why does this book have three more parts? Because of what surrounds the point estimates. Line up the honest accounting:</p>
+<p><strong>No finite-sample inference.</strong> The conditional mean is a point. Its distribution <a href="#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a> would seem to offer more — but it is computed <em>at the plug-in</em> <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>, as if the population parameters were known rather than estimated. Person-level uncertainty statements that account for population-level uncertainty require nesting the whole <a href="#eq-conditional-mean" class="quarto-xref">Equation&nbsp;<span>14.2</span></a> computation inside the sampling distribution of <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span> — possible in principle, done by almost no one, offered by no standard software.</p>
+<p><strong>A two-step architecture with error at both steps.</strong> Step one: MSL, with its simulation bias (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>) and its own standard errors. Step two: conditional means, with fresh simulation error, treating step one as exact. The errors do not add up in any package’s output; they are simply not accounted.</p>
+<p><strong>And the first step itself strains.</strong> The <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> accounting: minutes per fit at three random coefficients with diagonal covariance; full covariance means Cholesky parameterizations, quadratically growing parameter counts, numerical gradients or heavy derivations, multiplied by the multiple-starts discipline. MSL <em>works</em> — we validated it — but every increment of model richness is paid for in optimization fragility and draws.</p>
+<p>Now step back and look at the <em>shape</em> of what we built, because the shape is the punchline. To get individual estimates out of maximum likelihood, we bolted Bayes’ rule onto the side of the estimator: <a href="#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a> treats the population distribution as a prior and updates it with a person’s data. The natural question — the one Part III answers — is: <em>if Bayes’ rule is doing the interesting work anyway, why not build the entire estimator out of it?</em> Treat <span class="math inline">\(\boldsymbol{\theta}\)</span> itself as uncertain, put the hierarchy <span class="math inline">\(\mathbf{y}_n \leftarrow \boldsymbol{\beta}_n \leftarrow \boldsymbol{\theta}\)</span> inside one coherent posterior, and sample from that posterior directly. Every deficiency in the list above dissolves: person-level and population-level uncertainty arrive together, exactly, in finite samples; there is no two-step; and — the surprise of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> — the computation gets <em>easier</em>, replacing a strained 9-parameter optimization with draws from simple conditional distributions. The tools are ready: the likelihood code of Part II is the engine, and the sampling skills of <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> are the fuel. What remains is the algorithm — Markov chain Monte Carlo — and that is Part III.</p>
 </section>
-<section id="but-it-creaks" class="level2" data-number="14.4">
-<h2 data-number="14.4" class="anchored" data-anchor-id="but-it-creaks"><span class="header-section-number">14.4</span> …But It Creaks</h2>
-<!-- two-step logic with no exact inference; simulation error on top of estimation error; plug-in population parameters treated as known; and MSL itself strains (ch 13's accounting) -->
-</section>
-<section id="the-bayesian-road" class="level2" data-number="14.5">
-<h2 data-number="14.5" class="anchored" data-anchor-id="the-bayesian-road"><span class="header-section-number">14.5</span> The Bayesian Road</h2>
-<!-- preview of Part III: treat beta_n as random quantities in one coherent model; MCMC replaces the optimizer; individual posteriors arrive natively, with exact finite-sample inference; and we already wrote the likelihood code it needs -->
-</section>
-<section id="key-learnings" class="level2" data-number="14.6">
-<h2 data-number="14.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">14.6</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">14.4</span> Key Learnings</h2>
+<ul>
+<li>Population parameters are not the deliverable; individual-level <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s are what targeting, segmentation, and market simulation consume. Maximum likelihood’s route to them is the subject of this chapter — and its limit.</li>
+<li>Per-person MLE fails structurally: perfect separation sends coefficients to infinity, and the incidental parameters problem (parameters growing with <span class="math inline">\(N\)</span>, information growing only with fixed <span class="math inline">\(T\)</span>) voids the asymptotics. The failure histogram is not subtle.</li>
+<li>Conditioning works: Bayes’ rule (<a href="#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a>) upgrades the estimated population distribution into person-specific distributions, and the conditional mean (<a href="#eq-conditional-mean" class="quarto-xref">Equation&nbsp;<span>14.2</span></a>) is a probability-weighted average of draws — computable from quantities MSL already produced, the continuous sibling of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s posterior memberships.</li>
+<li>Conditional means track the truth strongly and exhibit <strong>shrinkage</strong> — rational compression toward the population mean under thin personal data. Never confuse the spread of conditional means with the spread of tastes.</li>
+<li>What likelihood cannot supply: honest person-level uncertainty (the plug-in ignores <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>’s error), a one-step architecture, and relief from MSL’s growing strain. The fix is to promote Bayes’ rule from bolt-on to foundation — Part III.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-allenby2019" class="csl-entry" role="listitem">
+Allenby, Greg M., Nino Hardt, and Peter E. Rossi. 2019. <span>“Economic Foundations of Conjoint Analysis.”</span> In <em>Handbook of the Economics of Marketing, Volume 1</em>, edited by Jean-Pierre Dubé and Peter E. Rossi, 151–92. North-Holland.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The incidental parameters problem dates to Neyman and Scott (1948); <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 11.4 discusses it in exactly our setting. It is why no serious practitioner estimates “fixed effects” utility coefficients from short choice panels.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The compression also means conditional means should <em>not</em> be treated as draws from the taste distribution — their variance understates the population’s by construction. Population statements come from <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span>; person statements from <a href="#eq-conditional-mean" class="quarto-xref">Equation&nbsp;<span>14.2</span></a>; mixing up the two is a standard applied error <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 11.5</a>)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

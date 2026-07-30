@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -341,12 +424,13 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#the-shape-of-choice-data" id="toc-the-shape-of-choice-data" class="nav-link active" data-scroll-target="#the-shape-of-choice-data"><span class="header-section-number">4.1</span> The Shape of Choice Data</a></li>
   <li><a href="#wide-and-long-formats" id="toc-wide-and-long-formats" class="nav-link" data-scroll-target="#wide-and-long-formats"><span class="header-section-number">4.2</span> Wide and Long Formats</a></li>
-  <li><a href="#alternative-specific-and-individual-specific-variables" id="toc-alternative-specific-and-individual-specific-variables" class="nav-link" data-scroll-target="#alternative-specific-and-individual-specific-variables"><span class="header-section-number">4.3</span> Alternative-Specific and Individual-Specific Variables</a></li>
+  <li><a href="#two-kinds-of-variables-two-kinds-of-columns" id="toc-two-kinds-of-variables-two-kinds-of-columns" class="nav-link" data-scroll-target="#two-kinds-of-variables-two-kinds-of-columns"><span class="header-section-number">4.3</span> Two Kinds of Variables, Two Kinds of Columns</a></li>
   <li><a href="#coding-categorical-attributes" id="toc-coding-categorical-attributes" class="nav-link" data-scroll-target="#coding-categorical-attributes"><span class="header-section-number">4.4</span> Coding Categorical Attributes</a></li>
-  <li><a href="#the-outside-option" id="toc-the-outside-option" class="nav-link" data-scroll-target="#the-outside-option"><span class="header-section-number">4.5</span> The Outside Option</a></li>
-  <li><a href="#from-data-frame-to-likelihood-inputs" id="toc-from-data-frame-to-likelihood-inputs" class="nav-link" data-scroll-target="#from-data-frame-to-likelihood-inputs"><span class="header-section-number">4.6</span> From Data Frame to Likelihood Inputs</a></li>
-  <li><a href="#package-conventions" id="toc-package-conventions" class="nav-link" data-scroll-target="#package-conventions"><span class="header-section-number">4.7</span> Package Conventions</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">4.8</span> Key Learnings</a></li>
+  <li><a href="#sec-data-intercept" id="toc-sec-data-intercept" class="nav-link" data-scroll-target="#sec-data-intercept"><span class="header-section-number">4.5</span> Where Is the Intercept?</a></li>
+  <li><a href="#sec-build-design" id="toc-sec-build-design" class="nav-link" data-scroll-target="#sec-build-design"><span class="header-section-number">4.6</span> Building the Study Design</a></li>
+  <li><a href="#sec-choice-data" id="toc-sec-choice-data" class="nav-link" data-scroll-target="#sec-choice-data"><span class="header-section-number">4.7</span> From Data Frame to Likelihood Inputs</a></li>
+  <li><a href="#package-conventions-dfidx-and-friends" id="toc-package-conventions-dfidx-and-friends" class="nav-link" data-scroll-target="#package-conventions-dfidx-and-friends"><span class="header-section-number">4.8</span> Package Conventions: <code>dfidx</code> and Friends</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">4.9</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/04_data.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -372,39 +456,239 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: pkg-mlogit.md (dfidx format, wide vs long); cbc-handbook-2022.md (worked CBC data example); diener-2006 (stacked dual-response data trick, for ch 22) -->
+<p>This chapter contains no new statistics. It is about something more mundane and, in my experience, responsible for more student-hours of frustration than any mathematical topic in this book: getting choice data into a shape that estimation code can consume. The likelihoods of Part II are sums over choice situations of expressions involving each alternative’s attributes; between the data as they arrive and the likelihood as it computes sits a layer of pure bookkeeping. Do the bookkeeping haphazardly and every later chapter fights it. Do it once, deliberately, and the same few structures will carry us from the plain MNL (<a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>) through simulated likelihood (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) to the hierarchical samplers (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>) without modification.</p>
+<p>Because this is a chapter of choices-with-tradeoffs rather than theorems, I will follow a pattern used throughout the book: lay out the reasonable options, then commit to one and say why. You may prefer different choices in your own work — the options all <em>work</em> — but a book, like a codebase, benefits from picking a lane.</p>
 <section id="the-shape-of-choice-data" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="the-shape-of-choice-data"><span class="header-section-number">4.1</span> The Shape of Choice Data</h2>
-<!-- three indices: decision-maker n, choice situation t, alternative j; contrast with the one-row-per-observation data of a regression course -->
+<p>The data of a regression course are flat: one row per observation, one column per variable. Choice data have more structure, because each observation is not a number but an <em>event with internal anatomy</em>: a particular person, facing a particular set of alternatives, on a particular occasion, choosing one. Three indices track that anatomy, and they have been fixed since <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>:</p>
+<ul>
+<li><span class="math inline">\(n = 1, \ldots, N\)</span> indexes <strong>decision-makers</strong> (our survey respondents),</li>
+<li><span class="math inline">\(t = 1, \ldots, T\)</span> indexes <strong>choice situations</strong> (the tasks each respondent completes),</li>
+<li><span class="math inline">\(j = 1, \ldots, J\)</span> indexes <strong>alternatives</strong> within a choice situation.</li>
+</ul>
+<p>The pair <span class="math inline">\((n, t)\)</span> identifies one choice situation; the triple <span class="math inline">\((n, t, j)\)</span> identifies one alternative in one situation — one <em>utility</em> in the model’s terms, since <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> will assign <span class="math inline">\(U_{ntj} = \mathbf{x}_{ntj}'\boldsymbol{\beta}+ \varepsilon_{ntj}\)</span> to exactly this triple. Our laptop study (<a href="01_choice.html#sec-running_example" class="quarto-xref"><span>Section 1.4</span></a>) has <span class="math inline">\(N = 500\)</span>, <span class="math inline">\(T = 8\)</span>, and <span class="math inline">\(J = 3\)</span>: five hundred respondents, eight tasks each, three laptop profiles per task, for <span class="math inline">\(500 \times 8 = 4{,}000\)</span> observed choices and <span class="math inline">\(4{,}000 \times 3 = 12{,}000\)</span> described alternatives.</p>
+<p>The binary data of <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a> were the degenerate case that hid all of this: one task per person (<span class="math inline">\(T=1\)</span>) and one modeled alternative plus a fixed outside option (<span class="math inline">\(J=2\)</span> with the “don’t buy” utility normalized away), so a flat data frame sufficed. It no longer does. The question of this chapter is: <em>in what shape do we store 12,000 alternative descriptions and 4,000 choices?</em></p>
 </section>
 <section id="wide-and-long-formats" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="wide-and-long-formats"><span class="header-section-number">4.2</span> Wide and Long Formats</h2>
-<!-- one row per choice situation vs one row per alternative; how to convert; which computations each format makes easy -->
+<p>Two conventions dominate, distinguished by what a row represents.</p>
+<p>In <strong>wide format</strong>, one row is one choice situation <span class="math inline">\((n,t)\)</span>, and each alternative’s attributes spread across columns:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  id task brand_1 price_1 brand_2 price_2 brand_3 price_3 choice
+1  1    1    Acer     1.2   Apple     2.0    Dell     1.4      2
+2  1    2    Dell     1.6    Acer     0.9   Apple     1.8      1</code></pre>
+</div>
+</div>
+<p>In <strong>long format</strong>, one row is one alternative <span class="math inline">\((n,t,j)\)</span>, with the choice recorded as an indicator:</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  id task alt brand price choice
+1  1    1   1  Acer   1.2      0
+2  1    1   2 Apple   2.0      1
+3  1    1   3  Dell   1.4      0
+4  1    2   1  Dell   1.6      1
+5  1    2   2  Acer   0.9      0
+6  1    2   3 Apple   1.8      0</code></pre>
+</div>
+</div>
+<p>(These two tables show the same two tasks; respondent 1 chose the Apple in task 1 and the Dell in task 2.)</p>
+<p>The tradeoffs:</p>
+<ul>
+<li><strong>Wide</strong> matches how survey platforms export data and how humans read a choice task (“here were your three options; you picked #2”). It is compact — one row per choice. But the attributes of “alternative 2” live in differently-named columns from “alternative 1,” so any computation over alternatives means wrangling column-name patterns; and if some tasks show two alternatives while others show four, the format needs padding columns and missing-value conventions.</li>
+<li><strong>Long</strong> matches how the <em>model</em> thinks. Each row is one <span class="math inline">\((n,t,j)\)</span> triple — one utility. Attributes have a single column each regardless of <span class="math inline">\(J\)</span>; tasks with different numbers of alternatives are just groups of different sizes; and the operations our likelihoods need (compute a value for every alternative, then aggregate within choice situations) become operations on rows and groups.</li>
+</ul>
+<p><strong>Our choice: long format, always.</strong> The deciding argument is the last one — in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> the log-likelihood will be built from exactly two moves, “one value per row” and “aggregate rows within task,” and long format makes both natural. Wide-to-long conversion is a mechanical reshape,<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> so nothing is lost by standardizing. When a dataset in this book is called <em>the data</em>, it is a long-format data frame with columns <code>id</code>, <code>task</code>, <code>alt</code>, <code>choice</code>, then attributes.</p>
+<p>One convention completes the format, and I state it as a contract because code will rely on it silently: <strong>rows are sorted by <code>id</code>, then <code>task</code>, then <code>alt</code>.</strong> Grouped computations in the chapters ahead identify a choice situation by contiguous runs of rows; the sort order is what makes that identification valid. Violate the contract and nothing errors — results are simply, quietly wrong. (We will build one guardrail below.)</p>
 </section>
-<section id="alternative-specific-and-individual-specific-variables" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="alternative-specific-and-individual-specific-variables"><span class="header-section-number">4.3</span> Alternative-Specific and Individual-Specific Variables</h2>
-<!-- x_ntj vs z_n; generic vs alternative-specific coefficients; where each enters utility and what each identifies (preview of ch 7 identification) -->
+<section id="two-kinds-of-variables-two-kinds-of-columns" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="two-kinds-of-variables-two-kinds-of-columns"><span class="header-section-number">4.3</span> Two Kinds of Variables, Two Kinds of Columns</h2>
+<p>Look again at the long-format table and note what varies where. <code>price</code> varies across rows <em>within</em> a task — each alternative has its own. But a respondent characteristic like age would repeat across all rows of a task, varying only with <code>id</code>. The distinction matters enough for names:</p>
+<ul>
+<li><strong>Alternative-specific variables</strong> (<span class="math inline">\(\mathbf{x}_{ntj}\)</span>): attributes of the alternatives — price, brand, memory. These vary within a choice situation and are the natural drivers of choice.</li>
+<li><strong>Individual-specific variables</strong> (<span class="math inline">\(\mathbf{z}_n\)</span>): characteristics of the decision-maker — age, income, prior brand ownership. Constant across the alternatives in a task. (A notation caution: this <span class="math inline">\(\mathbf{z}_n\)</span> — observed characteristics — is unrelated to the standard-normal draw vector <span class="math inline">\(\mathbf{z}\)</span> of <a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a>; the collision is regrettably standard in this literature, and context always disambiguates.)</li>
+</ul>
+<p>Here is the fact that surprises newcomers, stated now and explained properly in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>: <em>an individual-specific variable cannot enter utility with a single common coefficient.</em> If age adds <span class="math inline">\(\gamma \cdot \texttt{age}_n\)</span> to the utility of <strong>every</strong> alternative, it raises all <span class="math inline">\(J\)</span> utilities equally, changes no comparison, and drops out of the choice probabilities entirely — <span class="math inline">\(\gamma\)</span> is unidentified. Only <em>differences</em> in utility move choices. Individual-specific variables earn their way into choice models by interaction: with alternative dummies (age shifts the appeal of Apple relative to Acer) or with attributes (income damps price sensitivity). Structurally, that means <span class="math inline">\(\mathbf{z}_n\)</span> columns in a long data frame are raw material awaiting interaction, not regressors in their own right. In this book’s main thread, individual-specific variation instead enters through <em>coefficients that vary across people</em> — the heterogeneity models of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> onward — and in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> the two devices meet, with <span class="math inline">\(\mathbf{z}_n\)</span> shifting the <em>mean</em> of person <span class="math inline">\(n\)</span>’s coefficient vector.</p>
 </section>
 <section id="coding-categorical-attributes" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="coding-categorical-attributes"><span class="header-section-number">4.4</span> Coding Categorical Attributes</h2>
-<!-- dummy coding vs effects coding; reference levels; conjoint attribute-level conventions (cbc-handbook-2022) -->
+<p>Brand takes values Acer, Dell, Apple; memory takes 8, 16, 32. Utilities are sums of numbers, so categories must become numeric columns, and the mapping is another small decision with options.</p>
+<p><strong>Dummy (treatment) coding</strong> picks a reference level and creates an indicator per remaining level. With Acer as reference: <code>dell</code> and <code>apple</code> columns, each 0/1. A brand coefficient is then the utility of that brand <em>relative to Acer, all else equal</em> — concrete and readable, with the reference level absorbing the baseline.</p>
+<p><strong>Effects coding</strong> constrains the level utilities to sum to zero instead: the reference level’s columns are all <span class="math inline">\(-1\)</span>, and each level’s utility is read relative to the <em>average</em> level. Conjoint practice often prefers it because part-worths then compare against a neutral average rather than an arbitrary reference, and it interacts more gracefully with the “attribute importance” summaries of <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>.</p>
+<p><strong>Our choice: dummy coding, with the reference levels fixed once</strong> — Acer, 8GB, 13-inch, as set in <a href="01_choice.html#tbl-laptop-attributes" class="quarto-xref">Table&nbsp;<span>1.1</span></a>. For a book, interpretability-per-line-of-code wins: “the Apple coefficient is the extra utility of an Apple over an Acer” needs no further explanation, and every simulate-and-recover check reads directly against true parameters stated in the same coding. Effects coding returns for a cameo in <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> where its advantages actually bite. What is <em>not</em> optional is consistency: coding schemes, like sort orders, are contracts, and estimates are only interpretable against the coding that produced them.</p>
+<p>R can build coded columns from factors automatically via <code>model.matrix()</code>, and we will let it — with the factor levels ordered explicitly so the reference is what we intend, not what alphabetical order happens to deliver:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>brand <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Apple"</span>,<span class="st">"Dell"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">model.matrix</span>(<span class="sc">~</span> brand)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) brandDell brandApple
+1           1         0          0
+2           1         0          1
+3           1         1          0
+attr(,"assign")
+[1] 0 1 1
+attr(,"contrasts")
+attr(,"contrasts")$brand
+[1] "contr.treatment"</code></pre>
+</div>
+</div>
+<p>Note <code>model.matrix()</code> includes an intercept column by default. Whether we keep it is the next section’s business.</p>
 </section>
-<section id="the-outside-option" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="the-outside-option"><span class="header-section-number">4.5</span> The Outside Option</h2>
-<!-- coding a no-choice/none alternative: a row of zeros plus an ASC; why its utility is normalized; deeper treatment deferred to ch 22 -->
+<section id="sec-data-intercept" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sec-data-intercept"><span class="header-section-number">4.5</span> Where Is the Intercept?</h2>
+<p>The binary model of <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a> had an intercept: a constant in <span class="math inline">\(\mathbf{x}_n\)</span> giving the baseline pull toward buying. Scan the long-format laptop data for its analogue and you hit a small conceptual wall: a column of ones would give <em>every alternative in every task</em> the same utility boost — and as with individual-specific variables, anything common to all alternatives cancels from every comparison. A common intercept is unidentified in multinomial choice data.</p>
+<p>What can exist is an <strong>alternative-specific constant (ASC)</strong>: a dummy for <em>position</em> <span class="math inline">\(j\)</span>, capturing systematic utility for “option 2” as such. Whether ASCs belong in the model depends on the design:</p>
+<ul>
+<li>With <strong>labeled alternatives</strong> — the options are inherently “car,” “bus,” “train,” the staples of transportation economics <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 2.5</a>)</span> — ASCs are essential. Each mode has unmeasured systematic appeal, and its ASC absorbs it.</li>
+<li>With <strong>unlabeled profiles</strong> — our study, and most conjoint: the three laptops in a task are just “some laptops,” their screen positions randomized — position has no meaning, and the brand attribute already carries the “which product” information. Including position ASCs would estimate, roughly, left-middle-right screen bias.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+</ul>
+<p>So our laptop data frames carry no intercept and no ASCs; the brand dummies play the role closest to “brand intercepts.” When Part IV needs ASCs (the probit’s identification story makes them central) and when <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a> adds a no-choice option (whose ASC is the entire model of “walking away”), we will add the relevant dummy columns explicitly, as ordinary attributes. That is a quiet advantage of long format: an ASC is just one more 0/1 column, not a special modeling object.</p>
 </section>
-<section id="from-data-frame-to-likelihood-inputs" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="from-data-frame-to-likelihood-inputs"><span class="header-section-number">4.6</span> From Data Frame to Likelihood Inputs</h2>
-<!-- the target structure our estimation code consumes: y vector and X matrix (or list of matrices) with consistent index ordering; write helper functions we reuse for the rest of the book -->
+<section id="sec-build-design" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="sec-build-design"><span class="header-section-number">4.6</span> Building the Study Design</h2>
+<p>Enough principles; let’s build the actual dataset scaffold for the laptop study. A useful separation of concerns — and the one real studies force on you anyway — is between the <strong>design</strong> (which profiles appear in which tasks; exists before any respondent) and the <strong>responses</strong> (the <code>choice</code> column; exists after). We build the design now. Filling in choices requires the MNL model itself, so that half arrives in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
+<p>How should profiles be assigned to tasks? The gold standard is a formal experimental design — orthogonal arrays, D-efficient designs — that maximizes the information the study extracts per task <span class="citation" data-cites="rao2014">(<a href="references.html#ref-rao2014" role="doc-biblioref">Rao 2014</a>, Chs. 2 and 4)</span>. Design theory is a book of its own and deliberately out of our scope. We use the simplest defensible method, <strong>independent random assignment</strong>: every attribute of every profile drawn independently at random. Random designs are what our simulate-and-recover studies need (no accidental confounding between attributes, by construction) and they let the code stay transparent:<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sim_laptop_design <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">id    =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T <span class="sc">*</span> J),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">task  =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt   =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(J), <span class="at">times =</span> N <span class="sc">*</span> T),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">brand =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram   =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>), <span class="dv">2</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">40</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>laptops <span class="ot">&lt;-</span> <span class="fu">sim_laptop_design</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">J =</span> <span class="dv">3</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(laptops, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  id task alt brand ram screen price
+1  1    1   1 Apple  16     13  2.16
+2  1    1   2  Dell  16     15  2.08
+3  1    1   3  Acer  32     15  1.77
+4  1    2   1  Dell  32     15  1.81
+5  1    2   2 Apple   8     15  1.24
+6  1    2   3  Dell  32     15  1.82</code></pre>
+</div>
+</div>
+<p>The <code>rep()</code> calls in the first three columns implement the sort-order contract mechanically — <code>id</code> slowest, <code>alt</code> fastest — so the design is born correctly ordered. Dimensions check:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(laptops)                       <span class="co"># 500 * 8 * 3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12000</code></pre>
+</div>
+</div>
+<p>And a design-level sanity check in the spirit of <a href="03_simdata.html#sec-sanity-checks" class="quarto-xref"><span>Section 3.5</span></a>: with independent random assignment, attributes should be uncorrelated and levels balanced. Brand shares by alternative position:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(laptops<span class="sc">$</span>brand, laptops<span class="sc">$</span>alt), <span class="at">margin =</span> <span class="dv">2</span>), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+           1    2    3
+  Acer  0.34 0.35 0.33
+  Dell  0.34 0.33 0.34
+  Apple 0.32 0.32 0.33</code></pre>
+</div>
+</div>
+<p>Near-uniform everywhere, as designed.</p>
 </section>
-<section id="package-conventions" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="package-conventions"><span class="header-section-number">4.7</span> Package Conventions</h2>
-<!-- mlogit's dfidx (alt/chid/id indexes); how our structure maps to it, so validation runs (ch 8 onward) are painless -->
+<section id="sec-choice-data" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="sec-choice-data"><span class="header-section-number">4.7</span> From Data Frame to Likelihood Inputs</h2>
+<p>The last mile. A data frame is for humans; estimation code wants numeric arrays. Specifically, everything from <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> onward needs three things: the attribute matrix, the choices, and a map from rows to choice situations. There are three reasonable containers, and this is the load-bearing decision of the chapter:</p>
+<ul>
+<li><strong>(a) A list of per-task matrices.</strong> <code>data[[i]]</code> holds task <span class="math inline">\(i\)</span>’s <span class="math inline">\(J \times K\)</span> attribute matrix and its choice. Transparent — each likelihood term has its own little bundle — and the shape most textbook pseudo-code implies. But R-level loops over 4,000 list elements are slow (<a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a> will quantify how slow), and slow inside a likelihood means slow <em>everywhere</em>, because the likelihood is the inner loop of every method in this book.</li>
+<li><strong>(b) A three-dimensional array.</strong> Dimensions (task, alternative, attribute): <code>X[i, j, k]</code>. Fast, vectorizable, and appealing when every task shows exactly <span class="math inline">\(J\)</span> alternatives. But it hard-codes the balanced-design assumption — add a no-choice alternative to some tasks (<a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a>) or work with real-world availability variation, and the array needs padding and masking. Array code also reads poorly; three-index gymnastics obscure the model.</li>
+<li><strong>(c) A stacked matrix plus index vectors.</strong> Keep the long format’s row layout: one <span class="math inline">\((N \cdot T \cdot J) \times K\)</span> matrix <code>X</code> whose rows are alternatives in contract order, a 0/1 vector <code>choice</code> marking chosen rows, and an integer vector <code>task_id</code> assigning each row to its choice situation. Grouped operations — “sum <span class="math inline">\(e^{V}\)</span> within each task” — become single calls to R’s grouped-aggregation primitives (<code>rowsum()</code> chief among them), which run at compiled speed. Ragged tasks cost nothing: a task is however many rows share its <code>task_id</code>.</li>
+</ul>
+<p><strong>Our choice: (c), the stacked-matrix representation.</strong> It is within a whisker of the array’s speed, it degrades gracefully to ragged designs, and — decisive for this book — it is the representation that survives unchanged into later parts: the MSL of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> evaluates the same stacked <code>X</code> under many coefficient draws, and the person-by-person Metropolis steps of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> slice it by <code>id</code> without restructuring. Build once, reuse for nineteen chapters.</p>
+<p>The conversion function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>build_choice_data <span class="ot">&lt;-</span> <span class="cf">function</span>(df, attr_formula) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stopifnot</span>(<span class="sc">!</span><span class="fu">is.unsorted</span>(<span class="fu">order</span>(df<span class="sc">$</span>id, df<span class="sc">$</span>task, df<span class="sc">$</span>alt)))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(attr_formula, <span class="at">data =</span> df)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[, <span class="fu">colnames</span>(X) <span class="sc">!=</span> <span class="st">"(Intercept)"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">X       =</span> X,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">choice  =</span> <span class="cf">if</span> (<span class="st">"choice"</span> <span class="sc">%in%</span> <span class="fu">names</span>(df)) df<span class="sc">$</span>choice <span class="cf">else</span> <span class="cn">NULL</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">task_id =</span> task_id,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">id      =</span> df<span class="sc">$</span>id,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_tasks =</span> <span class="fu">max</span>(task_id),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">K       =</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Every line earns its place:</p>
+<ul>
+<li>The <code>stopifnot()</code> guardrail enforces the sort-order contract; better a loud failure now than silent nonsense later.</li>
+<li><code>model.matrix(attr_formula, df)</code> expands factors into dummy columns using their declared reference levels — the coding decision of this chapter, executed by base R. We then drop the intercept column it insists on adding, for the identification reason of <a href="#sec-data-intercept" class="quarto-xref"><span>Section 4.5</span></a>.</li>
+<li><code>task_id</code> is built by a small idiom worth reading twice: <code>!duplicated()</code> over the <code>(id, task)</code> pairs flags each task’s first row, and <code>cumsum()</code> turns those flags into a running task counter — <code>1,1,1,2,2,2,...</code> — giving every row its group label in two vectorized calls.</li>
+<li><code>choice</code> is optional, so the same function serves a bare design (now) and responded data (from <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> on).</li>
+</ul>
+<p>Applied to the laptop design:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">build_choice_data</span>(laptops, <span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(dat, <span class="at">max.level =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 6
+ $ X      : num [1:12000, 1:6] 0 1 0 1 0 1 0 1 0 0 ...
+  ..- attr(*, "dimnames")=List of 2
+ $ choice : NULL
+ $ task_id: int [1:12000] 1 1 1 2 2 2 3 3 3 4 ...
+ $ id     : int [1:12000] 1 1 1 1 1 1 1 1 1 1 ...
+ $ n_tasks: int 4000
+ $ K      : int 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(dat<span class="sc">$</span>X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "brandDell"  "brandApple" "ram16"      "ram32"      "screen15"  
+[6] "price"     </code></pre>
+</div>
+</div>
+<p>There it is: a 12000 <span class="math inline">\(\times\)</span> 6 matrix whose six columns<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> — <code>dell</code>, <code>apple</code>, <code>ram16</code>, <code>ram32</code>, <code>screen15</code>, <code>price</code> in our shorthand — line up exactly, column for column, with the true parameter vector we will fix when the full study’s choices are simulated in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>, plus the index vectors that give the rows their meaning. When <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> computes its first multinomial log-likelihood, it will consume precisely this object, and so will nearly every estimator after it.</p>
 </section>
-<section id="key-learnings" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">4.8</span> Key Learnings</h2>
+<section id="package-conventions-dfidx-and-friends" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="package-conventions-dfidx-and-friends"><span class="header-section-number">4.8</span> Package Conventions: <code>dfidx</code> and Friends</h2>
+<p>When we validate our hand-coded estimators against R packages — <code>mlogit</code> in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>, <code>gmnl</code> in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> — we must feed those packages <em>their</em> expected structure. Happily, the ecosystem standardized on ideas congruent with ours: <code>mlogit</code> <span class="citation" data-cites="croissant2020">(<a href="references.html#ref-croissant2020" role="doc-biblioref">Croissant 2020</a>)</span> consumes data via the <code>dfidx</code> package, which wraps a long-format data frame with declared indexes — <code>idx = c("chid", "alt")</code> naming the choice-situation and alternative columns, with a nesting structure for respondent panels. The conversion from our canonical format is one line, which we will write when we first need it. If you understand this chapter, no R choice package’s data layer will ever mystify you: they are all long format plus index bookkeeping, differing only in surface conventions.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">4.9</span> Key Learnings</h2>
+<ul>
+<li>Choice data live on three indices — decision-maker <span class="math inline">\(n\)</span>, choice situation <span class="math inline">\(t\)</span>, alternative <span class="math inline">\(j\)</span> — and one row of our canonical data is one <span class="math inline">\((n,t,j)\)</span> triple: <strong>long format</strong>, sorted by <code>id</code>, <code>task</code>, <code>alt</code>. The sort order is a contract that grouped computations rely on silently.</li>
+<li>Only utility <em>differences</em> move choices. That single fact organized the whole chapter: individual-specific variables need interactions to matter, a common intercept is unidentified, and ASCs are position dummies that belong in labeled designs but not in our unlabeled profile study.</li>
+<li>Categorical attributes become dummy columns against fixed reference levels (Acer, 8GB, 13”); <code>model.matrix()</code> mechanizes the coding, and consistency is what keeps estimates interpretable.</li>
+<li>The study <strong>design</strong> exists before responses: <code>sim_laptop_design()</code> builds the <span class="math inline">\(500 \times 8 \times 3\)</span> laptop study with independent random attribute assignment, correctly ordered by construction.</li>
+<li>The load-bearing decision: estimation code consumes the <strong>stacked-matrix representation</strong> — <code>X</code> (<span class="math inline">\(NTJ \times K\)</span>), 0/1 <code>choice</code>, integer <code>task_id</code> — chosen over per-task lists (slow) and 3-D arrays (rigid) because it is fast, ragged-friendly, and reusable verbatim from MLE through MSL to MCMC. <code>build_choice_data()</code> performs the conversion and guards the contracts.</li>
+<li>Package data layers (<code>dfidx</code> for <code>mlogit</code>) are the same ideas under different names; conversion is mechanical.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-croissant2020" class="csl-entry" role="listitem">
+Croissant, Yves. 2020. <span>“Estimation of Random Utility Models in <span>R</span>: The <span class="nocase">mlogit</span> Package.”</span> <em>Journal of Statistical Software</em> 95 (11): 1–41.
+</div>
+<div id="ref-rao2014" class="csl-entry" role="listitem">
+Rao, Vithala R. 2014. <em>Applied Conjoint Analysis</em>. Springer.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><code>stats::reshape()</code>, <code>tidyr::pivot_longer()</code>, or the <code>dfidx</code> package all automate it. We won’t dwell on the mechanics; what matters is knowing which shape you’re in and which shape you need.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Which is a real (if small) behavioral phenomenon, and estimating position effects is occasionally a useful design diagnostic. The point is that in an unlabeled design ASCs are a diagnostic, not a structural part of utility.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>A confession: <code>T</code> is also R’s abbreviation for <code>TRUE</code>, and masking it is normally poor hygiene. We use it anyway so the code reads like the math (<span class="math inline">\(N\)</span>, <span class="math inline">\(T\)</span>, <span class="math inline">\(J\)</span>). Never abbreviate <code>TRUE</code> as <code>T</code> in your own code — this is exactly why.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><code>model.matrix()</code> names them <code>brandDell</code>, <code>brandApple</code>, <code>ram16</code>, <code>ram32</code>, <code>screen15</code>, <code>price</code>: each factor contributes levels-minus-one dummy columns, per the coding discussion above.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

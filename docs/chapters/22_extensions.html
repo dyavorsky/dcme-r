@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,25 +422,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-recipe" id="toc-the-recipe" class="nav-link active" data-scroll-target="#the-recipe"><span class="header-section-number">22.1</span> The Recipe</a></li>
-  <li><a href="#extension-1-the-no-choice-option-and-dual-response" id="toc-extension-1-the-no-choice-option-and-dual-response" class="nav-link" data-scroll-target="#extension-1-the-no-choice-option-and-dual-response"><span class="header-section-number">22.2</span> Extension 1: The No-Choice Option and Dual Response</a>
-  <ul class="collapse">
-  <li><a href="#modeling-none" id="toc-modeling-none" class="nav-link" data-scroll-target="#modeling-none"><span class="header-section-number">22.2.1</span> Modeling “None”</a></li>
-  <li><a href="#dual-response-designs-and-their-likelihoods" id="toc-dual-response-designs-and-their-likelihoods" class="nav-link" data-scroll-target="#dual-response-designs-and-their-likelihoods"><span class="header-section-number">22.2.2</span> Dual-Response Designs and Their Likelihoods</a></li>
-  <li><a href="#what-changes-in-the-code" id="toc-what-changes-in-the-code" class="nav-link" data-scroll-target="#what-changes-in-the-code"><span class="header-section-number">22.2.3</span> What Changes in the Code</a></li>
-  </ul></li>
-  <li><a href="#extension-2-a-budget-constraint" id="toc-extension-2-a-budget-constraint" class="nav-link" data-scroll-target="#extension-2-a-budget-constraint"><span class="header-section-number">22.3</span> Extension 2: A Budget Constraint</a>
-  <ul class="collapse">
-  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="header-section-number">22.3.1</span> The Model</a></li>
-  <li><a href="#what-changes-in-the-code-1" id="toc-what-changes-in-the-code-1" class="nav-link" data-scroll-target="#what-changes-in-the-code-1"><span class="header-section-number">22.3.2</span> What Changes in the Code</a></li>
-  </ul></li>
-  <li><a href="#extension-3-flexible-mixing-distributions" id="toc-extension-3-flexible-mixing-distributions" class="nav-link" data-scroll-target="#extension-3-flexible-mixing-distributions"><span class="header-section-number">22.4</span> Extension 3: Flexible Mixing Distributions</a>
-  <ul class="collapse">
-  <li><a href="#the-logit-mixed-logit-model" id="toc-the-logit-mixed-logit-model" class="nav-link" data-scroll-target="#the-logit-mixed-logit-model"><span class="header-section-number">22.4.1</span> The Logit-Mixed Logit Model</a></li>
-  <li><a href="#what-changes-in-the-code-2" id="toc-what-changes-in-the-code-2" class="nav-link" data-scroll-target="#what-changes-in-the-code-2"><span class="header-section-number">22.4.2</span> What Changes in the Code</a></li>
-  </ul></li>
-  <li><a href="#where-to-go-from-here" id="toc-where-to-go-from-here" class="nav-link" data-scroll-target="#where-to-go-from-here"><span class="header-section-number">22.5</span> Where to Go from Here</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">22.6</span> Key Learnings</a></li>
+  <li><a href="#sec-ext-nochoice" id="toc-sec-ext-nochoice" class="nav-link active" data-scroll-target="#sec-ext-nochoice"><span class="header-section-number">22.1</span> Extension 1: The No-Choice Option</a></li>
+  <li><a href="#sec-ext-budget" id="toc-sec-ext-budget" class="nav-link" data-scroll-target="#sec-ext-budget"><span class="header-section-number">22.2</span> Extension 2: A Budget Constraint</a></li>
+  <li><a href="#sec-ext-flexmix" id="toc-sec-ext-flexmix" class="nav-link" data-scroll-target="#sec-ext-flexmix"><span class="header-section-number">22.3</span> Extension 3: A Flexible Mixing Distribution</a></li>
+  <li><a href="#where-to-go-from-here" id="toc-where-to-go-from-here" class="nav-link" data-scroll-target="#where-to-go-from-here"><span class="header-section-number">22.4</span> Where to Go From Here</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">22.5</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/22_extensions.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -383,59 +452,324 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- The chapter the book was written for: three worked demonstrations of the recipe. Sources: brazell-2006/diener-2006/hung-2025 x2 (no-choice/dual response); pachali-2022 (budget); train-2016 (flexible mixing) -->
-<section id="the-recipe" class="level2" data-number="22.1">
-<h2 data-number="22.1" class="anchored" data-anchor-id="the-recipe"><span class="header-section-number">22.1</span> The Recipe</h2>
-<!-- everything in this book was one loop: specify utility and error -> derive/simulate the choice probability -> build the likelihood or the sampler -> simulate data -> recover parameters -> only then, real data; a custom model is just a new pass through the loop -->
+<p>Every chapter until now taught you models other people built. This one teaches the move that matters for your own research: <em>changing</em> a model — because your data have a feature the standard models ignore, or your theory implies behavior they cannot express. The introduction promised that the true value of choice modeling is the ability to create tailor-made models; here is where the promise is kept, three times, on three extensions drawn from live research literatures.</p>
+<p>The method is the one this book has been rehearsing since <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, now stated as a recipe:</p>
+<ol type="1">
+<li><strong>Change the model</strong> — a new term in utility, a new choice rule <span class="math inline">\(h\)</span>, a new distribution somewhere in the hierarchy.</li>
+<li><strong>Re-derive the choice probability</strong> (or recognize that a known one still applies).</li>
+<li><strong>Write the simulator first.</strong> If you cannot simulate it, you do not understand it yet.</li>
+<li><strong>Modify the likelihood or the sampler</strong> — usually a handful of lines in code you already have.</li>
+<li><strong>Simulate-and-recover before real data ever enters.</strong> The answer key is the only proof your estimator works.</li>
+</ol>
+<p>Watch the recipe’s economy in what follows: each extension changes remarkably little code, because Part I’s architecture — stacked data, kernel likelihood functions, modular samplers — was designed to be extended. That was the point all along.</p>
+<section id="sec-ext-nochoice" class="level2" data-number="22.1">
+<h2 data-number="22.1" class="anchored" data-anchor-id="sec-ext-nochoice"><span class="header-section-number">22.1</span> Extension 1: The No-Choice Option</h2>
+<p><strong>The problem.</strong> Our laptop study forces a choice: every task ends with one of three laptops “bought.” Real shoppers walk away, and a model estimated on forced choices systematically overstates demand — every simulated market in <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> implicitly assumed everyone buys <em>something</em>. The standard repair adds a <strong>no-choice option</strong> (“I would not buy any of these”) to each task <span class="citation" data-cites="brazell2006">(<a href="references.html#ref-brazell2006" role="doc-biblioref">Brazell et al. 2006</a>)</span>.</p>
+<p><strong>The model change.</strong> The none option is a fourth alternative whose utility has no attributes — nothing about it varies — so it is pure constant plus noise:</p>
+<p><span id="eq-none-utility"><span class="math display">\[
+U_{nt,\text{none}} = \gamma + \varepsilon_{nt,\text{none}}
+\tag{22.1}\]</span></span></p>
+<p>One new parameter. And here <a href="04_data.html#sec-data-intercept" class="quarto-xref"><span>Section 4.5</span></a>’s groundwork pays off: in the long data format, the none option is <em>just another row</em> — attribute columns zero, a <code>none</code> dummy equal to one — and the MNL machinery does not know or care that one alternative is special. The choice probabilities, likelihood, gradient, and code are all unchanged.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p><strong>Simulate, estimate, recover</strong> — the recipe executed in one block. The simulator is <a href="07_mnl.html#sec-sim-mnl" class="quarto-xref"><span>Section 7.6</span></a>’s with a fourth row per task; the estimator is <em>literally</em> <code>loglik_mnl()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">220</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>sim_none_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, beta, gamma_none) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">&lt;-</span> <span class="dv">3</span>; n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">id =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T<span class="sc">*</span>J),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">task =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>J, <span class="at">times =</span> N<span class="sc">*</span>T),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">brand =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="fl">0.8</span>, <span class="fl">2.4</span>), <span class="dv">2</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, df)[, <span class="sc">-</span><span class="dv">1</span>],</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">none =</span> <span class="dv">0</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="do">## append one none row per task: all-zero attributes, none dummy = 1</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    Xn <span class="ot">&lt;-</span> X[df<span class="sc">$</span>alt <span class="sc">==</span> <span class="dv">1</span>, ]; Xn[] <span class="ot">&lt;-</span> <span class="dv">0</span>; Xn[, <span class="st">"none"</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    X  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(X, Xn)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    ids  <span class="ot">&lt;-</span> <span class="fu">c</span>(df<span class="sc">$</span>id,   df<span class="sc">$</span>id[df<span class="sc">$</span>alt <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    tsks <span class="ot">&lt;-</span> <span class="fu">c</span>(df<span class="sc">$</span>task, df<span class="sc">$</span>task[df<span class="sc">$</span>alt <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ord  <span class="ot">&lt;-</span> <span class="fu">order</span>(ids, tsks, <span class="fu">c</span>(df<span class="sc">$</span>alt, <span class="fu">rep</span>(<span class="dv">4</span>, <span class="fu">sum</span>(df<span class="sc">$</span>alt <span class="sc">==</span> <span class="dv">1</span>))))</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> X[ord, ]; ids <span class="ot">&lt;-</span> ids[ord]; tsks <span class="ot">&lt;-</span> tsks[ord]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(<span class="fu">cbind</span>(ids, tsks)))</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> <span class="fu">c</span>(beta, gamma_none)) <span class="sc">-</span> <span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="fu">nrow</span>(X))))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">X =</span> X, <span class="at">y =</span> choice, <span class="at">task_id =</span> task_id, <span class="at">id =</span> ids)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>               <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>gamma_true <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span>                      <span class="co"># none is mildly unattractive</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>d1 <span class="ot">&lt;-</span> <span class="fu">sim_none_data</span>(<span class="dv">500</span>, <span class="dv">8</span>, beta_true, gamma_true)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">rowsum</span>(d1<span class="sc">$</span>y <span class="sc">*</span> (d1<span class="sc">$</span>X[, <span class="st">"none"</span>] <span class="sc">==</span> <span class="dv">1</span>), d1<span class="sc">$</span>task_id))   <span class="co"># share choosing none</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.264</code></pre>
+</div>
+</div>
+<p>About a fifth of tasks end in “none” — real demand information the forced design threw away. Estimation requires nothing new:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>loglik_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {           <span class="co"># @sec-mnl-mle, untouched</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta); Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    eV <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fit1 <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>), loglik_mnl, <span class="at">y =</span> d1<span class="sc">$</span>y, <span class="at">X =</span> d1<span class="sc">$</span>X, <span class="at">task_id =</span> d1<span class="sc">$</span>task_id,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth =</span> <span class="fu">c</span>(beta_true, <span class="at">none =</span> gamma_true),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">est =</span> fit1<span class="sc">$</span>par,</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">se =</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit1<span class="sc">$</span>hessian)))), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dell apple ram16 ram32 screen15 price  none
+truth 0.50  1.00  0.60  0.90     0.30 -1.20 -0.50
+est   0.53  1.02  0.67  0.84     0.33 -1.20 -0.52
+se    0.06  0.06  0.06  0.06     0.05  0.05  0.10</code></pre>
+</div>
+</div>
+<p>Recovery, including the new parameter. Total new code: a simulator variant. Total new estimation code: zero — the none option was a <em>data</em> change, which is the least expensive kind of extension there is.</p>
+<p><strong>The dual-response refinement</strong>, in brief, because practice uses it heavily <span class="citation" data-cites="diener2006 brazell2006">(<a href="references.html#ref-diener2006" role="doc-biblioref">Diener, Orme, and Yardley 2006</a>; <a href="references.html#ref-brazell2006" role="doc-biblioref">Brazell et al. 2006</a>)</span>: asking “which would you choose?” <em>and then</em> “would you actually buy it?” keeps the forced task’s statistical efficiency while measuring purchase intent. The likelihood treats the two answers as two choices sharing parameters — the first over the <span class="math inline">\(J\)</span> products, the second between the winner and none — and <span class="citation" data-cites="diener2006">Diener, Orme, and Yardley (<a href="references.html#ref-diener2006" role="doc-biblioref">2006</a>)</span>’s practical insight is that the second response can be <em>stacked as an additional pseudo-task</em> in the long data, after which standard MNL/HB software estimates it unmodified: another extension executed entirely in the data layer. The modern frontier connects the none utility to economic primitives — <span class="citation" data-cites="hung2025dual">Hung, Liu, et al. (<a href="references.html#ref-hung2025dual" role="doc-biblioref">2025</a>)</span> derive it from a budget constraint, which is precisely where our second extension goes.</p>
 </section>
-<section id="extension-1-the-no-choice-option-and-dual-response" class="level2" data-number="22.2">
-<h2 data-number="22.2" class="anchored" data-anchor-id="extension-1-the-no-choice-option-and-dual-response"><span class="header-section-number">22.2</span> Extension 1: The No-Choice Option and Dual Response</h2>
-<!-- motivation: forced choice distorts demand estimates -->
-<section id="modeling-none" class="level3" data-number="22.2.1">
-<h3 data-number="22.2.1" class="anchored" data-anchor-id="modeling-none"><span class="header-section-number">22.2.1</span> Modeling “None”</h3>
-<!-- outside good as a zero-utility alternative with an ASC (Brazell); what the ASC absorbs -->
+<section id="sec-ext-budget" class="level2" data-number="22.2">
+<h2 data-number="22.2" class="anchored" data-anchor-id="sec-ext-budget"><span class="header-section-number">22.2</span> Extension 2: A Budget Constraint</h2>
+<p><strong>The problem.</strong> For laptops — or cars, or houses — some shoppers simply <em>cannot</em> pay premium prices, no matter their tastes. A linear price term says a $2,400 laptop is merely less attractive; a <strong>budget</strong> says it is not an option. Models that ignore binding budgets misestimate price response exactly where pricing decisions live, overstating premium demand — the bias <span class="citation" data-cites="pachali2022">Pachali, Kurz, and Otter (<a href="references.html#ref-pachali2022" role="doc-biblioref">2022</a>)</span> document in conjoint studies of exactly our product category.</p>
+<p><strong>The model change</strong> — and this one, unlike Extension 1, changes the behavioral rule <span class="math inline">\(h\)</span> itself. Following the spirit of <span class="citation" data-cites="pachali2022">Pachali, Kurz, and Otter (<a href="references.html#ref-pachali2022" role="doc-biblioref">2022</a>)</span> (simplified to a common budget <span class="math inline">\(\tau\)</span> for transparency): alternatives priced above <span class="math inline">\(\tau\)</span> are <em>screened out</em> — infeasible, never chosen — and money left under the budget enters utility with diminishing returns:</p>
+<p><span id="eq-budget-utility"><span class="math display">\[
+U_{ntj} = \begin{cases}
+\mathbf{x}_{ntj}'\boldsymbol{\beta}+ \alpha \log(\tau - p_{ntj}) + \varepsilon_{ntj} &amp; p_{ntj} &lt; \tau \\
+-\infty &amp; p_{ntj} \ge \tau
+\end{cases}
+\tag{22.2}\]</span></span></p>
+<p>(The <span class="math inline">\(\log(\tau - p)\)</span> term is the utility of the outside numeraire — what the unspent budget buys — and it is where the price sensitivity now lives; there is no separate linear price coefficient.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) The MNL probability survives with two amendments: the choice set shrinks to the feasible alternatives, and utilities gain curvature in price that grows explosive as <span class="math inline">\(p \to \tau\)</span>. Both are <em>visible in behavior</em> — shoppers never choosing above a ceiling, and price sensitivity concentrating near it — which is what identifies <span class="math inline">\(\tau\)</span>.</p>
+<p><strong>Simulator first</strong>, per the recipe — and note how <a href="#eq-budget-utility" class="quarto-xref">Equation&nbsp;<span>22.2</span></a> transcribes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">221</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>sim_budget_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, beta, alpha, tau) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">&lt;-</span> <span class="dv">3</span>; n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">id =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T<span class="sc">*</span>J),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">task =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>J, <span class="at">times =</span> N<span class="sc">*</span>T),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">brand =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="fl">0.8</span>, <span class="fl">2.4</span>), <span class="dv">2</span>))</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]  <span class="co"># note: no price column</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>         <span class="fu">ifelse</span>(df<span class="sc">$</span>price <span class="sc">&lt;</span> tau, alpha <span class="sc">*</span> <span class="fu">log</span>(tau <span class="sc">-</span> df<span class="sc">$</span>price), <span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> V <span class="sc">-</span> <span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(n_rows)))</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"task"</span>)]))</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">df =</span> df, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>beta_np <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>, <span class="at">screen15 =</span> <span class="fl">0.3</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>alpha_true <span class="ot">&lt;-</span> <span class="fl">1.4</span>; tau_true <span class="ot">&lt;-</span> <span class="fl">2.6</span>         <span class="co"># budget $2,600: binding for top prices</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">&lt;-</span> <span class="fu">sim_budget_data</span>(<span class="dv">500</span>, <span class="dv">8</span>, beta_np, alpha_true, tau_true)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(d2<span class="sc">$</span>df<span class="sc">$</span>price[d2<span class="sc">$</span>df<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>])         <span class="co"># nobody chose above tau... check</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.4</code></pre>
+</div>
+</div>
+<p>(A task where <em>all three</em> laptops exceed <span class="math inline">\(\tau\)</span> would have no feasible option; with our price range topping out at $2,400 &lt; <span class="math inline">\(\tau\)</span>, the issue does not arise here, but your own version must decide what shoppers do then — a none option, Extension 1, is the natural coupling. Model changes interact; simulators surface the interactions before referees do.)</p>
+<p><strong>The likelihood</strong> amends the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel in exactly the two places the model changed — the utility line gains the budget term, and infeasible rows carry <span class="math inline">\(-\infty\)</span> (which the log-sum-exp machinery handles gracefully: <span class="math inline">\(e^{-\infty} = 0\)</span> drops them from the denominator):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loglik_budget <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, X, price, task_id) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> theta[<span class="dv">1</span><span class="sc">:</span>K]; alpha <span class="ot">&lt;-</span> theta[K<span class="sc">+</span><span class="dv">1</span>]; tau <span class="ot">&lt;-</span> theta[K<span class="sc">+</span><span class="dv">2</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (tau <span class="sc">&lt;=</span> <span class="fu">max</span>(price[y <span class="sc">==</span> <span class="dv">1</span>])) <span class="fu">return</span>(<span class="sc">-</span><span class="fl">1e10</span>)   <span class="co"># chosen&gt;tau impossible</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> alpha <span class="sc">*</span> <span class="fu">log</span>(<span class="fu">pmax</span>(tau <span class="sc">-</span> price, <span class="fl">1e-12</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    V[price <span class="sc">&gt;=</span> tau] <span class="ot">&lt;-</span> <span class="sc">-</span><span class="cn">Inf</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    eV <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>One wrinkle deserves its sentence: the feasibility screen makes the likelihood <em>zero</em> for any <span class="math inline">\(\tau\)</span> below the highest chosen price — the data flatly refute such budgets — so the parameter space has a data-dependent boundary, and the surface is non-smooth in <span class="math inline">\(\tau\)</span> at every observed price point. Textbook MLE regularity has left the building.[^3] Practical estimation is untroubled: profile the likelihood on a grid of <span class="math inline">\(\tau\)</span> (grid search’s redemption arc, from <a href="05_likelihood.html#sec-grid-search" class="quarto-xref"><span>Section 5.7</span></a>) with the smooth parameters maximized at each point:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>taus <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">2.45</span>, <span class="fl">3.2</span>, <span class="at">by =</span> <span class="fl">0.025</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>prof <span class="ot">&lt;-</span> <span class="fu">sapply</span>(taus, <span class="cf">function</span>(tt) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    f <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">5</span>), <span class="dv">1</span>), <span class="cf">function</span>(th, ...)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">loglik_budget</span>(<span class="fu">c</span>(th, tt), ...),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> d2<span class="sc">$</span>df<span class="sc">$</span>choice, <span class="at">X =</span> d2<span class="sc">$</span>X, <span class="at">price =</span> d2<span class="sc">$</span>df<span class="sc">$</span>price,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">task_id =</span> d2<span class="sc">$</span>task_id,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">300</span>))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">tau =</span> tt, <span class="at">ll =</span> f<span class="sc">$</span>value, f<span class="sc">$</span>par)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> prof[, <span class="fu">which.max</span>(prof[<span class="st">"ll"</span>, ])]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth =</span> <span class="fu">c</span>(beta_np, <span class="at">alpha =</span> alpha_true, <span class="at">tau =</span> tau_true),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">est   =</span> <span class="fu">c</span>(best[<span class="dv">3</span><span class="sc">:</span><span class="dv">7</span>], best[<span class="dv">8</span>], best[<span class="st">"tau"</span>])), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      dell apple ram16 ram32 screen15 alpha  tau
+truth 0.50  1.00  0.60  0.90     0.30   1.4 2.60
+est   0.57  1.04  0.72  0.98     0.23   1.5 2.65</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">tau =</span> prof[<span class="st">"tau"</span>, ], <span class="at">ll =</span> prof[<span class="st">"ll"</span>, ]), <span class="fu">aes</span>(tau, ll)) <span class="sc">+</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> tau_true, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(tau<span class="sc">~</span><span class="st">"($1,000s)"</span>), <span class="at">y =</span> <span class="st">"profile log-likelihood"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-budget-profile" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-budget-profile-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="22_extensions_files/figure-html/fig-budget-profile-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-budget-profile-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.1: The profile log-likelihood over the budget parameter. The data reject budgets below the highest chosen price outright (left boundary), climb to a well-defined peak near the true $2,600, and fall away as larger budgets flatten the log(tau - p) curvature the choices exhibit.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Recovery — including a latent budget no survey question asked about, identified purely from where price sensitivity concentrates. <strong>The research road map</strong> from here is <span class="citation" data-cites="pachali2022">Pachali, Kurz, and Otter (<a href="references.html#ref-pachali2022" role="doc-biblioref">2022</a>)</span>’s: make <span class="math inline">\(\tau_n\)</span> person-specific with a hierarchical prior (the <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> machinery — the budget becomes one more transformed coefficient, log-normal to stay positive, sampled in the person-level Metropolis block), let stated budget questions enter as noisy <em>indicators</em> of <span class="math inline">\(\tau_n\)</span> rather than truth, and watch premium-price demand curves correct themselves by double-digit percentages. Every component is in your toolkit already.</p>
 </section>
-<section id="dual-response-designs-and-their-likelihoods" class="level3" data-number="22.2.2">
-<h3 data-number="22.2.2" class="anchored" data-anchor-id="dual-response-designs-and-their-likelihoods"><span class="header-section-number">22.2.2</span> Dual-Response Designs and Their Likelihoods</h3>
-<!-- the two-stage question; DR-AnyMax vs DR-2Max likelihoods (Diener); the stacked-data trick that reuses our standard MNL code -->
+<section id="sec-ext-flexmix" class="level2" data-number="22.3">
+<h2 data-number="22.3" class="anchored" data-anchor-id="sec-ext-flexmix"><span class="header-section-number">22.3</span> Extension 3: A Flexible Mixing Distribution</h2>
+<p><strong>The problem.</strong> Parts II–III assumed tastes are <em>normally</em> distributed — always unimodal, symmetric, thin-tailed. Suppose the true market is polarized: a budget segment and a premium segment with little in between. A normal mixing distribution will report the average of two camps and the spread between them — a distribution centered where almost nobody lives (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>’s warning, at the population level).</p>
+<p><strong>The model change</strong>, following <span class="citation" data-cites="train2016">Train (<a href="references.html#ref-train2016" role="doc-biblioref">2016</a>)</span>’s <em>logit-mixed logit</em> in one dimension: replace the price coefficient’s normal distribution with a <strong>nonparametric distribution on a grid</strong>. Fix <span class="math inline">\(G\)</span> candidate values <span class="math inline">\(b_1, \ldots, b_G\)</span> spanning the plausible range; estimate the probability mass <span class="math inline">\(w_g\)</span> on each, via a softmax in free parameters (<span class="math inline">\(w_g \propto e^{\theta_g}\)</span> — <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s device). One normalization before coding it: adding a constant to every <span class="math inline">\(\theta_g\)</span> leaves the softmax weights unchanged — the level unidentifiability of <a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a>, back again — so we pin <span class="math inline">\(\theta_1 = 0\)</span> and estimate the remaining <span class="math inline">\(G-1\)</span> free parameters. That is the <code>c(0, theta)</code> in the code below. The reader who has reached this chapter sees immediately what this <em>is</em>: a latent class model where the class locations are frozen to a grid and only the shares are estimated — flexibility through many cheap classes rather than a few expensive ones.</p>
+<p><strong>The estimation insight</strong> that makes it practical — and this is the trick worth stealing for other models: person <span class="math inline">\(n\)</span>’s sequence likelihood at grid point <span class="math inline">\(g\)</span>, <span class="math display">\[L_{ng} = \prod_{t=1}^{T} P_{nt}\big(y_{nt} \mid \beta_{\text{price}} = b_g\big)\]</span> — the ordinary MNL likelihood of person <span class="math inline">\(n\)</span>’s whole sequence with the price coefficient frozen at grid value <span class="math inline">\(b_g\)</span> (and the other coefficients at their step-1 values; <code>persll_at()</code> returns its log, one column of an <span class="math inline">\(N \times G\)</span> matrix per grid point) — <em>does not depend on the weights</em>. Compute the <span class="math inline">\(N \times G\)</span> matrix of <span class="math inline">\(L_{ng}\)</span> <strong>once</strong>; thereafter the log-likelihood</p>
+<p><span id="eq-lml"><span class="math display">\[
+\ell(\boldsymbol{\theta}) = \sum_n \log \sum_g w_g(\boldsymbol{\theta}) \, L_{ng}
+\tag{22.3}\]</span></span></p>
+<p>costs a matrix-vector product per evaluation — the optimizer runs on a <em>precomputed</em> likelihood, and estimation takes seconds regardless of how expensive the kernel was [<span class="citation" data-cites="train2016">Train (<a href="references.html#ref-train2016" role="doc-biblioref">2016</a>)</span> reports 69 mixing parameters estimated in 18 seconds; ours is humbler]:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">222</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">## simulate a polarized market: price coefficient is bimodal, others fixed</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>sim_laptop_design <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J) {</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T<span class="sc">*</span>J),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">task =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">alt =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(J), <span class="at">times =</span> N<span class="sc">*</span>T),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">brand =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                              <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">ram =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="cn">TRUE</span>),</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="fl">0.8</span>, <span class="fl">2.4</span>), <span class="dv">2</span>))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">1000</span>; T <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">sim_laptop_design</span>(N, T, <span class="dv">3</span>)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>K  <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>,<span class="st">"task"</span>)]))</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>b_fixed <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>, <span class="at">screen15 =</span> <span class="fl">0.3</span>)</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>bp_n <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">runif</span>(N) <span class="sc">&lt;</span> <span class="fl">0.55</span>, <span class="fu">rnorm</span>(N, <span class="sc">-</span><span class="fl">2.0</span>, <span class="fl">0.25</span>), <span class="fu">rnorm</span>(N, <span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">0.25</span>))</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">%*%</span> b_fixed) <span class="sc">+</span> X[, <span class="dv">6</span>] <span class="sc">*</span> bp_n[df<span class="sc">$</span>id]</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> V <span class="sc">-</span> <span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="fu">nrow</span>(X))))</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="do">## step 1 (approximation, disclosed): fix non-price coefficients at MNL estimates</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mnl <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), loglik_mnl, <span class="at">y =</span> df<span class="sc">$</span>choice, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="do">## step 2: precompute person-by-gridpoint log-likelihoods</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>grid_b <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">3.2</span>, <span class="fl">0.2</span>, <span class="at">length.out =</span> <span class="dv">18</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>id_of_task <span class="ot">&lt;-</span> df<span class="sc">$</span>id[<span class="sc">!</span><span class="fu">duplicated</span>(task_id)]</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>persll_at <span class="ot">&lt;-</span> <span class="cf">function</span>(bp) {</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X[, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>] <span class="sc">%*%</span> mnl<span class="sc">$</span>par[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]) <span class="sc">+</span> X[, <span class="dv">6</span>] <span class="sc">*</span> bp</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    eV <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> (V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[df<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(logP, id_of_task))</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>llng <span class="ot">&lt;-</span> <span class="fu">sapply</span>(grid_b, persll_at)             <span class="co"># N x G, computed ONCE</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="do">## step 3: maximize over the weights -- each evaluation is trivial</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>loglik_lml <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, llng) {</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    lw <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, theta) <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(<span class="fu">c</span>(<span class="dv">0</span>, theta))))    <span class="co"># log softmax weights</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    M  <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">sweep</span>(llng, <span class="dv">2</span>, lw, <span class="st">`</span><span class="at">+</span><span class="st">`</span>), <span class="dv">1</span>, max)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(M <span class="sc">+</span> <span class="fu">log</span>(<span class="fu">rowSums</span>(<span class="fu">exp</span>(<span class="fu">sweep</span>(llng, <span class="dv">2</span>, lw, <span class="st">`</span><span class="at">+</span><span class="st">`</span>) <span class="sc">-</span> M))))</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>fit3 <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(grid_b) <span class="sc">-</span> <span class="dv">1</span>), loglik_lml, <span class="at">llng =</span> llng,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">1000</span>))</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>w_hat <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(<span class="dv">0</span>, fit3<span class="sc">$</span>par)); w_hat <span class="ot">&lt;-</span> w_hat <span class="sc">/</span> <span class="fu">sum</span>(w_hat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>true_dens <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fl">0.55</span><span class="sc">*</span><span class="fu">dnorm</span>(x, <span class="sc">-</span><span class="fl">2.0</span>, <span class="fl">0.25</span>) <span class="sc">+</span> <span class="fl">0.45</span><span class="sc">*</span><span class="fu">dnorm</span>(x, <span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">0.25</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gap <span class="ot">&lt;-</span> <span class="fu">diff</span>(grid_b)[<span class="dv">1</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">b =</span> grid_b, <span class="at">w =</span> w_hat <span class="sc">/</span> gap), <span class="fu">aes</span>(b, w)) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">width =</span> gap <span class="sc">*</span> <span class="fl">0.9</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_function</span>(<span class="at">fun =</span> true_dens, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(beta[price]), <span class="at">y =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-lml" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lml-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="22_extensions_files/figure-html/fig-lml-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lml-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;22.2: The estimated nonparametric distribution of the price coefficient (bars: mass at each grid point) against the true bimodal density (line). Nobody told the model there were two segments; eighteen grid weights found them. A normal mixing distribution, by construction, could report only the average of the two camps.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Two modes, correct locations, correct proportions — from choice data alone, with a mixing distribution the model was free to shape.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The disclosed shortcut (fixing the other coefficients first) is the honest price of a demonstration; <span class="citation" data-cites="train2016">Train (<a href="references.html#ref-train2016" role="doc-biblioref">2016</a>)</span>’s full treatment estimates everything jointly, adds smoothness through spline or polynomial structure on the weights, and extends to multiple dimensions. And the Bayesian reader has already noticed that <a href="#eq-lml" class="quarto-xref">Equation&nbsp;<span>22.3</span></a>’s grid weights would make a lovely Dirichlet-prior Gibbs block — extensions compose across Parts II and III alike.</p>
 </section>
-<section id="what-changes-in-the-code" class="level3" data-number="22.2.3">
-<h3 data-number="22.2.3" class="anchored" data-anchor-id="what-changes-in-the-code"><span class="header-section-number">22.2.3</span> What Changes in the Code</h3>
-<!-- walk the recipe: new likelihood, small edits to ch 8/17 code; simulate-and-recover -->
+<section id="where-to-go-from-here" class="level2" data-number="22.4">
+<h2 data-number="22.4" class="anchored" data-anchor-id="where-to-go-from-here"><span class="header-section-number">22.4</span> Where to Go From Here</h2>
+<p>Three extensions, three different entry points into the machinery — the data layer (none option), the behavioral rule (budget), the population distribution (flexible mixing) — and none required more than a page of new code. The pattern generalizes to the research frontier: volumetric and multiple-discreteness models change the choice rule to Kuhn–Tucker conditions <span class="citation" data-cites="allenby2019">(<a href="references.html#ref-allenby2019" role="doc-biblioref">Allenby, Hardt, and Rossi 2019</a>)</span>; WTP-space models reparameterize utility so preference heterogeneity lives in dollar units <span class="citation" data-cites="train2016 benakiva2019">(<a href="references.html#ref-train2016" role="doc-biblioref">Train 2016</a>; <a href="references.html#ref-benakiva2019" role="doc-biblioref">Ben-Akiva, McFadden, and Train 2019</a>)</span>; context-dependent none utilities track what respondents learn across tasks <span class="citation" data-cites="hung2025nochoice">(<a href="references.html#ref-hung2025nochoice" role="doc-biblioref">Hung, Kurz, et al. 2025</a>)</span>; and the unified framework of <span class="citation" data-cites="marshall2002">Marshall and Bradlow (<a href="references.html#ref-marshall2002" role="doc-biblioref">2002</a>)</span> shows ratings, rankings, and choices as different observation layers over one latent-utility core — extensions of the <em>data</em> model rather than the utility model.</p>
+<p>Your own extension will not be on this list; that is the point of it being yours. The recipe at the chapter’s head does not care: change the model, re-derive the probability, <em>simulate first</em>, adjust the estimator, recover before real data. You now own every tool the recipe calls for — which is what this book was for.</p>
 </section>
-</section>
-<section id="extension-2-a-budget-constraint" class="level2" data-number="22.3">
-<h2 data-number="22.3" class="anchored" data-anchor-id="extension-2-a-budget-constraint"><span class="header-section-number">22.3</span> Extension 2: A Budget Constraint</h2>
-<!-- motivation: high-ticket categories; standard models overstate demand at high prices (Pachali) -->
-<section id="the-model" class="level3" data-number="22.3.1">
-<h3 data-number="22.3.1" class="anchored" data-anchor-id="the-model"><span class="header-section-number">22.3.1</span> The Model</h3>
-<!-- latent budget tau_n screens the choice set; utility responds to log(tau_n - p); sign-constrained heterogeneity -->
-</section>
-<section id="what-changes-in-the-code-1" class="level3" data-number="22.3.2">
-<h3 data-number="22.3.2" class="anchored" data-anchor-id="what-changes-in-the-code-1"><span class="header-section-number">22.3.2</span> What Changes in the Code</h3>
-<!-- the likelihood gains a screening step; the hierarchy gains a budget layer; modify the ch 17 sampler -->
-</section>
-</section>
-<section id="extension-3-flexible-mixing-distributions" class="level2" data-number="22.4">
-<h2 data-number="22.4" class="anchored" data-anchor-id="extension-3-flexible-mixing-distributions"><span class="header-section-number">22.4</span> Extension 3: Flexible Mixing Distributions</h2>
-<!-- motivation: why should tastes be normal? (Train 2016: sometimes they're bimodal) -->
-<section id="the-logit-mixed-logit-model" class="level3" data-number="22.4.1">
-<h3 data-number="22.4.1" class="anchored" data-anchor-id="the-logit-mixed-logit-model"><span class="header-section-number">22.4.1</span> The Logit-Mixed Logit Model</h3>
-<!-- the mixing distribution itself gets a logit form over a grid; latent class as a special case -->
-</section>
-<section id="what-changes-in-the-code-2" class="level3" data-number="22.4.2">
-<h3 data-number="22.4.2" class="anchored" data-anchor-id="what-changes-in-the-code-2"><span class="header-section-number">22.4.2</span> What Changes in the Code</h3>
-<!-- MSL with precomputed kernels; modify the ch 13 estimator -->
-</section>
-</section>
-<section id="where-to-go-from-here" class="level2" data-number="22.5">
-<h2 data-number="22.5" class="anchored" data-anchor-id="where-to-go-from-here"><span class="header-section-number">22.5</span> Where to Go from Here</h2>
-<!-- volumetric/Kuhn-Tucker demand (Allenby-Kim-Rossi 2015), WTP-space models, ordered/rank data, endogeneity; and the reader's own model, which does not exist yet -->
-</section>
-<section id="key-learnings" class="level2" data-number="22.6">
-<h2 data-number="22.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">22.6</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="22.5">
+<h2 data-number="22.5" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">22.5</span> Key Learnings</h2>
+<ul>
+<li>Custom models are the recipe: model change <span class="math inline">\(\to\)</span> probability <span class="math inline">\(\to\)</span> <strong>simulator first</strong> <span class="math inline">\(\to\)</span> estimator tweak <span class="math inline">\(\to\)</span> simulate-and-recover. The architecture built in Part I is what makes each step small.</li>
+<li>The no-choice option is a <em>data-layer</em> extension: one all-zero row with an ASC per task, zero new estimation code, and it restores the walk-away margin that forced choice suppresses (with dual-response designs as the practice-standard refinement, also executable in the data layer).</li>
+<li>The budget constraint changes <span class="math inline">\(h\)</span> itself: screening plus <span class="math inline">\(\log(\tau - p)\)</span> curvature. Its likelihood has a data-dependent boundary and kinks in <span class="math inline">\(\tau\)</span> — profiled grid search handles what BFGS regularity cannot — and a latent budget is identified from behavior alone. The hierarchical version is <span class="citation" data-cites="pachali2022">Pachali, Kurz, and Otter (<a href="references.html#ref-pachali2022" role="doc-biblioref">2022</a>)</span> and everything it needs is in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>.</li>
+<li>Flexible mixing replaces the normal population with estimated grid weights — latent class with frozen locations — and Train’s precomputed-likelihood trick (<span class="math inline">\(L_{ng}\)</span> once, then <a href="#eq-lml" class="quarto-xref">Equation&nbsp;<span>22.3</span></a> in microseconds) makes it nearly free. On polarized data it finds the two camps a normal distribution would average away.</li>
+<li>Extensions enter through the data, the rule, or the population — and compose, with each other and with both estimation philosophies. Go build yours.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-allenby2019" class="csl-entry" role="listitem">
+Allenby, Greg M., Nino Hardt, and Peter E. Rossi. 2019. <span>“Economic Foundations of Conjoint Analysis.”</span> In <em>Handbook of the Economics of Marketing, Volume 1</em>, edited by Jean-Pierre Dubé and Peter E. Rossi, 151–92. North-Holland.
+</div>
+<div id="ref-benakiva2019" class="csl-entry" role="listitem">
+Ben-Akiva, Moshe, Daniel McFadden, and Kenneth Train. 2019. <em>Foundations of Stated Preference Elicitation: Consumer Behavior and Choice-Based Conjoint Analysis</em>. Vol. 10. Foundations and Trends in Econometrics 1–2. Now Publishers.
+</div>
+<div id="ref-brazell2006" class="csl-entry" role="listitem">
+Brazell, Jeff D., Christopher G. Diener, Ekaterina Karniouchina, William L. Moore, Václav Séverin, and Pierre-Francois Uldry. 2006. <span>“The No-Choice Option and Dual Response Choice Designs.”</span> <em>Marketing Letters</em> 17 (4): 255–68.
+</div>
+<div id="ref-diener2006" class="csl-entry" role="listitem">
+Diener, Christopher, Bryan Orme, and David Yardley. 2006. <span>“Dual Response <span>‘None’</span> Approaches: Theory and Practice.”</span> In <em>Sawtooth Software Conference Proceedings</em>.
+</div>
+<div id="ref-hung2025nochoice" class="csl-entry" role="listitem">
+Hung, Ya-Han, Peter Kurz, Rachael Bailey, Joel Huber, and Greg M. Allenby. 2025. <span>“Re-Examining the No-Choice Option in Conjoint Analysis.”</span> <em>Journal of Choice Modelling</em>.
+</div>
+<div id="ref-hung2025dual" class="csl-entry" role="listitem">
+Hung, Ya-Han, Peng Liu, Jeff D. Brazell, and Greg M. Allenby. 2025. <span>“Dual Response in Conjoint Analysis.”</span> <em>Marketing Letters</em>.
+</div>
+<div id="ref-marshall2002" class="csl-entry" role="listitem">
+Marshall, Pablo, and Eric T. Bradlow. 2002. <span>“A Unified Approach to Conjoint Analysis Models.”</span> <em>Journal of the American Statistical Association</em> 97 (459): 674–82.
+</div>
+<div id="ref-pachali2022" class="csl-entry" role="listitem">
+Pachali, Max J., Peter Kurz, and Thomas Otter. 2022. <span>“The Perils of Ignoring the Budget Constraint in Single-Unit Demand Models.”</span> <em>Journal of Marketing Research</em>.
+</div>
+<div id="ref-train2016" class="csl-entry" role="listitem">
+Train, Kenneth. 2016. <span>“Mixed Logit with a Flexible Mixing Distribution.”</span> <em>Journal of Choice Modelling</em> 19: 40–53.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The identification bookkeeping: adding a constant-utility alternative is what <em>anchors</em> the utility scale for “buying nothing,” making statements like “share who buy nothing at these prices” meaningful — the quantity <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> flagged as missing. The deeper behavioral question — is the none utility really constant across tasks? — is live research: <span class="citation" data-cites="hung2025nochoice">Hung, Kurz, et al. (<a href="references.html#ref-hung2025nochoice" role="doc-biblioref">2025</a>)</span> find respondents update the none option’s appeal as tasks teach them market prices, and model exactly that.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This is the direct-utility formulation of <span class="citation" data-cites="allenby2019">Allenby, Hardt, and Rossi (<a href="references.html#ref-allenby2019" role="doc-biblioref">2019</a>)</span> and <span class="citation" data-cites="pachali2022">Pachali, Kurz, and Otter (<a href="references.html#ref-pachali2022" role="doc-biblioref">2022</a>)</span>: choose one product plus outside spending subject to the budget; substitute the constraint into utility; the <span class="math inline">\(\log\)</span> delivers diminishing marginal utility of money. Our simplification is the common <span class="math inline">\(\tau\)</span>; the research version makes <span class="math inline">\(\tau_n\)</span> heterogeneous, which the road map below restores.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Sharp eyes will connect this figure to <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>’s normal-prior HB: run on these polarized data, the normal hierarchy would shrink both camps toward a middle where no one lives. Flexible mixing is not decoration; on the wrong population shape, the normal assumption distorts every downstream deliverable in <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

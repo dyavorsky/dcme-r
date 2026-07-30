@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -341,20 +424,15 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#from-two-alternatives-to-many" id="toc-from-two-alternatives-to-many" class="nav-link active" data-scroll-target="#from-two-alternatives-to-many"><span class="header-section-number">7.1</span> From Two Alternatives to Many</a></li>
   <li><a href="#random-utility-and-the-extreme-value-distribution" id="toc-random-utility-and-the-extreme-value-distribution" class="nav-link" data-scroll-target="#random-utility-and-the-extreme-value-distribution"><span class="header-section-number">7.2</span> Random Utility and the Extreme Value Distribution</a></li>
-  <li><a href="#the-mnl-choice-probability" id="toc-the-mnl-choice-probability" class="nav-link" data-scroll-target="#the-mnl-choice-probability"><span class="header-section-number">7.3</span> The MNL Choice Probability</a></li>
-  <li><a href="#properties-and-implications" id="toc-properties-and-implications" class="nav-link" data-scroll-target="#properties-and-implications"><span class="header-section-number">7.4</span> Properties and Implications</a>
+  <li><a href="#the-mnl-choice-probability-in-r" id="toc-the-mnl-choice-probability-in-r" class="nav-link" data-scroll-target="#the-mnl-choice-probability-in-r"><span class="header-section-number">7.3</span> The MNL Choice Probability in R</a></li>
+  <li><a href="#properties-what-the-mnl-assumes-about-substitution" id="toc-properties-what-the-mnl-assumes-about-substitution" class="nav-link" data-scroll-target="#properties-what-the-mnl-assumes-about-substitution"><span class="header-section-number">7.4</span> Properties: What the MNL Assumes About Substitution</a>
   <ul class="collapse">
-  <li><a href="#independence-from-irrelevant-alternatives" id="toc-independence-from-irrelevant-alternatives" class="nav-link" data-scroll-target="#independence-from-irrelevant-alternatives"><span class="header-section-number">7.4.1</span> Independence from Irrelevant Alternatives</a></li>
-  <li><a href="#substitution-patterns-and-elasticities" id="toc-substitution-patterns-and-elasticities" class="nav-link" data-scroll-target="#substitution-patterns-and-elasticities"><span class="header-section-number">7.4.2</span> Substitution Patterns and Elasticities</a></li>
+  <li><a href="#independence-from-irrelevant-alternatives" id="toc-independence-from-irrelevant-alternatives" class="nav-link" data-scroll-target="#independence-from-irrelevant-alternatives"><span class="header-section-number">7.4.1</span> Independence from irrelevant alternatives</a></li>
+  <li><a href="#proportional-substitution" id="toc-proportional-substitution" class="nav-link" data-scroll-target="#proportional-substitution"><span class="header-section-number">7.4.2</span> Proportional substitution</a></li>
   </ul></li>
-  <li><a href="#identification" id="toc-identification" class="nav-link" data-scroll-target="#identification"><span class="header-section-number">7.5</span> Identification</a>
-  <ul class="collapse">
-  <li><a href="#only-utility-differences-matter" id="toc-only-utility-differences-matter" class="nav-link" data-scroll-target="#only-utility-differences-matter"><span class="header-section-number">7.5.1</span> Only Utility Differences Matter</a></li>
-  <li><a href="#the-scale-of-utility" id="toc-the-scale-of-utility" class="nav-link" data-scroll-target="#the-scale-of-utility"><span class="header-section-number">7.5.2</span> The Scale of Utility</a></li>
-  </ul></li>
-  <li><a href="#specification-choices" id="toc-specification-choices" class="nav-link" data-scroll-target="#specification-choices"><span class="header-section-number">7.6</span> Specification Choices</a></li>
-  <li><a href="#simulating-mnl-data" id="toc-simulating-mnl-data" class="nav-link" data-scroll-target="#simulating-mnl-data"><span class="header-section-number">7.7</span> Simulating MNL Data</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">7.8</span> Key Learnings</a></li>
+  <li><a href="#sec-mnl-identification" id="toc-sec-mnl-identification" class="nav-link" data-scroll-target="#sec-mnl-identification"><span class="header-section-number">7.5</span> Identification: What Choices Can and Cannot Reveal</a></li>
+  <li><a href="#sec-sim-mnl" id="toc-sec-sim-mnl" class="nav-link" data-scroll-target="#sec-sim-mnl"><span class="header-section-number">7.6</span> Simulating the Laptop Study</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">7.7</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/07_mnl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -380,53 +458,249 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 3; McFadden 2001 (EV1 foundations, history); Allenby-Kim-Rossi 2015 (derivation from direct utility with budget/outside good) -->
+<p>Part I practiced on binary choices — buy the laptop or don’t. Real choice sets are richer: the shopper in our study faces <em>three</em> laptops per task, and the shopper in a store faces dozens. This chapter introduces the model that dominates the analysis of such data, in academic research and industry practice alike: the <strong>multinomial logit</strong> (MNL). By the chapter’s end, the full laptop study of <a href="01_choice.html#sec-running_example" class="quarto-xref"><span>Section 1.4</span></a> will exist as data on your machine — simulated from the MNL with known parameters, organized by the tools of <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>, and waiting for the estimator we build in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+<p>The MNL earned its dominance honestly. Its choice probabilities have a closed form — the exceptional case, as <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> taught — which makes estimation fast and stable. Its parameters read naturally as marginal utilities. And it is the seed from which everything else in this book grows: the nested logit (<a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>), the latent class model (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>), the mixed logit (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>), and the hierarchical Bayesian models (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>) are all the MNL with one assumption relaxed. Learn this model deeply and the rest of the book is variations on a theme.</p>
 <section id="from-two-alternatives-to-many" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="from-two-alternatives-to-many"><span class="header-section-number">7.1</span> From Two Alternatives to Many</h2>
-<!-- J alternatives, one utility each; y is the index of the max; the workhorse model of the book -->
+<p>The random utility construction of <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> generalizes without friction. Decision-maker <span class="math inline">\(n\)</span> in choice situation <span class="math inline">\(t\)</span> faces <span class="math inline">\(J\)</span> alternatives; each alternative <span class="math inline">\(j\)</span> carries a utility</p>
+<p><span id="eq-mnl-utility"><span class="math display">\[
+U_{ntj} = V_{ntj} + \varepsilon_{ntj}, \qquad V_{ntj} = \mathbf{x}_{ntj}'\boldsymbol{\beta}
+\tag{7.1}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{x}_{ntj}\)</span> is the attribute vector of alternative <span class="math inline">\(j\)</span> in that situation — one row of the long-format data of <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a> — and <span class="math inline">\(\varepsilon_{ntj}\)</span> collects everything about that alternative, that person, and that moment that we do not observe. The behavioral rule is maximization:</p>
+<p><span id="eq-mnl-rule"><span class="math display">\[
+y_{nt} = \arg\max_{j \in \{1, \ldots, J\}} \; U_{ntj}
+\tag{7.2}\]</span></span></p>
+<p>The observed choice reveals which utility was largest — nothing more. That “nothing more” has teeth, and the identification section below counts them.</p>
+<p>For the choice <em>probability</em>, the general recipe of <a href="01_choice.html#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> applies: <span class="math inline">\(P_{ntj} = \Pr(U_{ntj} &gt; U_{ntk} \; \forall k \neq j)\)</span>, an integral of the density of <span class="math inline">\(\boldsymbol{\varepsilon}_{nt}\)</span> over the region where alternative <span class="math inline">\(j\)</span> wins. What remains is to choose that density.</p>
 </section>
 <section id="random-utility-and-the-extreme-value-distribution" class="level2" data-number="7.2">
 <h2 data-number="7.2" class="anchored" data-anchor-id="random-utility-and-the-extreme-value-distribution"><span class="header-section-number">7.2</span> Random Utility and the Extreme Value Distribution</h2>
-<!-- U_j = x_j'beta + eps_j with eps iid EV1; why EV1: the closed form (state the max-stability logic, cite the derivation); the logistic connection to ch 1's binary model -->
+<p>The MNL’s defining assumption is that the unobservables are independent draws from the Gumbel (Type I Extreme Value) distribution you met in <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>:</p>
+<p><span id="eq-mnl-errors"><span class="math display">\[
+\varepsilon_{ntj} \stackrel{iid}{\sim}\text{Gumbel}, \qquad F(\varepsilon) = e^{-e^{-\varepsilon}}
+\tag{7.3}\]</span></span></p>
+<p>Why this distribution, of all the shapes a density can take? Candor first: primarily because of what it <em>delivers</em> — with Gumbel errors, the choice-probability integral solves in closed form. The result <span class="citation" data-cites="train2009">(derived in two pages in <a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 3.10</a>)</span> is the most famous formula in discrete choice:</p>
+<p><span id="eq-mnl-prob"><span class="math display">\[
+P_{ntj} = \frac{e^{V_{ntj}}}{\sum_{j'=1}^{J} e^{V_{ntj'}}}
+\tag{7.4}\]</span></span></p>
+<p>Exponentiate every representative utility, and each alternative’s probability is its share of the total. (Machine learning readers know this map as the <em>softmax</em>.) The formula respects everything a choice probability must — positive, summing to one, increasing in own-utility — and it is differentiable, cheap, and impossible to get numerically wrong in any interesting way. McFadden’s derivation of this form from utility maximization, and the empirical program it launched, is the subject of his Nobel lecture <span class="citation" data-cites="mcfadden2001">(<a href="references.html#ref-mcfadden2001" role="doc-biblioref">McFadden 2001</a>)</span>.</p>
+<p>Two properties of the Gumbel family make the magic work, both of which we can <em>verify</em> rather than take on faith — the <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> toolkit was built for exactly this. First, the difference of two independent Gumbels is logistic (verified in <a href="02_draws.html#fig-gumbel-diff" class="quarto-xref">Figure&nbsp;<span>2.5</span></a>), which is why the <span class="math inline">\(J=2\)</span> case of <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> collapses to the binary logit of <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> — reassuring consistency. Second, the <em>maximum</em> of several Gumbel variables is itself Gumbel, shifted by the log of the sum of exponentiated locations — the property that makes the “which alternative wins” calculation tractable, and whose byproduct, the <em>log-sum</em> term <span class="math inline">\(\log \sum_{j'} e^{V_{j'}}\)</span>, will return twice with star billing: as the nested logit’s inclusive value (<a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>) and as the consumer-surplus measure behind willingness-to-pay calculations (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>).</p>
+<p>The second property is a three-line pleasure to check rather than take on faith. If <span class="math inline">\(U_j = V_j + \varepsilon_j\)</span> with <span class="math inline">\(\varepsilon_j\)</span> independent standard Gumbel, then each <span class="math inline">\(U_j\)</span> has CDF <span class="math inline">\(e^{-e^{-(u - V_j)}}\)</span>, and by independence <span class="math display">\[\Pr\big(\max_j U_j \le u\big) = \prod_j e^{-e^{-(u - V_j)}} = \exp\Big(-e^{-u} \textstyle\sum_j e^{V_j}\Big) = \exp\Big(-e^{-(u - \log \sum_j e^{V_j})}\Big),\]</span> which is again a Gumbel CDF, with location <span class="math inline">\(\log \sum_j e^{V_j}\)</span> — the log-sum, born.</p>
+<p>Rather than rely on the algebra, let’s watch <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> emerge from raw simulation — the strongest sanity check we know (<a href="03_simdata.html#sec-sanity-checks" class="quarto-xref"><span>Section 3.5</span></a>, level 3). Take one choice task from the laptop study: three profiles with representative utilities we fix by hand. Simulate the model’s <em>mechanics</em> — draw Gumbels, add, take the argmax — ten thousand times, and compare winning frequencies to the formula:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">70</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.2</span>)          <span class="co"># representative utilities of 3 profiles</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>wins <span class="ot">&lt;-</span> <span class="fu">integer</span>(<span class="dv">3</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="dv">3</span>)))  <span class="co"># Gumbel draws, from first principles</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    U   <span class="ot">&lt;-</span> V <span class="sc">+</span> eps</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    j   <span class="ot">&lt;-</span> <span class="fu">which.max</span>(U)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    wins[j] <span class="ot">&lt;-</span> wins[j] <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">simulated =</span> wins <span class="sc">/</span> R,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">formula   =</span> <span class="fu">exp</span>(V) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">exp</span>(V)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               [,1]      [,2]      [,3]
+simulated 0.2797000 0.5669000 0.1534000
+formula   0.2806967 0.5652537 0.1540496</code></pre>
+</div>
+</div>
+<p>Agreement to two-and-a-bit decimals, tightening with more draws. The closed form and the behavioral story — maximize noisy utilities — are the same model; <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> is just the integral pre-computed for us.</p>
 </section>
-<section id="the-mnl-choice-probability" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="the-mnl-choice-probability"><span class="header-section-number">7.3</span> The MNL Choice Probability</h2>
-<!-- the logit formula; softmax; probabilities from utilities in three lines of R -->
+<section id="the-mnl-choice-probability-in-r" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="the-mnl-choice-probability-in-r"><span class="header-section-number">7.3</span> The MNL Choice Probability in R</h2>
+<p>The formula deserves a function. Following the stacked-data conventions of <a href="04_data.html#sec-choice-data" class="quarto-xref"><span>Section 4.7</span></a> — utilities for all alternatives in a vector, tasks identified by a group index — here it is for a single choice situation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mnl_probs <span class="ot">&lt;-</span> <span class="cf">function</span>(V) <span class="fu">exp</span>(V) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">exp</span>(V))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mnl_probs</span>(<span class="fu">c</span>(<span class="fl">0.4</span>, <span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2806967 0.5652537 0.1540496</code></pre>
+</div>
+</div>
+<p>One line. It hides one hazard: if some <span class="math inline">\(V\)</span> is large — say 800, easy to produce with mis-scaled data — <code>exp(800)</code> overflows to <code>Inf</code> and the probabilities dissolve into <code>NaN</code>. The cure (subtract the maximum <span class="math inline">\(V\)</span> before exponentiating, which changes nothing mathematically because the shift cancels in numerator and denominator) is the <em>log-sum-exp trick</em>, and we fold it into our likelihood code in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> and dissect it in <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>. Flagged now so it never surprises you.</p>
 </section>
-<section id="properties-and-implications" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="properties-and-implications"><span class="header-section-number">7.4</span> Properties and Implications</h2>
+<section id="properties-what-the-mnl-assumes-about-substitution" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="properties-what-the-mnl-assumes-about-substitution"><span class="header-section-number">7.4</span> Properties: What the MNL Assumes About Substitution</h2>
+<p>A model this convenient must be paying for it somewhere. The MNL’s bill arrives as a strong, sometimes wrong, restriction on <em>how alternatives compete</em>.</p>
 <section id="independence-from-irrelevant-alternatives" class="level3" data-number="7.4.1">
-<h3 data-number="7.4.1" class="anchored" data-anchor-id="independence-from-irrelevant-alternatives"><span class="header-section-number">7.4.1</span> Independence from Irrelevant Alternatives</h3>
-<!-- odds ratios don't depend on other alternatives; red-bus/blue-bus; when IIA is fine and when it's fatal (sets up ch 10-13) -->
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="independence-from-irrelevant-alternatives"><span class="header-section-number">7.4.1</span> Independence from irrelevant alternatives</h3>
+<p>Take the ratio of any two alternatives’ probabilities under <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a>:</p>
+<p><span id="eq-iia"><span class="math display">\[
+\frac{P_{ntj}}{P_{ntk}} = \frac{e^{V_{ntj}}}{e^{V_{ntk}}} = e^{V_{ntj} - V_{ntk}}
+\tag{7.5}\]</span></span></p>
+<p>Everything about every <em>other</em> alternative has canceled. The odds between the Apple and the Dell depend only on the Apple and the Dell — not on what else is in the task, how similar it is to either, or whether it exists at all. This property is <strong>independence from irrelevant alternatives</strong> (IIA), and it is a direct inheritance of assuming the <span class="math inline">\(\varepsilon\)</span>’s independent: the model has no channel through which alternatives can share unobserved appeal.</p>
+<p>Sometimes IIA is harmless, even welcome. Sometimes it is absurd, and the canonical absurdity is worth internalizing in numbers.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> A commuter chooses between a car (<span class="math inline">\(V_c\)</span>) and a blue bus (<span class="math inline">\(V_b\)</span>), with <span class="math inline">\(V_c = V_b\)</span>, so the model says 50/50. Now add a <em>red</em> bus — identical to the blue bus in every respect except paint, so <span class="math inline">\(V_r = V_b\)</span>. Common sense: bus riders split over paint colors, and shares go to <span class="math inline">\(\left(\tfrac{1}{2}, \tfrac{1}{4}, \tfrac{1}{4}\right)\)</span>. The MNL, constrained by <a href="#eq-iia" class="quarto-xref">Equation&nbsp;<span>7.5</span></a> to keep the car/blue-bus odds at 1:1, says <span class="math inline">\(\left(\tfrac{1}{3}, \tfrac{1}{3}, \tfrac{1}{3}\right)\)</span> — painting a bus red steals a sixth of the car market:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>V2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">car =</span> <span class="dv">0</span>, <span class="at">blue_bus =</span> <span class="dv">0</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>V3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">car =</span> <span class="dv">0</span>, <span class="at">blue_bus =</span> <span class="dv">0</span>, <span class="at">red_bus =</span> <span class="dv">0</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">before =</span> <span class="fu">mnl_probs</span>(V2), <span class="at">after =</span> <span class="fu">mnl_probs</span>(V3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$before
+     car blue_bus 
+     0.5      0.5 
+
+$after
+      car  blue_bus   red_bus 
+0.3333333 0.3333333 0.3333333 </code></pre>
+</div>
+</div>
+<p>The diagnosis is precise: the two buses share nearly <em>all</em> their unobserved utility (comfort with buses, no parking hassle), and independence of the <span class="math inline">\(\varepsilon\)</span>’s is exactly the assumption that forbids the model from knowing it. The repairs form a tour of this book’s second half: let the <span class="math inline">\(\varepsilon\)</span>’s correlate within groups (nested logit, <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>), let coefficients vary across people so “bus people” exist (mixed logit, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> — which breaks IIA in aggregate while keeping logit form for each individual), or let the errors correlate freely (probit, <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>).</p>
 </section>
-<section id="substitution-patterns-and-elasticities" class="level3" data-number="7.4.2">
-<h3 data-number="7.4.2" class="anchored" data-anchor-id="substitution-patterns-and-elasticities"><span class="header-section-number">7.4.2</span> Substitution Patterns and Elasticities</h3>
-<!-- proportional substitution; brief -- full elasticity treatment in ch 21 -->
+<section id="proportional-substitution" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="proportional-substitution"><span class="header-section-number">7.4.2</span> Proportional substitution</h3>
+<p>IIA’s flip side. Differentiate <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> with respect to the utility of a <em>different</em> alternative <span class="math inline">\(j\)</span>: for <span class="math inline">\(k \ne j\)</span>, <span class="math inline">\(\partial P_k / \partial V_j = -e^{V_k} e^{V_j} / \big(\sum_l e^{V_l}\big)^2 = -P_k P_j\)</span>. If attribute <span class="math inline">\(z_j\)</span> enters utility with coefficient <span class="math inline">\(\beta_z\)</span>, the chain rule gives a cross-elasticity of <span class="math inline">\(\frac{\partial P_k}{\partial z_j}\frac{z_j}{P_k} = -\beta_z z_j P_j\)</span> — an expression with no <span class="math inline">\(k\)</span> in it: when alternative <span class="math inline">\(j\)</span> improves, <em>every</em> competitor’s share falls by the same percentage <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 3.6</a>)</span>. That is proportional substitution. In our study: cut the Apple’s price and the model takes customers from Dell and Acer in proportion to their shares, never disproportionately from the <em>other premium option</em>. For the laptop study as designed this is defensible; for a study with two near-identical Dell configurations it would not be. <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> computes these elasticities explicitly, and <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> begins the repairs.</p>
 </section>
 </section>
-<section id="identification" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="identification"><span class="header-section-number">7.5</span> Identification</h2>
-<section id="only-utility-differences-matter" class="level3" data-number="7.5.1">
-<h3 data-number="7.5.1" class="anchored" data-anchor-id="only-utility-differences-matter"><span class="header-section-number">7.5.1</span> Only Utility Differences Matter</h3>
-<!-- level normalization: drop an ASC or difference against a base alternative -->
+<section id="sec-mnl-identification" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="sec-mnl-identification"><span class="header-section-number">7.5</span> Identification: What Choices Can and Cannot Reveal</h2>
+<p>Before simulating data, we must be honest about what the data can possibly tell us. <a href="#eq-mnl-rule" class="quarto-xref">Equation&nbsp;<span>7.2</span></a> says choices reveal only which utility was <em>largest</em>. Two consequences follow, both previewed in Part I, both now precise. They are not pedantry: each corresponds to a specific way estimation code fails — parameters wandering without changing the likelihood — and each dictates a normalization our simulator and estimator must share, or recovery checks will “fail” mysteriously.</p>
+<p><strong>Only differences in utility matter.</strong> Add any constant <span class="math inline">\(c\)</span> to <em>every</em> alternative’s utility in a task and the argmax — hence the choice, hence the probability (check it against <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a>: <span class="math inline">\(e^c\)</span> cancels) — is untouched. Absolute utility levels are unobservable. This is why the long-format data of <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a> carry no common intercept column and why individual-specific variables need interactions to matter (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a> made both points structurally; here is their behavioral root). It is also why <em>labeled</em> designs include ASCs for <span class="math inline">\(J-1\)</span> alternatives, never all <span class="math inline">\(J\)</span>: the last one’s level is the reference against which differences are measured.</p>
+<p><strong>The scale of utility is arbitrary.</strong> Multiply <em>all</em> utilities — systematic parts and errors alike — by any <span class="math inline">\(\alpha &gt; 0\)</span> and the argmax is again untouched. So the data cannot pin down the error variance separately from the magnitude of <span class="math inline">\(\boldsymbol{\beta}\)</span>; something must be fixed by convention, and the MNL convention is to fix the Gumbel errors at their standard variance, <span class="math inline">\(\pi^2/6\)</span>. Every coefficient is therefore measured <em>relative to the fixed scale of the Gumbel noise</em> (whose standard deviation is <span class="math inline">\(\pi/\sqrt{6} \approx 1.28\)</span>) — <span class="math inline">\(\beta_{\text{price}} = -1.2\)</span> means “a $1,000 price increase moves utility by 1.2 units on a scale where the unobserved noise has standard deviation about 1.3,” not any absolute quantity. Three practical corollaries, in ascending order of how often they bite researchers:</p>
+<ol type="1">
+<li>Coefficients from models with different error scales are not comparable — the binary probit’s <span class="math inline">\(\boldsymbol{\beta}\)</span> (errors scaled to variance 1) and binary logit’s <span class="math inline">\(\boldsymbol{\beta}\)</span> (variance <span class="math inline">\(\pi^2/3\)</span>) differ by a factor of about 1.8 <em>for the same behavior</em>, resolving the puzzle flagged in <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>’s footnote.</li>
+<li>Coefficients estimated on two <em>datasets</em> can differ purely because choice consistency differs — noisier respondents shrink every coefficient toward zero together. Comparing across samples requires care (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>).</li>
+<li><em>Ratios</em> of coefficients are scale-free — <span class="math inline">\(\alpha\)</span> cancels — which is precisely why willingness-to-pay, a ratio with the price coefficient in the denominator, is the preferred currency for interpreting estimates (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>).</li>
+</ol>
+<p>Neither normalization is a limitation of the MNL; both are limitations of <em>choice data</em>, and they will reappear verbatim in the probit (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>), where getting them wrong is the classic implementation failure.</p>
 </section>
-<section id="the-scale-of-utility" class="level3" data-number="7.5.2">
-<h3 data-number="7.5.2" class="anchored" data-anchor-id="the-scale-of-utility"><span class="header-section-number">7.5.2</span> The Scale of Utility</h3>
-<!-- error variance normalization; why coefficients are only estimable up to scale; consequences for comparing models/datasets -->
+<section id="sec-sim-mnl" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-sim-mnl"><span class="header-section-number">7.6</span> Simulating the Laptop Study</h2>
+<p>Assembly time. We have the design generator (<code>sim_laptop_design()</code>, <a href="04_data.html#sec-build-design" class="quarto-xref"><span>Section 4.6</span></a>), the data organizer (<code>build_choice_data()</code>, <a href="04_data.html#sec-choice-data" class="quarto-xref"><span>Section 4.7</span></a>), the error generator (the Gumbel one-liner, <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>), and the behavioral rule (<a href="#eq-mnl-rule" class="quarto-xref">Equation&nbsp;<span>7.2</span></a>). The full true parameter vector for the study, extending <a href="01_choice.html#sec-running_example" class="quarto-xref"><span>Section 1.4</span></a>’s binary seed to all six attributes — and now fixed for the rest of the book:</p>
+<p><span id="eq-beta-true"><span class="math display">\[
+\boldsymbol{\beta}^\ast = (\underbrace{0.5}_{\texttt{dell}}, \underbrace{1.0}_{\texttt{apple}}, \underbrace{0.6}_{\texttt{ram16}}, \underbrace{0.9}_{\texttt{ram32}}, \underbrace{0.3}_{\texttt{screen15}}, \underbrace{-1.2}_{\texttt{price}})
+\tag{7.6}\]</span></span></p>
+<p>Reasonable preferences: brands ordered Acer <span class="math inline">\(\prec\)</span> Dell <span class="math inline">\(\prec\)</span> Apple, more memory better with diminishing returns, mild taste for the larger screen, and the familiar price distaste. The simulator packages the six-step anatomy of <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>, with the argmax-within-task as the one genuinely new move:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sim_laptop_design <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J) {        <span class="co"># from @sec-data</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">id    =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T <span class="sc">*</span> J),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">task  =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt   =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(J), <span class="at">times =</span> N <span class="sc">*</span> T),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">brand =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram   =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>), <span class="dv">2</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>sim_mnl_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J, beta) {</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">sim_laptop_design</span>(N, T, J)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stopifnot</span>(<span class="fu">ncol</span>(X) <span class="sc">==</span> <span class="fu">length</span>(beta))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="fu">nrow</span>(df))))            <span class="co"># Gumbel, one per utility</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    U   <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>                                <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">71</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>               <span class="at">ram32 =</span> <span class="fl">0.9</span>, <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>laptops <span class="ot">&lt;-</span> <span class="fu">sim_mnl_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">J =</span> <span class="dv">3</span>, <span class="at">beta =</span> beta_true)</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(laptops, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  id task alt brand ram screen price choice
+1  1    1   1 Apple  32     13  1.21      1
+2  1    1   2 Apple  16     13  1.14      0
+3  1    1   3  Dell  16     13  2.27      0</code></pre>
+</div>
+</div>
+<p>The <code>ave(U, task_id, FUN = ...)</code> idiom deserves a sentence, since it is how the argmax respects the data’s group structure: within each <code>task_id</code> group it flags the row achieving the group maximum, returning the flags in the original row order — <a href="#eq-mnl-rule" class="quarto-xref">Equation&nbsp;<span>7.2</span></a> executed group-wise on stacked data, no loop required.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Now the checking discipline of <a href="03_simdata.html#sec-sanity-checks" class="quarto-xref"><span>Section 3.5</span></a> — more important than ever, since these data underwrite the next seven chapters. Marginal shares first: with brands randomly assigned to profiles, brand choice shares should order as the brand coefficients do:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>chosen <span class="ot">&lt;-</span> laptops[laptops<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(chosen<span class="sc">$</span>brand)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Acer  Dell Apple 
+0.240 0.336 0.424 </code></pre>
+</div>
+</div>
+<p>Acer <span class="math inline">\(\prec\)</span> Dell <span class="math inline">\(\prec\)</span> Apple, as <span class="math inline">\((0, 0.5, 1.0)\)</span> commands. Directional price check: chosen laptops should be cheaper on average than rejected ones —</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(laptops<span class="sc">$</span>price, laptops<span class="sc">$</span>choice, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       0        1 
+1.675466 1.470368 </code></pre>
+</div>
+</div>
+<p>— and they are, by about $205. Finally the level-3 check, empirical frequencies against the closed form. We bin tasks by the model-implied probability of their first alternative, then ask how often that alternative was actually chosen — a <em>calibration</em> check that the simulation honors <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> across its whole range:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> laptops)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(laptops[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta_true))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>P    <span class="ot">&lt;-</span> eV <span class="sc">/</span> <span class="fu">rowsum</span>(eV, task_id)[task_id]   <span class="co"># eq-mnl-prob, all rows at once</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">cut</span>(P, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.1</span>))</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>cal  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">implied  =</span> <span class="fu">tapply</span>(P, bins, mean),</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">observed =</span> <span class="fu">tapply</span>(laptops<span class="sc">$</span>choice, bins, mean))</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cal, <span class="fu">aes</span>(implied, observed)) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"model-implied probability"</span>, <span class="at">y =</span> <span class="st">"empirical frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-mnl-calibration" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mnl-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="07_mnl_files/figure-html/fig-mnl-calibration-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mnl-calibration-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.1: Calibration of the simulated laptop study: model-implied choice probabilities (x) against empirical choice frequencies (y), tasks binned by implied probability. Points on the 45-degree line mean the simulator implements the MNL it claims to.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Dead on the diagonal. Two moves in that chunk foreshadow the next chapter: <code>rowsum(eV, task_id)</code> computed all 4,000 tasks’ logit denominators in one grouped operation, and indexing the result by <code>task_id</code> broadcast them back to the rows — the exact computational pattern at the heart of the vectorized MNL log-likelihood. You have now effectively seen <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>’s inner loop.</p>
+<p>The study is fielded. One housekeeping step: since every remaining chapter of Part II (and several beyond) analyzes exactly this dataset, we save it — data and answer key together — so later chapters can load it rather than re-simulate it. One dataset, one truth, one thread of examples:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(<span class="st">"../data"</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="fu">list</span>(<span class="at">data =</span> laptops, <span class="at">beta_true =</span> beta_true),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">file =</span> <span class="st">"../data/laptop_study.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the drawer sit <code>laptops</code> — 4,000 choices by 500 respondents — and, because we are the simulator as well as the analyst, the answer key <a href="#eq-beta-true" class="quarto-xref">Equation&nbsp;<span>7.6</span></a>. Time to forget we know it.</p>
 </section>
-</section>
-<section id="specification-choices" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="specification-choices"><span class="header-section-number">7.6</span> Specification Choices</h2>
-<!-- ASCs; generic vs alternative-specific coefficients; individual-specific covariates require interaction with ASCs (connects to ch 4 data organization) -->
-</section>
-<section id="simulating-mnl-data" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="simulating-mnl-data"><span class="header-section-number">7.7</span> Simulating MNL Data</h2>
-<!-- extend the ch 3 recipe to J alternatives; the dataset we will estimate on for the next several chapters -->
-</section>
-<section id="key-learnings" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">7.8</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">7.7</span> Key Learnings</h2>
+<ul>
+<li>The MNL assigns Gumbel errors to linear-in-parameters utilities (<a href="#eq-mnl-utility" class="quarto-xref">Equation&nbsp;<span>7.1</span></a>, <a href="#eq-mnl-errors" class="quarto-xref">Equation&nbsp;<span>7.3</span></a>); maximization then yields the closed-form softmax probabilities of <a href="#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a> — which we verified by simulating the model’s raw mechanics, not by trusting algebra.</li>
+<li>The Gumbel’s gifts: differences are logistic (binary logit as the <span class="math inline">\(J=2\)</span> special case) and maxima are Gumbel (source of the log-sum term that returns in <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> and <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>).</li>
+<li>The price of the closed form is IIA (<a href="#eq-iia" class="quarto-xref">Equation&nbsp;<span>7.5</span></a>): odds between two alternatives ignore all others, so substitution is proportional to shares — absurd for near-clones (red bus/blue bus) and the motivation for the nested, mixed, and probit models ahead.</li>
+<li>Choices reveal only the argmax, so utility <em>levels</em> (add a constant: nothing) and utility <em>scale</em> (multiply by <span class="math inline">\(\alpha\)</span>: nothing) are unidentifiable. Coefficients are measured on the arbitrary, convention-fixed logit scale; only their ratios are scale-free — the seed of willingness-to-pay.</li>
+<li>The laptop study now exists: <code>sim_mnl_data()</code> composes the design (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>), Gumbel draws (<a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>), and group-wise argmax into 4,000 simulated choices at <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span> (<a href="#eq-beta-true" class="quarto-xref">Equation&nbsp;<span>7.6</span></a>), and the data passed marginal, directional, and calibration checks.</li>
+<li>The calibration figure’s <code>rowsum()</code>/broadcast pattern <em>is</em> the vectorized MNL likelihood computation — <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> makes it official.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcfadden2001" class="csl-entry" role="listitem">
+McFadden, Daniel. 2001. <span>“Economic Choices.”</span> <em>American Economic Review</em> 91 (3): 351–78.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The red-bus/blue-bus parable is due to McFadden; <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 3.3.2 discusses it alongside cases where IIA is realistic. The parable is extreme by design — <em>perfect</em> substitutes — but the failure it dramatizes is graded: the more two alternatives share unobserved appeal, the worse the MNL’s substitution arithmetic.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>With continuous errors, ties occur with probability zero, so exactly one row per task is flagged. Verify: <code>all(rowsum(laptops$choice, cumsum(!duplicated(laptops[, c("id","task")]))) == 1)</code> returns <code>TRUE</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

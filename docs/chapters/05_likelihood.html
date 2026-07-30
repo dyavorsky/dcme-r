@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -342,10 +425,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-likelihood-function" id="toc-the-likelihood-function" class="nav-link active" data-scroll-target="#the-likelihood-function"><span class="header-section-number">5.1</span> The Likelihood Function</a></li>
   <li><a href="#independence-and-the-product-form" id="toc-independence-and-the-product-form" class="nav-link" data-scroll-target="#independence-and-the-product-form"><span class="header-section-number">5.2</span> Independence and the Product Form</a></li>
   <li><a href="#the-log-likelihood" id="toc-the-log-likelihood" class="nav-link" data-scroll-target="#the-log-likelihood"><span class="header-section-number">5.3</span> The Log-Likelihood</a></li>
-  <li><a href="#example-the-binary-logit-log-likelihood-in-r" id="toc-example-the-binary-logit-log-likelihood-in-r" class="nav-link" data-scroll-target="#example-the-binary-logit-log-likelihood-in-r"><span class="header-section-number">5.4</span> Example: The Binary Logit Log-Likelihood in R</a></li>
+  <li><a href="#sec-loglik-binary" id="toc-sec-loglik-binary" class="nav-link" data-scroll-target="#sec-loglik-binary"><span class="header-section-number">5.4</span> Coding the Binary Logit Log-Likelihood</a></li>
   <li><a href="#maximum-likelihood-estimation" id="toc-maximum-likelihood-estimation" class="nav-link" data-scroll-target="#maximum-likelihood-estimation"><span class="header-section-number">5.5</span> Maximum Likelihood Estimation</a></li>
-  <li><a href="#the-score-the-hessian-and-the-information-matrix" id="toc-the-score-the-hessian-and-the-information-matrix" class="nav-link" data-scroll-target="#the-score-the-hessian-and-the-information-matrix"><span class="header-section-number">5.6</span> The Score, the Hessian, and the Information Matrix</a></li>
-  <li><a href="#a-first-estimator-grid-search" id="toc-a-first-estimator-grid-search" class="nav-link" data-scroll-target="#a-first-estimator-grid-search"><span class="header-section-number">5.7</span> A First Estimator: Grid Search</a></li>
+  <li><a href="#the-score-and-the-hessian" id="toc-the-score-and-the-hessian" class="nav-link" data-scroll-target="#the-score-and-the-hessian"><span class="header-section-number">5.6</span> The Score and the Hessian</a></li>
+  <li><a href="#sec-grid-search" id="toc-sec-grid-search" class="nav-link" data-scroll-target="#sec-grid-search"><span class="header-section-number">5.7</span> A First Estimator: Grid Search</a></li>
   <li><a href="#why-grid-search-fails-at-scale" id="toc-why-grid-search-fails-at-scale" class="nav-link" data-scroll-target="#why-grid-search-fails-at-scale"><span class="header-section-number">5.8</span> Why Grid Search Fails at Scale</a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">5.9</span> Key Learnings</a></li>
   </ul>
@@ -373,43 +456,302 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: Greene 2008 (binary choice MLE in full detail); Hansen/Abramovich for MLE theory citations; DCMS Ch 3 intro -->
+<p>We can now specify a choice model (<a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>), draw from any density it involves (<a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>), simulate data from it (<a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>), and organize those data for computation (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>). This chapter builds the bridge that runs the other way — from observed data back toward the unknown parameters. The bridge is the <em>likelihood function</em>, and it is the single most important object in this book: Part II maximizes it, <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> approximates it, and Part III explores a posterior that is proportional to it. Every estimator we construct is some maneuver performed on the function this chapter teaches you to write.</p>
 <section id="the-likelihood-function" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="the-likelihood-function"><span class="header-section-number">5.1</span> The Likelihood Function</h2>
-<!-- the probability of the observed data as a function of the parameters; likelihood vs probability; the model (ch 1) supplies p(y|x,theta), the data supply y and x -->
+<p>Start from what the model gives us. A specified choice model delivers, for any parameter value, the probability of each possible outcome in a single choice situation: <span class="math inline">\(p(y_n \,|\, \mathbf{x}_n, \boldsymbol{\beta})\)</span>. In <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> we used this object in its natural direction — parameters known, probabilities of outcomes computed. Data reverse the situation: after the study is run, the outcomes <span class="math inline">\(y_1, \ldots, y_N\)</span> are <em>known</em>, and <span class="math inline">\(\boldsymbol{\beta}\)</span> is not.</p>
+<p>The likelihood function is the same mathematical expression read in the reverse direction:</p>
+<p><span id="eq-lik-def"><span class="math display">\[
+L(\boldsymbol{\beta}) = p(\mathbf{y}\,|\, \mathbf{X}, \boldsymbol{\beta}) \quad \text{viewed as a function of } \boldsymbol{\beta}\text{, with the data fixed.}
+\tag{5.1}\]</span></span></p>
+<p>Read it as: <em>how probable were the choices we actually observed, if the true parameter vector were <span class="math inline">\(\boldsymbol{\beta}\)</span>?</em> Every candidate <span class="math inline">\(\boldsymbol{\beta}\)</span> gets a score. A candidate under which the observed data would have been unremarkable scores high; a candidate under which the data would have been a miracle scores low. The principle of maximum likelihood — coming formally in a few pages — says to prefer the candidate with the highest score.</p>
+<p>The distinction between probability and likelihood trips up everyone at first pass, so let me put it plainly. <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span> is one formula with two readings: as a function of <span class="math inline">\(y\)</span> with <span class="math inline">\(\boldsymbol{\beta}\)</span> fixed, it is a probability distribution (non-negative, sums to one over outcomes); as a function of <span class="math inline">\(\boldsymbol{\beta}\)</span> with <span class="math inline">\(y\)</span> fixed, it is a likelihood (non-negative, but sums to nothing in particular over <span class="math inline">\(\boldsymbol{\beta}\)</span> — it is not a distribution over parameters).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Same formula, different axis held fixed.</p>
 </section>
 <section id="independence-and-the-product-form" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="independence-and-the-product-form"><span class="header-section-number">5.2</span> Independence and the Product Form</h2>
-<!-- independence across decision-makers (and, for now, across choice situations); the likelihood as a product of choice probabilities; panel subtleties deferred to ch 11/13 -->
+<p>For a dataset rather than a single observation, we need the <em>joint</em> probability of all the observed choices. Our models make this easy by assumption: conditional on the observables and parameters, the unobservables <span class="math inline">\(\varepsilon_n\)</span> are drawn independently across choice situations — look back at the simulator of <a href="03_simdata.html#sec-sim_binary" class="quarto-xref"><span>Section 3.2</span></a>, where <code>rlogis(N)</code> draws exactly that way. Independent unobservables make the choices conditionally independent, and the joint probability of independent events is the product of their probabilities:</p>
+<p><span id="eq-lik-product"><span class="math display">\[
+L(\boldsymbol{\beta}) = \prod_{n=1}^{N} p(y_n \,|\, \mathbf{x}_n, \boldsymbol{\beta})
+\tag{5.2}\]</span></span></p>
+<p>For the binary logit, each factor takes a form worth writing carefully. Denote <span class="math inline">\(P_n = \Pr(y_n = 1 | \mathbf{x}_n, \boldsymbol{\beta}) = e^{\mathbf{x}_n'\boldsymbol{\beta}} / (1 + e^{\mathbf{x}_n'\boldsymbol{\beta}})\)</span> from <a href="01_choice.html#eq-binlogit_prob" class="quarto-xref">Equation&nbsp;<span>1.6</span></a>. Shopper <span class="math inline">\(n\)</span> contributes <span class="math inline">\(P_n\)</span> if they bought and <span class="math inline">\(1 - P_n\)</span> if they didn’t, which a classic piece of notation compresses into one expression:</p>
+<p><span id="eq-binlogit-lik"><span class="math display">\[
+L(\boldsymbol{\beta}) = \prod_{n=1}^{N} P_n^{\,y_n} \, (1 - P_n)^{1 - y_n}
+\tag{5.3}\]</span></span></p>
+<p>The exponents <span class="math inline">\(y_n \in \{0,1\}\)</span> act as switches, turning on exactly the factor that matches what shopper <span class="math inline">\(n\)</span> actually did. This switch trick generalizes: in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>, the same device (an indicator exponent selecting the chosen alternative’s probability) builds the MNL likelihood.</p>
+<p>A word on the independence assumption, because we will renegotiate it later. Independence across <em>shoppers</em> is usually innocuous. Independence across <em>multiple choices by the same shopper</em> is not — respondent <span class="math inline">\(n\)</span>’s eight tasks share whatever is persistent about respondent <span class="math inline">\(n\)</span> — and how to honor that dependence is precisely the story of the panel-data models in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> and <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>. For this chapter’s cross-sectional data (one choice per shopper), the product form is exactly right.</p>
 </section>
 <section id="the-log-likelihood" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="the-log-likelihood"><span class="header-section-number">5.3</span> The Log-Likelihood</h2>
-<!-- why logs: products underflow, sums don't; monotone transform preserves the argmax; numerical demonstration of underflow in R -->
+<p><a href="#eq-lik-product" class="quarto-xref">Equation&nbsp;<span>5.2</span></a> is mathematically pleasant and computationally disastrous. Each factor is a probability, typically between 0.2 and 0.8; multiply five hundred of them and the result is on the order of <span class="math inline">\(0.5^{500} \approx 10^{-151}\)</span>. Multiply a few thousand — our laptop study has 4,000 choices — and the product is smaller than the smallest positive number a computer can represent (about <span class="math inline">\(10^{-308}\)</span> for standard doubles). The computed likelihood becomes exactly zero, for <em>every</em> candidate <span class="math inline">\(\boldsymbol{\beta}\)</span>, and all information is annihilated. Watch it happen:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>probs <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">5000</span>, <span class="fl">0.2</span>, <span class="fl">0.8</span>)   <span class="co"># plausible per-choice probabilities</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(probs[<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>])                <span class="co"># fine</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.600535e-32</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(probs[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>])                <span class="co"># vanishing...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.946295e-163</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prod</span>(probs)                       <span class="co"># gone: underflow to exactly 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>The remedy is to work with the <em>logarithm</em> of the likelihood. Logs turn products into sums, and sums of a few thousand moderate negative numbers are computationally trivial:</p>
+<p><span id="eq-loglik"><span class="math display">\[
+\ell(\boldsymbol{\beta}) = \log L(\boldsymbol{\beta}) = \sum_{n=1}^{N} \log p(y_n \,|\, \mathbf{x}_n, \boldsymbol{\beta})
+\tag{5.4}\]</span></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">log</span>(probs))                   <span class="co"># no drama</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -3786.994</code></pre>
+</div>
+</div>
+<p>Nothing is lost by the transformation: the logarithm is strictly increasing, so <span class="math inline">\(L\)</span> and <span class="math inline">\(\ell\)</span> rank every pair of candidates identically and share exactly the same maximizer. For the binary logit, taking logs of <a href="#eq-binlogit-lik" class="quarto-xref">Equation&nbsp;<span>5.3</span></a> gives the form we will implement:</p>
+<p><span id="eq-binlogit-loglik"><span class="math display">\[
+\ell(\boldsymbol{\beta}) = \sum_{n=1}^{N} \Big[ y_n \log P_n + (1 - y_n) \log (1 - P_n) \Big]
+\tag{5.5}\]</span></span></p>
+<p>From here on, “the likelihood” in conversation almost always means the log-likelihood in computation, and <span class="math inline">\(\ell(\boldsymbol{\beta})\)</span> is the function our code evaluates. Note its sign conventions: each term is the log of a probability, hence negative, so <span class="math inline">\(\ell(\boldsymbol{\beta})\)</span> is a negative number, and <em>less negative is better</em>.</p>
 </section>
-<section id="example-the-binary-logit-log-likelihood-in-r" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="example-the-binary-logit-log-likelihood-in-r"><span class="header-section-number">5.4</span> Example: The Binary Logit Log-Likelihood in R</h2>
-<!-- tiny dataset computed by hand, then a loglik(beta, y, X) function; evaluate at several beta values -->
+<section id="sec-loglik-binary" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="sec-loglik-binary"><span class="header-section-number">5.4</span> Coding the Binary Logit Log-Likelihood</h2>
+<p>Let’s turn <a href="#eq-binlogit-loglik" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> into R, in the transparent-first style we committed to. The function takes a candidate parameter vector plus the data — in the design-matrix form of <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a> — and returns one number:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loglik_binary <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    ll <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (n <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(y)) {</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        v  <span class="ot">&lt;-</span> <span class="fu">sum</span>(X[n, ] <span class="sc">*</span> beta)            <span class="co"># V_n = x_n' beta</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        P  <span class="ot">&lt;-</span> <span class="fu">exp</span>(v) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(v))         <span class="co"># P_n</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        ll <span class="ot">&lt;-</span> ll <span class="sc">+</span> y[n]<span class="sc">*</span><span class="fu">log</span>(P) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> y[n])<span class="sc">*</span><span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> P)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    ll</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The loop is a line-by-line transcription of the math: representative utility, choice probability, the switch expression, accumulate. Transcription fidelity is the point — when you can see the equation in the code, you can debug the code against the equation. (The vectorized version, several hundred times faster, appears in <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>; the answers are identical.)</p>
+<p>To exercise it we need data with known truth — the simulator from <a href="03_simdata.html#sec-sim-function" class="quarto-xref"><span>Section 3.4</span></a>, reproduced here so this chapter stands alone:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sim_binary_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, beta, <span class="at">X =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">dist =</span> <span class="fu">c</span>(<span class="st">"logistic"</span>, <span class="st">"normal"</span>)) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    dist <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(dist)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(X)) {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>        price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>        ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>        X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="cf">switch</span>(dist,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">logistic =</span> <span class="fu">rlogis</span>(N),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">normal   =</span> <span class="fu">rnorm</span>(N))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">as.integer</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>), X[, <span class="sc">-</span><span class="dv">1</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">50</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">beta =</span> beta_true)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> d<span class="sc">$</span>y</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, d<span class="sc">$</span>price, d<span class="sc">$</span>ram16)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now the payoff. The log-likelihood scores candidates; let’s score a few, including the truth and some pretenders:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cands <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth        =</span> <span class="fu">c</span>( <span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>,  <span class="fl">0.6</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">zero_price   =</span> <span class="fu">c</span>( <span class="fl">1.0</span>,  <span class="fl">0.0</span>,  <span class="fl">0.6</span>),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">flipped_sign =</span> <span class="fu">c</span>( <span class="fl">1.0</span>,  <span class="fl">1.2</span>,  <span class="fl">0.6</span>),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">all_zero     =</span> <span class="fu">c</span>( <span class="fl">0.0</span>,  <span class="fl">0.0</span>,  <span class="fl">0.0</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(cands, <span class="dv">1</span>, <span class="cf">function</span>(b) <span class="fu">loglik_binary</span>(b, y, X))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       truth   zero_price flipped_sign     all_zero 
+   -302.7940    -533.0668   -1077.9031    -346.5736 </code></pre>
+</div>
+</div>
+<p>The ranking behaves exactly as the likelihood principle promises. The true parameters score best. Ignoring price entirely costs dozens of log-likelihood points; <em>flipping</em> the price coefficient’s sign — claiming shoppers prefer expensive laptops — is catastrophically implausible given these data. And the all-zero candidate, which says every shopper flips a fair coin, does poorly in a specific, interpretable way: its score is exactly <span class="math inline">\(N \log(0.5) = -346.6\)</span>, a number we will meet again as the <em>null log-likelihood</em> when <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> builds fit measures around it.</p>
+<p>One more scoring note: the true <span class="math inline">\(\boldsymbol{\beta}\)</span> is the best candidate <em>of these four</em>, but it will not be the exact maximizer of <span class="math inline">\(\ell\)</span> — the maximizer adapts to this particular sample’s noise. How far the maximizer wanders from the truth, sample to sample, is the entire subject of standard errors.</p>
 </section>
 <section id="maximum-likelihood-estimation" class="level2" data-number="5.5">
 <h2 data-number="5.5" class="anchored" data-anchor-id="maximum-likelihood-estimation"><span class="header-section-number">5.5</span> Maximum Likelihood Estimation</h2>
-<!-- the estimator: argmax of the log-likelihood; brief statement of consistency, asymptotic normality, invariance with citations (not derivations) -->
+<p>The estimator this scoring logic suggests has a one-line definition:</p>
+<p><span id="eq-mle-def"><span class="math display">\[
+\hat{\boldsymbol{\beta}} = \arg\max_{\boldsymbol{\beta}} \; \ell(\boldsymbol{\beta})
+\tag{5.6}\]</span></span></p>
+<p>The <em>maximum likelihood estimator</em> (MLE) is the parameter value that makes the observed data most probable. Note carefully what kind of object <a href="#eq-mle-def" class="quarto-xref">Equation&nbsp;<span>5.6</span></a> is, in the taxonomy from the introduction: it is an <em>estimator</em> — a rule mapping data to a value — not yet an estimate (that requires data) and certainly not the model (which supplied <span class="math inline">\(\ell\)</span>’s formula). One model, many possible estimators; maximum likelihood is our first because it is general (any model with a computable likelihood), principled, and — for the well-behaved models of Part II — as statistically efficient as any estimator can be.</p>
+<p>That efficiency claim is part of a package of classical results that I will state and use but not prove; <span class="citation" data-cites="abramovich2023">Abramovich and Ritov (<a href="references.html#ref-abramovich2023" role="doc-biblioref">2023</a>)</span> and <span class="citation" data-cites="hansen2">Hansen (<a href="references.html#ref-hansen2" role="doc-biblioref">2022</a>)</span> give full treatments. Under regularity conditions our models satisfy:</p>
+<ul>
+<li><strong>Consistency</strong>: as <span class="math inline">\(N \to \infty\)</span>, <span class="math inline">\(\hat{\boldsymbol{\beta}} \to \boldsymbol{\beta}^\ast\)</span>. More data concentrates the likelihood around the truth.</li>
+<li><strong>Asymptotic normality</strong>: <span class="math inline">\(\sqrt{N}(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta}^\ast)\)</span> converges to a normal distribution whose covariance the next section identifies. This is what licenses confidence intervals and <span class="math inline">\(z\)</span>-statistics.</li>
+<li><strong>Efficiency</strong>: among (regular) consistent estimators, the MLE achieves the smallest asymptotic variance — it wrings the most out of each observation.</li>
+<li><strong>Invariance</strong>: the MLE of any function <span class="math inline">\(g(\boldsymbol{\beta})\)</span> is <span class="math inline">\(g(\hat{\boldsymbol{\beta}})\)</span>. Estimate the model once, and quantities like willingness-to-pay — ratios of coefficients, as <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> develops — come free by plugging in.</li>
+</ul>
+<p>These are <em>asymptotic</em> promises, and simulation is how we audit them at the sample sizes we actually face: the replication study in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> will watch consistency and asymptotic normality emerge (or not) at <span class="math inline">\(N = 4{,}000\)</span> choices.</p>
 </section>
-<section id="the-score-the-hessian-and-the-information-matrix" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="the-score-the-hessian-and-the-information-matrix"><span class="header-section-number">5.6</span> The Score, the Hessian, and the Information Matrix</h2>
-<!-- gradient and curvature; why curvature at the max delivers standard errors (used in ch 6 and ch 8); analytic vs numerical derivatives preview -->
+<section id="the-score-and-the-hessian" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="the-score-and-the-hessian"><span class="header-section-number">5.6</span> The Score and the Hessian</h2>
+<p>Two derivative objects of <span class="math inline">\(\ell\)</span> carry the theory and drive the computation of the next chapter. Their names are worth memorizing now.</p>
+<p>The <strong>score</strong> is the gradient — the <span class="math inline">\(K\)</span>-vector of first derivatives:</p>
+<p><span id="eq-score"><span class="math display">\[
+s(\boldsymbol{\beta}) = \frac{\partial \ell(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}}
+\tag{5.7}\]</span></span></p>
+<p>At an interior maximum the score is zero; that is what “maximum” means. So the MLE can be characterized as the solution to <span class="math inline">\(s(\hat{\boldsymbol{\beta}}) = \mathbf{0}\)</span>, and the numerical methods of <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> are, at heart, root-finders for the score.</p>
+<p>For the binary logit the score has a form so clean it feels like a reward. Differentiating <a href="#eq-binlogit-loglik" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> is worth doing once in full. Write <span class="math inline">\(v_n = \mathbf{x}_n'\boldsymbol{\beta}\)</span>, so <span class="math inline">\(P_n = e^{v_n}/(1+e^{v_n})\)</span> and, more conveniently, <span class="math inline">\(\log P_n = v_n - \log(1+e^{v_n})\)</span> and <span class="math inline">\(\log(1-P_n) = -\log(1+e^{v_n})\)</span>. Since <span class="math inline">\(\partial v_n/\partial \boldsymbol{\beta}= \mathbf{x}_n\)</span>, <span class="math display">\[
+\frac{\partial \log P_n}{\partial \boldsymbol{\beta}} = \mathbf{x}_n - \frac{e^{v_n}}{1+e^{v_n}}\,\mathbf{x}_n = (1-P_n)\,\mathbf{x}_n,
+\qquad
+\frac{\partial \log(1-P_n)}{\partial \boldsymbol{\beta}} = -P_n \mathbf{x}_n.
+\]</span> Each observation therefore contributes <span class="math inline">\(y_n(1-P_n)\mathbf{x}_n - (1-y_n)P_n\mathbf{x}_n = (y_n - P_n)\mathbf{x}_n\)</span>, and summing over observations gives the score. (The same algebra yields <span class="math inline">\(\partial P_n/\partial \boldsymbol{\beta}= P_n(1-P_n)\mathbf{x}_n\)</span>, which we will need for the Hessian in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>.)</p>
+<p><span id="eq-binlogit-score"><span class="math display">\[
+s(\boldsymbol{\beta}) = \sum_{n=1}^{N} (y_n - P_n)\, \mathbf{x}_n = \mathbf{X}'(\mathbf{y}- \mathbf{P})
+\tag{5.8}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{X}\)</span> stacks the row vectors <span class="math inline">\(\mathbf{x}_n'\)</span> into an <span class="math inline">\(N \times K\)</span> matrix, and <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{P}\)</span> are the <span class="math inline">\(N\)</span>-vectors collecting the <span class="math inline">\(y_n\)</span> and <span class="math inline">\(P_n\)</span>.</p>
+<p>The score is the sum of <em>prediction errors times covariates</em>. At the maximum, errors are exactly uncorrelated with every covariate — the likelihood’s echo of least squares’ normal equations. We will verify <a href="#eq-binlogit-score" class="quarto-xref">Equation&nbsp;<span>5.8</span></a> numerically in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> and derive its MNL sibling in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
+<p>The <strong>Hessian</strong> is the <span class="math inline">\(K \times K\)</span> matrix of second derivatives:</p>
+<p><span id="eq-hessian"><span class="math display">\[
+H(\boldsymbol{\beta}) = \frac{\partial^2 \ell(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}\, \partial \boldsymbol{\beta}'}
+\tag{5.9}\]</span></span></p>
+<p>At the maximum, <span class="math inline">\(H\)</span> is negative definite (the surface curves down in every direction), and <em>how sharply</em> it curves is the information content of the data. Intuition: a knife-edge peak means tiny parameter movements make the data noticeably less probable — the data pin the parameters down; a broad mesa means many candidates explain the data near-equally — the data are less informative. The classical results make this exact: the asymptotic covariance of the MLE is the inverse of the (expected) negative Hessian, so in practice</p>
+<p><span id="eq-mle-vcov"><span class="math display">\[
+\widehat{\mathrm{Var}}(\hat{\boldsymbol{\beta}}) = \left[ -H(\hat{\boldsymbol{\beta}}) \right]^{-1}
+\tag{5.10}\]</span></span></p>
+<p>whose diagonal, square-rooted, gives the standard errors reported next to every estimate in this book.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> If you are wondering where the <span class="math inline">\(\sqrt{N}\)</span> of the asymptotic-normality statement went: it is hiding inside <span class="math inline">\(H\)</span>. The Hessian sums over all <span class="math inline">\(N\)</span> observations, so it grows in proportion to <span class="math inline">\(N\)</span>, and its inverse shrinks like <span class="math inline">\(1/N\)</span> — <a href="#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a> is the <span class="math inline">\(\sqrt{N}\)</span> statement with the scaling already folded in. (Watch it happen empirically at the end of <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>, where quadrupling <span class="math inline">\(N\)</span> roughly halves the standard errors.) Curvature is variance, inverted. Hold onto that sentence; it is the entire connection between optimization output and statistical inference, and <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> cashes it in.</p>
 </section>
-<section id="a-first-estimator-grid-search" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="a-first-estimator-grid-search"><span class="header-section-number">5.7</span> A First Estimator: Grid Search</h2>
-<!-- one-parameter binary logit; plot the log-likelihood curve, find the max by brute force; recover the true beta from ch 3's simulated data -- the first complete simulate-and-recover -->
+<section id="sec-grid-search" class="level2" data-number="5.7">
+<h2 data-number="5.7" class="anchored" data-anchor-id="sec-grid-search"><span class="header-section-number">5.7</span> A First Estimator: Grid Search</h2>
+<p>We have the objective (<a href="#eq-binlogit-loglik" class="quarto-xref">Equation&nbsp;<span>5.5</span></a>) and the target (<a href="#eq-mle-def" class="quarto-xref">Equation&nbsp;<span>5.6</span></a>). The only missing ingredient is a way to <em>find</em> the maximizer, and the most naive method is fully within our powers: evaluate <span class="math inline">\(\ell\)</span> on a grid of candidates and take the best. Crude, but it completes the simulate-and-recover loop for the first time in this book, and its failure mode motivates everything in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
+<p>Start in one dimension to build intuition: fix the intercept and memory coefficients at their true values and slice the log-likelihood along the price coefficient alone (a <em>slice</em>, not the “profile likelihood” of the testing literature, which re-maximizes over the other parameters at each point):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>b_price <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ll <span class="ot">&lt;-</span> <span class="fu">sapply</span>(b_price, <span class="cf">function</span>(b)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loglik_binary</span>(<span class="fu">c</span>(<span class="fl">1.0</span>, b, <span class="fl">0.6</span>), y, X))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(b_price, ll), <span class="fu">aes</span>(b_price, ll)) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> b_price[<span class="fu">which.max</span>(ll)], <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(beta[price]), <span class="at">y =</span> <span class="st">"log-likelihood"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-loglik-1d" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loglik-1d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05_likelihood_files/figure-html/fig-loglik-1d-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loglik-1d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: A slice of the log-likelihood along the price coefficient (intercept and memory coefficients held at truth). The maximizer (dashed) sits near, but not exactly at, the true value of -1.2 (solid): the difference is sampling noise, the raw material of standard errors.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The curve is smooth, single-peaked, and — look closely at the dashed line — peaks at -1.24, close to but not exactly <span class="math inline">\(-1.2\)</span>. That gap <em>is</em> sampling variation; rerun the simulation with a different seed and the peak lands somewhere else nearby. The curvature at the peak is what <a href="#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a> converts into a standard error — a sharper peak would mean the data confine <span class="math inline">\(\beta_{\text{price}}\)</span> more tightly.</p>
+<p>Now search over two parameters jointly (intercept and price, memory held at truth), which also lets us <em>see</em> a log-likelihood surface — worth a long look, because the algorithms of <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> live on surfaces like this one:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">b0 =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">80</span>),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">bp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">2.4</span>, <span class="sc">-</span><span class="fl">0.2</span>, <span class="at">length.out =</span> <span class="dv">80</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">$</span>ll <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(b0, bp)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loglik_binary</span>(<span class="fu">c</span>(b0, bp, <span class="fl">0.6</span>), y, X), grid<span class="sc">$</span>b0, grid<span class="sc">$</span>bp)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>best <span class="ot">&lt;-</span> grid[<span class="fu">which.max</span>(grid<span class="sc">$</span>ll), ]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grid, <span class="fu">aes</span>(b0, bp, <span class="at">z =</span> ll)) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_contour</span>(<span class="at">bins =</span> <span class="dv">25</span>, <span class="at">color =</span> <span class="st">"grey50"</span>) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> <span class="fl">1.0</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> best<span class="sc">$</span>b0, <span class="at">y =</span> best<span class="sc">$</span>bp, <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">stroke =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(beta[<span class="dv">0</span>]), <span class="at">y =</span> <span class="fu">expression</span>(beta[price]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-loglik-2d" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-loglik-2d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="05_likelihood_files/figure-html/fig-loglik-2d-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-loglik-2d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: Log-likelihood contours over the intercept and price coefficient. The X marks the grid maximizer; the dot marks the truth. The elongated, tilted contours mean the two parameters are partially confounded in these data: raising the intercept while steepening price sensitivity leaves the data almost as probable.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>best</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           b0        bp        ll
+2852 1.291139 -1.425316 -302.2199</code></pre>
+</div>
+</div>
+<p>Recovery, again: the grid maximizer lands near <span class="math inline">\((1.0, -1.2)\)</span>. Notice the <em>shape</em> of the contours — elongated and tilted, not circular. The tilt says the data partially confound the two parameters (a higher baseline buying propensity plus stronger price aversion mimics the original pair), and its algebraic signature is a large off-diagonal element in <span class="math inline">\(H^{-1}\)</span>: correlated estimation errors. Surfaces like this are easy terrain; <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> will show you surfaces with ridges and plateaus where the confounding is severe, and reading contour geometry will pay off.</p>
 </section>
 <section id="why-grid-search-fails-at-scale" class="level2" data-number="5.8">
 <h2 data-number="5.8" class="anchored" data-anchor-id="why-grid-search-fails-at-scale"><span class="header-section-number">5.8</span> Why Grid Search Fails at Scale</h2>
-<!-- curse of dimensionality; motivates ch 6 -->
+<p>So why isn’t this book twenty pages long? Count evaluations. A grid with 100 points per axis costs <span class="math inline">\(100^K\)</span> evaluations for <span class="math inline">\(K\)</span> parameters:</p>
+<div id="tbl-grid-curse" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-grid-curse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5.1: The curse of dimensionality for grid search.
+</figcaption>
+<div aria-describedby="tbl-grid-curse-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: right;"><span class="math inline">\(K\)</span></th>
+<th style="text-align: right;">evaluations at 100 points/axis</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">10,000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;"><span class="math inline">\(10^6\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6 (our MNL, <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(10^{12}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">27 (mixed MNL with full covariance, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(10^{54}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>At a million evaluations per second, the six-parameter MNL takes eleven days; the mixed MNL needs <span class="math inline">\(10^{48}\)</span> seconds — about thirty orders of magnitude longer than the age of the universe. And a 100-point grid is <em>coarse</em> — refining it multiplies the cost further. Exhaustive search dies exponentially in <span class="math inline">\(K\)</span>.</p>
+<p>But our two figures whisper the escape route. These surfaces are smooth and hill-shaped, so the local slope — the score, <a href="#eq-binlogit-score" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>, which we can <em>compute</em> — always points uphill. A climber who consults the gradient needs no grid: from any starting point, walk uphill until the slope vanishes. Making that idea precise, fast, and robust is the business of numerical optimization, and it is where we turn next.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="5.9">
 <h2 data-number="5.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">5.9</span> Key Learnings</h2>
+<ul>
+<li>The likelihood is the model’s probability formula read in reverse: data fixed, parameters free (<a href="#eq-lik-def" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>). It scores every candidate <span class="math inline">\(\boldsymbol{\beta}\)</span> by how probable it renders the observed choices.</li>
+<li>Independence of the unobservables across choice situations — visible as one line in our simulator — makes the likelihood a product (<a href="#eq-lik-product" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>); the 0/1 exponent trick (<a href="#eq-binlogit-lik" class="quarto-xref">Equation&nbsp;<span>5.3</span></a>) selects each observation’s realized outcome.</li>
+<li>Products of thousands of probabilities underflow to zero; the log-likelihood (<a href="#eq-loglik" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>) converts them to benign sums with the same maximizer. Code computes <span class="math inline">\(\ell\)</span>, always.</li>
+<li><code>loglik_binary()</code> is <a href="#eq-binlogit-loglik" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> transcribed line by line: utility, probability, switch, accumulate — and it ranked truth above pretenders on simulated data, with the all-zero candidate scoring the null value <span class="math inline">\(N\log(0.5)\)</span>.</li>
+<li>The MLE (<a href="#eq-mle-def" class="quarto-xref">Equation&nbsp;<span>5.6</span></a>) is consistent, asymptotically normal, efficient, and invariant. The score (<a href="#eq-score" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>) vanishes at the maximum — for the binary logit it is the elegant <span class="math inline">\(\mathbf{X}'(\mathbf{y}- \mathbf{P})\)</span> — and the inverse negative Hessian (<a href="#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a>) converts peak curvature into standard errors.</li>
+<li>Grid search completed our first simulate-and-recover loop and drew us two instructive pictures — but it costs <span class="math inline">\(100^K\)</span> evaluations and dies exponentially in dimension (<a href="#tbl-grid-curse" class="quarto-xref">Table&nbsp;<span>5.1</span></a>). Smooth, gradient-bearing surfaces invite hill-climbing instead: <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-abramovich2023" class="csl-entry" role="listitem">
+Abramovich, Felix, and Ya’acov Ritov. 2023. <em>Bayesian Statistics</em>. CRC press.
+</div>
+<div id="ref-greene2008" class="csl-entry" role="listitem">
+Greene, William H. 2008. <span>“Discrete Choice Modeling.”</span> In <em>Palgrave Handbook of Econometrics, Volume 2: Applied Econometrics</em>, edited by Terence C. Mills and Kerry Patterson. Palgrave Macmillan.
+</div>
+<div id="ref-hansen2" class="csl-entry" role="listitem">
+Hansen, Bruce. 2022. <em>Econometrics</em>. Princeton University Press.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Wanting a distribution over parameters is a legitimate desire — it is <em>the</em> Bayesian desire, and <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> shows what must be added to the likelihood to get one (a prior). Until then, the likelihood is a scoring function, not a belief.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The negative expected Hessian is the <em>Fisher information matrix</em>; evaluating the actual Hessian at <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> estimates it. Alternative covariance estimators (outer-product-of-scores, sandwich) matter when models are misspecified; <span class="citation" data-cites="greene2008">Greene (<a href="references.html#ref-greene2008" role="doc-biblioref">2008</a>)</span> catalogs them. For our simulate-and-recover work, where the model is true by construction, <a href="#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a> is the natural choice.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

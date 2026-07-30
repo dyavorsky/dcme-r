@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -340,9 +423,9 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#why-probit" id="toc-why-probit" class="nav-link active" data-scroll-target="#why-probit"><span class="header-section-number">18.1</span> Why Probit?</a></li>
-  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="header-section-number">18.2</span> The Model</a></li>
-  <li><a href="#identification" id="toc-identification" class="nav-link" data-scroll-target="#identification"><span class="header-section-number">18.3</span> Identification</a></li>
-  <li><a href="#binary-probit-as-a-warm-up" id="toc-binary-probit-as-a-warm-up" class="nav-link" data-scroll-target="#binary-probit-as-a-warm-up"><span class="header-section-number">18.4</span> Binary Probit as a Warm-up</a></li>
+  <li><a href="#the-choice-probability-is-an-integral" id="toc-the-choice-probability-is-an-integral" class="nav-link" data-scroll-target="#the-choice-probability-is-an-integral"><span class="header-section-number">18.2</span> The Choice Probability Is an Integral</a></li>
+  <li><a href="#identification-the-sternest-version-yet" id="toc-identification-the-sternest-version-yet" class="nav-link" data-scroll-target="#identification-the-sternest-version-yet"><span class="header-section-number">18.3</span> Identification: The Sternest Version Yet</a></li>
+  <li><a href="#warming-up-binary-probit-by-mle" id="toc-warming-up-binary-probit-by-mle" class="nav-link" data-scroll-target="#warming-up-binary-probit-by-mle"><span class="header-section-number">18.4</span> Warming Up: Binary Probit by MLE</a></li>
   <li><a href="#simulating-mnp-data" id="toc-simulating-mnp-data" class="nav-link" data-scroll-target="#simulating-mnp-data"><span class="header-section-number">18.5</span> Simulating MNP Data</a></li>
   <li><a href="#the-estimation-problem-ahead" id="toc-the-estimation-problem-ahead" class="nav-link" data-scroll-target="#the-estimation-problem-ahead"><span class="header-section-number">18.6</span> The Estimation Problem Ahead</a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">18.7</span> Key Learnings</a></li>
@@ -371,35 +454,183 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 5; mcculloch-rossi-1994 (identification); Greene 2008 §0.7 -->
+<p>Part IV leaves the logit family. Every model so far — MNL, nested, latent class, mixed, hierarchical — has Gumbel errors somewhere in its bones, chosen in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> for the closed form they buy. The <strong>multinomial probit</strong> (MNP) makes the other choice: multivariate <em>normal</em> errors with a freely estimated covariance matrix. Correlation between any pair of alternatives, unobserved-taste patterns of any shape — nothing pre-specified, everything estimated. The price is the one we have spent two parts learning to pay: the choice probabilities are integrals with no closed form, ever.</p>
+<p>That price structure is why the MNP sits here, at the book’s culmination, rather than in Part II where its cousins live. Estimating it requires either the simulation-assisted likelihood machinery of <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> or the augmentation-and-Gibbs machinery of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> — and it is the rare model where <em>both</em> routes are standard, which makes it the perfect capstone demonstration that model and estimation method are separate choices (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> runs the head-to-head). This chapter does the groundwork: the model, its subtle identification, and its simulation.</p>
 <section id="why-probit" class="level2" data-number="18.1">
 <h2 data-number="18.1" class="anchored" data-anchor-id="why-probit"><span class="header-section-number">18.1</span> Why Probit?</h2>
-<!-- normal errors with a free covariance matrix: correlated utilities and flexible substitution without inventing nests; the cost: no closed form, ever -->
+<p>The nested logit of <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> repaired IIA by letting the researcher declare which alternatives share unobserved appeal. The mixed logit of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> generated flexible substitution through random coefficients on <em>observed</em> attributes. The MNP attacks the unobservables directly:</p>
+<p><span id="eq-mnp-model"><span class="math display">\[
+U_{ntj} = \mathbf{x}_{ntj}'\boldsymbol{\beta}+ \varepsilon_{ntj}, \qquad
+\boldsymbol{\varepsilon}_{nt} = (\varepsilon_{nt1}, \ldots, \varepsilon_{ntJ})' \sim N(\mathbf{0}, \Omega)
+\tag{18.1}\]</span></span></p>
+<p>with <span class="math inline">\(\Omega\)</span> an unrestricted <span class="math inline">\(J \times J\)</span> covariance matrix. Return to the story that motivated nesting: Windows machines share unobserved OS-related utility. The nested logit <em>encoded</em> that as a nest with an estimated <span class="math inline">\(\lambda\)</span>. The MNP simply lets the data put a positive covariance between the Acer and Dell errors — or not — along with any other pattern among the alternatives: no nests to specify, no researcher declaration of who competes with whom, no IIA anywhere.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> For this part we return to the <strong>brand-labeled design</strong> of <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> (one Acer, one Dell, one Apple per task), because a covariance between “the Acer error” and “the Dell error” needs alternatives with stable identities to attach to.</p>
 </section>
-<section id="the-model" class="level2" data-number="18.2">
-<h2 data-number="18.2" class="anchored" data-anchor-id="the-model"><span class="header-section-number">18.2</span> The Model</h2>
-<!-- U = X beta + eps, eps ~ N(0, Omega); the choice probability as a (J-1)-dimensional normal integral over utility differences -->
+<section id="the-choice-probability-is-an-integral" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="the-choice-probability-is-an-integral"><span class="header-section-number">18.2</span> The Choice Probability Is an Integral</h2>
+<p>The behavioral rule is unchanged — pick the maximum utility — so the probability that alternative <span class="math inline">\(j\)</span> is chosen is the probability that <span class="math inline">\(J-1\)</span> utility differences all fall on <span class="math inline">\(j\)</span>’s side:</p>
+<p><span id="eq-mnp-prob"><span class="math display">\[
+P_{ntj} = \Pr\left( U_{ntj} &gt; U_{ntk} \;\; \forall \, k \neq j \right)
+= \int_{\text{region where } j \text{ wins}} \phi_J(\boldsymbol{\varepsilon}\mid \mathbf{0}, \Omega) \, d\boldsymbol{\varepsilon}
+\tag{18.2}\]</span></span></p>
+<p>— on its face a <span class="math inline">\(J\)</span>-dimensional integral over the cone where <span class="math inline">\(j\)</span> wins; but only utility <em>differences</em> decide the comparison, and differences of normals are normal, so subtracting <span class="math inline">\(U_{ntj}\)</span> from the others collapses it to a <span class="math inline">\((J-1)\)</span>-dimensional normal orthant probability. That differenced form is the one every computation downstream actually uses. For <span class="math inline">\(J = 2\)</span> it collapses to the univariate <span class="math inline">\(\Phi(\cdot)\)</span> of the binary probit — closed form, essentially. For <span class="math inline">\(J = 3\)</span> it is a bivariate normal probability — computable by good numerical routines (<code>pmvnorm</code>), no longer a formula. For the <span class="math inline">\(J\)</span> of a real supermarket category, it is the reason this model waited until Part IV. Everything hard about the MNP is <a href="#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a>; everything in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> is a strategy for never quite computing it.</p>
 </section>
-<section id="identification" class="level2" data-number="18.3">
-<h2 data-number="18.3" class="anchored" data-anchor-id="identification"><span class="header-section-number">18.3</span> Identification</h2>
-<!-- differencing against a base alternative; scale normalization (fix one diagonal element); count the free parameters in Omega; why identification is subtler here than in ch 7 (McCulloch-Rossi treatment) -->
+<section id="identification-the-sternest-version-yet" class="level2" data-number="18.3">
+<h2 data-number="18.3" class="anchored" data-anchor-id="identification-the-sternest-version-yet"><span class="header-section-number">18.3</span> Identification: The Sternest Version Yet</h2>
+<p><a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a> established two facts about what choice data can reveal — only utility <em>differences</em> matter, and the <em>scale</em> of utility is arbitrary — and the MNL absorbed both with quiet normalizations (no common intercept; error variance fixed by convention). The MNP has to pay the same two taxes, but on a much larger taxable estate, because <span class="math inline">\(\Omega\)</span>’s <span class="math inline">\(J(J+1)/2\)</span> free-looking parameters are exactly where the unidentifiability hides. Walk it through for our <span class="math inline">\(J = 3\)</span> study; the logic is <span class="citation" data-cites="mcculloch1994">McCulloch and Rossi (<a href="references.html#ref-mcculloch1994" role="doc-biblioref">1994</a>)</span>’s, and it governs everything in the next two chapters.</p>
+<p><strong>Differences.</strong> Since only differences matter, subtract a base alternative’s utility — say the Acer’s — from the others. The data can only ever speak about the <em>differenced</em> system: two equations, with differenced attributes and a differenced error vector whose covariance is</p>
+<p><span id="eq-mnp-differencing"><span class="math display">\[
+\tilde\Omega = M \Omega M', \qquad
+M = \begin{pmatrix} -1 &amp; 1 &amp; 0 \\ -1 &amp; 0 &amp; 1 \end{pmatrix}
+\tag{18.3}\]</span></span></p>
+<p><span class="math inline">\(\tilde\Omega\)</span> is <span class="math inline">\(2 \times 2\)</span> symmetric: <strong>three</strong> numbers. The original <span class="math inline">\(\Omega\)</span> had six. Three whole dimensions of <span class="math inline">\(\Omega\)</span> are invisible to choice data — infinitely many <span class="math inline">\(\Omega\)</span>’s produce identical behavior. (This is the multivariate version of “a constant added to all utilities cancels”; adding any common noise to all three alternatives changes nothing.)</p>
+<p><strong>Scale.</strong> Multiply all utilities by <span class="math inline">\(\lambda &gt; 0\)</span>: choices unchanged, so one more dimension dies. Convention: fix the first diagonal of the differenced covariance, <span class="math inline">\(\tilde\omega_{11} = 1\)</span>. Two bookkeeping notes the next chapter leans on. First, from here on <span class="math inline">\(\tilde\Omega\)</span> means the differenced covariance <em>after</em> this normalization; its unnormalized cousin, raw <span class="math inline">\(M \Omega M'\)</span>, will reappear in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> under the name <span class="math inline">\(W\)</span> — the object the Gibbs sampler actually draws. Second, the scale tax hits <span class="math inline">\(\boldsymbol{\beta}\)</span> as well: dividing the differenced system by <span class="math inline">\(\sqrt{(M\Omega M')_{11}}\)</span> to enforce <span class="math inline">\(\tilde\omega_{11}=1\)</span> divides every utility, so what the data identify is <span class="math inline">\(\boldsymbol{\beta}/ \sqrt{(M\Omega M')_{11}}\)</span>, not <span class="math inline">\(\boldsymbol{\beta}\)</span> itself. Coefficients scale like utility; covariances like utility squared. Count what survives: $3 - 1 = $ <strong>two</strong> free covariance parameters for our three-alternative study. From six down to two — the MNP’s flexibility is real but far smaller than <span class="math inline">\(\Omega\)</span>’s dimensions suggest, and it shrinks further if you forget that each ASC also consumes <a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a>’s level normalization (our brand-labeled design carries <code>dell</code> and <code>apple</code> ASCs against the Acer base, exactly as in <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>).</p>
+<p>Why belabor this? Because unidentified parameters are the classic MNP implementation disaster, in both estimation routes. Hand an optimizer a likelihood written in terms of raw <span class="math inline">\(\Omega\)</span> and it wanders flat directions forever, “converging” wherever it likes (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>’s warnings, in their natural habitat); run a Gibbs sampler on raw <span class="math inline">\(\Omega\)</span> and the chain drifts happily along the unidentified ridge — traces that never settle, <span class="math inline">\(\widehat{R}\)</span> that never approaches 1 — <em>while the identified functions of the parameters mix beautifully</em>. The two routes of <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> handle this differently (the MLE route parameterizes only identified quantities; the Bayesian route samples the unidentified space and reports identified ratios, post-processed), and knowing the identified count in advance — <span class="math inline">\((J-1)J/2 - 1\)</span> covariance parameters — is how you audit either.</p>
 </section>
-<section id="binary-probit-as-a-warm-up" class="level2" data-number="18.4">
-<h2 data-number="18.4" class="anchored" data-anchor-id="binary-probit-as-a-warm-up"><span class="header-section-number">18.4</span> Binary Probit as a Warm-up</h2>
-<!-- closed form via pnorm(); MLE with ch 6's tools in a page; everything hard about MNP is about J > 2 -->
+<section id="warming-up-binary-probit-by-mle" class="level2" data-number="18.4">
+<h2 data-number="18.4" class="anchored" data-anchor-id="warming-up-binary-probit-by-mle"><span class="header-section-number">18.4</span> Warming Up: Binary Probit by MLE</h2>
+<p>For <span class="math inline">\(J = 2\)</span> everything is tractable, and it is worth thirty seconds to close a loop left open since <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>, where the binary probit was one changed line in the simulator. Its choice probability is <span class="math inline">\(\Phi(\mathbf{x}'\boldsymbol{\beta})\)</span> (error scale fixed at 1 — the scale tax, paid), its log-likelihood mirrors <a href="05_likelihood.html#eq-binlogit-loglik" class="quarto-xref">Equation&nbsp;<span>5.5</span></a> with <code>pnorm</code> in place of <code>plogis</code>, and Part I’s machinery does the rest:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">180</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="fl">0.8</span>, <span class="fl">2.4</span>); ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta_true) <span class="sc">+</span> <span class="fu">rnorm</span>(N) <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>loglik_bprobit <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    P <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(y <span class="sc">*</span> <span class="fu">log</span>(P) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> y) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> P))</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), loglik_bprobit, <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth =</span> beta_true, <span class="at">est =</span> fit<span class="sc">$</span>par,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">se =</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit<span class="sc">$</span>hessian)))), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]   [,2]  [,3]
+truth 1.000 -1.200 0.600
+est   1.049 -1.220 0.623
+se    0.081  0.052 0.045</code></pre>
+</div>
+</div>
+<p>Recovery, no drama — and compare with <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s Albert–Chib sampler on data of exactly this form: two estimation philosophies already agree on the binary case. Everything difficult about the MNP is about <span class="math inline">\(J &gt; 2\)</span>: the moment a <em>matrix</em> of error covariances exists, <a href="#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a> stops being <code>pnorm</code> and identification stops being automatic.</p>
 </section>
 <section id="simulating-mnp-data" class="level2" data-number="18.5">
 <h2 data-number="18.5" class="anchored" data-anchor-id="simulating-mnp-data"><span class="header-section-number">18.5</span> Simulating MNP Data</h2>
-<!-- multivariate normal errors via ch 2's Cholesky; verify substitution patterns respond to Omega -->
+<p>Simulation, as usual, is the easy direction — the integral of <a href="#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a> never appears, because we run the <em>mechanics</em> (draw errors, add, argmax), not the probabilities. The errors are multivariate normal, so <a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a>’s Cholesky transformation is the whole trick. We give the truth the OS-correlation story: Acer and Dell errors correlated at <span class="math inline">\(0.6\)</span>, Apple independent, unit variances —</p>
+<p><span id="eq-omega-true"><span class="math display">\[
+\Omega^\ast = \begin{pmatrix} 1 &amp; 0.6 &amp; 0 \\ 0.6 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 1 \end{pmatrix}
+\tag{18.4}\]</span></span></p>
+<p>— with the usual attribute coefficients and brand ASCs (<a href="07_mnl.html#eq-beta-true" class="quarto-xref">Equation&nbsp;<span>7.6</span></a>’s values, now interpreted against normal-scale errors<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sim_mnp_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, beta, Omega) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">id    =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T <span class="sc">*</span> J),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">task  =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt   =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>, <span class="st">"Dell"</span>, <span class="st">"Apple"</span>), <span class="at">times =</span> N <span class="sc">*</span> T),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>, <span class="st">"Dell"</span>, <span class="st">"Apple"</span>)),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram   =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>), <span class="dv">2</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> alt <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    L   <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Omega))                       <span class="co"># @sec-mvnorm</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(L <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_rows), <span class="at">nrow =</span> J))  <span class="co"># J x (N*T), stacked back</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    U   <span class="ot">&lt;-</span> V <span class="sc">+</span> eps</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">181</span>)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>beta_true  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>                <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>Omega_true <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.6</span>, <span class="dv">0</span>,</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>                       <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">0</span>,</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>                       <span class="dv">0</span>,   <span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>mnp <span class="ot">&lt;-</span> <span class="fu">sim_mnp_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">beta =</span> beta_true, <span class="at">Omega =</span> Omega_true)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="do">## save for the estimation chapters</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="fu">list</span>(<span class="at">data =</span> mnp, <span class="at">beta_true =</span> beta_true, <span class="at">Omega_true =</span> Omega_true),</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">file =</span> <span class="st">"../data/mnp_study.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>One line rewards a careful look: the error draw reshapes the row vector into a <span class="math inline">\(3 \times (NT)\)</span> matrix so that <em>each task’s three errors</em> — one column — get the <span class="math inline">\(L\)</span> transformation as a unit, then stacks back to row order. Correlation lives <em>within</em> tasks, independence <em>across</em> them: the covariance structure of <a href="#eq-mnp-model" class="quarto-xref">Equation&nbsp;<span>18.1</span></a>, implemented in the shape of the data (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>’s sort contract doing silent work — <code>alt</code> varies fastest, so columns are tasks).</p>
+<p>The usual battery, plus one check specific to this model. Marginals and directions first:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>chosen <span class="ot">&lt;-</span> mnp[mnp<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">prop.table</span>(<span class="fu">table</span>(chosen<span class="sc">$</span>alt)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+ Acer  Dell Apple 
+0.152 0.298 0.550 </code></pre>
+</div>
+</div>
+<p>Apple leads, Acer trails — the ASC ordering, as always. Now the check that matters: <em>is the error correlation visible in behavior?</em> Under IIA-obeying errors, how often a shopper’s second-favorite brand is the other same-OS machine wouldn’t depend on error correlation; under <a href="#eq-omega-true" class="quarto-xref">Equation&nbsp;<span>18.4</span></a> it should. A sharper, simpler signature: compare the joint frequency that the two Windows machines <em>both</em> beat Apple against what independent errors would produce. Cheapest of all — lean on the model directly: recompute choice shares after deleting the Dell from every task, using fresh simulations, and watch where its share goes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">182</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sim_shares <span class="ot">&lt;-</span> <span class="cf">function</span>(Omega, <span class="at">drop_dell =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="do">## one standardized task: identical specs, $1.5k each</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    X_task <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">acer =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">1.5</span>), <span class="at">dell =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">1.5</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">apple =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">1.5</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    keep <span class="ot">&lt;-</span> <span class="cf">if</span> (drop_dell) <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>) <span class="cf">else</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X_task <span class="sc">%*%</span> beta_true)[keep]</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Omega[keep, keep, <span class="at">drop =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="dv">200000</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> L <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="fu">length</span>(keep) <span class="sc">*</span> R), <span class="at">nrow =</span> <span class="fu">length</span>(keep))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tabulate</span>(<span class="fu">max.col</span>(<span class="fu">t</span>(V <span class="sc">+</span> eps)), <span class="fu">length</span>(keep)) <span class="sc">/</span> R</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>before <span class="ot">&lt;-</span> <span class="fu">sim_shares</span>(Omega_true)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>after  <span class="ot">&lt;-</span> <span class="fu">sim_shares</span>(Omega_true, <span class="at">drop_dell =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">before =</span> <span class="fu">round</span>(<span class="fu">setNames</span>(before, <span class="fu">c</span>(<span class="st">"acer"</span>,<span class="st">"dell"</span>,<span class="st">"apple"</span>)), <span class="dv">3</span>),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">after  =</span> <span class="fu">round</span>(<span class="fu">setNames</span>(after, <span class="fu">c</span>(<span class="st">"acer"</span>,<span class="st">"apple"</span>)), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$before
+ acer  dell apple 
+0.106 0.299 0.595 
+
+$after
+ acer apple 
+ 0.24  0.76 </code></pre>
+</div>
+</div>
+<p>Delete the Dell and its customers flow <em>disproportionately to the Acer</em> — the correlated-error sibling — not proportionally as MNL arithmetic would insist. The red-bus/blue-bus pathology of <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>, cured by two off-diagonal numbers. (Run <code>sim_shares(diag(3))</code> and the flow turns proportional: the cure really is the correlation, not the normality.)</p>
 </section>
 <section id="the-estimation-problem-ahead" class="level2" data-number="18.6">
 <h2 data-number="18.6" class="anchored" data-anchor-id="the-estimation-problem-ahead"><span class="header-section-number">18.6</span> The Estimation Problem Ahead</h2>
-<!-- evaluating the choice probability IS the obstacle; two roads: simulate the integral inside MLE (ch 19, route 1) or never compute it at all via data augmentation (ch 19, route 2) -->
+<p>Take stock of the asymmetry we have manufactured. Simulating MNP choices: eight lines, all of them Part I material. Estimating MNP parameters: the likelihood needs <a href="#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a> — an integral we can only approximate — once per task per candidate parameter, inside an optimizer that will make thousands of candidate visits. <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>’s playbook applies but needs an unbiased, <em>smooth</em> simulator of an orthant probability, which is a subtler object than the mixed logit’s average-of-closed-forms; building one (GHK, from <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>’s truncated normals) is half of <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>.</p>
+<p>The other half never touches the integral. <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s Albert–Chib logic generalizes: conditional on the <em>latent utilities</em>, the MNP is just seemingly-related regressions with normal errors — conjugate territory — and conditional on parameters and the observed choice, each task’s utilities are a multivariate normal truncated to the region where the chosen alternative wins. Draw utilities, draw parameters, repeat: the intractable integral is dissolved into truncated normal draws, at scale, with the identification post-processing that <span class="citation" data-cites="mcculloch1994">McCulloch and Rossi (<a href="references.html#ref-mcculloch1994" role="doc-biblioref">1994</a>)</span> made standard. Two routes, one model, next chapter.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="18.7">
 <h2 data-number="18.7" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">18.7</span> Key Learnings</h2>
+<ul>
+<li>The MNP replaces Gumbel errors with <span class="math inline">\(N(\mathbf{0}, \Omega)\)</span>, <span class="math inline">\(\Omega\)</span> free (<a href="#eq-mnp-model" class="quarto-xref">Equation&nbsp;<span>18.1</span></a>): substitution patterns are <em>estimated in the error covariance</em> rather than specified in nests or proxied by random coefficients. No IIA anywhere — our deletion experiment showed Dell’s share flowing to its correlated sibling, disproportionately.</li>
+<li>The choice probability (<a href="#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a>) is a <span class="math inline">\((J-1)\)</span>-dimensional normal orthant integral: closed-form at <span class="math inline">\(J=2\)</span> (<code>pnorm</code>), numerical at <span class="math inline">\(J=3\)</span>, and the central obstacle beyond. Everything in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> is a strategy for living with it.</li>
+<li>Identification is unforgiving: differencing kills <span class="math inline">\(J\)</span> of <span class="math inline">\(\Omega\)</span>’s dimensions, scale kills one more, leaving <span class="math inline">\((J-1)J/2 - 1\)</span> free covariance parameters (two, for our study). Unidentified MNP parameterizations produce optimizers that wander and samplers that never converge — count before you code.</li>
+<li>Simulation needed none of it: Cholesky-correlated errors within tasks (shaped by the data’s sort contract), argmax, done — plus a saved answer key including <span class="math inline">\(\Omega^\ast\)</span> for the recovery tests ahead.</li>
+<li>Two estimation routes await: simulate the integral inside MSL (GHK), or augment it away entirely (truncated normals + Bayesian regression). The capstone comparison of the book’s two estimation philosophies, on one model.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcculloch1994" class="csl-entry" role="listitem">
+McCulloch, Robert, and Peter E. Rossi. 1994. <span>“An Exact Likelihood Analysis of the Multinomial Probit Model.”</span> <em>Journal of Econometrics</em> 64 (1–2): 207–40.
+</div>
+<div id="ref-mcfaddentrain2000" class="csl-entry" role="listitem">
+McFadden, Daniel, and Kenneth Train. 2000. <span>“Mixed MNL Models for Discrete Response.”</span> <em>Journal of Applied Econometrics</em> 15 (5): 447–70.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The mixed logit already offered estimated substitution flexibility, and <span class="citation" data-cites="mcfaddentrain2000">McFadden and Train (<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">2000</a>)</span>’s theorem says it can mimic the MNP arbitrarily well — so why bother? Three honest answers: the MNP puts the flexibility exactly where the story says it lives (the error covariance) rather than asking random coefficients to proxy for it; its Bayesian treatment (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>) is startlingly clean, with <em>no tuning at all</em>; and its identification lessons are the sternest in choice modeling — rite-of-passage material.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Alert readers of <a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a> will note the scale subtlety: coefficients against unit-normal errors are not numerically comparable to the same values against Gumbel errors. We reuse the familiar numbers for continuity; they simply <em>mean</em> slightly different signal-to-noise here. The recovery checks below compare against the correctly transformed identified quantities, which is the only comparison the data license.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

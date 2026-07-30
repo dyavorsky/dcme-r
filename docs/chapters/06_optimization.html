@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -340,13 +423,13 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#climbing-a-hill-you-cannot-see" id="toc-climbing-a-hill-you-cannot-see" class="nav-link active" data-scroll-target="#climbing-a-hill-you-cannot-see"><span class="header-section-number">6.1</span> Climbing a Hill You Cannot See</a></li>
-  <li><a href="#newton-raphson" id="toc-newton-raphson" class="nav-link" data-scroll-target="#newton-raphson"><span class="header-section-number">6.2</span> Newton-Raphson</a></li>
-  <li><a href="#quasi-newton-methods-bhhh-and-bfgs" id="toc-quasi-newton-methods-bhhh-and-bfgs" class="nav-link" data-scroll-target="#quasi-newton-methods-bhhh-and-bfgs"><span class="header-section-number">6.3</span> Quasi-Newton Methods: BHHH and BFGS</a></li>
+  <li><a href="#newtonraphson" id="toc-newtonraphson" class="nav-link" data-scroll-target="#newtonraphson"><span class="header-section-number">6.2</span> Newton–Raphson</a></li>
+  <li><a href="#the-quasi-newton-family-bhhh-and-bfgs" id="toc-the-quasi-newton-family-bhhh-and-bfgs" class="nav-link" data-scroll-target="#the-quasi-newton-family-bhhh-and-bfgs"><span class="header-section-number">6.3</span> The Quasi-Newton Family: BHHH and BFGS</a></li>
   <li><a href="#numerical-derivatives" id="toc-numerical-derivatives" class="nav-link" data-scroll-target="#numerical-derivatives"><span class="header-section-number">6.4</span> Numerical Derivatives</a></li>
-  <li><a href="#rs-optimizers" id="toc-rs-optimizers" class="nav-link" data-scroll-target="#rs-optimizers"><span class="header-section-number">6.5</span> R’s Optimizers</a></li>
+  <li><a href="#rs-optimizers-optim" id="toc-rs-optimizers-optim" class="nav-link" data-scroll-target="#rs-optimizers-optim"><span class="header-section-number">6.5</span> R’s Optimizers: <code>optim()</code></a></li>
   <li><a href="#standard-errors-from-the-hessian" id="toc-standard-errors-from-the-hessian" class="nav-link" data-scroll-target="#standard-errors-from-the-hessian"><span class="header-section-number">6.6</span> Standard Errors from the Hessian</a></li>
   <li><a href="#practical-realities" id="toc-practical-realities" class="nav-link" data-scroll-target="#practical-realities"><span class="header-section-number">6.7</span> Practical Realities</a></li>
-  <li><a href="#end-to-end-simulate-estimate-recover" id="toc-end-to-end-simulate-estimate-recover" class="nav-link" data-scroll-target="#end-to-end-simulate-estimate-recover"><span class="header-section-number">6.8</span> End-to-End: Simulate, Estimate, Recover</a></li>
+  <li><a href="#the-complete-loop-end-to-end" id="toc-the-complete-loop-end-to-end" class="nav-link" data-scroll-target="#the-complete-loop-end-to-end"><span class="header-section-number">6.8</span> The Complete Loop, End to End</a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">6.9</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/06_optimization.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -373,43 +456,291 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 8 (Newton-Raphson/BHHH/BFGS with step-size logic); Hess & Daly Ch 21 (Bunch: definitive frequentist optimization survey) -->
+<p><a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a> left us standing at the base of a hill. The log-likelihood <span class="math inline">\(\ell(\boldsymbol{\beta})\)</span> is a surface over the parameter space; the MLE is its summit; and grid search — visiting every location and comparing altitudes — dies exponentially as the space grows dimensions. This chapter builds the climber. The methods here are not specific to choice models; they are the general machinery for maximizing smooth functions, and mastering them pays off every time you write down a new model with a computable likelihood — which is to say, for the rest of this book and the rest of your research life.</p>
+<p>A note on ambition before we start. R ships with excellent optimizers, and by the chapter’s end we will happily hand our work to <code>optim()</code>. But we first build Newton’s method by hand, for the same reason this book simulates before it estimates: optimizers are the least inspectable link in the estimation chain — data goes in, numbers come out, and when something goes wrong (“convergence code 1”?) the black box offers no comfort. Twenty lines of your own Newton iteration make the box transparent forever.</p>
 <section id="climbing-a-hill-you-cannot-see" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="climbing-a-hill-you-cannot-see"><span class="header-section-number">6.1</span> Climbing a Hill You Cannot See</h2>
-<!-- iterative ascent: current position, direction, step size; all methods differ only in how they pick direction and step -->
+<p>Picture standing on the log-likelihood surface in fog. You cannot see the summit; you can only <em>feel the ground at your feet</em> — evaluate <span class="math inline">\(\ell\)</span>, and its derivatives, at your current position. Every practical method is a loop built from that local information:</p>
+<ol type="1">
+<li>From the current position <span class="math inline">\(\boldsymbol{\beta}^{(i)}\)</span>, choose a <strong>direction</strong> <span class="math inline">\(\mathbf{d}_i\)</span>.</li>
+<li>Choose a <strong>step size</strong> <span class="math inline">\(\lambda_i\)</span>.</li>
+<li>Move: <span class="math inline">\(\boldsymbol{\beta}^{(i+1)} = \boldsymbol{\beta}^{(i)} + \lambda_i \mathbf{d}_i\)</span>. Repeat until no direction goes up.</li>
+</ol>
+<p>(The parenthesized superscript counts iterations, just as <span class="math inline">\(\varepsilon^{(r)}\)</span> counted draws in <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>; subscripts on <span class="math inline">\(\boldsymbol{\beta}\)</span> stay reserved for its elements, <span class="math inline">\(\beta_k\)</span>.)</p>
+<p>The score <span class="math inline">\(s(\boldsymbol{\beta})\)</span> — the gradient from <a href="05_likelihood.html#eq-score" class="quarto-xref">Equation&nbsp;<span>5.7</span></a> — feels the slope, and pointing straight uphill (<span class="math inline">\(\mathbf{d}_i = s(\boldsymbol{\beta}^{(i)})\)</span>, <em>steepest ascent</em>) seems natural. It is also famously inefficient: on the elongated, tilted contours we saw in <a href="05_likelihood.html#fig-loglik-2d" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>, steepest ascent zigzags across the narrow axis of the valley, inching along its length. The cure is to consult not just the slope but the <em>curvature</em>, and that idea has a name.</p>
 </section>
-<section id="newton-raphson" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="newton-raphson"><span class="header-section-number">6.2</span> Newton-Raphson</h2>
-<!-- derive from the quadratic approximation; code it by hand for the binary logit; watch the iterates converge -->
+<section id="newtonraphson" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="newtonraphson"><span class="header-section-number">6.2</span> Newton–Raphson</h2>
+<p>Approximate the surface near the current position by its second-order Taylor expansion — a quadratic bowl (inverted) with the same slope and curvature:</p>
+<p><span id="eq-taylor"><span class="math display">\[
+\ell(\boldsymbol{\beta}) \approx \ell(\boldsymbol{\beta}^{(i)}) + s_i'(\boldsymbol{\beta}- \boldsymbol{\beta}^{(i)}) + \tfrac{1}{2} (\boldsymbol{\beta}- \boldsymbol{\beta}^{(i)})' H_i \, (\boldsymbol{\beta}- \boldsymbol{\beta}^{(i)})
+\tag{6.1}\]</span></span></p>
+<p>where <span class="math inline">\(s_i\)</span> and <span class="math inline">\(H_i\)</span> are the score and Hessian at <span class="math inline">\(\boldsymbol{\beta}^{(i)}\)</span>. A quadratic we can maximize <em>exactly</em>: setting the derivative <span class="math inline">\(s_i + H_i(\boldsymbol{\beta}- \boldsymbol{\beta}^{(i)})\)</span> to zero gives the <strong>Newton–Raphson step</strong></p>
+<p><span id="eq-newton"><span class="math display">\[
+\boldsymbol{\beta}^{(i+1)} = \boldsymbol{\beta}^{(i)} - H_i^{-1} s_i
+\tag{6.2}\]</span></span></p>
+<p>Jump directly to the top of the local quadratic model, re-fit the model there, jump again. Where the surface really is quadratic, one step lands on the summit; where it is merely smooth, convergence near the optimum is <em>quadratic</em> — roughly, the number of correct digits doubles per iteration. Compare <a href="#eq-newton" class="quarto-xref">Equation&nbsp;<span>6.2</span></a> with steepest ascent: multiplying the score by <span class="math inline">\(-H_i^{-1}\)</span> rotates and rescales the uphill direction, exactly correcting for the tilted, elongated contours that make steepest ascent zigzag. And notice a happy economy: <span class="math inline">\(-H^{-1}\)</span> evaluated at the <em>last</em> step is exactly the covariance estimate <a href="05_likelihood.html#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a> requires (up to the sign, the algorithm’s machinery and the inference machinery are the same matrix).</p>
+<p>To implement Newton for the binary logit, we need its score and Hessian analytically. The score we derived as <a href="05_likelihood.html#eq-binlogit-score" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>: <span class="math inline">\(s(\boldsymbol{\beta}) = \mathbf{X}'(\mathbf{y}- \mathbf{P})\)</span>. One more differentiation — only <span class="math inline">\(\mathbf{P}\)</span> depends on <span class="math inline">\(\boldsymbol{\beta}\)</span>, and <span class="math inline">\(\partial P_n / \partial \boldsymbol{\beta}= P_n(1-P_n)\mathbf{x}_n\)</span> — gives</p>
+<p><span id="eq-binlogit-hessian"><span class="math display">\[
+H(\boldsymbol{\beta}) = -\sum_{n=1}^{N} P_n (1 - P_n) \, \mathbf{x}_n \mathbf{x}_n' = -\mathbf{X}' W \mathbf{X}
+\tag{6.3}\]</span></span></p>
+<p>with <span class="math inline">\(W = \mathrm{diag}\big(P_n(1-P_n)\big)\)</span>. Note <span class="math inline">\(H\)</span> is negative definite everywhere — the binary logit’s log-likelihood is globally concave, one peak and no traps, which is part of why it makes such a good training ground.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Here is the whole algorithm; the loop body is <a href="#eq-newton" class="quarto-xref">Equation&nbsp;<span>6.2</span></a> verbatim:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>newton_binary <span class="ot">&lt;-</span> <span class="cf">function</span>(beta0, y, X, <span class="at">tol =</span> <span class="fl">1e-10</span>, <span class="at">max_iter =</span> <span class="dv">25</span>) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> beta0</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    path <span class="ot">&lt;-</span> <span class="fu">list</span>(beta)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        P <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta))       <span class="co"># P_n for all n</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        s <span class="ot">&lt;-</span> <span class="fu">crossprod</span>(X, y <span class="sc">-</span> P)                 <span class="co"># score:   X'(y - P)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">crossprod</span>(X <span class="sc">*</span> (P <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> P)), X)    <span class="co"># hessian: -X' W X</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        step <span class="ot">&lt;-</span> <span class="fu">solve</span>(H, s)                      <span class="co"># H^{-1} s without inverting</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        beta <span class="ot">&lt;-</span> beta <span class="sc">-</span> <span class="fu">as.vector</span>(step)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        path[[i <span class="sc">+</span> <span class="dv">1</span>]] <span class="ot">&lt;-</span> beta</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (<span class="fu">max</span>(<span class="fu">abs</span>(step)) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">beta =</span> beta, <span class="at">hessian =</span> H, <span class="at">iterations =</span> i,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">path =</span> <span class="fu">do.call</span>(rbind, path))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Three implementation notes. <code>plogis()</code> computes the logistic CDF — i.e., our choice probability — more stably than <code>exp(v)/(1+exp(v))</code>. <code>crossprod(X, v)</code> is <span class="math inline">\(\mathbf{X}'v\)</span> done efficiently, and multiplying <code>X</code> by the weight vector row-wise builds <span class="math inline">\(\mathbf{X}'W\mathbf{X}\)</span> without materializing the <span class="math inline">\(N \times N\)</span> diagonal matrix — a <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a> habit arriving early. And <code>solve(H, s)</code> computes <span class="math inline">\(H^{-1}s\)</span> by solving the linear system directly, which is both faster and numerically sounder than forming the inverse.</p>
+<p>Simulate data (the <a href="03_simdata.html#sec-sim-function" class="quarto-xref"><span>Section 3.4</span></a> generator once more) and release the climber from a deliberately poor start:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sim_binary_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, beta, <span class="at">X =</span> <span class="cn">NULL</span>,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">dist =</span> <span class="fu">c</span>(<span class="st">"logistic"</span>, <span class="st">"normal"</span>)) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    dist <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(dist)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(X)) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>        X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="cf">switch</span>(dist, <span class="at">logistic =</span> <span class="fu">rlogis</span>(N), <span class="at">normal =</span> <span class="fu">rnorm</span>(N))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">as.integer</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>), X[, <span class="sc">-</span><span class="dv">1</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">60</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">beta =</span> beta_true)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> d<span class="sc">$</span>y</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, d<span class="sc">$</span>price, d<span class="sc">$</span>ram16)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>fit_nr <span class="ot">&lt;-</span> <span class="fu">newton_binary</span>(<span class="at">beta0 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">y =</span> y, <span class="at">X =</span> X)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>fit_nr<span class="sc">$</span>iterations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(fit_nr<span class="sc">$</span>path, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       [,1]    [,2]   [,3]
+[1,] 0.0000  0.0000 0.0000
+[2,] 1.3357 -1.2783 0.5092
+[3,] 1.5124 -1.4536 0.5929
+[4,] 1.5198 -1.4610 0.5966
+[5,] 1.5198 -1.4610 0.5967
+[6,] 1.5198 -1.4610 0.5967</code></pre>
+</div>
+</div>
+<p>Six iterations from the origin to ten-digit convergence, and the path table shows the promised acceleration: the first step covers most of the distance, and the final steps change digits far beyond anything of statistical interest. The quadratic-convergence signature — correct digits roughly doubling — is visible down the columns. Seen on the contour map:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>loglik_binary_vec <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X) {   <span class="co"># vectorized; loop version in @sec-likelihood</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(y<span class="sc">*</span>v <span class="sc">-</span> <span class="fu">log1p</span>(<span class="fu">exp</span>(v)))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">b0 =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.5</span>, <span class="dv">2</span>, <span class="at">length.out =</span> <span class="dv">80</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">bp =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">2.4</span>, <span class="fl">0.4</span>, <span class="at">length.out =</span> <span class="dv">80</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">$</span>ll <span class="ot">&lt;-</span> <span class="fu">mapply</span>(<span class="cf">function</span>(b0, bp)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loglik_binary_vec</span>(<span class="fu">c</span>(b0, bp, fit_nr<span class="sc">$</span>beta[<span class="dv">3</span>]), y, X), grid<span class="sc">$</span>b0, grid<span class="sc">$</span>bp)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">b0 =</span> fit_nr<span class="sc">$</span>path[, <span class="dv">1</span>], <span class="at">bp =</span> fit_nr<span class="sc">$</span>path[, <span class="dv">2</span>])</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grid, <span class="fu">aes</span>(b0, bp)) <span class="sc">+</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_contour</span>(<span class="fu">aes</span>(<span class="at">z =</span> ll), <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">color =</span> <span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(<span class="at">data =</span> path, <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">"cm"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> path, <span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(beta[<span class="dv">0</span>]), <span class="at">y =</span> <span class="fu">expression</span>(beta[price]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-newton-path" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-newton-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="06_optimization_files/figure-html/fig-newton-path-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-newton-path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: Newton-Raphson’s path from the origin across the log-likelihood contours (intercept and price coefficient shown; the memory coefficient also updates each step). Each jump maximizes the local quadratic model of the surface.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>(The figure’s helper sneaks in the vectorized log-likelihood, because plotting 6,400 grid points with <a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a>’s loop version tries one’s patience. Why is <code>y*v - log1p(exp(v))</code> the same function? With <span class="math inline">\(v_n = \mathbf{x}_n'\boldsymbol{\beta}\)</span>: <span class="math inline">\(\log P_n = v_n - \log(1+e^{v_n})\)</span> and <span class="math inline">\(\log(1-P_n) = -\log(1+e^{v_n})\)</span>, so <span class="math inline">\(y_n \log P_n + (1-y_n)\log(1-P_n) = y_n v_n - \log(1+e^{v_n})\)</span>. The rewrite avoids computing <span class="math inline">\(P_n\)</span> at all, and <code>log1p()</code> evaluates <span class="math inline">\(\log(1+e^v)\)</span> accurately when <span class="math inline">\(e^v\)</span> is tiny — the full stability story waits for <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>.)</p>
 </section>
-<section id="quasi-newton-methods-bhhh-and-bfgs" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="quasi-newton-methods-bhhh-and-bfgs"><span class="header-section-number">6.3</span> Quasi-Newton Methods: BHHH and BFGS</h2>
-<!-- avoiding the Hessian: outer product of scores (BHHH), secant updates (BFGS); when each is appropriate (DCMS Ch 8) -->
+<section id="the-quasi-newton-family-bhhh-and-bfgs" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="the-quasi-newton-family-bhhh-and-bfgs"><span class="header-section-number">6.3</span> The Quasi-Newton Family: BHHH and BFGS</h2>
+<p>Newton’s appetite is the Hessian: <span class="math inline">\(K(K+1)/2\)</span> second derivatives, re-derived analytically for every new model. For the binary logit that was a pleasure; for the mixed logit of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> it is a punishment. The <em>quasi-Newton</em> methods keep Newton’s step structure but replace <span class="math inline">\(H\)</span> with a cheaper stand-in, and two members of the family matter for us [DCMS Ch. 8 surveys more, including step-size strategies we gloss over; <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>].</p>
+<p><strong>BHHH</strong> exploits a statistical identity: at the true parameters, the expected outer product of per-observation scores equals the information matrix (the negative expected Hessian). So sum the outer products of the observation-level score contributions — quantities the score calculation already produces. Write <span class="math inline">\(s_n(\boldsymbol{\beta})\)</span> for observation <span class="math inline">\(n\)</span>’s contribution to the score, so that <span class="math inline">\(s(\boldsymbol{\beta}) = \sum_n s_n(\boldsymbol{\beta})\)</span> — for the binary logit, <span class="math inline">\(s_n(\boldsymbol{\beta}) = (y_n - P_n)\mathbf{x}_n\)</span>, the individual terms of <a href="05_likelihood.html#eq-binlogit-score" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>. BHHH uses</p>
+<p><span id="eq-bhhh"><span class="math display">\[
+\hat{H}_{\textrm{BHHH}} = -\sum_{n=1}^{N} s_n(\boldsymbol{\beta}) \, s_n(\boldsymbol{\beta})'
+\tag{6.4}\]</span></span></p>
+<p>No second derivatives at all, and the approximation is guaranteed negative (semi-)definite, so the step always points uphill. The catch: the identity holds <em>at the truth, in expectation, for a correctly specified model</em> — far from the optimum or under misspecification, BHHH’s picture of the curvature can be poor and its steps clumsy.</p>
+<p><strong>BFGS</strong>, the default workhorse of numerical optimization, builds its Hessian substitute from the optimization’s own history: each iteration’s change in the gradient, compared against the step taken, reveals one slice of curvature, and BFGS accumulates these slices into a running approximation — start with something crude (the identity matrix), let every step teach you a little more geometry. It needs only gradients, tolerates imperfect ones, and converges nearly as fast as true Newton in practice. When we call <code>optim()</code> below, BFGS is what we ask for.</p>
 </section>
 <section id="numerical-derivatives" class="level2" data-number="6.4">
 <h2 data-number="6.4" class="anchored" data-anchor-id="numerical-derivatives"><span class="header-section-number">6.4</span> Numerical Derivatives</h2>
-<!-- finite differences; step-size pitfalls (Bunch); verifying analytic gradients numerically -- a habit we keep all book -->
+<p>Quasi-Newton methods still want the <em>gradient</em>, and deriving even first derivatives analytically becomes real work as models grow. The fallback is numerical differentiation: the definition of the derivative, executed with a small but finite <span class="math inline">\(h\)</span>,</p>
+<p><span id="eq-central-diff"><span class="math display">\[
+\frac{\partial \ell}{\partial \beta_k} \approx \frac{\ell(\boldsymbol{\beta}+ h\,\mathbf{e}_k) - \ell(\boldsymbol{\beta}- h\,\mathbf{e}_k)}{2h}
+\tag{6.5}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{e}_k\)</span> is the <span class="math inline">\(k\)</span>-th standard basis vector — all zeros except a 1 in position <span class="math inline">\(k\)</span>, so the perturbation nudges one coordinate at a time (the <em>central</em> difference; the one-sided version is half as accurate for the same cost). (This <span class="math inline">\(h\)</span> is the step size of numerical analysis, no relation to the behavioral rule <span class="math inline">\(h\)</span> of <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>.) Coding it is a five-line loop over coordinates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>num_grad <span class="ot">&lt;-</span> <span class="cf">function</span>(fn, beta, <span class="at">h =</span> <span class="fl">1e-6</span>, ...) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    g <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="fu">length</span>(beta))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> <span class="fu">seq_along</span>(beta)) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        e    <span class="ot">&lt;-</span> <span class="fu">replace</span>(<span class="fu">numeric</span>(<span class="fu">length</span>(beta)), k, h)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        g[k] <span class="ot">&lt;-</span> (<span class="fu">fn</span>(beta <span class="sc">+</span> e, ...) <span class="sc">-</span> <span class="fu">fn</span>(beta <span class="sc">-</span> e, ...)) <span class="sc">/</span> (<span class="dv">2</span><span class="sc">*</span>h)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    g</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Choosing <span class="math inline">\(h\)</span> is a genuine tension, not a formality: too large and the secant misrepresents the slope (truncation error); too small and you subtract two nearly equal numbers, amplifying floating-point noise (roundoff error). The engineering compromise near <span class="math inline">\(h \approx 10^{-6}\)</span> works for well-scaled problems, but “well-scaled” is doing real work in that sentence — one more reason parameter scaling (below) matters. <span class="citation" data-cites="hessdaly2024">Hess and Daly (<a href="references.html#ref-hessdaly2024" role="doc-biblioref">2024</a>)</span>’s optimization chapter (Bunch) treats these pitfalls with the care they deserve.</p>
+<p>Numerical gradients also settle a debt. In <a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a> I asserted the elegant score formula <span class="math inline">\(s(\boldsymbol{\beta}) = \mathbf{X}'(\mathbf{y}- \mathbf{P})\)</span>; we can now audit the algebra:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>beta_test <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">0.8</span>, <span class="fl">0.2</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">plogis</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta_test))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>analytic <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">crossprod</span>(X, y <span class="sc">-</span> P))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>numeric  <span class="ot">&lt;-</span> <span class="fu">num_grad</span>(loglik_binary_vec, beta_test, <span class="at">y =</span> y, <span class="at">X =</span> X)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(analytic, numeric)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             [,1]     [,2]     [,3]
+analytic 21.62871 19.85474 20.87288
+numeric  21.62871 19.85474 20.87288</code></pre>
+</div>
+</div>
+<p>Agreement to six decimals. Make this check a reflex: <em>every</em> analytic gradient in this book — and every one you ever derive — gets verified against <a href="#eq-central-diff" class="quarto-xref">Equation&nbsp;<span>6.5</span></a> before it is trusted. It is the cheapest insurance in computational statistics; a silent sign error in a gradient produces optimizers that limp, wander, or confidently stop at nonsense, and none of those symptoms names its cause.</p>
 </section>
-<section id="rs-optimizers" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="rs-optimizers"><span class="header-section-number">6.5</span> R’s Optimizers</h2>
-<!-- optim() (methods, control, hessian=TRUE), nlm(), maxLik; reading convergence codes; why we mostly use optim(method="BFGS") -->
+<section id="rs-optimizers-optim" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="rs-optimizers-optim"><span class="header-section-number">6.5</span> R’s Optimizers: <code>optim()</code></h2>
+<p>With the concepts in hand, we can read R’s general-purpose optimizer fluently. <code>optim()</code> wants a starting value, a function, optionally a gradient, and a method. Two conventions need deciding once:</p>
+<ul>
+<li><em>Minimize or maximize?</em> <code>optim()</code> minimizes by default. Some authors therefore write negative log-likelihoods everywhere; I find that a standing invitation to sign errors. We keep writing log-likelihoods — the statistically meaningful object — and pass <code>control = list(fnscale = -1)</code>, which tells <code>optim()</code> to maximize.</li>
+<li><em>Which method?</em> <code>method = "BFGS"</code> for the reasons above. (Derivative-free Nelder–Mead, the default, is a robust fallback when gradients are treacherous; we will want it exactly once, and I will flag it.)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par     =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">fn      =</span> loglik_binary_vec,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> y, <span class="at">X =</span> X,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">method  =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span>par</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  1.5197645 -1.4610247  0.5966551</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fit<span class="sc">$</span>convergence</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>Reading the output: <code>par</code> is <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span>; <code>value</code> is <span class="math inline">\(\ell(\hat{\boldsymbol{\beta}})\)</span>; <code>convergence</code> of <code>0</code> means the algorithm believes it finished (anything else is a warning label, not a result<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>); and <code>hessian = TRUE</code> asks for a numerically differentiated Hessian at the solution — our inference input. Compare the two climbers:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">newton =</span> fit_nr<span class="sc">$</span>beta, <span class="at">bfgs =</span> fit<span class="sc">$</span>par, <span class="at">truth =</span> beta_true)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]      [,2]      [,3]
+newton 1.519774 -1.461030 0.5966501
+bfgs   1.519764 -1.461025 0.5966551
+truth  1.000000 -1.200000 0.6000000</code></pre>
+</div>
+</div>
+<p>Identical to four decimals (Newton and BFGS found the same summit — there is only one) and near the truth (recovery, once again). We did not supply a gradient, so BFGS differentiated numerically behind the scenes; passing our analytic <code>gr</code> speeds things up and tightens convergence, and we will do so for the MNL in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>.</p>
 </section>
 <section id="standard-errors-from-the-hessian" class="level2" data-number="6.6">
 <h2 data-number="6.6" class="anchored" data-anchor-id="standard-errors-from-the-hessian"><span class="header-section-number">6.6</span> Standard Errors from the Hessian</h2>
-<!-- invert the negative Hessian at the max; connect back to ch 5's information matrix; delta method mention (full treatment ch 21) -->
+<p>The statistical payoff. <a href="05_likelihood.html#eq-mle-vcov" class="quarto-xref">Equation&nbsp;<span>5.10</span></a> said the estimated covariance of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is the inverse negative Hessian at the peak; <code>optim()</code> just handed us that Hessian:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>vcov_hat <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="sc">-</span>fit<span class="sc">$</span>hessian)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(vcov_hat))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth    =</span> beta_true,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> fit<span class="sc">$</span>par,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">se       =</span> se,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">z        =</span> fit<span class="sc">$</span>par <span class="sc">/</span> se,</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_lo    =</span> fit<span class="sc">$</span>par <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>se,</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ci_hi    =</span> fit<span class="sc">$</span>par <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"intercept"</span>, <span class="st">"price"</span>, <span class="st">"ram16"</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(results, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          truth estimate    se      z  ci_lo  ci_hi
+intercept   1.0    1.520 0.360  4.225  0.815  2.225
+price      -1.2   -1.461 0.220 -6.636 -1.893 -1.029
+ram16       0.6    0.597 0.197  3.033  0.211  0.982</code></pre>
+</div>
+</div>
+<p>This little table is the archetype of estimation output, and every column traces to something we built: estimates from the climber, standard errors from the curvature, <span class="math inline">\(z\)</span>-statistics testing “is this coefficient distinguishable from zero,” and 95% confidence intervals — each of which, satisfyingly, covers its true value. (Any single interval fails with 5% probability, of course; <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> runs the replication study that checks the coverage <em>rate</em>.) The price coefficient’s interval is the widest relative to its magnitude — look back at <a href="05_likelihood.html#fig-loglik-2d" class="quarto-xref">Figure&nbsp;<span>5.2</span></a> and its elongated contours to see why: that is the flat direction of the surface, rendered as a number.</p>
+<p>Two cautions before we move on. The Hessian route to standard errors assumes the model is correctly specified (true in our simulations by construction; an act of faith with real data — robust “sandwich” alternatives exist, see <span class="citation" data-cites="greene2008">Greene (<a href="references.html#ref-greene2008" role="doc-biblioref">2008</a>)</span>). And it is <em>asymptotic</em>: at small <span class="math inline">\(N\)</span>, normality of <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> is an approximation whose quality is, again, checkable by simulation — a theme <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> takes up in earnest.</p>
 </section>
 <section id="practical-realities" class="level2" data-number="6.7">
 <h2 data-number="6.7" class="anchored" data-anchor-id="practical-realities"><span class="header-section-number">6.7</span> Practical Realities</h2>
-<!-- starting values, parameter scaling, local maxima and multiple starts, non-convergence triage -->
+<p>Textbook optimization ends at the previous section. Real optimization involves four recurring frictions, and knowing them in advance converts hours of confusion into minutes of diagnosis.</p>
+<p><strong>Starting values.</strong> Every climber starts somewhere, and bad starts cost iterations or worse (a flat-region start can stall numerical gradients entirely). Cheap heuristics go far: zeros are serviceable for logit-family models; estimates from a simpler relative are better — we will start the MNL from zeros, but the mixed logit of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> from <em>the plain MNL’s estimates</em>, and the HB sampler of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> likewise. A model hierarchy is also a starting-value hierarchy.</p>
+<p><strong>Scaling.</strong> Optimizers work best when parameters live on comparable scales; a gradient step calibrated for a coefficient of size 1 misbehaves for one of size 1,000. We engineered this away in <a href="01_choice.html#sec-running_example" class="quarto-xref"><span>Section 1.4</span></a> by measuring price in $1,000s — making all true coefficients order-one — and that was not an aesthetic choice. If you meet a dataset with price in dollars, <em>rescale before optimizing</em>, then translate the estimate back.</p>
+<p><strong>Local maxima.</strong> The binary logit’s concavity guarantees one summit, but the guarantee expires later in this book: latent class likelihoods (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>) are riddled with local maxima, and mixed logit surfaces (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) can undulate. The standard defense is disciplined brute force: launch from several dispersed starting points and compare the summits reached. Same summit everywhere: reassuring. Different summits: report the best, and know your surface is treacherous.</p>
+<p><strong>Believing convergence too easily.</strong> A zero convergence code means the stopping rule triggered — steps got small — not that the maximum was found. Corroborate: is the gradient actually near zero? Is the Hessian negative definite (all eigenvalues negative)? Does a restart from the “solution” stay put? Thirty seconds of paranoia, applied routinely, catches the rare failures that matter.</p>
 </section>
-<section id="end-to-end-simulate-estimate-recover" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="end-to-end-simulate-estimate-recover"><span class="header-section-number">6.8</span> End-to-End: Simulate, Estimate, Recover</h2>
-<!-- the payoff of Part I: binary logit from ch 3 simulation through optim() to estimates with standard errors; the true parameters sit inside the confidence intervals -->
+<section id="the-complete-loop-end-to-end" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="the-complete-loop-end-to-end"><span class="header-section-number">6.8</span> The Complete Loop, End to End</h2>
+<p>Part I’s tools are now all on the bench, and it is worth savoring the moment the loop closes cleanly. The whole simulate-and-recover cycle, in one breath:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">61</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>d2   <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="at">N =</span> <span class="dv">2000</span>, <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>))   <span class="co"># simulate</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>X2   <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, d2<span class="sc">$</span>price, d2<span class="sc">$</span>ram16)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>), loglik_binary_vec, <span class="at">y =</span> d2<span class="sc">$</span>y, <span class="at">X =</span> X2,   <span class="co"># estimate</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>              <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>se2  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit2<span class="sc">$</span>hessian)))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>),                    <span class="co"># recover?</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">estimate =</span> fit2<span class="sc">$</span>par, <span class="at">se =</span> se2), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  truth estimate    se
+1   1.0    1.280 0.177
+2  -1.2   -1.265 0.107
+3   0.6    0.451 0.096</code></pre>
+</div>
+</div>
+<p>Simulate at known truth; hand the estimator <em>only</em> the data; watch the truth come back, bracketed by honest uncertainty. Note the standard errors relative to the <span class="math inline">\(N=500\)</span> run — quadrupling the sample roughly halved them, the <span class="math inline">\(\sqrt{N}\)</span> law making its second appearance (it governed simulation error in <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>; it governs estimation error here).</p>
+<p>This loop is the book’s heartbeat. Everything that follows elaborates one of its stages: richer models to simulate (<a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>), faster likelihood evaluation (<a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>), likelihoods that themselves require simulation (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>), and eventually a different philosophy of the “estimate” step entirely (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>) — where, I promise, the log-likelihood functions and the paranoid checking habits built here transfer without modification.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="6.9">
 <h2 data-number="6.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">6.9</span> Key Learnings</h2>
+<ul>
+<li>Optimization is climbing in fog: direction and step size from local information, repeated. Consulting curvature, not just slope, is what makes climbing fast on tilted terrain.</li>
+<li>Newton–Raphson (<a href="#eq-newton" class="quarto-xref">Equation&nbsp;<span>6.2</span></a>) maximizes a local quadratic model per step: for the binary logit, with score <span class="math inline">\(\mathbf{X}'(\mathbf{y}-\mathbf{P})\)</span> and Hessian <span class="math inline">\(-\mathbf{X}'W\mathbf{X}\)</span> (<a href="#eq-binlogit-hessian" class="quarto-xref">Equation&nbsp;<span>6.3</span></a>), it reaches ten-digit accuracy in six steps — and its Hessian doubles as the standard-error engine.</li>
+<li>BHHH substitutes the outer product of scores for the Hessian (<a href="#eq-bhhh" class="quarto-xref">Equation&nbsp;<span>6.4</span></a>, valid near the truth under correct specification); BFGS learns curvature from the optimization’s own history and is our default method in <code>optim()</code> (<code>fnscale = -1</code> to maximize; nonzero convergence codes mean <em>stop and investigate</em>).</li>
+<li>Numerical gradients (<a href="#eq-central-diff" class="quarto-xref">Equation&nbsp;<span>6.5</span></a>) are the universal fallback and the universal <em>audit</em>: every analytic gradient gets checked against them, always.</li>
+<li>Standard errors are peak curvature inverted: <code>solve(-hessian)</code>, diagonal, square root. Flat directions of the surface (<a href="05_likelihood.html#fig-loglik-2d" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>) become the large standard errors in the table.</li>
+<li>The practical frictions — starting values, scaling, local maxima, over-trusting convergence — have standard defenses; we will apply the multiple-starts discipline in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>, where local maxima stop being hypothetical.</li>
+<li>The simulate-and-recover loop closed: truth in, truth out, with uncertainty that shrinks at the <span class="math inline">\(\sqrt{N}\)</span> rate. Part I is complete.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-greene2008" class="csl-entry" role="listitem">
+Greene, William H. 2008. <span>“Discrete Choice Modeling.”</span> In <em>Palgrave Handbook of Econometrics, Volume 2: Applied Econometrics</em>, edited by Terence C. Mills and Kerry Patterson. Palgrave Macmillan.
+</div>
+<div id="ref-hessdaly2024" class="csl-entry" role="listitem">
+Hess, Stephane, and Andrew Daly, eds. 2024. <em>Handbook of Choice Modelling</em>. 2nd ed. Edward Elgar.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Global concavity is a luxury enjoyed by the binary logit and the MNL (<a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>) but <em>not</em> by most models later in the book — file that away for the multiple-starting-values discussion below.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><code>convergence = 1</code> means the iteration limit was hit — raise <code>maxit</code> and restart from where it stopped. Code <code>10</code> signals degeneracy in Nelder–Mead. The messages accompanying nonzero codes are terse; the reflex should be: nonzero code, no trust.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

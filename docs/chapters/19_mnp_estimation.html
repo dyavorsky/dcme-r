@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,19 +422,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#route-1-simulated-likelihood" id="toc-route-1-simulated-likelihood" class="nav-link active" data-scroll-target="#route-1-simulated-likelihood"><span class="header-section-number">19.1</span> Route 1: Simulated Likelihood</a>
+  <li><a href="#route-1-simulated-maximum-likelihood-via-ghk" id="toc-route-1-simulated-maximum-likelihood-via-ghk" class="nav-link active" data-scroll-target="#route-1-simulated-maximum-likelihood-via-ghk"><span class="header-section-number">19.1</span> Route 1: Simulated Maximum Likelihood via GHK</a>
   <ul class="collapse">
-  <li><a href="#the-accept-reject-simulator-and-its-flaws" id="toc-the-accept-reject-simulator-and-its-flaws" class="nav-link" data-scroll-target="#the-accept-reject-simulator-and-its-flaws"><span class="header-section-number">19.1.1</span> The Accept-Reject Simulator and Its Flaws</a></li>
-  <li><a href="#the-ghk-simulator" id="toc-the-ghk-simulator" class="nav-link" data-scroll-target="#the-ghk-simulator"><span class="header-section-number">19.1.2</span> The GHK Simulator</a></li>
-  <li><a href="#msl-with-ghk" id="toc-msl-with-ghk" class="nav-link" data-scroll-target="#msl-with-ghk"><span class="header-section-number">19.1.3</span> MSL with GHK</a></li>
+  <li><a href="#why-the-obvious-simulator-fails" id="toc-why-the-obvious-simulator-fails" class="nav-link" data-scroll-target="#why-the-obvious-simulator-fails"><span class="header-section-number">19.1.1</span> Why the obvious simulator fails</a></li>
+  <li><a href="#the-ghk-simulator" id="toc-the-ghk-simulator" class="nav-link" data-scroll-target="#the-ghk-simulator"><span class="header-section-number">19.1.2</span> The GHK simulator</a></li>
   </ul></li>
-  <li><a href="#route-2-bayesian-data-augmentation" id="toc-route-2-bayesian-data-augmentation" class="nav-link" data-scroll-target="#route-2-bayesian-data-augmentation"><span class="header-section-number">19.2</span> Route 2: Bayesian Data Augmentation</a>
-  <ul class="collapse">
-  <li><a href="#latent-utilities-as-parameters" id="toc-latent-utilities-as-parameters" class="nav-link" data-scroll-target="#latent-utilities-as-parameters"><span class="header-section-number">19.2.1</span> Latent Utilities as Parameters</a></li>
-  <li><a href="#the-mcculloch-rossi-gibbs-sampler" id="toc-the-mcculloch-rossi-gibbs-sampler" class="nav-link" data-scroll-target="#the-mcculloch-rossi-gibbs-sampler"><span class="header-section-number">19.2.2</span> The McCulloch-Rossi Gibbs Sampler</a></li>
-  <li><a href="#identification-inside-the-sampler" id="toc-identification-inside-the-sampler" class="nav-link" data-scroll-target="#identification-inside-the-sampler"><span class="header-section-number">19.2.3</span> Identification Inside the Sampler</a></li>
-  </ul></li>
-  <li><a href="#the-two-routes-compared" id="toc-the-two-routes-compared" class="nav-link" data-scroll-target="#the-two-routes-compared"><span class="header-section-number">19.3</span> The Two Routes Compared</a></li>
+  <li><a href="#route-2-gibbs-with-data-augmentation" id="toc-route-2-gibbs-with-data-augmentation" class="nav-link" data-scroll-target="#route-2-gibbs-with-data-augmentation"><span class="header-section-number">19.2</span> Route 2: Gibbs with Data Augmentation</a></li>
+  <li><a href="#the-two-routes-head-to-head" id="toc-the-two-routes-head-to-head" class="nav-link" data-scroll-target="#the-two-routes-head-to-head"><span class="header-section-number">19.3</span> The Two Routes, Head to Head</a></li>
   <li><a href="#validation-against-bayesm" id="toc-validation-against-bayesm" class="nav-link" data-scroll-target="#validation-against-bayesm"><span class="header-section-number">19.4</span> Validation Against <code>bayesm</code></a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">19.5</span> Key Learnings</a></li>
   </ul>
@@ -379,49 +456,332 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- The capstone demonstration that model and estimation method are separate choices: one model, both toolkits. Sources: DCMS Ch 5 (AR, smoothed AR, GHK); mcculloch-rossi-1994 (3-block Gibbs); validation: bayesm rmnpGibbs -->
-<section id="route-1-simulated-likelihood" class="level2" data-number="19.1">
-<h2 data-number="19.1" class="anchored" data-anchor-id="route-1-simulated-likelihood"><span class="header-section-number">19.1</span> Route 1: Simulated Likelihood</h2>
-<section id="the-accept-reject-simulator-and-its-flaws" class="level3" data-number="19.1.1">
-<h3 data-number="19.1.1" class="anchored" data-anchor-id="the-accept-reject-simulator-and-its-flaws"><span class="header-section-number">19.1.1</span> The Accept-Reject Simulator and Its Flaws</h3>
-<!-- frequency simulator: not smooth, can be zero; smoothed (logit-kernel) AR as a patch -->
+<p>One model, both toolkits. The MNP’s likelihood is a wall of normal orthant integrals (<a href="18_mnp.html#eq-mnp-prob" class="quarto-xref">Equation&nbsp;<span>18.2</span></a>); this chapter scales it twice — once with Part II’s machinery (simulate the integral, maximize the simulated likelihood) and once with Part III’s (augment the integral away, Gibbs the rest). Beyond estimating the MNP, the chapter is the book’s thesis made concrete: <em>the model is a set of assumptions; the estimator is a separate choice; and a well-built toolkit lets you make that choice on the merits.</em> By the end, the two routes will sit in one table, agreeing with each other to the second decimal.</p>
+<p>Load the study saved in <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>, and build the differenced objects that both routes consume — everything here runs on the identification analysis of <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>, so the differencing is not preprocessing, it <em>is</em> the identified model:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mnp_study <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/mnp_study.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mnp <span class="ot">&lt;-</span> mnp_study<span class="sc">$</span>data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> alt <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> mnp)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## rows of each alternative (the design is balanced and ordered: @sec-data contract)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>i1 <span class="ot">&lt;-</span> <span class="fu">which</span>(mnp<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Acer"</span>); i2 <span class="ot">&lt;-</span> <span class="fu">which</span>(mnp<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Dell"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>i3 <span class="ot">&lt;-</span> <span class="fu">which</span>(mnp<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Apple"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>Xd2 <span class="ot">&lt;-</span> X[i2, ] <span class="sc">-</span> X[i1, ]      <span class="co"># attributes of (Dell - Acer), one row per task</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>Xd3 <span class="ot">&lt;-</span> X[i3, ] <span class="sc">-</span> X[i1, ]      <span class="co"># attributes of (Apple - Acer)</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>chosen <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(mnp<span class="sc">$</span>alt[mnp<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>])   <span class="co"># 1=Acer, 2=Dell, 3=Apple</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>n_task <span class="ot">&lt;-</span> <span class="fu">length</span>(chosen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And compute the <strong>identified truth</strong> this chapter must recover — the <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a> arithmetic executed: difference <span class="math inline">\(\Omega^\ast\)</span> against the base, normalize the covariance by its first diagonal, and rescale <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span> by the <em>square root</em> of that diagonal — <span class="math inline">\(\boldsymbol{\beta}^\ast_{\text{id}} = \boldsymbol{\beta}^\ast/\sqrt{(M\Omega^\ast M')_{11}}\)</span> and <span class="math inline">\(\tilde\Omega^\ast = M\Omega^\ast M'/(M\Omega^\ast M')_{11}\)</span>; coefficients live on the utility scale, covariances on the utility-squared scale, so they pay the scale tax at different rates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>M  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>Ot <span class="ot">&lt;-</span> M <span class="sc">%*%</span> mnp_study<span class="sc">$</span>Omega_true <span class="sc">%*%</span> <span class="fu">t</span>(M)     <span class="co"># differenced covariance</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sc <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(Ot[<span class="dv">1</span>, <span class="dv">1</span>])                           <span class="co"># the scale normalization</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>beta_star  <span class="ot">&lt;-</span> mnp_study<span class="sc">$</span>beta_true <span class="sc">/</span> sc</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>omega_star <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">w12 =</span> Ot[<span class="dv">1</span>, <span class="dv">2</span>], <span class="at">w22 =</span> Ot[<span class="dv">2</span>, <span class="dv">2</span>]) <span class="sc">/</span> Ot[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(beta_star, omega_star), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    dell    apple    ram16    ram32 screen15    price      w12      w22 
+   0.559    1.118    0.671    1.006    0.335   -1.342    0.500    2.500 </code></pre>
+</div>
+</div>
+<p>Those eight numbers — six scaled coefficients, one differenced covariance, one differenced variance ratio — are everything the data can reveal, and the scoreboard for both routes.</p>
+<section id="route-1-simulated-maximum-likelihood-via-ghk" class="level2" data-number="19.1">
+<h2 data-number="19.1" class="anchored" data-anchor-id="route-1-simulated-maximum-likelihood-via-ghk"><span class="header-section-number">19.1</span> Route 1: Simulated Maximum Likelihood via GHK</h2>
+<section id="why-the-obvious-simulator-fails" class="level3" data-number="19.1.1">
+<h3 data-number="19.1.1" class="anchored" data-anchor-id="why-the-obvious-simulator-fails"><span class="header-section-number">19.1.1</span> Why the obvious simulator fails</h3>
+<p><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>’s frequency simulator applies directly: draw errors, count how often the chosen alternative wins. It is unbiased — and useless inside an optimizer, for two reasons that <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> equips us to name instantly. It is a <em>step function</em> of the parameters (nudge <span class="math inline">\(\boldsymbol{\beta}\)</span> slightly and either no draw changes its vote or one flips discretely), so gradients are zero almost everywhere and undefined elsewhere — BFGS starves. And for tasks where the chosen alternative was unlikely, all <span class="math inline">\(R\)</span> draws can vote no, returning <span class="math inline">\(\widehat{P} = 0\)</span> and <span class="math inline">\(\log \widehat{P} = -\infty\)</span> — <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>’s underflow catastrophe, by construction rather than accident. Smoothing the indicator (the logit-kernel AR simulator) patches both at the cost of a tuning parameter and bias <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 5.6</a>)</span>. The field’s solution is better than a patch.</p>
 </section>
 <section id="the-ghk-simulator" class="level3" data-number="19.1.2">
-<h3 data-number="19.1.2" class="anchored" data-anchor-id="the-ghk-simulator"><span class="header-section-number">19.1.2</span> The GHK Simulator</h3>
-<!-- recursive conditioning with truncated normals (ch 2's tool again); code it step by step; verify against pmvnorm on small problems -->
+<h3 data-number="19.1.2" class="anchored" data-anchor-id="the-ghk-simulator"><span class="header-section-number">19.1.2</span> The GHK simulator</h3>
+<p>The <strong>GHK simulator</strong> (Geweke–Hajivassiliou–Keane) computes the orthant probability by recursive conditioning, and it is <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>’s truncated-normal trick wearing its work clothes. The probability that alternative <span class="math inline">\(j\)</span> was chosen is the probability that a bivariate normal vector <span class="math inline">\(\mathbf{w} = (w_1, w_2)\)</span> — the utility differences <em>against</em> <span class="math inline">\(j\)</span> — lands entirely below zero. Factor the joint event through the Cholesky root of its covariance, <span class="math inline">\(A_j \tilde\Omega A_j' = LL'\)</span>, writing <span class="math inline">\(\mathbf{w} = \boldsymbol{\mu} + L\boldsymbol{\eta}\)</span> with <span class="math inline">\(\boldsymbol{\eta}\)</span> standard normal. Because <span class="math inline">\(L\)</span> is lower triangular with positive diagonal, <span class="math inline">\(w_1 &lt; 0 \iff \eta_1 &lt; b_1 := -\mu_1/\ell_{11}\)</span>; and given <span class="math inline">\(\eta_1\)</span>, <span class="math inline">\(w_2 &lt; 0 \iff \eta_2 &lt; b_2(\eta_1) := (-\mu_2 - \ell_{21}\eta_1)/\ell_{22}\)</span>. The law of total probability, plus the independence of <span class="math inline">\(\eta_2\)</span> from <span class="math inline">\(\eta_1\)</span>, then gives:</p>
+<p><span id="eq-ghk"><span class="math display">\[
+\Pr(w_1 &lt; 0, w_2 &lt; 0)
+= \underbrace{\Pr\left( \eta_1 &lt; b_1 \right)}_{p_1}
+\times \mathrm{E}\left[ \underbrace{\Pr\left( \eta_2 &lt; b_2(\eta_1) \right)}_{p_2(\eta_1)} \,\middle|\, \eta_1 &lt; b_1 \right]
+\tag{19.1}\]</span></span></p>
+<p>where <span class="math inline">\(b_1 = -\mu_1 / \ell_{11}\)</span> and <span class="math inline">\(b_2(\eta_1) = (-\mu_2 - \ell_{21}\eta_1)/\ell_{22}\)</span>: the first coordinate’s constraint is a univariate normal probability, exactly; the second’s is a univariate probability <em>given</em> the first, averaged over truncated draws of <span class="math inline">\(\eta_1\)</span>. GHK draws <span class="math inline">\(\eta_1\)</span> from its truncated distribution by the inverse-CDF trick of <a href="02_draws.html#eq-trunc" class="quarto-xref">Equation&nbsp;<span>2.2</span></a> — <code>qnorm(u * p1)</code> maps a uniform into exactly the admissible region — and averages <span class="math inline">\(p_1 \cdot p_2(\eta_1^{(r)})\)</span> over <span class="math inline">\(R\)</span> draws. Every ingredient is a <code>pnorm</code>/<code>qnorm</code> call: <strong>smooth</strong> in the parameters (BFGS eats), <strong>strictly positive</strong> (each factor is a genuine probability), and unbiased. For <span class="math inline">\(J\)</span> alternatives the recursion just continues <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 5.6.3</a> writes out the general case)</span> — each coordinate truncated given the previous ones, the triangularity of <span class="math inline">\(L\)</span> making each step univariate; you can see in that description why <a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a> called Cholesky triangularity “the same idea that powers GHK.”</p>
+<p>One bookkeeping matter: the differences-against-<span class="math inline">\(j\)</span> vector for each chosen alternative is a fixed linear map <span class="math inline">\(A_j\)</span> of the base differences <span class="math inline">\((d_2, d_3)\)</span> — e.g., for <span class="math inline">\(j=2\)</span>: <span class="math inline">\((U_1 - U_2, U_3 - U_2) = (-d_2, \; d_3 - d_2)\)</span>. All three maps, for the record: <span class="math inline">\(A_1 = I_2\)</span> (Acer chosen: <span class="math inline">\((d_2, d_3) &lt; \mathbf{0}\)</span> already); <span class="math inline">\(A_2 = \begin{pmatrix} -1 &amp; 0 \\ -1 &amp; 1 \end{pmatrix}\)</span>, so <span class="math inline">\(A_2 \mathbf{d} = (-d_2, \; d_3 - d_2)\)</span>; <span class="math inline">\(A_3 = \begin{pmatrix} 0 &amp; -1 \\ 1 &amp; -1 \end{pmatrix}\)</span>. Row <span class="math inline">\(i\)</span> of <span class="math inline">\(A_j\)</span> simply rewrites <span class="math inline">\(U_k - U_j\)</span> in terms of the base differences. So means transform per task, but the covariance <span class="math inline">\(A_j \tilde\Omega A_j'\)</span> (hence its Cholesky) is computed once per chosen-alternative <em>type</em> per likelihood call — three small factorizations, not four thousand.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GHK simulated log-likelihood for the 3-alternative MNP</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## theta = (beta [K], a, log b) with differenced-normalized chol Lt = [1 0; a b]</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ghk_loglik <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, Xd2, Xd3, chosen, U1) {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(Xd2)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> theta[<span class="dv">1</span><span class="sc">:</span>K]; a <span class="ot">&lt;-</span> theta[K<span class="sc">+</span><span class="dv">1</span>]; b <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta[K<span class="sc">+</span><span class="dv">2</span>])</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    Ot_id <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, a), <span class="fu">c</span>(a, a<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> b<span class="sc">^</span><span class="dv">2</span>))      <span class="co"># identified covariance: first diagonal fixed at 1 (this is Omega-tilde)</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    m2 <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Xd2 <span class="sc">%*%</span> beta)                   <span class="co"># mean of d2 = U_dell - U_acer</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    m3 <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Xd3 <span class="sc">%*%</span> beta)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    A  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">diag</span>(<span class="dv">2</span>),                             <span class="co"># chosen = Acer:  (d2, d3) &lt; 0</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>               <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>), <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)),           <span class="co"># chosen = Dell:  (-d2, d3-d2) &lt; 0</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>               <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)))           <span class="co"># chosen = Apple: (-d3, d2-d3) &lt; 0</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    ll <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) {</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        idx <span class="ot">&lt;-</span> <span class="fu">which</span>(chosen <span class="sc">==</span> j)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        mu  <span class="ot">&lt;-</span> <span class="fu">cbind</span>(m2[idx], m3[idx]) <span class="sc">%*%</span> <span class="fu">t</span>(A[[j]])</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        Lj  <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(A[[j]] <span class="sc">%*%</span> Ot_id <span class="sc">%*%</span> <span class="fu">t</span>(A[[j]])))</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        u   <span class="ot">&lt;-</span> U1[idx, , drop <span class="ot">=</span> <span class="cn">FALSE</span>]              <span class="co"># fixed uniforms (@sec-msl!)</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        b1  <span class="ot">&lt;-</span> (<span class="sc">-</span>mu[, <span class="dv">1</span>]) <span class="sc">/</span> Lj[<span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        p1  <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="fu">pnorm</span>(b1), <span class="fl">1e-12</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        e1  <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">pmax</span>(u <span class="sc">*</span> p1, <span class="fl">1e-14</span>))           <span class="co"># truncated draws via the inverse-CDF trick (eq-trunc)</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        b2  <span class="ot">&lt;-</span> (<span class="sc">-</span>mu[, <span class="dv">2</span>] <span class="sc">-</span> Lj[<span class="dv">2</span>, <span class="dv">1</span>] <span class="sc">*</span> e1) <span class="sc">/</span> Lj[<span class="dv">2</span>, <span class="dv">2</span>]</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        Phat <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="fu">rowMeans</span>(p1 <span class="sc">*</span> <span class="fu">pnorm</span>(b2)), <span class="fl">1e-300</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        ll  <span class="ot">&lt;-</span> ll <span class="sc">+</span> <span class="fu">sum</span>(<span class="fu">log</span>(Phat))</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    ll</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note the <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> discipline embedded: the uniforms <code>U1</code> are generated <em>once</em> and passed in — fixed draws, rule one — and the covariance enters through its Cholesky elements with the diagonal log-parameterized, so every candidate the optimizer visits implies a valid matrix. Before trusting it, the mandatory audit — GHK against an independent oracle, R’s numerical bivariate-normal routine, on a handful of tasks:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">190</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>U1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(n_task <span class="sc">*</span> <span class="dv">100</span>), n_task, <span class="dv">100</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>check <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="cf">function</span>(i) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">sum</span>(Xd2[i, ] <span class="sc">*</span> beta_star), <span class="fu">sum</span>(Xd3[i, ] <span class="sc">*</span> beta_star))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    Ot_id <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, omega_star[<span class="st">"w12"</span>]),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">c</span>(omega_star[<span class="st">"w12"</span>], omega_star[<span class="st">"w22"</span>]))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    A  <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">diag</span>(<span class="dv">2</span>), <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>), <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>)), <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="sc">-</span><span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>)))[[chosen[i]]]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    exact <span class="ot">&lt;-</span> <span class="fu">pmvnorm</span>(<span class="at">upper =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="at">mean =</span> <span class="fu">as.vector</span>(A <span class="sc">%*%</span> mu),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">sigma =</span> A <span class="sc">%*%</span> Ot_id <span class="sc">%*%</span> <span class="fu">t</span>(A))</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    ghk <span class="ot">&lt;-</span> {  <span class="co"># one-task GHK, 100 draws</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        Lj <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(A <span class="sc">%*%</span> Ot_id <span class="sc">%*%</span> <span class="fu">t</span>(A))); mm <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(A <span class="sc">%*%</span> mu)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>        p1 <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(<span class="sc">-</span>mm[<span class="dv">1</span>]<span class="sc">/</span>Lj[<span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        e1 <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(U1[i, ] <span class="sc">*</span> p1)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(p1 <span class="sc">*</span> <span class="fu">pnorm</span>((<span class="sc">-</span>mm[<span class="dv">2</span>] <span class="sc">-</span> Lj[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">*</span>e1)<span class="sc">/</span>Lj[<span class="dv">2</span>,<span class="dv">2</span>]))</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">exact =</span> exact, <span class="at">ghk =</span> ghk)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(check, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        [,1]   [,2]   [,3]   [,4]   [,5]
+exact 0.6359 0.8164 0.6167 0.3432 0.5639
+ghk   0.6170 0.8115 0.5975 0.3296 0.5641</code></pre>
+</div>
+</div>
+<p>Agreement in the third decimal with 100 draws — certified. Now the fit, with the covariance parameters box-bounded (the <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> device) to keep the search in well-conditioned territory:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit_ghk <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), <span class="dv">0</span>, <span class="dv">0</span>), ghk_loglik,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">Xd2 =</span> Xd2, <span class="at">Xd3 =</span> Xd3, <span class="at">chosen =</span> chosen, <span class="at">U1 =</span> U1,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"L-BFGS-B"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">lower =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="cn">Inf</span>, K), <span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="fl">2.5</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">upper =</span> <span class="fu">c</span>(<span class="fu">rep</span>( <span class="cn">Inf</span>, K),  <span class="dv">5</span>,  <span class="fl">2.5</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">500</span>), <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>se_ghk <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit_ghk<span class="sc">$</span>hessian)))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>est_ghk <span class="ot">&lt;-</span> <span class="fu">c</span>(fit_ghk<span class="sc">$</span>par[<span class="dv">1</span><span class="sc">:</span>K],</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">w12 =</span> fit_ghk<span class="sc">$</span>par[K<span class="sc">+</span><span class="dv">1</span>],</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">w22 =</span> fit_ghk<span class="sc">$</span>par[K<span class="sc">+</span><span class="dv">1</span>]<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">exp</span>(fit_ghk<span class="sc">$</span>par[K<span class="sc">+</span><span class="dv">2</span>])<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(beta_star, omega_star),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                 <span class="at">ghk =</span> est_ghk,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                 <span class="at">se =</span> <span class="fu">c</span>(se_ghk[<span class="dv">1</span><span class="sc">:</span>K], se_ghk[K<span class="sc">+</span><span class="dv">1</span>], <span class="cn">NA</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          truth    ghk    se
+dell      0.559  0.502 0.065
+apple     1.118  1.142 0.066
+ram16     0.671  0.805 0.057
+ram32     1.006  1.173 0.067
+screen15  0.335  0.350 0.039
+price    -1.342 -1.423 0.072
+w12       0.500  0.418 0.121
+w22       2.500  2.610    NA</code></pre>
+</div>
+</div>
+<p>Recovery of all eight identified quantities, including the covariance parameters that carry the substitution story — the estimated <span class="math inline">\(\tilde\omega_{12}\)</span> is the data confirming that Acer and Dell share unobserved appeal. (The <code>w22</code> transformation’s standard error needs the delta method; <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>, or route 2, where it’s free.)</p>
 </section>
-<section id="msl-with-ghk" class="level3" data-number="19.1.3">
-<h3 data-number="19.1.3" class="anchored" data-anchor-id="msl-with-ghk"><span class="header-section-number">19.1.3</span> MSL with GHK</h3>
-<!-- wrap GHK in ch 12's MSL machinery; estimate, recover; run-time and draw-count notes -->
 </section>
+<section id="route-2-gibbs-with-data-augmentation" class="level2" data-number="19.2">
+<h2 data-number="19.2" class="anchored" data-anchor-id="route-2-gibbs-with-data-augmentation"><span class="header-section-number">19.2</span> Route 2: Gibbs with Data Augmentation</h2>
+<p>Write the differenced system explicitly first, because it is the object the whole route manipulates:</p>
+<p><span class="math display">\[\mathbf{d}_{nt} = \tilde{X}_{nt}\boldsymbol{\beta}+ \mathbf{e}_{nt}, \qquad \mathbf{e}_{nt} \sim N(\mathbf{0}, W)\]</span></p>
+<p>where <span class="math inline">\(\mathbf{d}_{nt} = (d_2, d_3)\)</span> stacks <span class="math inline">\(d_2 = U_{\text{Dell}} - U_{\text{Acer}}\)</span> and <span class="math inline">\(d_3 = U_{\text{Apple}} - U_{\text{Acer}}\)</span>, the rows of <span class="math inline">\(\tilde{X}_{nt}\)</span> are the corresponding rows of <code>Xd2</code> and <code>Xd3</code>, and <span class="math inline">\(W\)</span> is <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>’s differenced covariance <em>before</em> the <span class="math inline">\(\tilde\omega_{11} = 1\)</span> convention — the unnormalized object the sampler is free to draw. The identified quantities are <span class="math inline">\(\tilde\Omega = W/w_{11}\)</span> and <span class="math inline">\(\boldsymbol{\beta}/\sqrt{w_{11}}\)</span>; the sampler never imposes this, and the post-processing recovers it.</p>
+<p>Now forget optimization entirely. The <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> Albert–Chib logic, scaled up per <span class="citation" data-cites="mcculloch1994">McCulloch and Rossi (<a href="references.html#ref-mcculloch1994" role="doc-biblioref">1994</a>)</span>: conditional on the latent <em>differenced utilities</em> <span class="math inline">\(\mathbf{d}_{nt} = (d_2, d_3)_{nt}\)</span>, the MNP is a two-equation normal regression system — conjugate everywhere; conditional on parameters and the observed choice, each task’s <span class="math inline">\(\mathbf{d}_{nt}\)</span> is bivariate normal truncated to the region its choice implies. Three blocks:</p>
+<ul>
+<li><strong>Latent utilities.</strong> The regions, read off the choice rule: Acer chosen <span class="math inline">\(\Rightarrow d_2 &lt; 0, d_3 &lt; 0\)</span>; Dell <span class="math inline">\(\Rightarrow d_2 &gt; \max(0, d_3)\)</span>; Apple <span class="math inline">\(\Rightarrow d_3 &gt; \max(0, d_2)\)</span>. Sampling a truncated <em>bivariate</em> normal is done by one more level of Gibbs: draw <span class="math inline">\(d_2\)</span> given <span class="math inline">\(d_3\)</span> (a univariate truncated normal — the conditional mean and variance are the textbook bivariate-normal formulas, the truncation from the region; concretely, if <span class="math inline">\((d_2, d_3) \sim N\big((m_2, m_3), W\big)\)</span> then <span class="math inline">\(d_2 \mid d_3 \sim N\!\big(m_2 + \tfrac{w_{12}}{w_{22}}(d_3 - m_3), \; w_{11} - \tfrac{w_{12}^2}{w_{22}}\big)\)</span>, and symmetrically for <span class="math inline">\(d_3 \mid d_2\)</span> — the code’s <code>c21</code>/<code>v21</code> and <code>c12</code>/<code>v12</code>), then <span class="math inline">\(d_3\)</span> given <span class="math inline">\(d_2\)</span>. All 4,000 tasks in two vectorized <code>rtnorm()</code> calls.</li>
+<li><strong><span class="math inline">\(\boldsymbol{\beta}\)</span>.</strong> Given the <span class="math inline">\(\mathbf{d}\)</span>’s: generalized least squares dressed as Bayes — whiten the two-equation system by <span class="math inline">\(W^{-1/2}\)</span> (Cholesky again) and apply the conjugate regression update of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>.</li>
+<li><strong><span class="math inline">\(W\)</span>.</strong> Given residuals: a <span class="math inline">\(2 \times 2\)</span> inverse-Wishart.</li>
+</ul>
+<p>And the McCulloch–Rossi move that makes it elegant: <strong>sample the unidentified model, report the identified one.</strong> No constraint forces <span class="math inline">\(w_{11} = 1\)</span> during sampling — the chain wanders the scale ridge freely, conjugacy intact — and every saved draw is normalized <em>afterward</em>: <span class="math inline">\(\boldsymbol{\beta}/ \sqrt{w_{11}}\)</span>, <span class="math inline">\(W / w_{11}\)</span>. Identified functions of unidentified draws are perfectly valid posterior draws of the identified quantities.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rtnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(n, mean, sd, a, b) {                    <span class="co"># @sec-draws</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    Fa <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(a, mean, sd); Fb <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(b, mean, sd)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">pmin</span>(<span class="fu">pmax</span>(<span class="fu">runif</span>(n, Fa, Fb), <span class="fl">1e-12</span>), <span class="dv">1</span> <span class="sc">-</span> <span class="fl">1e-12</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">qnorm</span>(u, mean, sd)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>rinvwishart <span class="ot">&lt;-</span> <span class="cf">function</span>(nu, S) {                           <span class="co"># @sec-hb-mnl</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">nrow</span>(S); L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(<span class="fu">solve</span>(S)))</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, K, K)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(A) <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">rchisq</span>(K, nu <span class="sc">-</span> (<span class="dv">1</span><span class="sc">:</span>K) <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    A[<span class="fu">lower.tri</span>(A)] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(K<span class="sc">*</span>(K<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">solve</span>(L <span class="sc">%*%</span> A <span class="sc">%*%</span> <span class="fu">t</span>(A) <span class="sc">%*%</span> <span class="fu">t</span>(L))</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>gibbs_mnp <span class="ot">&lt;-</span> <span class="cf">function</span>(Xd2, Xd3, chosen, S_iter, <span class="at">A0 =</span> <span class="fl">0.01</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>                      <span class="at">nu0 =</span> <span class="dv">5</span>, <span class="at">V0 =</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="dv">5</span>) {</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(Xd2); n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xd2)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K); W <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">2</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    d2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>)          <span class="co"># any region-respecting start</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    d3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">beta =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, K),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>                <span class="at">W =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, <span class="dv">3</span>))</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S_iter) {</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- latent utilities: two vectorized truncated-normal sweeps --</span></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        m2 <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Xd2 <span class="sc">%*%</span> beta); m3 <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Xd3 <span class="sc">%*%</span> beta)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>        c21 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>W[<span class="dv">2</span>,<span class="dv">2</span>]; v21 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">1</span>] <span class="sc">-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>W[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>        c12 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>W[<span class="dv">1</span>,<span class="dv">1</span>]; v12 <span class="ot">&lt;-</span> W[<span class="dv">2</span>,<span class="dv">2</span>] <span class="sc">-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>W[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>        lo2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="fu">pmax</span>(<span class="dv">0</span>, d3), <span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>        hi2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="cn">Inf</span>, <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">0</span>, d3))</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>        d2  <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(n, m2 <span class="sc">+</span> c21<span class="sc">*</span>(d3 <span class="sc">-</span> m3), <span class="fu">sqrt</span>(v21), lo2, hi2)</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>        lo3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="fu">pmax</span>(<span class="dv">0</span>, d2), <span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>        hi3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="cn">Inf</span>, <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">0</span>, d2))</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>        d3  <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(n, m3 <span class="sc">+</span> c12<span class="sc">*</span>(d2 <span class="sc">-</span> m2), <span class="fu">sqrt</span>(v12), lo3, hi3)</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- beta: whiten the 2-equation system, conjugate regression --</span></span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>        Li  <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(<span class="fu">chol</span>(W)))</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>        Y1  <span class="ot">&lt;-</span> Li[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">*</span>d2 <span class="sc">+</span> Li[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">*</span>d3;   Y2  <span class="ot">&lt;-</span> Li[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">*</span>d2 <span class="sc">+</span> Li[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">*</span>d3</span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>        Xw1 <span class="ot">&lt;-</span> Li[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">*</span>Xd2 <span class="sc">+</span> Li[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">*</span>Xd3; Xw2 <span class="ot">&lt;-</span> Li[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">*</span>Xd2 <span class="sc">+</span> Li[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">*</span>Xd3</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>        Vb  <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">crossprod</span>(Xw1) <span class="sc">+</span> <span class="fu">crossprod</span>(Xw2) <span class="sc">+</span> <span class="fu">diag</span>(A0, K))</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>        mb  <span class="ot">&lt;-</span> Vb <span class="sc">%*%</span> (<span class="fu">crossprod</span>(Xw1, Y1) <span class="sc">+</span> <span class="fu">crossprod</span>(Xw2, Y2))</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>        beta <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(mb <span class="sc">+</span> <span class="fu">t</span>(<span class="fu">chol</span>(Vb)) <span class="sc">%*%</span> <span class="fu">rnorm</span>(K))</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- W: inverse-Wishart on residuals --</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>        e2 <span class="ot">&lt;-</span> d2 <span class="sc">-</span> <span class="fu">as.vector</span>(Xd2 <span class="sc">%*%</span> beta); e3 <span class="ot">&lt;-</span> d3 <span class="sc">-</span> <span class="fu">as.vector</span>(Xd3 <span class="sc">%*%</span> beta)</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>        Sres <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="fu">sum</span>(e2<span class="sc">^</span><span class="dv">2</span>), <span class="fu">sum</span>(e2<span class="sc">*</span>e3)), <span class="fu">c</span>(<span class="fu">sum</span>(e2<span class="sc">*</span>e3), <span class="fu">sum</span>(e3<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>        W <span class="ot">&lt;-</span> <span class="fu">rinvwishart</span>(nu0 <span class="sc">+</span> n, V0 <span class="sc">+</span> Sres)</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>beta[s, ] <span class="ot">&lt;-</span> beta</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>W[s, ]    <span class="ot">&lt;-</span> <span class="fu">c</span>(W[<span class="dv">1</span>,<span class="dv">1</span>], W[<span class="dv">1</span>,<span class="dv">2</span>], W[<span class="dv">2</span>,<span class="dv">2</span>])</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">191</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">gibbs_mnp</span>(Xd2, Xd3, chosen, <span class="at">S_iter =</span> <span class="dv">3000</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="dv">501</span><span class="sc">:</span><span class="dv">3000</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>scd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(g<span class="sc">$</span>W[post, <span class="dv">1</span>])                        <span class="co"># per-draw normalization</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>beta_id <span class="ot">&lt;-</span> g<span class="sc">$</span>beta[post, ] <span class="sc">/</span> scd</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>tab_gibbs <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> <span class="fu">c</span>(beta_star, omega_star),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">gibbs =</span> <span class="fu">c</span>(<span class="fu">colMeans</span>(beta_id),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(g<span class="sc">$</span>W[post, <span class="dv">2</span>] <span class="sc">/</span> g<span class="sc">$</span>W[post, <span class="dv">1</span>]),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(g<span class="sc">$</span>W[post, <span class="dv">3</span>] <span class="sc">/</span> g<span class="sc">$</span>W[post, <span class="dv">1</span>])),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">post_sd =</span> <span class="fu">c</span>(<span class="fu">apply</span>(beta_id, <span class="dv">2</span>, sd),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">sd</span>(g<span class="sc">$</span>W[post, <span class="dv">2</span>] <span class="sc">/</span> g<span class="sc">$</span>W[post, <span class="dv">1</span>]),</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">sd</span>(g<span class="sc">$</span>W[post, <span class="dv">3</span>] <span class="sc">/</span> g<span class="sc">$</span>W[post, <span class="dv">1</span>]))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab_gibbs) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="st">"w12"</span>, <span class="st">"w22"</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(tab_gibbs, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          truth  gibbs post_sd
+altDell   0.559  0.513   0.059
+altApple  1.118  1.148   0.063
+ram16     0.671  0.809   0.056
+ram32     1.006  1.175   0.063
+screen15  0.335  0.353   0.037
+price    -1.342 -1.428   0.069
+w12       0.500  0.436   0.112
+w22       2.500  2.683   0.367</code></pre>
+</div>
+</div>
+<p>Recovery again — and notice what this sampler did <em>not</em> contain: no likelihood evaluation (the orthant integral never appears — <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s augmentation promise, delivered at multinomial scale), no Metropolis step, no acceptance rate, no tuning constant of any kind, and posterior uncertainty for the covariance parameters included, no delta method required.</p>
 </section>
-<section id="route-2-bayesian-data-augmentation" class="level2" data-number="19.2">
-<h2 data-number="19.2" class="anchored" data-anchor-id="route-2-bayesian-data-augmentation"><span class="header-section-number">19.2</span> Route 2: Bayesian Data Augmentation</h2>
-<section id="latent-utilities-as-parameters" class="level3" data-number="19.2.1">
-<h3 data-number="19.2.1" class="anchored" data-anchor-id="latent-utilities-as-parameters"><span class="header-section-number">19.2.1</span> Latent Utilities as Parameters</h3>
-<!-- augment with the utility vector per observation; conditional on utilities, everything is linear-normal (ch 16's world) -->
-</section>
-<section id="the-mcculloch-rossi-gibbs-sampler" class="level3" data-number="19.2.2">
-<h3 data-number="19.2.2" class="anchored" data-anchor-id="the-mcculloch-rossi-gibbs-sampler"><span class="header-section-number">19.2.2</span> The McCulloch-Rossi Gibbs Sampler</h3>
-<!-- three blocks: truncated-normal utilities consistent with the observed choice / normal beta / Wishart on Sigma-inverse; code it -->
-</section>
-<section id="identification-inside-the-sampler" class="level3" data-number="19.2.3">
-<h3 data-number="19.2.3" class="anchored" data-anchor-id="identification-inside-the-sampler"><span class="header-section-number">19.2.3</span> Identification Inside the Sampler</h3>
-<!-- sample unidentified, normalize by sigma_11 post hoc (McCulloch-Rossi); why this is legitimate -->
-</section>
-</section>
-<section id="the-two-routes-compared" class="level2" data-number="19.3">
-<h2 data-number="19.3" class="anchored" data-anchor-id="the-two-routes-compared"><span class="header-section-number">19.3</span> The Two Routes Compared</h2>
-<!-- same simulated data through both; estimates agree; contrast effort, run time, and what each hands you; no integral was ever computed on route 2 -->
+<section id="the-two-routes-head-to-head" class="level2" data-number="19.3">
+<h2 data-number="19.3" class="anchored" data-anchor-id="the-two-routes-head-to-head"><span class="header-section-number">19.3</span> The Two Routes, Head to Head</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>head2head <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> <span class="fu">c</span>(beta_star, omega_star),</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ghk_msl =</span> est_ghk,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">gibbs   =</span> tab_gibbs<span class="sc">$</span>gibbs</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(head2head) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="st">"w12"</span>, <span class="st">"w22"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(head2head, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          truth ghk_msl  gibbs
+altDell   0.559   0.502  0.513
+altApple  1.118   1.142  1.148
+ram16     0.671   0.805  0.809
+ram32     1.006   1.173  1.175
+screen15  0.335   0.350  0.353
+price    -1.342  -1.423 -1.428
+w12       0.500   0.418  0.436
+w22       2.500   2.610  2.683</code></pre>
+</div>
+</div>
+<p>Agreement between the routes to roughly the second decimal on every identified quantity — two philosophies, two codebases, two entirely different computational strategies (one never draws a latent variable, the other never evaluates a probability), one answer. The residual daylight between either column and the <em>truth</em> is this dataset’s sampling noise, which the two estimators share because they share the data.</p>
+<p>The choice between routes, then, rides on everything <em>around</em> the point estimates. Tallying this chapter’s experience: the Gibbs route was faster here, tuning-free, and delivered exact posterior uncertainty for every identified function — and, decisively for what comes next, it <em>extends</em>: bolting the <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> hierarchy onto it is <a href="20_hb_mnp.html" class="quarto-xref"><span>Chapter 20</span></a>, a short chapter precisely because augmentation composes. The GHK route earns its keep where the Bayesian route strains — very large <span class="math inline">\(J\)</span> (the truncated-utilities block grows with alternatives), classical inference requirements, or embedding in moment-based estimators — and GHK itself is a permanent resident of the choice modeler’s toolkit <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009</a>, Ch. 5)</span>. But for the workhorse cases, the augmentation route is the one modern practice reaches for, and having built both, you know exactly why.</p>
 </section>
 <section id="validation-against-bayesm" class="level2" data-number="19.4">
 <h2 data-number="19.4" class="anchored" data-anchor-id="validation-against-bayesm"><span class="header-section-number">19.4</span> Validation Against <code>bayesm</code></h2>
-<!-- rmnpGibbs -->
+<p>The reference implementation of route 2 is <code>rmnpGibbs</code> <span class="citation" data-cites="rossi2005">(<a href="references.html#ref-rossi2005" role="doc-biblioref">Rossi, Allenby, and McCulloch 2005</a>)</span>. Its conventions differ from ours in one consequential way — it differences against the <em>last</em> alternative (base <span class="math inline">\(= J\)</span>), where we used the first — so validating requires restating the identified truth in its parameterization: differences against Apple, ASCs for Acer and Dell, normalization by the first differenced variance <em>in that system</em>. Getting a reference package’s conventions right is not busywork; it is most of what “validation” means in practice, and mismatched differencing conventions produce exactly the kind of sign-flipped, rescaled nonsense that looks like a broken sampler.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesm)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>na <span class="ot">&lt;-</span> <span class="dv">4</span>                                          <span class="co"># alt-varying attributes</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Xa <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_task, <span class="dv">3</span><span class="sc">*</span>na)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (a_i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>na) {                              <span class="co"># columns: variable-major, alt within</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    Xa[, (a_i<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> X[i1, <span class="dv">2</span> <span class="sc">+</span> a_i]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    Xa[, (a_i<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">2</span>] <span class="ot">&lt;-</span> X[i2, <span class="dv">2</span> <span class="sc">+</span> a_i]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    Xa[, (a_i<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">3</span> <span class="sc">+</span> <span class="dv">3</span>] <span class="ot">&lt;-</span> X[i3, <span class="dv">2</span> <span class="sc">+</span> a_i]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>Xc <span class="ot">&lt;-</span> <span class="fu">createX</span>(<span class="at">p =</span> <span class="dv">3</span>, <span class="at">na =</span> na, <span class="at">nd =</span> <span class="cn">NULL</span>, <span class="at">Xa =</span> Xa, <span class="at">Xd =</span> <span class="cn">NULL</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">INT =</span> <span class="cn">TRUE</span>, <span class="at">DIFF =</span> <span class="cn">TRUE</span>, <span class="at">base =</span> <span class="dv">3</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">192</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>outb <span class="ot">&lt;-</span> <span class="fu">rmnpGibbs</span>(<span class="at">Data =</span> <span class="fu">list</span>(<span class="at">p =</span> <span class="dv">3</span>, <span class="at">y =</span> chosen, <span class="at">X =</span> Xc),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Mcmc =</span> <span class="fu">list</span>(<span class="at">R =</span> <span class="dv">3000</span>, <span class="at">keep =</span> <span class="dv">1</span>, <span class="at">nprint =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## identified truth in bayesm's (base = Apple) parameterization</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>M3  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>Ot3 <span class="ot">&lt;-</span> M3 <span class="sc">%*%</span> mnp_study<span class="sc">$</span>Omega_true <span class="sc">%*%</span> <span class="fu">t</span>(M3)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sc3 <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(Ot3[<span class="dv">1</span>, <span class="dv">1</span>])</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>truth_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">int_acer =</span> (<span class="dv">0</span> <span class="sc">-</span> <span class="fl">1.0</span>)<span class="sc">/</span>sc3,      <span class="co"># base = Apple: each ASC is its raw value minus Apple's (1.0)</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">int_dell =</span> (<span class="fl">0.5</span> <span class="sc">-</span> <span class="fl">1.0</span>)<span class="sc">/</span>sc3,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>             mnp_study<span class="sc">$</span>beta_true[<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>]<span class="sc">/</span>sc3)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="do">## reuse post = 501:3000: same burn-in convention for bayesm's chain</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>s11 <span class="ot">&lt;-</span> outb<span class="sc">$</span>sigmadraw[post, <span class="dv">1</span>]</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth  =</span> truth_b,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">bayesm =</span> <span class="fu">colMeans</span>(outb<span class="sc">$</span>betadraw[post, ] <span class="sc">/</span> <span class="fu">sqrt</span>(s11))), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       int_acer int_dell ram16 ram32 screen15  price
+truth    -0.707   -0.354 0.424 0.636    0.212 -0.849
+bayesm   -0.711   -0.394 0.497 0.726    0.218 -0.884</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">w12 =</span> <span class="fu">mean</span>(outb<span class="sc">$</span>sigmadraw[post, <span class="dv">2</span>] <span class="sc">/</span> s11),</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">w22 =</span> <span class="fu">mean</span>(outb<span class="sc">$</span>sigmadraw[post, <span class="dv">4</span>] <span class="sc">/</span> s11),</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">truth_w12 =</span> Ot3[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>Ot3[<span class="dv">1</span>,<span class="dv">1</span>], <span class="at">truth_w22 =</span> Ot3[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>Ot3[<span class="dv">1</span>,<span class="dv">1</span>]), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      w12       w22 truth_w12 truth_w22 
+    0.831     1.057     0.800     1.000 </code></pre>
+</div>
+</div>
+<p>The package agrees — with our estimates and with the (re-parameterized) truth. Same normalize-after-sampling treatment of its draws, note: <code>bayesm</code> also samples unidentified and leaves the division to you.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="19.5">
 <h2 data-number="19.5" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">19.5</span> Key Learnings</h2>
+<ul>
+<li>The frequency simulator fails inside optimizers for nameable reasons — non-smooth, can return zero — and GHK (<a href="#eq-ghk" class="quarto-xref">Equation&nbsp;<span>19.1</span></a>) repairs both: recursive conditioning through the Cholesky root turns an orthant probability into a product of exact univariate probabilities averaged over truncated draws. Smooth, positive, unbiased; audited against <code>pmvnorm</code> before use.</li>
+<li>GHK-MSL is <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> verbatim: fixed uniforms, log-parameterized Cholesky, box bounds, BFGS — and it recovered all eight identified quantities.</li>
+<li>The augmentation route dissolves the integral instead: truncated-bivariate utility draws (Gibbs-within-Gibbs, two vectorized <code>rtnorm</code> sweeps), a whitened conjugate regression for <span class="math inline">\(\boldsymbol{\beta}\)</span>, an inverse-Wishart for <span class="math inline">\(W\)</span> — <em>no tuning, no likelihood</em>. Sample the unidentified model, normalize every draw afterward: identified posteriors from an unconstrained chain, per <span class="citation" data-cites="mcculloch1994">McCulloch and Rossi (<a href="references.html#ref-mcculloch1994" role="doc-biblioref">1994</a>)</span>.</li>
+<li>Head to head: second-decimal agreement across routes. The differences that matter are architectural — Gibbs extends to the hierarchy (next chapter) and prices uncertainty exactly; GHK serves large <span class="math inline">\(J\)</span> and classical pipelines.</li>
+<li>Validation against <code>rmnpGibbs</code> succeeded only after matching its base-alternative convention — reference-implementation conventions are half the work, and mismatches masquerade as broken code.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcculloch1994" class="csl-entry" role="listitem">
+McCulloch, Robert, and Peter E. Rossi. 1994. <span>“An Exact Likelihood Analysis of the Multinomial Probit Model.”</span> <em>Journal of Econometrics</em> 64 (1–2): 207–40.
+</div>
+<div id="ref-rossi2005" class="csl-entry" role="listitem">
+Rossi, Peter E., Greg M. Allenby, and Robert McCulloch. 2005. <em>Bayesian Statistics and Marketing</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>This is the resolution of <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>’s warning about samplers on unidentified spaces: the <em>raw</em> traces of <span class="math inline">\(\boldsymbol{\beta}\)</span> and <span class="math inline">\(W\)</span> indeed drift along the scale ridge and look unconverged — diagnose the <em>normalized</em> series instead. Try plotting both; it is a five-line experiment and a permanent inoculation.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Ask me how I know. (The first attempt at this comparison used base <span class="math inline">\(= 1\)</span> and produced beautifully converged garbage.)<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,18 +422,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sampling-by-blocks" id="toc-sampling-by-blocks" class="nav-link active" data-scroll-target="#sampling-by-blocks"><span class="header-section-number">16.1</span> Sampling by Blocks</a>
-  <ul class="collapse">
-  <li><a href="#a-toy-example-the-bivariate-normal" id="toc-a-toy-example-the-bivariate-normal" class="nav-link" data-scroll-target="#a-toy-example-the-bivariate-normal"><span class="header-section-number">16.1.1</span> A Toy Example: The Bivariate Normal</a></li>
-  </ul></li>
-  <li><a href="#conjugacy" id="toc-conjugacy" class="nav-link" data-scroll-target="#conjugacy"><span class="header-section-number">16.2</span> Conjugacy</a></li>
-  <li><a href="#the-hierarchical-model" id="toc-the-hierarchical-model" class="nav-link" data-scroll-target="#the-hierarchical-model"><span class="header-section-number">16.3</span> The Hierarchical Model</a>
-  <ul class="collapse">
-  <li><a href="#shrinkage-borrowing-strength" id="toc-shrinkage-borrowing-strength" class="nav-link" data-scroll-target="#shrinkage-borrowing-strength"><span class="header-section-number">16.3.1</span> Shrinkage: Borrowing Strength</a></li>
-  <li><a href="#gibbs-for-the-hierarchical-linear-model" id="toc-gibbs-for-the-hierarchical-linear-model" class="nav-link" data-scroll-target="#gibbs-for-the-hierarchical-linear-model"><span class="header-section-number">16.3.2</span> Gibbs for the Hierarchical Linear Model</a></li>
-  </ul></li>
-  <li><a href="#data-augmentation" id="toc-data-augmentation" class="nav-link" data-scroll-target="#data-augmentation"><span class="header-section-number">16.4</span> Data Augmentation</a></li>
-  <li><a href="#metropolis-within-gibbs" id="toc-metropolis-within-gibbs" class="nav-link" data-scroll-target="#metropolis-within-gibbs"><span class="header-section-number">16.5</span> Metropolis-within-Gibbs</a></li>
+  <li><a href="#sampling-by-blocks" id="toc-sampling-by-blocks" class="nav-link active" data-scroll-target="#sampling-by-blocks"><span class="header-section-number">16.1</span> Sampling by Blocks</a></li>
+  <li><a href="#conjugacy-the-conditional-distribution-factory" id="toc-conjugacy-the-conditional-distribution-factory" class="nav-link" data-scroll-target="#conjugacy-the-conditional-distribution-factory"><span class="header-section-number">16.2</span> Conjugacy: The Conditional-Distribution Factory</a></li>
+  <li><a href="#the-hierarchical-normal-model" id="toc-the-hierarchical-normal-model" class="nav-link" data-scroll-target="#the-hierarchical-normal-model"><span class="header-section-number">16.3</span> The Hierarchical Normal Model</a></li>
+  <li><a href="#data-augmentation-the-albertchib-sampler" id="toc-data-augmentation-the-albertchib-sampler" class="nav-link" data-scroll-target="#data-augmentation-the-albertchib-sampler"><span class="header-section-number">16.4</span> Data Augmentation: The Albert–Chib Sampler</a></li>
+  <li><a href="#metropolis-within-gibbs-the-missing-piece" id="toc-metropolis-within-gibbs-the-missing-piece" class="nav-link" data-scroll-target="#metropolis-within-gibbs-the-missing-piece"><span class="header-section-number">16.5</span> Metropolis-within-Gibbs: The Missing Piece</a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">16.6</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/16_gibbs.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -377,43 +453,249 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: Hess & Daly Ch 22 (Lenk's blueprint: Gibbs -> HB regression -> data augmentation); Greene 2008 (Albert-Chib); Rao Ch 3 App 3 (Gibbs primer); rossi-1996 App A (code-ready conditionals) -->
+<p>Metropolis–Hastings will sample anything, slowly. This chapter builds its efficient sibling and the model architecture that Part III exists for. The <strong>Gibbs sampler</strong> replaces M-H’s propose-and-mostly-reject shuffle with draws from <em>exact conditional distributions</em> — proposals so good they are never rejected — whenever the model’s structure supplies such conditionals. And the model structure that supplies them most beautifully is the <strong>hierarchy</strong>: person-level parameters drawn from a population, the formal home of everything <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> found missing. We develop both on models simple enough to see through — a hierarchical normal model, then a binary probit — because <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> assembles the HB-MNL <em>entirely</em> from blocks built here, and <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s probit samplers are these ideas at scale.</p>
 <section id="sampling-by-blocks" class="level2" data-number="16.1">
 <h2 data-number="16.1" class="anchored" data-anchor-id="sampling-by-blocks"><span class="header-section-number">16.1</span> Sampling by Blocks</h2>
-<!-- when the joint posterior is intractable but full conditionals are known densities, cycle through them; Gibbs as M-H with acceptance probability one (note, not derivation) -->
-<section id="a-toy-example-the-bivariate-normal" class="level3" data-number="16.1.1">
-<h3 data-number="16.1.1" class="anchored" data-anchor-id="a-toy-example-the-bivariate-normal"><span class="header-section-number">16.1.1</span> A Toy Example: The Bivariate Normal</h3>
-<!-- code the two-conditional Gibbs sampler; watch draws trace out the joint -->
+<p>Suppose the parameter vector splits into blocks <span class="math inline">\(\boldsymbol{\theta}= (\boldsymbol{\theta}_1, \boldsymbol{\theta}_2, \ldots)\)</span> and, while the <em>joint</em> posterior is intractable, each <strong>full conditional</strong> — the distribution of one block given the data and all other blocks — is a known, sampleable distribution. The Gibbs sampler simply cycles:</p>
+<p><span id="eq-gibbs-cycle"><span class="math display">\[
+\boldsymbol{\theta}_1^{(s+1)} \sim p(\boldsymbol{\theta}_1 \mid \boldsymbol{\theta}_2^{(s)}, \mathbf{y}), \qquad
+\boldsymbol{\theta}_2^{(s+1)} \sim p(\boldsymbol{\theta}_2 \mid \boldsymbol{\theta}_1^{(s+1)}, \mathbf{y}), \qquad \ldots
+\tag{16.1}\]</span></span></p>
+<p>— always conditioning on the most recent values of the other blocks. The resulting chain has the joint posterior as its stationary distribution, exactly like M-H;<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> the practical differences are that every draw is accepted, there is no step size to tune, and the moves are calibrated to the local shape of the posterior <em>by construction</em>. The cost of admission: you must be able to derive and sample the conditionals — real analytic work, purchased model by model, mostly through a phenomenon called conjugacy.</p>
+<p><strong>A toy first</strong>, per the <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> discipline of testing samplers on known targets. The bivariate normal with correlation <span class="math inline">\(\rho\)</span> has textbook conditionals — each coordinate given the other is univariate normal, <span class="math inline">\(x_1 | x_2 \sim N(\rho x_2, 1 - \rho^2)\)</span> and symmetrically — so Gibbs needs six lines, and <a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a>’s Cholesky method provides an exact benchmark:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">160</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fl">0.8</span>; S <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>gx <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S, <span class="dv">2</span>); xy <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)         <span class="co"># deliberately absurd start</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S) {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    xy[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, rho <span class="sc">*</span> xy[<span class="dv">2</span>], <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    xy[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, rho <span class="sc">*</span> xy[<span class="dv">1</span>], <span class="fu">sqrt</span>(<span class="dv">1</span> <span class="sc">-</span> rho<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    gx[s, ] <span class="ot">&lt;-</span> xy</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">gibbs   =</span> <span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">colMeans</span>(gx[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), ]),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">cor =</span> <span class="fu">cor</span>(gx[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), <span class="dv">1</span>], gx[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>), <span class="dv">2</span>])),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">target  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, rho))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mean1      mean2       cor
+gibbs  0.01280292 0.01592062 0.7995821
+target 0.00000000 0.00000000 0.8000000</code></pre>
+</div>
+</div>
+<p>Means and correlation on target. The chain’s <em>path</em> is worth one look — Gibbs moves in axis-parallel steps (one coordinate at a time), staircasing across the correlated ellipse:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> <span class="fu">rep</span>(gx[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">1</span>], <span class="at">each =</span> <span class="dv">2</span>)[<span class="sc">-</span><span class="dv">1</span>],</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">x2 =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fu">rep</span>(gx[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">2</span>], <span class="at">each =</span> <span class="dv">2</span>))[<span class="dv">1</span><span class="sc">:</span><span class="dv">59</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(path, <span class="fu">aes</span>(x1, x2)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_path</span>(<span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x1 =</span> gx[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">1</span>], <span class="at">x2 =</span> gx[<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="dv">2</span>]),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(x[<span class="dv">1</span>]), <span class="at">y =</span> <span class="fu">expression</span>(x[<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-gibbs-staircase" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gibbs-staircase-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="16_gibbs_files/figure-html/fig-gibbs-staircase-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gibbs-staircase-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.1: The first 30 moves of the Gibbs sampler on a correlated bivariate normal, from a far-off start: axis-parallel staircase steps, because each update changes one coordinate conditional on the other. High correlation makes the staircase treads small – a preview of why strongly dependent parameters mix slowly under coordinate-wise sampling.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Note the figure’s caption warning: correlation between blocks shrinks the staircase treads. It will return as practical advice — block correlated parameters <em>together</em> when you can.</p>
 </section>
+<section id="conjugacy-the-conditional-distribution-factory" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="conjugacy-the-conditional-distribution-factory"><span class="header-section-number">16.2</span> Conjugacy: The Conditional-Distribution Factory</h2>
+<p>Where do sampleable conditionals come from? From prior-likelihood pairs whose product lands back in the prior’s family — <strong>conjugate</strong> pairs. One derivation, done honestly, powers everything below; the rest we state and use.</p>
+<p><strong>The normal–normal update.</strong> Data <span class="math inline">\(y_1, \ldots, y_n \stackrel{iid}{\sim}N(\theta, \sigma^2)\)</span> with <span class="math inline">\(\sigma^2\)</span> known; prior <span class="math inline">\(\theta \sim N(\mu_0, \tau_0^2)\)</span>. The posterior is proportional to prior times likelihood — two exponentials of quadratics in <span class="math inline">\(\theta\)</span>: <span class="math display">\[p(\theta \mid \mathbf{y}) \;\propto\; \exp\!\left( -\frac{(\theta - \mu_0)^2}{2\tau_0^2} \right) \prod_{i=1}^{n} \exp\!\left( -\frac{(y_i - \theta)^2}{2\sigma^2} \right) \;\propto\; \exp\!\left( -\tfrac{1}{2}\!\left[ \theta^2 \left( \tau_0^{-2} + n\sigma^{-2} \right) - 2\theta \left( \tau_0^{-2}\mu_0 + n\sigma^{-2}\bar{y} \right) \right] \right)\]</span> where every term free of <span class="math inline">\(\theta\)</span> has been dropped into the proportionality sign. Now a reading-off rule worth memorizing on its own: anything of the form <span class="math inline">\(\exp(-\tfrac{1}{2}[a\theta^2 - 2b\theta])\)</span> is an unnormalized <span class="math inline">\(N(b/a, \; 1/a)\)</span> density — complete the square to see it. With <span class="math inline">\(a = \tau_0^{-2} + n\sigma^{-2}\)</span> and <span class="math inline">\(b = \tau_0^{-2}\mu_0 + n\sigma^{-2}\bar{y}\)</span>, we read off</p>
+<p><span id="eq-normal-normal"><span class="math display">\[
+\theta \mid \mathbf{y}\;\sim\; N\!\left( \frac{ \tau_0^{-2} \, \mu_0 + n\sigma^{-2} \, \bar{y} }{ \tau_0^{-2} + n\sigma^{-2} }, \;\; \left( \tau_0^{-2} + n\sigma^{-2} \right)^{-1} \right)
+\tag{16.2}\]</span></span></p>
+<p>Memorize the <em>shape</em>, not the symbols: <strong>precisions add; the posterior mean is the precision-weighted average of prior mean and data mean.</strong> Rich data (large <span class="math inline">\(n\sigma^{-2}\)</span>) pull the posterior onto <span class="math inline">\(\bar{y}\)</span>; thin data leave it near <span class="math inline">\(\mu_0\)</span>. That precision-weighted compromise <em>is</em> shrinkage — <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s phenomenon, now with an exact formula — and you will see this update, in scalar and matrix dress, inside every sampler for the rest of the book.</p>
+<p><strong>Variances: the inverse-gamma update.</strong> For the variance of a normal with known mean, the conjugate prior is inverse-gamma: <span class="math inline">\(\sigma^2 \sim IG(a_0, b_0)\)</span> yields <span class="math inline">\(\sigma^2 \mid \mathbf{y}\sim IG(a_0 + n/2, \; b_0 + \tfrac{1}{2}\sum (y_i - \theta)^2)\)</span> — prior pseudo-observations plus data observations, prior sum-of-squares plus data sum-of-squares. (Its matrix generalization, the inverse-Wishart for covariance matrices, arrives in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>; same grammar.) Derivations: <span class="citation" data-cites="bda3">Gelman et al. (<a href="references.html#ref-bda3" role="doc-biblioref">2013</a>)</span>, or <span class="citation" data-cites="rossi2005">Rossi, Allenby, and McCulloch (<a href="references.html#ref-rossi2005" role="doc-biblioref">2005</a>)</span> in exactly our setting.</p>
 </section>
-<section id="conjugacy" class="level2" data-number="16.2">
-<h2 data-number="16.2" class="anchored" data-anchor-id="conjugacy"><span class="header-section-number">16.2</span> Conjugacy</h2>
-<!-- normal prior + normal likelihood -> normal posterior (derive once, carefully); inverse-gamma/inverse-Wishart for variances and covariance matrices (state and use, cite derivations) -->
+<section id="the-hierarchical-normal-model" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="the-hierarchical-normal-model"><span class="header-section-number">16.3</span> The Hierarchical Normal Model</h2>
+<p>Now the architecture. Strip the choice modeling away from <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s problem and what remains is this: repeated measurements on many units, each unit with its own parameter, the parameters themselves drawn from a population we also want to learn. The minimal version — our laptop shoppers, with each person’s <em>willingness-to-spend on upgrades</em> <span class="math inline">\(\beta_n\)</span> measured noisily <span class="math inline">\(T\)</span> times:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p><span id="eq-hier-normal"><span class="math display">\[
+y_{nt} \sim N(\beta_n, \sigma^2), \qquad
+\beta_n \sim N(\mu, \tau^2), \qquad
+\mu \sim N(0, 10^2), \;\; \tau^2 \sim IG(2, 2), \;\; \sigma^2 \sim IG(2, 2)
+\tag{16.3}\]</span></span></p>
+<p>(A notation caution: this <span class="math inline">\(\tau^2\)</span> is the population <em>variance</em> — how much true willingness-to-spend varies across people — and has nothing to do with <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>’s Metropolis step size <span class="math inline">\(\tau\)</span>. Gibbs has no step size, so the letter is free again, and <span class="math inline">\(\tau\)</span> for a hierarchy’s spread is the standard choice.)</p>
+<p>Three layers: data given person-parameters, person-parameters given population, priors on everything unknown. This <em>is</em> the mixed model of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> in normal-linear miniature — and where MSL had to integrate the <span class="math inline">\(\beta_n\)</span>’s out (they were nuisance obstacles to the likelihood), the Bayesian treatment keeps every <span class="math inline">\(\beta_n\)</span> <em>in</em> the posterior as a first-class unknown: <span class="math inline">\(p(\boldsymbol{\beta}_{1:N}, \mu, \tau^2, \sigma^2 \mid \mathbf{y})\)</span>. What looked like the problem (hundreds of parameters!) becomes the solution, because every full conditional is conjugate:</p>
+<ul>
+<li><span class="math inline">\(\beta_n \mid \cdots\)</span>: normal–normal update (<a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a>) with “prior” <span class="math inline">\(N(\mu, \tau^2)\)</span> and “data” person <span class="math inline">\(n\)</span>’s <span class="math inline">\(T\)</span> observations. <em>One precision-weighted shrinkage per person.</em></li>
+<li><span class="math inline">\(\mu \mid \cdots\)</span>: normal–normal update treating the current <span class="math inline">\(\beta_n\)</span>’s as data.</li>
+<li><span class="math inline">\(\tau^2 \mid \cdots\)</span> and <span class="math inline">\(\sigma^2 \mid \cdots\)</span> (where “<span class="math inline">\(\cdots\)</span>” always means <em>the data and every other current block</em>): inverse-gamma updates, each applied to the residuals its block owns. The <span class="math inline">\(\beta_n\)</span>’s are <span class="math inline">\(\tau^2\)</span>’s “data”: <span class="math inline">\(\tau^2 \mid \cdots \sim IG\big(a_0 + N/2, \; b_0 + \tfrac{1}{2}\sum_n (\beta_n - \mu)^2\big)\)</span>. The observations are <span class="math inline">\(\sigma^2\)</span>’s: <span class="math inline">\(\sigma^2 \mid \cdots \sim IG\big(a_0 + NT/2, \; b_0 + \tfrac{1}{2}\sum_{n,t} (y_{nt} - \beta_n)^2\big)\)</span>.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gibbs_hier <span class="ot">&lt;-</span> <span class="cf">function</span>(y, id, S, <span class="at">mu0 =</span> <span class="dv">0</span>, <span class="at">tau0sq =</span> <span class="dv">100</span>, <span class="at">a0 =</span> <span class="dv">2</span>, <span class="at">b0 =</span> <span class="dv">2</span>) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    N  <span class="ot">&lt;-</span> <span class="fu">max</span>(id)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Tn <span class="ot">&lt;-</span> <span class="fu">tabulate</span>(id)                    <span class="co"># obs per person</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    ybar_n <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(y, id)) <span class="sc">/</span> Tn</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> ybar_n; mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(y); tau2 <span class="ot">&lt;-</span> <span class="dv">1</span>; sig2 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">beta =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S, N), <span class="at">hyper =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S, <span class="dv">3</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S) {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        <span class="do">## person-level betas: precision-weighted normal draws, all N at once</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>        prec <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>tau2 <span class="sc">+</span> Tn<span class="sc">/</span>sig2</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        m    <span class="ot">&lt;-</span> (mu<span class="sc">/</span>tau2 <span class="sc">+</span> Tn<span class="sc">*</span>ybar_n<span class="sc">/</span>sig2) <span class="sc">/</span> prec</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        beta <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, m, <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>prec))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="do">## population mean</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>        precm <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span>tau0sq <span class="sc">+</span> N<span class="sc">/</span>tau2</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        mu    <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1</span>, (mu0<span class="sc">/</span>tau0sq <span class="sc">+</span> <span class="fu">sum</span>(beta)<span class="sc">/</span>tau2) <span class="sc">/</span> precm, <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>precm))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="do">## population variance and noise variance</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        tau2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, a0 <span class="sc">+</span> N<span class="sc">/</span><span class="dv">2</span>, b0 <span class="sc">+</span> <span class="fu">sum</span>((beta <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        sig2 <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, a0 <span class="sc">+</span> <span class="fu">length</span>(y)<span class="sc">/</span><span class="dv">2</span>, b0 <span class="sc">+</span> <span class="fu">sum</span>((y <span class="sc">-</span> beta[id])<span class="sc">^</span><span class="dv">2</span>)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>beta[s, ]  <span class="ot">&lt;-</span> beta</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>hyper[s, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(mu, <span class="fu">sqrt</span>(tau2), <span class="fu">sqrt</span>(sig2))</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(out<span class="sc">$</span>hyper) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"mu"</span>, <span class="st">"tau"</span>, <span class="st">"sigma"</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Every line is one of the two conjugate updates. Note the vectorization: all <span class="math inline">\(N\)</span> person-draws happen in a single <code>rnorm(N, ...)</code> call, because given the hyperparameters the <span class="math inline">\(\beta_n\)</span>’s are conditionally <em>independent</em> — the hierarchy’s structure is the code’s structure (and <code>matrix(NA_real_, S, N)</code> is <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s preallocation rule earning its keep: this sampler stores half a million numbers). Simulate and recover:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">161</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">200</span>; T <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>mu_true <span class="ot">&lt;-</span> <span class="dv">2</span>; tau_true <span class="ot">&lt;-</span> <span class="fl">1.5</span>; sig_true <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>beta_n <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, mu_true, tau_true)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">each =</span> T)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>y  <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N<span class="sc">*</span>T, beta_n[id], sig_true)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">gibbs_hier</span>(y, id, <span class="at">S =</span> <span class="dv">5000</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> fit<span class="sc">$</span>hyper[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), ]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth =</span> <span class="fu">c</span>(mu_true, tau_true, sig_true),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">post_mean =</span> <span class="fu">colMeans</span>(post),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">post_sd   =</span> <span class="fu">apply</span>(post, <span class="dv">2</span>, sd)), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mu  tau sigma
+truth     2.00 1.50  2.00
+post_mean 2.08 1.47  1.95
+post_sd   0.12 0.10  0.05</code></pre>
+</div>
+</div>
+<p>All three population parameters recovered, uncertainty attached, in seconds — no optimizer, no draws-inside-a-likelihood, no tuning. And the person level came along for free. Here is this book’s first <em>fully honest</em> individual-level inference, and the shrinkage geometry it produces:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ybar_n <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(y, id)) <span class="sc">/</span> T</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">raw =</span> ybar_n, <span class="at">post =</span> <span class="fu">colMeans</span>(fit<span class="sc">$</span>beta[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), ]))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(raw, post)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_abline</span>(<span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">mean</span>(post[, <span class="st">"mu"</span>]), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">size =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"person's raw mean"</span>, <span class="at">y =</span> <span class="st">"person's posterior mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-shrinkage" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-shrinkage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="16_gibbs_files/figure-html/fig-shrinkage-1.png" class="img-fluid figure-img" width="528">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shrinkage-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;16.2: Shrinkage, exactly: each person’s posterior-mean beta against their raw data mean (T = 5 observations each). The cloud tilts flatter than the 45-degree line, pulled toward the population mean (dashed) – extreme raw means are partly noise, and the precision-weighted update (<a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a>) discounts them accordingly.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The flattened cloud is <a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a> acting on two hundred people at once: each posterior mean is a precision-weighted compromise between that person’s own average and the population’s. <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> met this as an ad-hoc extraction; here it is a <em>theorem-grade consequence of the model</em>, with the amount of shrinkage — the balance of <span class="math inline">\(\tau^{-2}\)</span> against <span class="math inline">\(T\sigma^{-2}\)</span> — itself estimated from the data. More data per person, less shrinkage; more real population spread, less shrinkage; the model negotiates it, not the analyst. This figure is the entire promise of Part III in one frame; <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> reproduces it with choice data.</p>
 </section>
-<section id="the-hierarchical-model" class="level2" data-number="16.3">
-<h2 data-number="16.3" class="anchored" data-anchor-id="the-hierarchical-model"><span class="header-section-number">16.3</span> The Hierarchical Model</h2>
-<!-- the three-layer structure on the linear model first: y_n | beta_n; beta_n ~ N(bar-beta, Sigma); priors on bar-beta, Sigma -->
-<section id="shrinkage-borrowing-strength" class="level3" data-number="16.3.1">
-<h3 data-number="16.3.1" class="anchored" data-anchor-id="shrinkage-borrowing-strength"><span class="header-section-number">16.3.1</span> Shrinkage: Borrowing Strength</h3>
-<!-- each person's posterior pulls toward the population mean, more when their data are thin; the statistical answer to the incidental parameters problem of ch 14 -->
+<section id="data-augmentation-the-albertchib-sampler" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="data-augmentation-the-albertchib-sampler"><span class="header-section-number">16.4</span> Data Augmentation: The Albert–Chib Sampler</h2>
+<p>The hierarchy needed no new trick — conjugacy carried it. Choice data will, because a <em>logit or probit likelihood is not conjugate to anything</em>: the discreteness of <span class="math inline">\(y\)</span> breaks the quadratic-in-parameters structure that <a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a> feeds on. The escape, due to <span class="citation" data-cites="albertchib1993">Albert and Chib (<a href="references.html#ref-albertchib1993" role="doc-biblioref">1993</a>)</span>, is one of the loveliest moves in computational statistics: <em>put the latent utilities back.</em></p>
+<p>Recall the binary probit of <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>: <span class="math inline">\(y_n = I[z_n &gt; 0]\)</span> where <span class="math inline">\(z_n = \mathbf{x}_n'\boldsymbol{\beta}+ \varepsilon_n\)</span>, <span class="math inline">\(\varepsilon_n \sim N(0,1)\)</span>. The observed <span class="math inline">\(y_n\)</span> is a censored glimpse of a well-behaved linear-normal model in <span class="math inline">\(z_n\)</span>. So <strong>augment</strong>: treat <span class="math inline">\(\mathbf{z}\)</span> as unknowns alongside <span class="math inline">\(\boldsymbol{\beta}\)</span>, and Gibbs the pair — each conditional is suddenly easy:</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol{\beta}\mid \mathbf{z}\)</span>: with <span class="math inline">\(\mathbf{z}\)</span> “observed,” this is <em>Bayesian linear regression</em> — normal prior, normal likelihood, so a multivariate <a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a>: <span class="math inline">\(\boldsymbol{\beta}\sim N\big( (X'X + B_0^{-1})^{-1}(X'\mathbf{z} + B_0^{-1}\mathbf{b}_0), \; (X'X + B_0^{-1})^{-1} \big)\)</span>.</li>
+<li><span class="math inline">\(z_n \mid \boldsymbol{\beta}, y_n\)</span>: normal with mean <span class="math inline">\(\mathbf{x}_n'\boldsymbol{\beta}\)</span>, <em>truncated</em> to the side of zero that agrees with the observed choice — positive if they bought, negative if not. Which is exactly what <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>’s <code>rtnorm()</code> was built for, as promised there.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rtnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>, <span class="at">a =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">b =</span> <span class="cn">Inf</span>) {   <span class="co"># @sec-draws</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    Fa <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(a, mean, sd); Fb <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(b, mean, sd)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">qnorm</span>(Fa <span class="sc">+</span> <span class="fu">runif</span>(n) <span class="sc">*</span> (Fb <span class="sc">-</span> Fa), mean, sd)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>gibbs_probit <span class="ot">&lt;-</span> <span class="cf">function</span>(y, X, S, <span class="at">b0 =</span> <span class="dv">0</span>, <span class="at">B0 =</span> <span class="dv">25</span>) {</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    K  <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    B0inv <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span><span class="sc">/</span>B0, K)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    V  <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">crossprod</span>(X) <span class="sc">+</span> B0inv)              <span class="co"># fixed: X never changes</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    L  <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(V))                                <span class="co"># @sec-mvnorm, once</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    beta  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    lo <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="cn">Inf</span>); hi <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y <span class="sc">==</span> <span class="dv">1</span>, <span class="cn">Inf</span>, <span class="dv">0</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    draws <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S, K)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S) {</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        z    <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(<span class="fu">length</span>(y), <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta), <span class="dv">1</span>, lo, hi)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        m    <span class="ot">&lt;-</span> V <span class="sc">%*%</span> (<span class="fu">crossprod</span>(X, z) <span class="sc">+</span> B0inv <span class="sc">%*%</span> <span class="fu">rep</span>(b0, K))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        beta <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(m <span class="sc">+</span> L <span class="sc">%*%</span> <span class="fu">rnorm</span>(K))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        draws[s, ] <span class="ot">&lt;-</span> beta</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    draws</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Count what is absent: no Metropolis step, no acceptance rate, no tuning parameter, no likelihood evaluation — the probit <em>likelihood never appears in the code</em>. Its integrals (the <span class="math inline">\(\Phi\)</span>’s that a probit MLE would evaluate) have been traded for truncated-normal draws, and every iteration draws from exact distributions. Note also the <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a> economies: <span class="math inline">\(V\)</span> and its Cholesky factor are data-only quantities, computed once outside the loop.</p>
+<p>Test on binary probit laptop data — <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>’s simulator, <code>dist = "normal"</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">162</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>sim_binary_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, beta, <span class="at">dist =</span> <span class="st">"normal"</span>) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="fl">0.8</span>, <span class="fl">2.4</span>); ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="cf">if</span> (dist <span class="sc">==</span> <span class="st">"normal"</span>) <span class="fu">rnorm</span>(N) <span class="cf">else</span> <span class="fu">rlogis</span>(N)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">as.integer</span>(<span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps <span class="sc">&gt;</span> <span class="dv">0</span>), price, ram16)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="dv">4000</span>, beta_true)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, d<span class="sc">$</span>price, d<span class="sc">$</span>ram16)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>ac <span class="ot">&lt;-</span> <span class="fu">gibbs_probit</span>(d<span class="sc">$</span>y, X, <span class="at">S =</span> <span class="dv">5000</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth =</span> beta_true,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">post_mean =</span> <span class="fu">colMeans</span>(ac[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>), ]),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">post_sd   =</span> <span class="fu">apply</span>(ac[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>), ], <span class="dv">2</span>, sd)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]   [,2]  [,3]
+truth     1.000 -1.200 0.600
+post_mean 1.163 -1.299 0.565
+post_sd   0.084  0.054 0.046</code></pre>
+</div>
+</div>
+<p>Recovery, tuning-free. Data augmentation is this book’s quiet superweapon: in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> it makes the <em>multinomial</em> probit — whose likelihood is a <span class="math inline">\((J-1)\)</span>-dimensional integral that Part II could only simulate — estimable by nothing more than truncated normals and regressions, and in <a href="20_hb_mnp.html" class="quarto-xref"><span>Chapter 20</span></a> it does so with a full hierarchy on top. The general principle deserves its box: <strong>when a likelihood is intractable because something latent was integrated out, put the latent thing back and sample it.</strong> Latent utilities, latent classes (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s memberships can be Gibbs-sampled the same way), latent budgets (<a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a>) — all one move.</p>
 </section>
-<section id="gibbs-for-the-hierarchical-linear-model" class="level3" data-number="16.3.2">
-<h3 data-number="16.3.2" class="anchored" data-anchor-id="gibbs-for-the-hierarchical-linear-model"><span class="header-section-number">16.3.2</span> Gibbs for the Hierarchical Linear Model</h3>
-<!-- code all blocks: person-level betas, population mean, covariance; simulate-and-recover -->
-</section>
-</section>
-<section id="data-augmentation" class="level2" data-number="16.4">
-<h2 data-number="16.4" class="anchored" data-anchor-id="data-augmentation"><span class="header-section-number">16.4</span> Data Augmentation</h2>
-<!-- latent variables treated as parameters to sample; Albert-Chib binary probit as the canonical example: truncated normal utilities (ch 2's tool) make everything conjugate; code it -->
-</section>
-<section id="metropolis-within-gibbs" class="level2" data-number="16.5">
-<h2 data-number="16.5" class="anchored" data-anchor-id="metropolis-within-gibbs"><span class="header-section-number">16.5</span> Metropolis-within-Gibbs</h2>
-<!-- when one conditional is non-conjugate (an MNL layer, say...), replace that block's draw with an M-H step; the exact architecture of the next chapter -->
+<section id="metropolis-within-gibbs-the-missing-piece" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="metropolis-within-gibbs-the-missing-piece"><span class="header-section-number">16.5</span> Metropolis-within-Gibbs: The Missing Piece</h2>
+<p>Survey what Part III now has. M-H samples anything evaluable (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>) but wanders. Gibbs is exact and tuning-free but demands conjugate conditionals. The hierarchy gives person-level inference with automatic shrinkage — when the data layer is normal. And augmentation converts probit data layers into normal ones.</p>
+<p>One target resists: the <strong>MNL data layer</strong>. The Gumbel-error structure has no Albert–Chib-style augmentation into conjugacy;<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> the logit likelihood must be <em>evaluated</em>, not conjugated away. But nothing requires a Gibbs cycle to be conjugate in <em>every</em> block. Replace the unavailable exact draw, in just that block, with a Metropolis step targeting the block’s conditional — accept/reject by <a href="15_bayes_mnl.html#eq-mh-ratio" class="quarto-xref">Equation&nbsp;<span>15.3</span></a>, conditioning on all other blocks — and the chain remains valid: <strong>Metropolis-within-Gibbs</strong>. The blueprint for the next chapter writes itself: population mean and covariance, conjugate Gibbs draws (<a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a> and inverse-Wishart, treating the current <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s as data — literally <code>gibbs_hier</code>’s middle blocks); each person’s <span class="math inline">\(\boldsymbol{\beta}_n\)</span>, a small random-walk Metropolis step whose target is (population prior) × (that person’s eight-task MNL likelihood) — literally <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>’s sampler, shrunk to one person’s data. Every component exists. Assembly is <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="16.6">
 <h2 data-number="16.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">16.6</span> Key Learnings</h2>
+<ul>
+<li>Gibbs sampling cycles through blocks, drawing each from its full conditional (<a href="#eq-gibbs-cycle" class="quarto-xref">Equation&nbsp;<span>16.1</span></a>): every draw accepted, nothing tuned, at the price of deriving conditionals. It is M-H with perfect proposals — and correlated blocks make its staircase treads small, so block wisely.</li>
+<li>Conjugacy is the conditional factory. The normal–normal update (<a href="#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a>) — <em>precisions add, means precision-weight</em> — is the single most reused formula in the rest of this book; inverse-gamma (and later inverse-Wishart) handles the variances.</li>
+<li>The hierarchical normal model holds every person’s parameter in the posterior jointly with the population’s: person-level inference with <em>estimated, automatic shrinkage</em> (<a href="#fig-shrinkage" class="quarto-xref">Figure&nbsp;<span>16.2</span></a>) — <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s ad-hoc extraction, rebuilt as a consequence of the model.</li>
+<li>Data augmentation (Albert–Chib): reinstate latent utilities and the probit’s intractable likelihood dissolves into truncated-normal draws (<code>rtnorm()</code>, as promised in <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>) plus Bayesian regression. No tuning, no likelihood evaluations. The same move powers the MNP samplers of Part IV.</li>
+<li>The MNL layer alone resists conjugation; Metropolis-within-Gibbs — exact draws where available, M-H steps where not — closes the gap. All HB-MNL components are now on the bench.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-albertchib1993" class="csl-entry" role="listitem">
+Albert, James H., and Siddhartha Chib. 1993. <span>“Bayesian Analysis of Binary and Polychotomous Response Data.”</span> <em>Journal of the American Statistical Association</em> 88 (422): 669–79.
+</div>
+<div id="ref-bda3" class="csl-entry" role="listitem">
+Gelman, Andrew, John B. Carlin, Hal S. Stern, David B. Dunson, Aki Vehtari, and Donald B. Rubin. 2013. <em>Bayesian Data Analysis</em>. CRC press.
+</div>
+<div id="ref-rossi2005" class="csl-entry" role="listitem">
+Rossi, Peter E., Greg M. Allenby, and Robert McCulloch. 2005. <em>Bayesian Statistics and Marketing</em>. John Wiley &amp; Sons.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The connection is exact: a Gibbs block-update is a Metropolis–Hastings step whose proposal is the full conditional itself, for which the acceptance ratio works out to precisely 1. One algorithm, two ends of a proposal-quality spectrum — a fact we exploit in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> by mixing the two within one cycle.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The stripped-down story: imagine observing, for each of <span class="math inline">\(N\)</span> shoppers, <span class="math inline">\(T\)</span> noisy dollar amounts spent on laptop upgrades. Nothing here is choice modeling — deliberately. The hierarchy is the lesson; the MNL kernel plugs back in next chapter.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>A Pólya-Gamma augmentation <em>does</em> exist for logit models and is a lovely modern development — but the Metropolis-within-Gibbs route is standard in choice modeling, more general, and builds directly on our <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> machinery, so we take it.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

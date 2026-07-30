@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -341,7 +424,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#the-model" id="toc-the-model" class="nav-link active" data-scroll-target="#the-model"><span class="header-section-number">17.1</span> The Model</a></li>
   <li><a href="#the-sampler" id="toc-the-sampler" class="nav-link" data-scroll-target="#the-sampler"><span class="header-section-number">17.2</span> The Sampler</a></li>
-  <li><a href="#coding-the-hb-mnl-sampler" id="toc-coding-the-hb-mnl-sampler" class="nav-link" data-scroll-target="#coding-the-hb-mnl-sampler"><span class="header-section-number">17.3</span> Coding the HB-MNL Sampler</a></li>
+  <li><a href="#coding-it" id="toc-coding-it" class="nav-link" data-scroll-target="#coding-it"><span class="header-section-number">17.3</span> Coding It</a></li>
   <li><a href="#running-it" id="toc-running-it" class="nav-link" data-scroll-target="#running-it"><span class="header-section-number">17.4</span> Running It</a></li>
   <li><a href="#the-payoff-individual-level-posteriors" id="toc-the-payoff-individual-level-posteriors" class="nav-link" data-scroll-target="#the-payoff-individual-level-posteriors"><span class="header-section-number">17.5</span> The Payoff: Individual-Level Posteriors</a></li>
   <li><a href="#hb-and-msl-on-the-same-data" id="toc-hb-and-msl-on-the-same-data" class="nav-link" data-scroll-target="#hb-and-msl-on-the-same-data"><span class="header-section-number">17.6</span> HB and MSL on the Same Data</a></li>
@@ -373,43 +456,369 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- The centerpiece. Sources: DCMS Ch 12 (complete pseudo-code); Train 2001 (adaptive M-H step, HB-vs-MSL); allenby-rossi-2006 (output presentation); rossi-1996 (covariates in the upper level); ben-akiva-2019 Ch 5-7; validation: bayesm rhierMnlRwMixture -->
+<p>This is the destination chapter. The hierarchical Bayesian multinomial logit — <strong>HB-MNL</strong> to the industry that runs it thousands of times a day — is the model this book has been assembling since page one: MNL choice behavior (<a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>), person-specific coefficients (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>), a population distribution binding them (<a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>), and a posterior explored by MCMC (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>). Every block of its sampler is code you have already written and tested; this chapter’s work is assembly, and then the payoff that <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> promised: exact person-level inference, with the shrinkage negotiated by the model, at computational cost that <em>falls</em> where MSL’s rose.</p>
+<p>We estimate it on the same simulated dataset as <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> and <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> — one dataset, three estimators, honest comparison.</p>
 <section id="the-model" class="level2" data-number="17.1">
 <h2 data-number="17.1" class="anchored" data-anchor-id="the-model"><span class="header-section-number">17.1</span> The Model</h2>
-<!-- three layers written in full: MNL choice probabilities given beta_n; beta_n ~ N(bar-beta, Sigma) (optionally bar-beta = Delta z_n for observed drivers of taste); priors on bar-beta and Sigma; this is the mixed MNL of ch 13 wearing Bayesian clothes -->
+<p>Three layers, written once in full:</p>
+<p><span id="eq-hb-mnl"><span class="math display">\[
+\begin{aligned}
+\text{choices:} \quad &amp; y_{nt} \sim \text{MNL}\left( \mathbf{x}_{nt1}'\boldsymbol{\beta}_n, \ldots, \mathbf{x}_{ntJ}'\boldsymbol{\beta}_n \right) \\
+\text{people:} \quad &amp; \boldsymbol{\beta}_n \sim N\left( \bar{\boldsymbol{\beta}}, \Sigma \right) \\
+\text{priors:} \quad &amp; \bar{\boldsymbol{\beta}} \sim N\left( \mathbf{0}, 100 \, I \right), \qquad \Sigma \sim IW\left( \nu_0, V_0 \right)
+\end{aligned}
+\tag{17.1}\]</span></span></p>
+<p>The first two layers <em>are</em> the mixed MNL of <a href="13_mixed_msl.html#eq-mixed-model" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> — identical model of behavior and heterogeneity. The third layer is what makes it Bayesian: the population parameters themselves get (weakly informative) priors, standard choices being <span class="math inline">\(\nu_0 = K + 3\)</span> degrees of freedom and scale <span class="math inline">\(V_0 = \nu_0 I\)</span> for the inverse-Wishart [<span class="citation" data-cites="rossi2005">Rossi, Allenby, and McCulloch (<a href="references.html#ref-rossi2005" role="doc-biblioref">2005</a>)</span> — and mark that <span class="math inline">\(V_0\)</span>; it returns under scrutiny in the practical notes]. Two specification notes. We let <strong>all six</strong> coefficients be random with a <strong>full covariance</strong> <span class="math inline">\(\Sigma\)</span> — the specification that cost MSL its 27-parameter nightmare is the default here, because (as the sampler will show) the hierarchy prices covariance matrices in draws, not in optimization dimensions; it is also deliberately <em>more general than the truth</em> (which has three random coefficients, uncorrelated), letting us watch how an honest model handles generality it doesn’t need. And unlike <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> there is no draw count <span class="math inline">\(R\)</span>, no Halton bases, no simulated integral anywhere: the <span class="math inline">\(\boldsymbol{\beta}_n\)</span> are not integrated out but <em>sampled</em>, which is the whole trick.</p>
 </section>
 <section id="the-sampler" class="level2" data-number="17.2">
 <h2 data-number="17.2" class="anchored" data-anchor-id="the-sampler"><span class="header-section-number">17.2</span> The Sampler</h2>
-<!-- assemble from ch 16's parts: conjugate Gibbs draws for bar-beta and Sigma; a random-walk M-H step per person for beta_n (evaluating the ch 8 likelihood on that person's data); adaptive proposal scaling toward ~0.3 acceptance (Train 2001) -->
+<p>The joint posterior over everything unknown — <span class="math inline">\(p(\boldsymbol{\beta}_{1:N}, \bar{\boldsymbol{\beta}}, \Sigma \mid \text{data})\)</span>, a <span class="math inline">\((500 \times 6 + 6 + 21)\)</span>-dimensional object — is intractable whole but factors beautifully into <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> blocks:</p>
+<p><strong>Block 1: each <span class="math inline">\(\boldsymbol{\beta}_n\)</span>.</strong> Given <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\Sigma\)</span>, person <span class="math inline">\(n\)</span>’s conditional posterior is (their MNL likelihood over <span class="math inline">\(T=8\)</span> tasks) <span class="math inline">\(\times\)</span> (their <span class="math inline">\(N(\bar{\boldsymbol{\beta}}, \Sigma)\)</span> population prior) — exactly <a href="14_limits.html#eq-conditional-dist" class="quarto-xref">Equation&nbsp;<span>14.1</span></a>, now sampled rather than summarized. The MNL kernel blocks conjugacy (<a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s closing diagnosis), so this block takes a <strong>random-walk Metropolis step</strong>: propose <span class="math inline">\(\boldsymbol{\beta}_n' = \boldsymbol{\beta}_n + \tau L\mathbf{u}\)</span> — with <span class="math inline">\(\mathbf{u} \sim N(\mathbf{0}, I_K)\)</span> a fresh standard-normal vector — and accept by the log ratio. Two refinements from the trade <span class="citation" data-cites="train2001 rossi2005">(<a href="references.html#ref-train2001" role="doc-biblioref">Train 2001</a>; <a href="references.html#ref-rossi2005" role="doc-biblioref">Rossi, Allenby, and McCulloch 2005</a>)</span>: the proposal is shaped by the <em>current population covariance</em> (<span class="math inline">\(L\)</span> the lower-triangular Cholesky factor, <span class="math inline">\(LL' = \Sigma\)</span>; in R, <code>t(chol(Sig))</code>, since <code>chol()</code> returns the upper factor — steps stretched along directions the population actually varies), and the step size <span class="math inline">\(\tau\)</span> — <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>’s one knob, named <code>step</code> in the code — <strong>adapts during burn-in</strong> toward a ~30% acceptance rate, then freezes.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Explicitly, person <span class="math inline">\(n\)</span>’s move is accepted with probability <span class="math display">\[\alpha_n = \min\left(1, \; \frac{ \left[\prod_{t} P(y_{nt} \mid \boldsymbol{\beta}_n')\right] \phi(\boldsymbol{\beta}_n' \mid \bar{\boldsymbol{\beta}}, \Sigma) }{ \left[\prod_{t} P(y_{nt} \mid \boldsymbol{\beta}_n)\right] \phi(\boldsymbol{\beta}_n \mid \bar{\boldsymbol{\beta}}, \Sigma) } \right)\]</span> — <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>’s <a href="15_bayes_mnl.html#eq-mh-ratio" class="quarto-xref">Equation&nbsp;<span>15.3</span></a> with the population density <span class="math inline">\(\phi(\cdot \mid \bar{\boldsymbol{\beta}}, \Sigma)\)</span> playing the prior’s role.</p>
+<p><strong>Block 2: <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>.</strong> Given the current <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s and <span class="math inline">\(\Sigma\)</span>, this is the <a href="16_gibbs.html#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a> update with the <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s as “data” — a conjugate multivariate normal draw. Literally <code>gibbs_hier</code>’s middle block from <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>. With the prior parameterized by its <em>precision</em> <span class="math inline">\(A_0\)</span> — so <span class="math inline">\(N(\mathbf{0}, A_0^{-1}I)\)</span> with <span class="math inline">\(A_0 = 0.01\)</span> is exactly <a href="#eq-hb-mnl" class="quarto-xref">Equation&nbsp;<span>17.1</span></a>’s <span class="math inline">\(N(\mathbf{0}, 100I)\)</span>; precision is how the prior enters the update, and the hierarchical literature’s convention (and <code>bayesm</code>’s) is to pass it directly — precisions add exactly as in <a href="16_gibbs.html#eq-normal-normal" class="quarto-xref">Equation&nbsp;<span>16.2</span></a>: <span class="math display">\[\bar{\boldsymbol{\beta}} \mid \boldsymbol{\beta}_{1:N}, \Sigma \;\sim\; N\!\Big( \big(N\Sigma^{-1} + A_0 I\big)^{-1} \Sigma^{-1} \textstyle\sum_n \boldsymbol{\beta}_n, \;\; \big(N\Sigma^{-1} + A_0 I\big)^{-1} \Big)\]</span></p>
+<p><strong>Block 3: <span class="math inline">\(\Sigma\)</span>.</strong> Given <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s and <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>: inverse-Wishart draw from the accumulated deviations — the matrix version of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s variance update. Sampling an IW is one small function via the Bartlett decomposition (build a Wishart from chi-square and normal draws — a construction in the spirit of <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> — and invert). <span class="math display">\[\Sigma \mid \boldsymbol{\beta}_{1:N}, \bar{\boldsymbol{\beta}} \;\sim\; IW\!\Big( \nu_0 + N, \;\; V_0 + \textstyle\sum_n (\boldsymbol{\beta}_n - \bar{\boldsymbol{\beta}})(\boldsymbol{\beta}_n - \bar{\boldsymbol{\beta}})' \Big)\]</span> — prior degrees of freedom plus data observations, prior scale plus data scatter: <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s inverse-gamma grammar, in matrix dress.</p>
+<p>Metropolis-within-Gibbs, exactly as <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> forecast: two exact draws and one tuned step per cycle.</p>
 </section>
-<section id="coding-the-hb-mnl-sampler" class="level2" data-number="17.3">
-<h2 data-number="17.3" class="anchored" data-anchor-id="coding-the-hb-mnl-sampler"><span class="header-section-number">17.3</span> Coding the HB-MNL Sampler</h2>
-<!-- the full walkthrough, block by block; storage preallocation (ch 9); the complete R script assembled at the end -->
+<section id="coding-it" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="coding-it"><span class="header-section-number">17.3</span> Coding It</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>study <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/mixed_study.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> study<span class="sc">$</span>data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> d)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> d<span class="sc">$</span>choice</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(d[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> d<span class="sc">$</span>id</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>n_id <span class="ot">&lt;-</span> <span class="fu">max</span>(id); K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## per-person MNL log-likelihood, given an N x K matrix of betas</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## (the @sec-mnl-mle kernel + one rowsum by person; cf. @sec-mixed-msl)</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>persll <span class="ot">&lt;-</span> <span class="cf">function</span>(B, y, X, task_id, id, id_of_task) {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> B[id, ])</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id])</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(logP[y <span class="sc">==</span> <span class="dv">1</span>], id_of_task))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">## inverse-Wishart via the Bartlett decomposition</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>rinvwishart <span class="ot">&lt;-</span> <span class="cf">function</span>(nu, S) {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">nrow</span>(S); L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(<span class="fu">solve</span>(S)))</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, K, K)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(A) <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">rchisq</span>(K, nu <span class="sc">-</span> (<span class="dv">1</span><span class="sc">:</span>K) <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    A[<span class="fu">lower.tri</span>(A)] <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(K<span class="sc">*</span>(K<span class="dv">-1</span>)<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">solve</span>(L <span class="sc">%*%</span> A <span class="sc">%*%</span> <span class="fu">t</span>(A) <span class="sc">%*%</span> <span class="fu">t</span>(L))</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The only new machinery relative to <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>’s kernel is <code>persll()</code>’s last line: <code>logP[y == 1]</code> has one entry per task (the chosen alternative’s log probability), and <code>id_of_task</code> labels each task with its owner, so <code>rowsum()</code> adds each person’s eight task log-probabilities into the length-<span class="math inline">\(N\)</span> vector the Metropolis step consumes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hb_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(y, X, task_id, id, S_iter, burn,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nu0 =</span> <span class="fu">ncol</span>(X) <span class="sc">+</span> <span class="dv">3</span>, <span class="at">V0 =</span> <span class="fu">diag</span>(<span class="fu">ncol</span>(X)) <span class="sc">*</span> (<span class="fu">ncol</span>(X) <span class="sc">+</span> <span class="dv">3</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">A0 =</span> <span class="fl">0.01</span>, <span class="at">step0 =</span> <span class="fl">0.1</span>, <span class="at">thin_ind =</span> <span class="dv">10</span>) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X); n_id <span class="ot">&lt;-</span> <span class="fu">max</span>(id)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    id_of_task <span class="ot">&lt;-</span> id[<span class="sc">!</span><span class="fu">duplicated</span>(task_id)]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    B    <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_id, K)                 <span class="co"># person betas</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    bar  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K); Sig <span class="ot">&lt;-</span> <span class="fu">diag</span>(K)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    step <span class="ot">&lt;-</span> step0</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    ll_cur <span class="ot">&lt;-</span> <span class="fu">persll</span>(B, y, X, task_id, id, id_of_task)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">bar =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, K),</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">sd  =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, K),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">acc =</span> <span class="fu">numeric</span>(S_iter),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">B_draws =</span> <span class="fu">array</span>(<span class="cn">NA_real_</span>, <span class="fu">c</span>((S_iter <span class="sc">-</span> burn) <span class="sc">%/%</span> thin_ind, n_id, K)))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    kk <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S_iter) {</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- block 1: all beta_n at once, RW Metropolis --</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Sig))</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        prop <span class="ot">&lt;-</span> B <span class="sc">+</span> step <span class="sc">*</span> (<span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_id<span class="sc">*</span>K), n_id, K) <span class="sc">%*%</span> <span class="fu">t</span>(L))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        ll_prop <span class="ot">&lt;-</span> <span class="fu">persll</span>(prop, y, X, task_id, id, id_of_task)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        Q_cur  <span class="ot">&lt;-</span> <span class="fu">forwardsolve</span>(L, <span class="fu">t</span>(B    <span class="sc">-</span> <span class="fu">rep</span>(bar, <span class="at">each =</span> n_id)))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        Q_prop <span class="ot">&lt;-</span> <span class="fu">forwardsolve</span>(L, <span class="fu">t</span>(prop <span class="sc">-</span> <span class="fu">rep</span>(bar, <span class="at">each =</span> n_id)))</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        lpri_cur  <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">colSums</span>(Q_cur<span class="sc">^</span><span class="dv">2</span>)     <span class="co"># log N(bar, Sig), up to const</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        lpri_prop <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">colSums</span>(Q_prop<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        accept <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">runif</span>(n_id)) <span class="sc">&lt;</span> (ll_prop <span class="sc">+</span> lpri_prop <span class="sc">-</span> ll_cur <span class="sc">-</span> lpri_cur)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        B[accept, ] <span class="ot">&lt;-</span> prop[accept, ]</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        ll_cur[accept] <span class="ot">&lt;-</span> ll_prop[accept]</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (s <span class="sc">&lt;=</span> burn) step <span class="ot">&lt;-</span> step <span class="sc">*</span> <span class="fu">ifelse</span>(<span class="fu">mean</span>(accept) <span class="sc">&gt;</span> <span class="fl">0.30</span>, <span class="fl">1.05</span>, <span class="fl">0.95</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- block 2: bar | B, Sig (conjugate normal; prior N(0, (1/A0) I)) --</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        Sinv <span class="ot">&lt;-</span> <span class="fu">solve</span>(Sig)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>        Vb   <span class="ot">&lt;-</span> <span class="fu">solve</span>(n_id <span class="sc">*</span> Sinv <span class="sc">+</span> <span class="fu">diag</span>(A0, K))</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        bar  <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Vb <span class="sc">%*%</span> (Sinv <span class="sc">%*%</span> <span class="fu">colSums</span>(B)) <span class="sc">+</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">t</span>(<span class="fu">chol</span>(Vb)) <span class="sc">%*%</span> <span class="fu">rnorm</span>(K))</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="do">## -- block 3: Sigma | B, bar (inverse-Wishart) --</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        Dev <span class="ot">&lt;-</span> B <span class="sc">-</span> <span class="fu">rep</span>(bar, <span class="at">each =</span> n_id)</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        Sig <span class="ot">&lt;-</span> <span class="fu">rinvwishart</span>(nu0 <span class="sc">+</span> n_id, V0 <span class="sc">+</span> <span class="fu">crossprod</span>(Dev))</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>bar[s, ] <span class="ot">&lt;-</span> bar</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>sd[s, ]  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(Sig))</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>acc[s]   <span class="ot">&lt;-</span> <span class="fu">mean</span>(accept)</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (s <span class="sc">&gt;</span> burn <span class="sc">&amp;&amp;</span> (s <span class="sc">-</span> burn) <span class="sc">%%</span> thin_ind <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            kk <span class="ot">&lt;-</span> kk <span class="sc">+</span> <span class="dv">1</span>; out<span class="sc">$</span>B_draws[kk, , ] <span class="ot">&lt;-</span> B</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sixty lines, and read against the blueprint every one is accounted for: the vectorized all-persons Metropolis step (two <code>persll()</code> calls per iteration — footnote 1’s promise, kept), the population prior evaluated via <code>forwardsolve()</code> against <span class="math inline">\(\Sigma\)</span>’s Cholesky factor (the <a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a> quadratic form, no densities packages), the two conjugate draws, the burn-in-only step adaptation, and <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s preallocation (with the person-draws thinned — storing every 10th of <span class="math inline">\(500 \times 6\)</span> numbers keeps memory civil at no inferential cost). One subtlety earns its own sentence: <code>lpri_cur</code> and <code>lpri_prop</code> omit the normal density’s constant <span class="math inline">\(-\tfrac{1}{2}\log|\Sigma| - \tfrac{K}{2}\log 2\pi\)</span>, which is legitimate only because both are evaluated under the <em>same</em> <span class="math inline">\(\Sigma\)</span> within an iteration, so the constant cancels in the acceptance ratio. Mechanically, <code>forwardsolve(L, ...)</code> computes <span class="math inline">\(L^{-1}(\boldsymbol{\beta}_n - \bar{\boldsymbol{\beta}})\)</span>, whose squared column sums are the quadratic forms <span class="math inline">\((\boldsymbol{\beta}_n - \bar{\boldsymbol{\beta}})'\Sigma^{-1}(\boldsymbol{\beta}_n - \bar{\boldsymbol{\beta}})\)</span> for all 500 people in one triangular solve. And one bookkeeping asymmetry to hold onto: <code>bar</code> and <code>sd</code> store every iteration, burn-in included — we drop the first <code>burn</code> rows at analysis time — while the person-level draws are kept only after burn-in and only every <code>thin_ind</code>-th cycle, so each chain’s <code>B_draws</code> is a <span class="math inline">\(400 \times 500 \times 6\)</span> array: 400 thinned draws, 500 people, 6 coefficients.</p>
 </section>
 <section id="running-it" class="level2" data-number="17.4">
 <h2 data-number="17.4" class="anchored" data-anchor-id="running-it"><span class="header-section-number">17.4</span> Running It</h2>
-<!-- burn-in, chain length, diagnostics per layer; which parameters mix slowly and why; run-time accounting vs ch 13's MSL -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">170</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>S_iter <span class="ot">&lt;-</span> <span class="dv">5000</span>; burn <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>fit  <span class="ot">&lt;-</span> <span class="fu">hb_mnl</span>(y, X, task_id, id, <span class="at">S_iter =</span> S_iter, <span class="at">burn =</span> burn)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">hb_mnl</span>(y, X, task_id, id, <span class="at">S_iter =</span> S_iter, <span class="at">burn =</span> burn)   <span class="co"># second chain</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">acc_rate =</span> <span class="fu">mean</span>(fit<span class="sc">$</span>acc[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span>burn)])), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>acc_rate 
+     0.3 </code></pre>
+</div>
+</div>
+<p>Two independent chains (different starting randomness), a minute or so each — pause on that: the <em>full-covariance</em> hierarchical model, on data where MSL with a diagonal 3-coefficient specification took comparable time per fit, and where the full-covariance MSL was an extrapolated nightmare. Diagnostics, per <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>’s non-negotiable workflow:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> (burn <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>S_iter</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tr <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">iter =</span> post, <span class="at">chain =</span> <span class="st">"1"</span>, <span class="at">what =</span> <span class="st">"bar_price"</span>,  <span class="at">v =</span> fit<span class="sc">$</span>bar[post, <span class="dv">6</span>]),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">iter =</span> post, <span class="at">chain =</span> <span class="st">"2"</span>, <span class="at">what =</span> <span class="st">"bar_price"</span>,  <span class="at">v =</span> fit2<span class="sc">$</span>bar[post, <span class="dv">6</span>]),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">iter =</span> post, <span class="at">chain =</span> <span class="st">"1"</span>, <span class="at">what =</span> <span class="st">"sd_price"</span>,   <span class="at">v =</span> fit<span class="sc">$</span>sd[post, <span class="dv">6</span>]),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">iter =</span> post, <span class="at">chain =</span> <span class="st">"2"</span>, <span class="at">what =</span> <span class="st">"sd_price"</span>,   <span class="at">v =</span> fit2<span class="sc">$</span>sd[post, <span class="dv">6</span>])</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tr[tr<span class="sc">$</span>iter <span class="sc">%%</span> <span class="dv">4</span> <span class="sc">==</span> <span class="dv">0</span>, ], <span class="fu">aes</span>(iter, v, <span class="at">color =</span> chain)) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> what, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_color_grey</span>(<span class="at">end =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"iteration"</span>, <span class="at">y =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-hb-trace" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hb-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="17_hb_mnl_files/figure-html/fig-hb-trace-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hb-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17.1: Traces of the population mean and standard deviation of the price coefficient, two chains overlaid (post-burn-in, thinned for display). Fuzzy, overlapping, stationary: the caterpillars of <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>, now on a 3,027-parameter posterior.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rhat <span class="ot">&lt;-</span> <span class="cf">function</span>(mat) {                       <span class="co"># from @sec-bayes-mnl</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">&lt;-</span> <span class="fu">ncol</span>(mat); n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mat)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">&lt;-</span> n <span class="sc">*</span> <span class="fu">var</span>(<span class="fu">colMeans</span>(mat)); W <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">apply</span>(mat, <span class="dv">2</span>, var))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>(((n <span class="sc">-</span> <span class="dv">1</span>)<span class="sc">/</span>n <span class="sc">*</span> W <span class="sc">+</span> B<span class="sc">/</span>n) <span class="sc">/</span> W)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">range</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rhat</span>(<span class="fu">cbind</span>(fit<span class="sc">$</span>bar[post, k], fit2<span class="sc">$</span>bar[post, k])))), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.000 1.018</code></pre>
+</div>
+</div>
+<p>Healthy. Note in the traces that <code>sd_price</code> mixes more slowly than <code>bar_price</code> — variance components always do (they are informed only by dispersion <em>between</em> noisy person-estimates), and their effective sample sizes are correspondingly lower. Population-level results, pooling the chains:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bar_draws <span class="ot">&lt;-</span> <span class="fu">rbind</span>(fit<span class="sc">$</span>bar[post, ], fit2<span class="sc">$</span>bar[post, ])</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sd_draws  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(fit<span class="sc">$</span>sd[post, ],  fit2<span class="sc">$</span>sd[post, ])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth_bar =</span> study<span class="sc">$</span>bar_true,   <span class="at">post_bar =</span> <span class="fu">colMeans</span>(bar_draws),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">bar_sd    =</span> <span class="fu">apply</span>(bar_draws, <span class="dv">2</span>, sd),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth_sd  =</span> study<span class="sc">$</span>sd_true,    <span class="at">post_sd  =</span> <span class="fu">colMeans</span>(sd_draws)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(X)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(tab, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           truth_bar post_bar bar_sd truth_sd post_sd
+brandDell        0.5     0.62   0.06      0.0    0.60
+brandApple       1.0     1.15   0.07      0.8    0.85
+ram16            0.6     0.68   0.07      0.0    0.67
+ram32            0.9     0.98   0.07      0.6    0.81
+screen15         0.3     0.38   0.05      0.0    0.60
+price           -1.2    -1.33   0.06      0.7    0.74</code></pre>
+</div>
+</div>
+<p>Read the two halves separately. The population <em>means</em> recover well, if a touch generously scaled. The population <em>standard deviations</em> recover the pattern — the three truly-random coefficients (<code>apple</code>, <code>ram32</code>, <code>price</code>) estimated largest, in the right order — but the three truly-<em>fixed</em> coefficients show standard deviations near 0.6 rather than 0. That is not a bug, and diagnosing it is the practical-notes section below; the short version is that our default inverse-Wishart prior cannot believe in zero variance. File it, and first collect the payoff the chapter exists for.</p>
 </section>
 <section id="the-payoff-individual-level-posteriors" class="level2" data-number="17.5">
 <h2 data-number="17.5" class="anchored" data-anchor-id="the-payoff-individual-level-posteriors"><span class="header-section-number">17.5</span> The Payoff: Individual-Level Posteriors</h2>
-<!-- each respondent's posterior distribution of beta_n; shrinkage visualized (per-person MLE vs conditional estimates of ch 14 vs HB posteriors on one plot); exact uncertainty statements per person -->
+<p>The sampler’s <code>B_draws</code> array holds something neither <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> nor any amount of MSL effort could produce: <em>joint posterior draws of every respondent’s coefficient vector</em>, with population-level uncertainty propagated through automatically — <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\Sigma\)</span> wiggled underneath every person’s draws, the one-step architecture <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> demanded. Person-level point estimates and honest intervals are now sample statistics:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nd <span class="ot">&lt;-</span> <span class="fu">dim</span>(fit<span class="sc">$</span>B_draws)[<span class="dv">1</span>]                   <span class="co"># pool the two chains' person-draws</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>Bd <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA_real_</span>, <span class="fu">c</span>(<span class="dv">2</span><span class="sc">*</span>nd, n_id, K))     <span class="co"># (rbind would flatten a 3-D array)</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>Bd[<span class="dv">1</span><span class="sc">:</span>nd, , ] <span class="ot">&lt;-</span> fit<span class="sc">$</span>B_draws</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>Bd[(nd<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span><span class="sc">*</span>nd), , ] <span class="ot">&lt;-</span> fit2<span class="sc">$</span>B_draws</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>bhat_price <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(Bd[, , <span class="dv">6</span>])           <span class="co"># posterior mean per person</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>blo <span class="ot">&lt;-</span> <span class="fu">apply</span>(Bd[, , <span class="dv">6</span>], <span class="dv">2</span>, quantile, <span class="fl">0.05</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>bhi <span class="ot">&lt;-</span> <span class="fu">apply</span>(Bd[, , <span class="dv">6</span>], <span class="dv">2</span>, quantile, <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">171</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>show <span class="ot">&lt;-</span> <span class="fu">sample</span>(n_id, <span class="dv">40</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>o <span class="ot">&lt;-</span> show[<span class="fu">order</span>(bhat_price[show])]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dfp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">rank =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">40</span>, <span class="at">mean =</span> bhat_price[o], <span class="at">lo =</span> blo[o], <span class="at">hi =</span> bhi[o],</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">truth =</span> study<span class="sc">$</span>betas_true[o, <span class="dv">6</span>])</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfp, <span class="fu">aes</span>(<span class="at">x =</span> rank)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">xend =</span> rank, <span class="at">y =</span> lo, <span class="at">yend =</span> hi), <span class="at">color =</span> <span class="st">"grey60"</span>) <span class="sc">+</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean), <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> truth), <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">size =</span> <span class="fl">1.8</span>) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"respondent (ordered)"</span>, <span class="at">y =</span> <span class="fu">expression</span>(beta[price]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-hb-individuals" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-hb-individuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="17_hb_mnl_files/figure-html/fig-hb-individuals-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-hb-individuals-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;17.2: The deliverable: posterior means (dots) and 90% credible intervals (segments) of the price coefficient for 40 randomly chosen respondents, ordered by posterior mean, with each respondent’s true coefficient marked (x). Intervals are person-specific, honest, and–for most respondents–cover the truth.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">cor_with_truth =</span> <span class="fu">round</span>(<span class="fu">cor</span>(bhat_price, study<span class="sc">$</span>betas_true[, <span class="dv">6</span>]), <span class="dv">2</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">coverage_90 =</span> <span class="fu">round</span>(<span class="fu">mean</span>(study<span class="sc">$</span>betas_true[, <span class="dv">6</span>] <span class="sc">&gt;=</span> blo <span class="sc">&amp;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                           study<span class="sc">$</span>betas_true[, <span class="dv">6</span>] <span class="sc">&lt;=</span> bhi), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>cor_with_truth    coverage_90 
+          0.51           0.92 </code></pre>
+</div>
+</div>
+<p>Person-by-person tracking of the truth on par with <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s conditional means<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> — but now each respondent carries an interval, and those intervals <em>cover at close to their nominal rate</em>. That coverage number is quietly the chapter’s most important line: it certifies that the person-level uncertainty statements mean what they say, the exact property <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> proved the two-step likelihood route could not deliver. Shrinkage is visible too — posterior means span a narrower range than the truths, for <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s precision-weighted reasons — so the <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> warning stands: the spread of <em>tastes</em> is read from <span class="math inline">\(\Sigma\)</span>’s posterior, never from the spread of person-level means.</p>
 </section>
 <section id="hb-and-msl-on-the-same-data" class="level2" data-number="17.6">
 <h2 data-number="17.6" class="anchored" data-anchor-id="hb-and-msl-on-the-same-data"><span class="header-section-number">17.6</span> HB and MSL on the Same Data</h2>
-<!-- estimate ch 13's simulated dataset both ways; population parameters agree; only HB hands you the individuals natively; when each approach wins (Train 2001 scoreboard) -->
+<p>The comparison <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> bookmarked. Same dataset, two engines:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>msl <span class="ot">&lt;-</span> study<span class="sc">$</span>theta_hat      <span class="co"># @sec-mixed-msl: means (6) + log-sds (3 random)</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>comp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth =</span> <span class="fu">c</span>(study<span class="sc">$</span>bar_true, study<span class="sc">$</span>sd_true[study<span class="sc">$</span>rc]),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">msl   =</span> <span class="fu">c</span>(msl[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="fu">exp</span>(msl[<span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>])),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">hb    =</span> <span class="fu">c</span>(<span class="fu">colMeans</span>(bar_draws), <span class="fu">colMeans</span>(sd_draws)[study<span class="sc">$</span>rc])</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(comp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="fu">paste0</span>(<span class="st">"sd_"</span>, <span class="fu">colnames</span>(X)[study<span class="sc">$</span>rc]))</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(comp, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              truth   msl    hb
+brandDell       0.5  0.55  0.62
+brandApple      1.0  1.03  1.15
+ram16           0.6  0.61  0.68
+ram32           0.9  0.89  0.98
+screen15        0.3  0.34  0.38
+price          -1.2 -1.22 -1.33
+sd_brandApple   0.8  0.68  0.85
+sd_ram32        0.6  0.54  0.81
+sd_price        0.7  0.52  0.74</code></pre>
+</div>
+</div>
+<p>Substantive agreement on every population mean and on the heterogeneity ordering, with the HB numbers running slightly larger — partly the IW floor (below), partly the specification gap (HB’s phantom heterogeneity on the fixed coefficients absorbs scale). The fair scorecard, then <span class="citation" data-cites="train2001 benakiva2019">(and it matches the literature’s: <a href="references.html#ref-train2001" role="doc-biblioref">Train 2001</a>; <a href="references.html#ref-benakiva2019" role="doc-biblioref">Ben-Akiva, McFadden, and Train 2019</a>, Ch. 7)</span>:</p>
+<ul>
+<li><strong>Population parameters, modest spec:</strong> a tie — both engines recover them, in comparable time here.</li>
+<li><strong>Full covariance matrices:</strong> HB, walking away. MSL’s 27-parameter Cholesky climb is HB’s one extra <code>rinvwishart()</code> line.</li>
+<li><strong>Individual-level inference:</strong> HB by design — native draws with honest coverage versus a bolt-on with a plug-in.</li>
+<li><strong>Sharp-null economy:</strong> MSL retains one genuine edge — when you <em>want</em> a coefficient exactly fixed (no heterogeneity), you just don’t randomize it, while the IW-equipped hierarchy resists zeros (next section) and constraining it takes work.</li>
+<li><strong>Tuning burdens:</strong> a wash, honestly — MSL trades draw counts and starting values for HB’s burn-in judgment and step adaptation. Neither is push-button; both are manageable with the diagnostics this book has drilled.</li>
+</ul>
 </section>
 <section id="validation-against-bayesm" class="level2" data-number="17.7">
 <h2 data-number="17.7" class="anchored" data-anchor-id="validation-against-bayesm"><span class="header-section-number">17.7</span> Validation Against <code>bayesm</code></h2>
-<!-- rhierMnlRwMixture on the same data; mapping our notation to bayesm's -->
+<p>The reference implementation is <code>rhierMnlRwMixture</code> <span class="citation" data-cites="rossi2005">(<a href="references.html#ref-rossi2005" role="doc-biblioref">Rossi, Allenby, and McCulloch 2005</a>)</span> — the same model with a mixture-of-normals population layer, set to one component to match <a href="#eq-hb-mnl" class="quarto-xref">Equation&nbsp;<span>17.1</span></a>, and the same default priors. Its data format wants each person’s tasks as a list of per-occasion design matrices:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesm)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>J <span class="ot">&lt;-</span> <span class="dv">3</span>; T <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>lgtdata <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>n_id, <span class="cf">function</span>(n) {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    rows <span class="ot">&lt;-</span> <span class="fu">which</span>(id <span class="sc">==</span> n)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    Xn <span class="ot">&lt;-</span> X[rows, ]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">y =</span> <span class="fu">max.col</span>(<span class="fu">t</span>(<span class="fu">matrix</span>(y[rows], <span class="at">nrow =</span> J))),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">X =</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span>T, <span class="cf">function</span>(t) Xn[((t<span class="dv">-1</span>)<span class="sc">*</span>J <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(t<span class="sc">*</span>J), , <span class="at">drop =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">172</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>outb <span class="ot">&lt;-</span> <span class="fu">rhierMnlRwMixture</span>(<span class="at">Data =</span> <span class="fu">list</span>(<span class="at">p =</span> J, <span class="at">lgtdata =</span> lgtdata),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Prior =</span> <span class="fu">list</span>(<span class="at">ncomp =</span> <span class="dv">1</span>),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">Mcmc =</span> <span class="fu">list</span>(<span class="at">R =</span> <span class="dv">5000</span>, <span class="at">keep =</span> <span class="dv">2</span>, <span class="at">nprint =</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>keepb <span class="ot">&lt;-</span> <span class="dv">1001</span><span class="sc">:</span><span class="dv">2500</span>     <span class="co"># kept draws: keep = 2 stores every 2nd, so this discards 2,000 iterations as burn-in</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mu_b <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(keepb, <span class="cf">function</span>(s) outb<span class="sc">$</span>nmix<span class="sc">$</span>compdraw[[s]][[<span class="dv">1</span>]]<span class="sc">$</span>mu))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sd_b <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(keepb, <span class="cf">function</span>(s) {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    rooti <span class="ot">&lt;-</span> outb<span class="sc">$</span>nmix<span class="sc">$</span>compdraw[[s]][[<span class="dv">1</span>]]<span class="sc">$</span>rooti</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">chol2inv</span>(<span class="fu">t</span>(rooti))))</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">ours_bar =</span> <span class="fu">colMeans</span>(bar_draws), <span class="at">bayesm_bar =</span> <span class="fu">colMeans</span>(mu_b),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">ours_sd  =</span> <span class="fu">colMeans</span>(sd_draws),  <span class="at">bayesm_sd  =</span> <span class="fu">colMeans</span>(sd_b)), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1] [,2] [,3] [,4] [,5]  [,6]
+ours_bar   0.62 1.15 0.68 0.98 0.38 -1.33
+bayesm_bar 0.61 1.14 0.67 0.98 0.38 -1.34
+ours_sd    0.60 0.85 0.67 0.81 0.60  0.74
+bayesm_sd  0.61 0.82 0.67 0.72 0.58  0.69</code></pre>
+</div>
+</div>
+<p>Two independently coded samplers — ours, sixty transparent lines; theirs, a compiled industry standard — agreeing on both layers of the posterior.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Note that <code>bayesm</code> shows the <em>same</em> elevated standard deviations on the truly-fixed coefficients: the phenomenon is the prior’s, not our code’s, which is exactly what the next section establishes on purpose.</p>
 </section>
 <section id="practical-notes" class="level2" data-number="17.8">
 <h2 data-number="17.8" class="anchored" data-anchor-id="practical-notes"><span class="header-section-number">17.8</span> Practical Notes</h2>
-<!-- priors on Sigma matter more than you'd like (cite Allenby 2014 prior-tightening); sign constraints via log-reparameterization (price); label conventions for reporting (posterior of the mean vs the distribution of tastes) -->
+<p><strong>The inverse-Wishart floor — priors on <span class="math inline">\(\Sigma\)</span> matter.</strong> Our recovery table showed <span class="math inline">\(\hat\sigma \approx 0.6\)</span> for coefficients whose true heterogeneity is zero. The mechanism: the IW prior with scale <span class="math inline">\(V_0 = \nu_0 I\)</span> puts essentially no mass on variances near zero — it is a prior <em>against</em> homogeneity — and eight tasks per person cannot overrule it (a person’s eight choices are consistent with modest taste variation plus Gumbel noise). Watch the prior’s hand move, by re-running with the scale matrix shrunk an order of magnitude:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">173</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>fit_tight <span class="ot">&lt;-</span> <span class="fu">hb_mnl</span>(y, X, task_id, id, <span class="at">S_iter =</span> <span class="dv">4000</span>, <span class="at">burn =</span> <span class="dv">1000</span>,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">V0 =</span> <span class="fu">diag</span>(K) <span class="sc">*</span> (K <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">*</span> <span class="fl">0.1</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">default_V0 =</span> <span class="fu">colMeans</span>(sd_draws),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">tight_V0   =</span> <span class="fu">colMeans</span>(fit_tight<span class="sc">$</span>sd[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>), ]),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">truth      =</span> study<span class="sc">$</span>sd_true), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1] [,2] [,3] [,4] [,5] [,6]
+default_V0 0.60 0.85 0.67 0.81 0.60 0.74
+tight_V0   0.31 0.58 0.33 0.53 0.33 0.41
+truth      0.00 0.80 0.00 0.60 0.00 0.70</code></pre>
+</div>
+</div>
+<p>The phantom standard deviations drop by nearly half — and the real ones shrink too, <code>sd_price</code> now <em>under</em> the truth. Neither prior is “right”: the IW simply cannot express “some variances near zero, others large” — its single scale parameter couples them — and this is a known, documented limitation with active remedies in the literature (separation strategies; tightened scales chosen by prior predictive checks, as in <span class="citation" data-cites="allenby2014">Allenby et al. (<a href="references.html#ref-allenby2014" role="doc-biblioref">2014</a>)</span>). The working discipline is the one <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> taught: <em>run the sensitivity, report it, and interpret heterogeneity magnitudes with the prior in view.</em> With hundreds of tasks per person the data would overwhelm all of this; with eight, the prior is a coauthor, and pretending otherwise is the error.</p>
+<p><strong>Sign constraints via transformation.</strong> Our population layer lets some simulated consumers like high prices (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>’s blemish, inherited). The standard repair reparameterizes: model <span class="math inline">\(\theta_n\)</span> with <span class="math inline">\(\beta_{n,\text{price}} = -e^{\theta_n}\)</span> — <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>’s lognormal transformation — so every person’s price coefficient is negative while <span class="math inline">\(\theta_n\)</span> enjoys the normal hierarchy untouched. In the sampler, exactly one line changes: <code>persll()</code>’s utility computation applies the transform before multiplying. The blocks, the conjugacy, the adaptation — all survive, because the hierarchy never cared what the coefficients <em>mean</em>. We defer the demonstration to <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a>, where transformed coefficients earn a starring role in the budget-constrained model.</p>
+<p><strong>Reporting: two different “heterogeneity” statements.</strong> The posterior of <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span> answers “where is the average consumer” — and its uncertainty shrinks with <span class="math inline">\(N\)</span>. The posterior of the <em>taste distribution</em> <span class="math inline">\(N(\bar{\boldsymbol{\beta}}, \Sigma)\)</span> answers “what consumers are out there” — and its spread does not shrink with <span class="math inline">\(N\)</span>; it is an estimate of real variety. Deliverables built on the wrong one (a “share who would pay X” computed from <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>’s posterior instead of the taste distribution) are a classic applied error <span class="citation" data-cites="chapman2013">(<a href="references.html#ref-chapman2013" role="doc-biblioref">Chapman 2013</a>’s “averages hide the distribution,” now with the machinery to do it right)</span>. <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> builds the correct versions.</p>
+<p>One save for the chapters ahead — the pooled draws, which <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> will spend freely:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="fu">list</span>(<span class="at">bar_draws =</span> bar_draws, <span class="at">sd_draws =</span> sd_draws, <span class="at">B_draws =</span> Bd,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">X_names =</span> <span class="fu">colnames</span>(X)),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">file =</span> <span class="st">"../data/hb_mnl_fit.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="key-learnings" class="level2" data-number="17.9">
 <h2 data-number="17.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">17.9</span> Key Learnings</h2>
+<ul>
+<li>The HB-MNL is the mixed MNL wearing priors (<a href="#eq-hb-mnl" class="quarto-xref">Equation&nbsp;<span>17.1</span></a>), and its sampler is pure assembly: an all-persons vectorized Metropolis step on the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel (adaptive during burn-in, ~30% acceptance), a conjugate normal draw for <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>, an inverse-Wishart draw for <span class="math inline">\(\Sigma\)</span> — Metropolis-within-Gibbs as <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> designed it, in sixty lines that run two chains in minutes.</li>
+<li>The full covariance matrix that strained MSL is free here — no draws, no Cholesky optimization, no <span class="math inline">\(R\)</span> to choose. The engines agree on population parameters where their specifications overlap (and <code>bayesm</code> agrees with our sixty lines on everything).</li>
+<li>The payoff is <a href="#fig-hb-individuals" class="quarto-xref">Figure&nbsp;<span>17.2</span></a>: every respondent gets a posterior — point, interval, the works — with population uncertainty propagated in one step, and the 90% intervals <em>actually cover</em> ~90% of the true individual coefficients. This is the deliverable <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> proved likelihood could not honestly produce.</li>
+<li>Shrinkage discipline carries over: person means understate taste spread by construction; read heterogeneity from <span class="math inline">\(\Sigma\)</span>, and never confuse the posterior of the average consumer with the distribution of consumers.</li>
+<li>The priors are coauthors at <span class="math inline">\(T = 8\)</span>: the default IW cannot believe in zero variance (phantom sds near 0.6 on truly-fixed coefficients, reproduced by <code>bayesm</code>), and tightening <span class="math inline">\(V_0\)</span> moves every variance — run the sensitivity, report it, interpret accordingly.</li>
+<li>Sign constraints are one transformed line away (lognormal price), because the hierarchy is agnostic about coefficient meaning — the extensibility that <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a> will exploit.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-allenby2014" class="csl-entry" role="listitem">
+Allenby, Greg M., Jeff D. Brazell, John R. Howell, and Peter E. Rossi. 2014. <span>“Economic Valuation of Product Features.”</span> <em>Quantitative Marketing and Economics</em> 12: 421–56.
+</div>
+<div id="ref-benakiva2019" class="csl-entry" role="listitem">
+Ben-Akiva, Moshe, Daniel McFadden, and Kenneth Train. 2019. <em>Foundations of Stated Preference Elicitation: Consumer Behavior and Choice-Based Conjoint Analysis</em>. Vol. 10. Foundations and Trends in Econometrics 1–2. Now Publishers.
+</div>
+<div id="ref-chapman2013" class="csl-entry" role="listitem">
+Chapman, Christopher N. 2013. <span>“9 Things Clients Get Wrong about Conjoint Analysis.”</span> In <em>Sawtooth Software Conference Proceedings</em>.
+</div>
+<div id="ref-rossi2005" class="csl-entry" role="listitem">
+Rossi, Peter E., Greg M. Allenby, and Robert McCulloch. 2005. <em>Bayesian Statistics and Marketing</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-train2001" class="csl-entry" role="listitem">
+Train, Kenneth. 2001. <span>“A Comparison of Hierarchical Bayes and Maximum Simulated Likelihood for Mixed Logit.”</span> <em>Working Paper, University of California, Berkeley</em>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Freezing matters: a chain whose proposal keeps adapting forever is not quite a Markov chain, and its stationarity guarantees decay. Adapt during burn-in (discarded anyway), then run fixed. Also note the happy structure: given <span class="math inline">\((\bar{\boldsymbol{\beta}}, \Sigma)\)</span>, the <span class="math inline">\(N\)</span> person-blocks are conditionally <em>independent</em> — so all 500 Metropolis steps can be executed simultaneously with matrix operations: propose an <span class="math inline">\(N \times K\)</span> matrix, evaluate all persons’ likelihoods with one stacked <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel call, accept element-wise. Two kernel calls per iteration, total, for all people. That is why this sampler runs in minutes.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Slightly lower correlation than <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s conditional means achieve on the same data, in fact — and the reason is instructive: the HB model here estimates all six coefficients as random with free covariance, spreading eight tasks of personal information across a richer parameterization than the (conveniently truth-matching) three-coefficient model <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> inherited. Generality has a price; honesty about not knowing the truth’s structure is what the extra 0.05 of correlation bought.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>To numerical-comparison precision for MCMC: posterior means from finite chains carry Monte Carlo error, so “agreement” means within a couple of MC standard errors, not five decimals. The <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> five-decimal standard was for deterministic optimizers.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

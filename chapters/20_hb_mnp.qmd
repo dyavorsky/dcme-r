@@ -4,22 +4,220 @@
 
 # The Hierarchical Bayesian MNP {#sec-hb-mnp}
 
-<!-- Sources: rossi-1996 (hierarchical MNP with demographics; App A conditionals); mcculloch-rossi-1994 §hierarchical extension -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+This short chapter is the book's technical summit, and the climb is gentler than the altitude suggests. The **hierarchical Bayesian MNP** puts person-specific coefficients over the probit kernel --- both of the deep generalizations this book has built, *simultaneously*: flexible substitution through a free error covariance (@sec-mnp) and taste heterogeneity through a population distribution (@sec-hb-mnl), in one model, estimated by one sampler. It is the model of @rossi1996, who used it to price the value of purchase-history data, and its construction here is nearly pure assembly --- which is itself the chapter's lesson: augmentation and hierarchy *compose*.
+
+There is one genuinely delightful surprise waiting in the sampler, so let us get to it.
 
 ## The Model
 
-<!-- person-level beta_n over the MNP kernel; upper level as in ch 17, optionally with covariates (beta_n = Delta z_n + v_n, Rossi et al. 1996); what the extra flexibility buys over HB-MNL -->
+Stack the layers. The data layer is @sec-mnp's differenced MNP, now with person-owned coefficients; the population and prior layers are @sec-hb-mnl's, plus a prior for the error covariance:
 
-## The Sampler
+$$
+\begin{aligned}
+\text{utilities:} \quad & \mathbf{d}_{nt} = \tilde{X}_{nt} \bfbeta_n + \mathbf{e}_{nt},
+    \qquad \mathbf{e}_{nt} \sim N(\mathbf{0}, W), \qquad y_{nt} = \text{(who wins)} \\
+\text{people:} \quad & \bfbeta_n \sim N(\bar{\bfbeta}, \Sigma) \\
+\text{priors:} \quad & \bar{\bfbeta} \sim N(\mathbf{0}, 100 I), \quad
+    \Sigma \sim IW(\nu_0, V_0), \quad W \sim IW(\nu_w, V_w)
+\end{aligned}
+$$ {#eq-hb-mnp}
 
-<!-- ch 19's augmentation blocks nested inside ch 17's hierarchy; enumerate all blocks; note which are conjugate (all of them -- the beauty of augmentation here) -->
+where $\mathbf{d}_{nt}$ is the pair of base-differenced utilities, $\tilde{X}_{nt}$ stacks the two differenced attribute rows (`Xd2` and `Xd3` in code), and $W$ is, as in @sec-mnp-est, the unnormalized differenced error covariance --- the sampled stand-in for @sec-mnp's $\tilde\Omega$, recovered as $W/w_{11}$. Identification: everything from @sec-mnp still applies, resolved the McCulloch--Rossi way --- sample unidentified, then normalize every saved draw at its own rate: the utility-scale objects ($\bfbeta_n$, $\bar{\bfbeta}$, and the heterogeneity standard deviations $\sqrt{\operatorname{diag}\Sigma}$) divide by $\sqrt{w_{11}}$; the covariance-scale objects ($\Sigma$ and $W$ itself) divide by $w_{11}$. The identified error covariance is $\tilde\Omega = W/w_{11}$, exactly as in @sec-mnp-est --- the code's `scd` and `W` ratios implement precisely this.
 
-## Coding the HB-MNP Sampler
+Why want both generalizations at once? Because they answer different questions that real categories pose simultaneously: the error covariance captures *alternative-level* similarity (Windows machines sharing unobserved appeal --- for everyone), while $\Sigma$ captures *person-level* persistence (an Apple lover across all eight tasks). A model with only one channel forces the other's behavior into the wrong container, and both containers feed the substitution patterns that pricing decisions consume.
 
-<!-- assembled from parts the reader has already written; simulate-and-recover -->
+## The Sampler: No Metropolis Anywhere
+
+List the full conditionals, each inherited from a chapter that already built it:
+
+1. **Latent utilities $\mathbf{d}_{nt}$** given $\bfbeta_n, W$: truncated bivariate normals, region set by the observed choice --- @sec-mnp-est's block, verbatim, with each row's mean using its *own person's* $\bfbeta_n$.
+2. **Each $\bfbeta_n$** given that person's utilities, $W$, $\bar{\bfbeta}$, $\Sigma$: and here is the surprise --- with the utilities in hand, person $n$'s data layer is *linear and normal*, so this is a **conjugate Bayesian regression** (@sec-gibbs's normal--normal update with prior $N(\bar{\bfbeta}, \Sigma)$): an exact multivariate normal draw. The Metropolis step that the HB-MNL needed for exactly this block --- because the *logit* kernel resists conjugacy --- is unnecessary. No step size, no adaptation, no acceptance monitoring.
+3. **$\bar{\bfbeta}$ and $\Sigma$** given the $\bfbeta_n$'s: @sec-hb-mnl's conjugate draws, unchanged.
+4. **$W$** given residuals: @sec-mnp-est's inverse-Wishart, unchanged.
+
+Every block exact. Data augmentation didn't just rescue the MNP's likelihood; it made the probit's *hierarchy* fully conjugate --- strictly cleaner machinery than the logit's, a genuine argument for the MNP that only becomes visible from inside the sampler.[^1]
+
+[^1]: The trade-off ledger: the probit pays instead in the latent-utility block (which the HB-MNL doesn't have) and its per-person regression loop. Roughly comparable total compute here; the probit's structural advantage grows with the amount of hierarchy, the logit's with the number of alternatives.
+
+## Coding It
+
+Simulate the study --- @sec-mixed-msl's heterogeneity truth combined with @sec-mnp's error-correlation truth --- then the sampler:
+
+```{r}
+set.seed(200)
+bar_true <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9,
+              screen15 = 0.3, price = -1.2)
+sd_true  <- c(0, 0.8, 0, 0.6, 0, 0.7)
+rc <- c(2, 4, 6)
+Omega_true <- matrix(c(1, 0.6, 0,  0.6, 1, 0,  0, 0, 1), 3, 3)
+
+N <- 500; T <- 8; J <- 3
+n_rows <- N * T * J
+df <- data.frame(
+    id = rep(seq_len(N), each = T*J),
+    task = rep(rep(seq_len(T), each = J), times = N),
+    alt = factor(rep(c("Acer","Dell","Apple"), times = N*T),
+                 levels = c("Acer","Dell","Apple")),
+    ram = factor(sample(c("8","16","32"), n_rows, replace = TRUE),
+                 levels = c("8","16","32")),
+    screen = factor(sample(c("13","15"), n_rows, replace = TRUE),
+                    levels = c("13","15")),
+    price = round(runif(n_rows, 0.8, 2.4), 2))
+X <- model.matrix(~ alt + ram + screen + price, data = df)[, -1]
+K <- ncol(X)
+
+betas <- matrix(rep(bar_true, each = N), N, K)          # person betas
+for (k in rc) betas[, k] <- betas[, k] + sd_true[k] * rnorm(N)
+L <- t(chol(Omega_true))
+eps <- as.vector(L %*% matrix(rnorm(n_rows), nrow = J))  # within-task correlation
+U <- rowSums(X * betas[df$id, ]) + eps
+task_id <- cumsum(!duplicated(df[, c("id", "task")]))
+df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+
+## differenced objects (@sec-mnp-est) and the person index of each task
+i1 <- which(df$alt == "Acer"); i2 <- which(df$alt == "Dell")
+i3 <- which(df$alt == "Apple")
+Xd2 <- X[i2, ] - X[i1, ]; Xd3 <- X[i3, ] - X[i1, ]
+chosen <- as.integer(df$alt[df$choice == 1])
+person <- df$id[!duplicated(task_id)]
+```
+
+```{r}
+#| echo: false
+rtnorm <- function(n, mean, sd, a, b) {
+    Fa <- pnorm(a, mean, sd); Fb <- pnorm(b, mean, sd)
+    u <- pmin(pmax(runif(n, Fa, Fb), 1e-12), 1 - 1e-12)
+    qnorm(u, mean, sd)
+}
+rinvwishart <- function(nu, S) {
+    K <- nrow(S); L <- t(chol(solve(S)))
+    A <- matrix(0, K, K)
+    diag(A) <- sqrt(rchisq(K, nu - (1:K) + 1))
+    A[lower.tri(A)] <- rnorm(K*(K-1)/2)
+    solve(L %*% A %*% t(A) %*% t(L))
+}
+```
+
+```{r}
+hb_mnp <- function(Xd2, Xd3, chosen, person, S_iter, burn,
+                   nu0 = ncol(Xd2) + 3, V0 = diag(ncol(Xd2)) * (ncol(Xd2) + 3) * 0.1,
+                   nu_w = 5, V_w = diag(2) * 5, A0 = 0.01) {
+    K <- ncol(Xd2); n <- nrow(Xd2); N <- max(person)
+    B <- matrix(0, N, K); bar <- rep(0, K); Sig <- diag(K); W <- diag(2)
+    d2 <- ifelse(chosen == 2, 1, -0.5); d3 <- ifelse(chosen == 3, 1, -0.5)
+    rows_of <- split(seq_len(n), person)
+    out <- list(bar = matrix(NA_real_, S_iter, K),
+                sd = matrix(NA_real_, S_iter, K),
+                W = matrix(NA_real_, S_iter, 3),
+                Bsum = matrix(0, N, K), nkeep = 0)
+    for (s in 1:S_iter) {
+        ## 1. latent utilities (rows use their person's beta)
+        Brow <- B[person, ]
+        m2 <- rowSums(Xd2 * Brow); m3 <- rowSums(Xd3 * Brow)
+        c21 <- W[1,2]/W[2,2]; v21 <- W[1,1] - W[1,2]^2/W[2,2]
+        c12 <- W[1,2]/W[1,1]; v12 <- W[2,2] - W[1,2]^2/W[1,1]
+        lo2 <- ifelse(chosen == 2, pmax(0, d3), -Inf)
+        hi2 <- ifelse(chosen == 2, Inf, ifelse(chosen == 1, 0, d3))
+        d2  <- rtnorm(n, m2 + c21*(d3 - m3), sqrt(v21), lo2, hi2)
+        lo3 <- ifelse(chosen == 3, pmax(0, d2), -Inf)
+        hi3 <- ifelse(chosen == 3, Inf, ifelse(chosen == 1, 0, d2))
+        d3  <- rtnorm(n, m3 + c12*(d2 - m2), sqrt(v12), lo3, hi3)
+        ## 2. each beta_n: conjugate regression, prior N(bar, Sig)
+        Li  <- solve(t(chol(W)))
+        Y1  <- Li[1,1]*d2 + Li[1,2]*d3;   Y2  <- Li[2,1]*d2 + Li[2,2]*d3
+        Xw1 <- Li[1,1]*Xd2 + Li[1,2]*Xd3; Xw2 <- Li[2,1]*Xd2 + Li[2,2]*Xd3
+        Sinv <- solve(Sig); Sb <- Sinv %*% bar
+        for (nn in 1:N) {
+            r  <- rows_of[[nn]]
+            Vb <- chol2inv(chol(crossprod(Xw1[r, , drop = FALSE]) +
+                                crossprod(Xw2[r, , drop = FALSE]) + Sinv))
+            mb <- Vb %*% (crossprod(Xw1[r, , drop = FALSE], Y1[r]) +
+                          crossprod(Xw2[r, , drop = FALSE], Y2[r]) + Sb)
+            B[nn, ] <- as.vector(mb + t(chol(Vb)) %*% rnorm(K))
+        }
+        ## 3. bar and Sigma (@sec-hb-mnl blocks)
+        Vbb <- solve(N * Sinv + diag(A0, K))
+        bar <- as.vector(Vbb %*% (Sinv %*% colSums(B)) +
+                         t(chol(Vbb)) %*% rnorm(K))
+        Dev <- B - rep(bar, each = N)
+        Sig <- rinvwishart(nu0 + N, V0 + crossprod(Dev))
+        ## 4. W (@sec-mnp-est block, residuals at person betas)
+        Brow <- B[person, ]
+        e2 <- d2 - rowSums(Xd2 * Brow); e3 <- d3 - rowSums(Xd3 * Brow)
+        Sres <- rbind(c(sum(e2^2), sum(e2*e3)), c(sum(e2*e3), sum(e3^2)))
+        W <- rinvwishart(nu_w + n, V_w + Sres)
+
+        out$bar[s, ] <- bar; out$sd[s, ] <- sqrt(diag(Sig))
+        out$W[s, ] <- c(W[1,1], W[1,2], W[2,2])
+        if (s > burn) {                      # store normalized person betas
+            out$Bsum <- out$Bsum + B / sqrt(W[1,1]); out$nkeep <- out$nkeep + 1
+        }
+    }
+    out
+}
+```
+
+(An unshown chunk carries `rtnorm()` and `rinvwishart()` from previous chapters.) Two notes before running. The `for (nn in 1:N)` loop over persons is unavoidable here --- each person's conjugate update solves their own $K \times K$ system --- but it is tolerable by @sec-performance's own doctrine: five hundred small Cholesky solves per iteration, milliseconds in total. And we adopt the *tightened* $\Sigma$ prior ($V_0$ scaled by 0.1) as the default, applying @sec-hb-mnl's practical lesson rather than re-learning it.
+
+## Running It
+
+```{r}
+#| cache: false
+set.seed(201)
+fit <- hb_mnp(Xd2, Xd3, chosen, person, S_iter = 2500, burn = 500)
+post <- 501:2500
+scd  <- sqrt(fit$W[post, 1])                 # per-draw identification scaling
+
+## identified truth for the scoreboard
+M  <- rbind(c(-1,1,0), c(-1,0,1))
+Ot <- M %*% Omega_true %*% t(M); sc <- sqrt(Ot[1,1])
+
+tab <- data.frame(
+    truth_bar = bar_true / sc,
+    post_bar  = colMeans(fit$bar[post, ] / scd),
+    truth_het_sd = sd_true / sc,
+    post_het_sd  = colMeans(fit$sd[post, ] / scd)
+)
+rownames(tab) <- colnames(X)
+round(tab, 2)
+round(c(w12 = mean(fit$W[post,2]/fit$W[post,1]),
+        w22 = mean(fit$W[post,3]/fit$W[post,1]),
+        truth_w12 = Ot[1,2]/Ot[1,1], truth_w22 = Ot[2,2]/Ot[1,1]), 2)
+```
+
+Read the scoreboard against everything Part III and IV have taught. The population means track their identified truths. The heterogeneity pattern is recovered --- the three truly-random coefficients estimated largest, the truly-fixed ones floored near 0.3 by the (tightened) IW prior, the @sec-hb-mnl phenomenon at its expected magnitude. (`post_het_sd` is the posterior mean of each coefficient's heterogeneity standard deviation --- a point estimate of taste *spread*, not a posterior uncertainty; @sec-mnp-est's `post_sd` column, by contrast, was exactly a posterior uncertainty. Column names deserve the same care as symbols.) And the error covariance parameters --- the *other* substitution channel --- are recovered alongside: the model successfully attributed the within-task correlation to $W$ and the cross-task persistence to $\Sigma$, the two containers sorted correctly.[^2] Individual-level payoff, one number for the record:
+
+```{r}
+Bhat <- fit$Bsum / fit$nkeep
+round(cor(Bhat[, 6], betas[, 6] / sc), 2)
+```
+
+[^2]: Not perfectly, of course --- with $T = 8$ the two channels compete for the same evidence, and their posteriors are correlated. This gentle confounding is intrinsic to the model class, not to the estimator; more tasks per person separates them.
+
+Person-level tracking comparable to the HB-MNL's on analogous data, now with correlated errors underneath. All of it from a sampler with *zero* tuning parameters.
 
 ## HB-MNL or HB-MNP?
 
-<!-- an honest cost-benefit: run time, mixing, parameter count in Sigma and Omega, and whether the application needs flexible substitution; guidance for practice -->
+The applied researcher's closing question for Part IV. Honest guidance, informed by everything built:
+
+**Default to the HB-MNL.** The logit kernel's closed form makes every likelihood-adjacent computation --- fit statistics, holdout validation, the market simulators of @sec-postestimation --- cheap and simple; its single Metropolis block is well-understood; the ecosystem (from `bayesm` to every commercial conjoint platform) is built around it; and with rich attribute data, random coefficients already generate most realistic substitution patterns [@mcfaddentrain2000's theorem, practically vindicated].
+
+**Reach for the HB-MNP when the errors are the story.** Categories with strong alternative-level similarity that attributes don't capture (store brands, platform ecosystems); scanner-data settings where the same few labeled alternatives recur and $W$ is well-fed; or when the deliverable turns on substitution among specific rivals rather than attribute-level demand. The costs are real --- the latent-utility machinery, identification bookkeeping at every step, probabilities that need GHK even *after* estimation for the simulators of @sec-postestimation --- and they buy exactly one thing: covariance where the logit has independence. Pay when that purchase matters; @rossi1996's targeting application is the canonical case where it did.
+
+Either way --- and this is the point of having built both --- the choice is now yours to make on substance, not forced by what your tools can estimate.
 
 ## Key Learnings
+
+- The HB-MNP stacks this book's two deep generalizations --- free error covariance and coefficient heterogeneity --- in one model (@eq-hb-mnp), with each substitution channel answering a different behavioral question.
+- Its sampler is assembly with a bonus: latent utilities (@sec-mnp-est) + per-person conjugate regressions + population blocks (@sec-hb-mnl) + $W$'s inverse-Wishart --- and because augmentation makes the data layer linear-normal, **no Metropolis step exists anywhere**. The probit's hierarchy is cleaner than the logit's.
+- Identification is handled by sampling free and normalizing every draw --- now including the person-level draws --- by $\sqrt{w_{11}}$.
+- Recovery sorted the two channels correctly: heterogeneity into $\Sigma$ (with the familiar, prior-managed floor on null variances), error correlation into $W$, person-level estimates tracking truth. Zero tuning parameters were involved.
+- Model choice guidance: HB-MNL by default (ecosystem, simplicity, closed-form kernel); HB-MNP when alternative-level error correlation is the substantive point. You can now estimate either from scratch --- which was the promise of this book's cover.

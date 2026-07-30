@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -402,24 +422,18 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-we-need-draws" id="toc-why-we-need-draws" class="nav-link active" data-scroll-target="#why-we-need-draws"><span class="header-section-number">2.1</span> Why We Need Draws</a></li>
-  <li><a href="#pseudo-random-numbers-from-the-uniform-distribution" id="toc-pseudo-random-numbers-from-the-uniform-distribution" class="nav-link" data-scroll-target="#pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.2</span> Pseudo-Random Numbers from the Uniform Distribution</a></li>
-  <li><a href="#the-inverse-transform-method" id="toc-the-inverse-transform-method" class="nav-link" data-scroll-target="#the-inverse-transform-method"><span class="header-section-number">2.3</span> The Inverse Transform Method</a>
+  <li><a href="#pseudo-random-numbers-from-the-uniform-distribution" id="toc-pseudo-random-numbers-from-the-uniform-distribution" class="nav-link active" data-scroll-target="#pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.1</span> Pseudo-Random Numbers from the Uniform Distribution</a></li>
+  <li><a href="#the-inverse-transform-method" id="toc-the-inverse-transform-method" class="nav-link" data-scroll-target="#the-inverse-transform-method"><span class="header-section-number">2.2</span> The Inverse Transform Method</a>
   <ul class="collapse">
-  <li><a href="#example-exponential" id="toc-example-exponential" class="nav-link" data-scroll-target="#example-exponential"><span class="header-section-number">2.3.1</span> Example: Exponential</a></li>
-  <li><a href="#example-gumbel" id="toc-example-gumbel" class="nav-link" data-scroll-target="#example-gumbel"><span class="header-section-number">2.3.2</span> Example: Gumbel</a></li>
-  <li><a href="#example-logistic" id="toc-example-logistic" class="nav-link" data-scroll-target="#example-logistic"><span class="header-section-number">2.3.3</span> Example: Logistic</a></li>
-  <li><a href="#example-normal" id="toc-example-normal" class="nav-link" data-scroll-target="#example-normal"><span class="header-section-number">2.3.4</span> Example: Normal</a></li>
+  <li><a href="#example-exponential" id="toc-example-exponential" class="nav-link" data-scroll-target="#example-exponential"><span class="header-section-number">2.2.1</span> Example: Exponential</a></li>
+  <li><a href="#example-gumbel" id="toc-example-gumbel" class="nav-link" data-scroll-target="#example-gumbel"><span class="header-section-number">2.2.2</span> Example: Gumbel</a></li>
+  <li><a href="#example-logistic" id="toc-example-logistic" class="nav-link" data-scroll-target="#example-logistic"><span class="header-section-number">2.2.3</span> Example: Logistic</a></li>
+  <li><a href="#example-normal" id="toc-example-normal" class="nav-link" data-scroll-target="#example-normal"><span class="header-section-number">2.2.4</span> Example: Normal</a></li>
   </ul></li>
-  <li><a href="#accept-reject-methods" id="toc-accept-reject-methods" class="nav-link" data-scroll-target="#accept-reject-methods"><span class="header-section-number">2.4</span> Accept-Reject Methods</a></li>
-  <li><a href="#transforming-draws" id="toc-transforming-draws" class="nav-link" data-scroll-target="#transforming-draws"><span class="header-section-number">2.5</span> Transforming Draws</a></li>
-  <li><a href="#the-multivariate-normal" id="toc-the-multivariate-normal" class="nav-link" data-scroll-target="#the-multivariate-normal"><span class="header-section-number">2.6</span> The Multivariate Normal</a>
-  <ul class="collapse">
-  <li><a href="#example-correlated-normal-draws" id="toc-example-correlated-normal-draws" class="nav-link" data-scroll-target="#example-correlated-normal-draws"><span class="header-section-number">2.6.1</span> Example: Correlated Normal Draws</a></li>
-  </ul></li>
-  <li><a href="#truncated-distributions" id="toc-truncated-distributions" class="nav-link" data-scroll-target="#truncated-distributions"><span class="header-section-number">2.7</span> Truncated Distributions</a></li>
-  <li><a href="#quasi-random-draws" id="toc-quasi-random-draws" class="nav-link" data-scroll-target="#quasi-random-draws"><span class="header-section-number">2.8</span> Quasi-Random Draws</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">2.9</span> Key Learnings</a></li>
+  <li><a href="#transforming-draws" id="toc-transforming-draws" class="nav-link" data-scroll-target="#transforming-draws"><span class="header-section-number">2.3</span> Transforming Draws</a></li>
+  <li><a href="#sec-mvnorm" id="toc-sec-mvnorm" class="nav-link" data-scroll-target="#sec-mvnorm"><span class="header-section-number">2.4</span> The Multivariate Normal</a></li>
+  <li><a href="#sec-quasirandom" id="toc-sec-quasirandom" class="nav-link" data-scroll-target="#sec-quasirandom"><span class="header-section-number">2.5</span> Quasi-Random Draws</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">2.6</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/02_draws.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -445,131 +459,380 @@ window.Quarto = {
 </header>
 
 
-<!-- Sources: DCMS Ch 9 (lit/notes/train-2009-dcms.md); Rchoice §2.3/§4 for draw-transformation formulas (lit/notes/pkg-rchoice.md); Rizzo for statistical computing background -->
-<section id="why-we-need-draws" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="why-we-need-draws"><span class="header-section-number">2.1</span> Why We Need Draws</h2>
-<!-- draws appear three times in this book: simulating data from a model (ch 3), approximating integrals in MSL (ch 12), and exploring posteriors via MCMC (ch 15-17); everything reduces to uniform draws plus transformations -->
+<p>In <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> we approximated choice probabilities by drawing values of <span class="math inline">\(\varepsilon\)</span> from a density <span class="math inline">\(f\)</span> and averaging an indicator function over the draws. We got away with it because R happened to supply the draws we needed: <code>runif()</code> for the uniform, <code>rlogis()</code> for the logistic. This chapter looks under the hood. Where do random draws come from? How do we produce them for densities R does not supply? And how do we produce <em>correlated</em> draws, <em>truncated</em> draws, and draws that cover a space more evenly than randomness allows?</p>
+<p>I want to persuade you that this material is not a detour. Draws are the raw material of every computational method in this book, and they appear in three distinct roles:</p>
+<ol type="1">
+<li><strong>Simulating data from a model</strong> (<a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a> and every chapter after): each simulated decision-maker needs a realization of the unobservables.</li>
+<li><strong>Approximating integrals inside a likelihood</strong> (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>, <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>): the mixed logit and probit probabilities are integrals with no closed form, evaluated by averaging over draws.</li>
+<li><strong>Exploring posterior distributions</strong> (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> onward): the entire output of a Bayesian estimation is a collection of draws, and the samplers that produce them are built from the primitives in this chapter — in particular, you cannot code the samplers of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> and <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> without multivariate normal and truncated normal draws.</li>
+</ol>
+<p>By the end of the chapter you will be able to generate draws from essentially any distribution this book requires, starting from nothing but uniform random numbers.</p>
+<section id="pseudo-random-numbers-from-the-uniform-distribution" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.1</span> Pseudo-Random Numbers from the Uniform Distribution</h2>
+<p>Computers are deterministic machines, so they cannot produce truly random numbers.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> What they produce instead are <em>pseudo-random</em> numbers: long sequences generated by a deterministic recurrence, initialized by a <em>seed</em>, that pass every practical statistical test of randomness. R’s default generator (the Mersenne Twister) produces values that behave, for our purposes, exactly like independent draws from the Uniform<span class="math inline">\((0,1)\)</span> distribution.</p>
+<p>Determinism is a gift for scientific work. Because the sequence depends only on the seed, setting the seed makes an entire simulation exactly reproducible — on your machine, on my machine, today, and in five years. That is why every stochastic code chunk in this book begins with <code>set.seed()</code>. When you see</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">runif</span>(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9148060 0.9370754 0.2861395</code></pre>
+</div>
+</div>
+<p>you will get those same three numbers on your computer. Re-running the chunk <em>without</em> resetting the seed continues the sequence and gives fresh values; resetting the seed replays it. Beyond reproducibility, seeds are a debugging instrument: when a simulation misbehaves, freezing the randomness lets you isolate what changed. And in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> the ability to <em>reuse the same draws</em> across likelihood evaluations turns out to be essential for the estimator itself, not merely convenient.</p>
+<p>Everything else in this chapter is a transformation of uniform draws. That is worth internalizing: <code>rnorm()</code>, <code>rlogis()</code>, <code>rexp()</code> and their relatives are not separate sources of randomness — they are deterministic functions applied to the same uniform stream. Our first and most important transformation makes the principle explicit.</p>
 </section>
-<section id="pseudo-random-numbers-from-the-uniform-distribution" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="pseudo-random-numbers-from-the-uniform-distribution"><span class="header-section-number">2.2</span> Pseudo-Random Numbers from the Uniform Distribution</h2>
-<!-- what a PRNG is (briefly); set.seed() and reproducibility; runif() -->
-</section>
-<section id="the-inverse-transform-method" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="the-inverse-transform-method"><span class="header-section-number">2.3</span> The Inverse Transform Method</h2>
-<p><span class="math display">\[
+<section id="the-inverse-transform-method" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="the-inverse-transform-method"><span class="header-section-number">2.2</span> The Inverse Transform Method</h2>
+<p>Suppose we want draws of a random variable <span class="math inline">\(X\)</span> with cumulative distribution function (CDF) <span class="math inline">\(F_X\)</span>, and suppose we can compute the inverse CDF <span class="math inline">\(F_X^{-1}\)</span> (also called the quantile function). Take <span class="math inline">\(U \sim \text{Uniform}(0,1)\)</span> and define the transformation <span class="math inline">\(T(U) = F_X^{-1}(U)\)</span>. I claim <span class="math inline">\(X = T(U)\)</span> has exactly the distribution we want. The proof is three lines: for any <span class="math inline">\(x\)</span>,</p>
+<p><span id="eq-invtrans"><span class="math display">\[
 \begin{aligned}
-F_X(x)
-    &amp;= \Pr \left(X \le x \right) \\
-    &amp;= \Pr \left(T(U) \le x \right) \\
-    &amp;= \Pr \left(U \le T^{-1}(x) \right) \\
-    &amp;= T^{-1}(x)
+\Pr \left(T(U) \le x \right)
+    &amp;= \Pr \left(F_X^{-1}(U) \le x \right) \\
+    &amp;= \Pr \left(U \le F_X(x) \right) \\
+    &amp;= F_X(x)
 \end{aligned}
-\]</span></p>
-<section id="example-exponential" class="level3" data-number="2.3.1">
-<h3 data-number="2.3.1" class="anchored" data-anchor-id="example-exponential"><span class="header-section-number">2.3.1</span> Example: Exponential</h3>
-<p><span class="math display">\[ F(y,\lambda) = 1 - \exp\left( -\lambda y \right) \hspace{1em} \text{for} \ y \ge 0 \]</span></p>
+\tag{2.1}\]</span></span></p>
+<p>where the second equality applies the (increasing) function <span class="math inline">\(F_X\)</span> to both sides of the inequality, and the third uses the defining property of the uniform: <span class="math inline">\(\Pr(U \le u) = u\)</span> for <span class="math inline">\(u \in [0,1]\)</span>. The transformed draw has CDF <span class="math inline">\(F_X\)</span>, which is what it means to have the distribution of <span class="math inline">\(X\)</span>.</p>
+<p>The geometry is worth seeing once. The CDF maps values of <span class="math inline">\(X\)</span> (horizontal axis) to probabilities (vertical axis); the inverse transform runs the map backwards. A uniform draw picks a random height on the vertical axis, and we read across to the curve and down to the horizontal axis:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-invtrans-geometry" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-invtrans-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-invtrans-geometry-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-invtrans-geometry-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.1: The inverse transform method: uniform draws on the vertical axis map through the inverse CDF to draws on the horizontal axis. Flat regions of the density correspond to steep regions of the CDF, which catch more of the uniform draws.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Notice how the method automatically concentrates draws where the density is high: where <span class="math inline">\(f\)</span> is large, <span class="math inline">\(F\)</span> is steep, so a wide band of uniform heights maps into a narrow band of <span class="math inline">\(x\)</span> values.</p>
+<p>Let’s implement the method for four distributions. Each follows the same two-step pattern — <em>invert the CDF algebraically, then apply it to uniform draws</em> — and each earns its place in this book.</p>
+<section id="example-exponential" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="example-exponential"><span class="header-section-number">2.2.1</span> Example: Exponential</h3>
+<p>The exponential distribution has CDF</p>
+<p><span class="math display">\[ F(y) = 1 - \exp\left( -\lambda y \right) \hspace{1em} \text{for} \ y \ge 0 \]</span></p>
+<p>Setting <span class="math inline">\(F(y) = u\)</span> and solving for <span class="math inline">\(y\)</span>: <span class="math inline">\(u = 1 - e^{-\lambda y}\)</span> implies <span class="math inline">\(e^{-\lambda y} = 1-u\)</span>, so</p>
 <p><span class="math display">\[ F^{-1}(u) = -\log(1-u) / \lambda \]</span></p>
+<p>Two lines of algebra, two lines of code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)<span class="sc">/</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2020</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(R)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)<span class="sc">/</span>lambda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>As in <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, <code>R</code> counts simulation draws — deliberately not <code>N</code>, which we reserve for counting decision-makers from <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a> onward. (And a naming note: this chapter’s code uses <code>y</code> as the generic name for a draw; it is not yet the choice outcome <span class="math inline">\(y\)</span> of the model chapters.)</p>
+<p>Did it work? The standard check — one we will repeat so often that we write it as a small helper function — is to plot a histogram of the draws against the true density. If the transformation is correct, the histogram should trace the density curve, with the agreement improving as <span class="math inline">\(R\)</span> grows.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="dv">0</span>, <span class="at">to=</span><span class="fu">ceiling</span>(<span class="fu">max</span>(y)), <span class="at">length.out=</span><span class="dv">100</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq=</span>F, <span class="at">breaks=</span><span class="dv">100</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x=</span>x, <span class="at">y=</span><span class="fu">dexp</span>(x,lambda), <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot_draws <span class="ot">&lt;-</span> <span class="cf">function</span>(y, dens_fun) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">y =</span> y), <span class="fu">aes</span>(<span class="at">x =</span> y)) <span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_function</span>(<span class="at">fun =</span> dens_fun, <span class="at">linewidth =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"draw value"</span>, <span class="at">y =</span> <span class="st">"density"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_draws</span>(y, <span class="cf">function</span>(x) <span class="fu">dexp</span>(x, <span class="at">rate =</span> lambda))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="02_draws_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-invtrans-exp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-invtrans-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-invtrans-exp-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-invtrans-exp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.2: Histogram of 10,000 inverse-transform draws against the true Exponential(0.3) density.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>The helper <code>plot_draws()</code> takes the vector of draws and the true density function; we will reuse it throughout the chapter. This histogram-against-density picture is the simplest instance of a discipline that recurs all book long: <em>whenever you generate anything by simulation, check it against something you know.</em></p>
 </section>
-<section id="example-gumbel" class="level3" data-number="2.3.2">
-<h3 data-number="2.3.2" class="anchored" data-anchor-id="example-gumbel"><span class="header-section-number">2.3.2</span> Example: Gumbel</h3>
+<section id="example-gumbel" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="example-gumbel"><span class="header-section-number">2.2.2</span> Example: Gumbel</h3>
+<p>The Gumbel distribution — also called the Type I Extreme Value distribution, or EV1 — has CDF</p>
 <p><span class="math display">\[ F(y) = \exp \left( -\exp \left( -y \right) \right) \]</span></p>
-<p><span class="math display">\[ F^{-1}(u) = -\log(-log(u))  \]</span></p>
+<p>You met its close relative in <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, and you will not escape it: the Gumbel is <em>the</em> error distribution of logit models, chosen because the difference of two independent Gumbels is logistic and the maximum of several Gumbels is again Gumbel — the properties that make the MNL’s closed form possible (<a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>). Inverting: <span class="math inline">\(u = e^{-e^{-y}}\)</span> gives <span class="math inline">\(\log u = -e^{-y}\)</span>, so</p>
+<p><span class="math display">\[ F^{-1}(u) = -\log(-\log(u)) \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(u))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2021</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(R)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(u))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Base R has no <code>dgumbel()</code>, but the density is simple enough to write ourselves — differentiate the CDF to get <span class="math inline">\(f(y) = \exp\!\big(\!-\!\big(y + e^{-y}\big)\big)\)</span>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="sc">-</span><span class="dv">3</span>, <span class="at">to=</span><span class="fu">ceiling</span>(<span class="fu">max</span>(y)), <span class="at">length.out=</span><span class="dv">500</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq=</span>F, <span class="at">breaks=</span><span class="dv">100</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x=</span>x, <span class="at">y=</span>ordinal<span class="sc">::</span><span class="fu">dgumbel</span>(x), <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dgumbel <span class="ot">&lt;-</span> <span class="cf">function</span>(x) <span class="fu">exp</span>(<span class="sc">-</span>(x <span class="sc">+</span> <span class="fu">exp</span>(<span class="sc">-</span>x)))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_draws</span>(y, dgumbel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="02_draws_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-invtrans-gumbel" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-invtrans-gumbel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-invtrans-gumbel-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-invtrans-gumbel-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.3: Histogram of 10,000 inverse-transform draws against the Gumbel (Type I Extreme Value) density. Note the right skew: extreme value distributions are asymmetric.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
+<p>Keep <code>y &lt;- -log(-log(runif(R)))</code> in your fingers. When we simulate MNL choice data from <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> onward, this one-liner generates the unobserved utility for every alternative in every choice task.</p>
 </section>
-<section id="example-logistic" class="level3" data-number="2.3.3">
-<h3 data-number="2.3.3" class="anchored" data-anchor-id="example-logistic"><span class="header-section-number">2.3.3</span> Example: Logistic</h3>
-<p><span class="math display">\[ F(y) = \frac{1}{1+\exp \left( -x \right)} \]</span></p>
+<section id="example-logistic" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="example-logistic"><span class="header-section-number">2.2.3</span> Example: Logistic</h3>
+<p>The logistic distribution — the <span class="math inline">\(f\)</span> of the binary logit model in <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> — has CDF</p>
+<p><span class="math display">\[ F(y) = \frac{1}{1+\exp \left( -y \right)} \]</span></p>
+<p>Inverting: <span class="math inline">\(u(1 + e^{-y}) = 1\)</span> gives <span class="math inline">\(e^{-y} = (1-u)/u\)</span>, so</p>
 <p><span class="math display">\[ F^{-1}(u) = \log(u) - \log(1-u) \]</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(u) <span class="sc">-</span> <span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2022</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(R)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">log</span>(u) <span class="sc">-</span> <span class="fu">log</span>(<span class="dv">1</span><span class="sc">-</span>u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from=</span><span class="fu">floor</span>(<span class="fu">min</span>(y)), <span class="at">to=</span><span class="fu">ceiling</span>(<span class="fu">max</span>(y)), <span class="at">length.out=</span><span class="dv">500</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(y, <span class="at">freq=</span>F, <span class="at">breaks=</span><span class="dv">100</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="at">x=</span>x, <span class="at">y=</span><span class="fu">dlogis</span>(x), <span class="at">lwd=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_draws</span>(y, dlogis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="02_draws_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<div id="fig-invtrans-logistic" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-invtrans-logistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-invtrans-logistic-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-invtrans-logistic-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.4: Histogram of 10,000 inverse-transform draws against the standard logistic density.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-</section>
-<section id="example-normal" class="level3" data-number="2.3.4">
-<h3 data-number="2.3.4" class="anchored" data-anchor-id="example-normal"><span class="header-section-number">2.3.4</span> Example: Normal</h3>
+<p>So <code>rlogis(R)</code> — which we used in <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> without comment — is nothing more mysterious than <code>log(u) - log(1-u)</code> applied to uniform draws.</p>
+<p>While we are here, let’s verify a claim made two pages ago, because it is the algebraic heart of the logit family: <em>the difference of two independent Gumbel draws is logistic.</em> Rather than prove it (see <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>, Section 3.1), we can check it by simulation — our tools are already good enough to interrogate distribution theory:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>eps1 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(R)))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>eps2 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(R)))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_draws</span>(eps1 <span class="sc">-</span> eps2, dlogis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-gumbel-diff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gumbel-diff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-gumbel-diff-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gumbel-diff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.5: The difference of two independent Gumbel draws, compared against the standard logistic density. This equivalence is why binary choice between two Gumbel-error alternatives yields the binary logit model.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The histogram of <span class="math inline">\(\varepsilon_1 - \varepsilon_2\)</span> sits exactly on the logistic density. This is why <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> could describe one utility with a single logistic error. Give each action its own utility — <span class="math inline">\(U_1 = V_1 + \varepsilon_1\)</span> for buying and <span class="math inline">\(U_0 = V_0 + \varepsilon_0\)</span> for walking away, where <span class="math inline">\(V\)</span> denotes the <em>representative</em> (observable) part of utility and <span class="math inline">\(\varepsilon\)</span> the unobserved part. Buying beats not buying when <span class="math inline">\(U_1 &gt; U_0\)</span>, i.e., when <span class="math inline">\(\varepsilon_0 - \varepsilon_1 &lt; V_1 - V_0\)</span>, and if both <span class="math inline">\(\varepsilon\)</span>’s are Gumbel then that difference is logistic. Two-error and one-error tellings of the binary logit are the same model.</p>
+</section>
+<section id="example-normal" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="example-normal"><span class="header-section-number">2.2.4</span> Example: Normal</h3>
+<p>The normal CDF has no closed-form expression, so its inverse has no tidy algebraic formula like the previous three. But numerical routines for <span class="math inline">\(\Phi^{-1}\)</span> are excellent and built into R as <code>qnorm()</code>, so the inverse transform method still applies:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2024</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">runif</span>(R)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Of course, R also provides <code>rnorm()</code> directly, and in practice we use it. The point of this example is conceptual: <code>qnorm(runif(R))</code> and <code>rnorm(R)</code> are the same idea,<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and <em>any</em> distribution with a computable quantile function is one line away. File this away — in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> we will deliberately generate normal draws as <code>qnorm()</code> applied to something <em>other</em> than uniform draws, and the fact that “draws = quantile function applied to points in <span class="math inline">\((0,1)\)</span>” is what makes that substitution legitimate.</p>
+</section>
+</section>
+<section id="transforming-draws" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="transforming-draws"><span class="header-section-number">2.3</span> Transforming Draws</h2>
+<p>The inverse transform gets us <em>standard</em> distributions. Applied work almost always needs distributions with particular locations, scales, and shapes, and these come from further transformations of standard draws. Three matter enormously in this book.</p>
+<p><strong>Location–scale.</strong> If <span class="math inline">\(Z\)</span> is standard normal, then <span class="math inline">\(\mu + \sigma Z \sim N(\mu, \sigma^2)\)</span>. Trivial, but say it once precisely, because its multivariate version (next section) is the backbone of every heterogeneity model we estimate:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="fl">1e4</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>z          <span class="co"># N(2, 0.25)</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">mean</span>(y), <span class="fu">sd</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.0026487 0.5009752</code></pre>
+</div>
+</div>
+<p><strong>Lognormal.</strong> If <span class="math inline">\(Z \sim N(\mu, \sigma^2)\)</span> then <span class="math inline">\(e^Z\)</span> is lognormal — always positive, right-skewed. Why care? Jump ahead to <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> and <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>: when we let the <em>price coefficient</em> vary across people, a normal distribution awkwardly implies some people <em>like</em> higher prices. The standard fix is to model the coefficient as <span class="math inline">\(-e^Z\)</span>, which is always negative. That fix is this transformation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>beta_price <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="fl">1e4</span>, <span class="at">mean =</span> <span class="fl">0.1</span>, <span class="at">sd =</span> <span class="fl">0.4</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">b =</span> beta_price), <span class="fu">aes</span>(b)) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">100</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"price coefficient"</span>, <span class="at">y =</span> <span class="st">"count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-lognormal" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lognormal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-lognormal-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lognormal-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.6: A lognormal price-coefficient distribution: minus the exponential of N(0.1, 0.4²) draws. Every simulated decision-maker dislikes price, but some dislike it far more than others. We will use exactly this device in the mixed logit and HB chapters.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Truncation.</strong> Sometimes we need draws from a distribution <em>restricted to an interval</em> — a normal confined to the positive half-line, say. The elegant route is a small extension of the inverse transform. If <span class="math inline">\(X\)</span> has CDF <span class="math inline">\(F\)</span> and we want <span class="math inline">\(X\)</span> conditioned on <span class="math inline">\(a &lt; X \le b\)</span>, note that the conditional CDF is <span class="math inline">\(\left(F(x) - F(a)\right)/\left(F(b) - F(a)\right)\)</span>: it runs from 0 at <span class="math inline">\(a\)</span> to 1 at <span class="math inline">\(b\)</span>. Inverting it says: <em>map a uniform draw into the <span class="math inline">\((F(a), F(b))\)</span> sub-interval, then apply the ordinary quantile function</em>:</p>
+<p><span id="eq-trunc"><span class="math display">\[
+X = F^{-1}\big( F(a) + u \cdot (F(b) - F(a)) \big)
+\tag{2.2}\]</span></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>rtnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>, <span class="at">a =</span> <span class="sc">-</span><span class="cn">Inf</span>, <span class="at">b =</span> <span class="cn">Inf</span>) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    Fa <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(a, mean, sd)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    Fb <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(b, mean, sd)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    u  <span class="ot">&lt;-</span> <span class="fu">runif</span>(n)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">qnorm</span>(Fa <span class="sc">+</span> u<span class="sc">*</span>(Fb <span class="sc">-</span> Fa), mean, sd)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2027</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(<span class="fl">1e4</span>, <span class="at">a =</span> <span class="fl">0.5</span>, <span class="at">b =</span> <span class="dv">2</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_draws</span>(y, <span class="cf">function</span>(x)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dnorm</span>(x) <span class="sc">/</span> (<span class="fu">pnorm</span>(<span class="dv">2</span>) <span class="sc">-</span> <span class="fu">pnorm</span>(<span class="fl">0.5</span>)) <span class="sc">*</span> (x <span class="sc">&gt;</span> <span class="fl">0.5</span> <span class="sc">&amp;</span> x <span class="sc">&lt;=</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p>![10,000 draws from a standard normal truncated to (0.5, 2], against the renormalized true density on that interval.](02_draws_files/figure-html/fig-truncnorm-1.png){#fig-truncnorm width=576}</p>
+</div>
+</div>
+<p>Do not skim past <code>rtnorm()</code>; it is the quiet workhorse of Part IV. The Bayesian estimation of the probit model (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>) proceeds by drawing each decision-maker’s latent utility from a normal distribution <em>truncated to the region consistent with their observed choice</em>, thousands of times, inside a Gibbs sampler. The Albert–Chib sampler of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> does the same for binary data. When we get there, the samplers will be new but this function will not be.</p>
+</section>
+<section id="sec-mvnorm" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="sec-mvnorm"><span class="header-section-number">2.4</span> The Multivariate Normal</h2>
+<p>Now for the transformation that carries the most weight in this book. We often need draws of a <em>vector</em> <span class="math inline">\(\mathbf{w} \sim N(\boldsymbol{\mu}, \Sigma)\)</span>: jointly normal components with means <span class="math inline">\(\boldsymbol{\mu}\)</span> and covariance matrix <span class="math inline">\(\Sigma\)</span>. Starting in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>, every simulated “population of decision-makers” is a cloud of multivariate normal draws — one coefficient vector <span class="math inline">\(\boldsymbol{\beta}_n\)</span> per person — and the samplers of <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>, <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>, and <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> draw multivariate normals at every iteration.</p>
+<p>The recipe generalizes location–scale. In one dimension we scaled by <span class="math inline">\(\sigma\)</span>, the square root of the variance. In <span class="math inline">\(K\)</span> dimensions we need a “square root” of the covariance <em>matrix</em>: a matrix <span class="math inline">\(L\)</span> such that</p>
+<p><span id="eq-cholesky"><span class="math display">\[
+L L' = \Sigma
+\tag{2.3}\]</span></span></p>
+<p>One such matrix always exists for a valid (positive definite) covariance matrix: the <strong>Cholesky root</strong>, a lower-triangular <span class="math inline">\(L\)</span> computable by <code>chol()</code> in R.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Given <span class="math inline">\(L\)</span>, take a vector <span class="math inline">\(\mathbf{z}\)</span> of <span class="math inline">\(K\)</span> <em>independent</em> standard normal draws and set</p>
+<p><span id="eq-mvn-transform"><span class="math display">\[
+\mathbf{w} = \boldsymbol{\mu} + L \mathbf{z}
+\tag{2.4}\]</span></span></p>
+<p>Then <span class="math inline">\(\mathbf{w}\)</span> is exactly <span class="math inline">\(N(\boldsymbol{\mu}, \Sigma)\)</span>. The mean is immediate. For the covariance, recall that <span class="math inline">\(\mathrm{Var}(A\mathbf{z}) = A \mathrm{Var}(\mathbf{z}) A'\)</span> for fixed <span class="math inline">\(A\)</span>; with <span class="math inline">\(\mathrm{Var}(\mathbf{z}) = I\)</span> this gives <span class="math inline">\(\mathrm{Var}(L\mathbf{z}) = L I L' = \Sigma\)</span>. Normality is preserved because linear combinations of normals are normal. The triangular structure of <span class="math inline">\(L\)</span> makes the mechanics transparent: the first component of <span class="math inline">\(\mathbf{w}\)</span> uses only <span class="math inline">\(z_1\)</span>; the second mixes <span class="math inline">\(z_1\)</span> and <span class="math inline">\(z_2\)</span> — and it is precisely this reuse of <span class="math inline">\(z_1\)</span> that manufactures the correlation.</p>
+<p>Here is the recipe on a concrete case — and to make it self-documenting, we verify that the sample moments of the draws match what we asked for:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2028</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>R  <span class="ot">&lt;-</span> <span class="fl">1e4</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.6</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>                  <span class="fl">0.6</span>, <span class="fl">0.5</span>), <span class="at">nrow =</span> <span class="dv">2</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Sigma))          <span class="co"># lower-triangular: L %*% t(L) == Sigma</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">2</span><span class="sc">*</span>R), <span class="at">nrow =</span> <span class="dv">2</span>)   <span class="co"># 2 x R standard normals</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> mu <span class="sc">+</span> L <span class="sc">%*%</span> z                    <span class="co"># 2 x R correlated draws</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rowMeans</span>(w)   <span class="co"># should be near (1, -1)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  0.9996430 -0.9978268</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(<span class="fu">t</span>(w))     <span class="co"># should be near Sigma</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          [,1]      [,2]
+[1,] 1.0059411 0.6044097
+[2,] 0.6044097 0.5065971</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">w1 =</span> w[<span class="dv">1</span>,], <span class="at">w2 =</span> w[<span class="dv">2</span>,]), <span class="fu">aes</span>(w1, w2)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(w[<span class="dv">1</span>]), <span class="at">y =</span> <span class="fu">expression</span>(w[<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-mvnorm" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mvnorm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-mvnorm-1.png" class="img-fluid figure-img" width="480">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mvnorm-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.7: 10,000 bivariate normal draws produced by the Cholesky transformation, showing the requested means and positive correlation.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Three lines — <code>t(chol(Sigma))</code>, <code>rnorm</code>, and a matrix multiply — and we can populate a world with correlated decision-makers. When you meet the expression <code>beta_n &lt;- mu + L %*% z</code> inside the mixed logit simulator of <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>, and again inside the hierarchical samplers of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>, you will know exactly what it does and why it works. The Cholesky root returns in one more role later: in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> we <em>estimate</em> the elements of <span class="math inline">\(L\)</span> itself, because optimizing over <span class="math inline">\(L\)</span> rather than <span class="math inline">\(\Sigma\)</span> guarantees the implied covariance matrix stays valid. And the recursive, one-component-at-a-time structure you can see in <span class="math inline">\(L\)</span>’s triangularity is the same idea that powers the GHK simulator in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>.</p>
+</section>
+<section id="sec-quasirandom" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-quasirandom"><span class="header-section-number">2.5</span> Quasi-Random Draws</h2>
+<p>Everything so far transforms <em>pseudo-random</em> uniforms. Our last topic replaces the uniforms themselves. It matters when draws are used to approximate integrals — role 2 from this chapter’s opening — where it buys striking accuracy gains for free.</p>
+<p>The Monte Carlo logic of <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> approximates an integral by averaging over draws, with error shrinking at rate <span class="math inline">\(\sqrt{R}\)</span>. The error comes from the draws’ failure to cover the integration region evenly: random points cluster and leave gaps. But nothing about the averaging <em>requires</em> randomness — if we replaced random uniforms with a deterministic set of points that covers <span class="math inline">\((0,1)\)</span> more evenly, the approximation could only improve. Sequences designed for exactly this purpose are called <em>quasi-random</em> or <em>low-discrepancy</em> sequences, and the workhorse in choice modeling is the <strong>Halton sequence</strong> <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 9.3.3</a>)</span>.</p>
+<p>The Halton sequence in base <span class="math inline">\(b\)</span> (a prime number) is built by a beautifully simple rule: write the integers <span class="math inline">\(1, 2, 3, \ldots\)</span> in base <span class="math inline">\(b\)</span>, then mirror their digits around the decimal point. In base 2: the integer <span class="math inline">\(1 = 1_2\)</span> becomes <span class="math inline">\(0.1_2 = 1/2\)</span>; <span class="math inline">\(2 = 10_2\)</span> becomes <span class="math inline">\(0.01_2 = 1/4\)</span>; <span class="math inline">\(3 = 11_2\)</span> becomes <span class="math inline">\(0.11_2 = 3/4\)</span>; and so on. Each new point lands in the largest remaining gap. The implementation is a short function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>halton <span class="ot">&lt;-</span> <span class="cf">function</span>(n, base) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    result <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>        f <span class="ot">&lt;-</span> <span class="dv">1</span>; r <span class="ot">&lt;-</span> <span class="dv">0</span>; k <span class="ot">&lt;-</span> i</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> (k <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>            f <span class="ot">&lt;-</span> f <span class="sc">/</span> base</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>            r <span class="ot">&lt;-</span> r <span class="sc">+</span> f <span class="sc">*</span> (k <span class="sc">%%</span> base)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>            k <span class="ot">&lt;-</span> k <span class="sc">%/%</span> base</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        result[i] <span class="ot">&lt;-</span> r</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    result</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="fu">halton</span>(<span class="dv">8</span>, <span class="at">base =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5000 0.2500 0.7500 0.1250 0.6250 0.3750 0.8750 0.0625</code></pre>
+</div>
+</div>
+<p>Look at those first eight values: <span class="math inline">\(1/2\)</span>, then the quarter points, then the eighth points — systematic gap-filling. For draws in several dimensions, we use a different prime base per dimension. The coverage difference is easiest to appreciate visually:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2029</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>pts <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">u1 =</span> <span class="fu">runif</span>(<span class="dv">200</span>), <span class="at">u2 =</span> <span class="fu">runif</span>(<span class="dv">200</span>), <span class="at">type =</span> <span class="st">"Pseudo-random"</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">u1 =</span> <span class="fu">halton</span>(<span class="dv">200</span>, <span class="dv">2</span>), <span class="at">u2 =</span> <span class="fu">halton</span>(<span class="dv">200</span>, <span class="dv">3</span>), <span class="at">type =</span> <span class="st">"Halton"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pts, <span class="fu">aes</span>(u1, u2)) <span class="sc">+</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> type) <span class="sc">+</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="fu">expression</span>(u[<span class="dv">1</span>]), <span class="at">y =</span> <span class="fu">expression</span>(u[<span class="dv">2</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-halton" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-halton-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="02_draws_files/figure-html/fig-halton-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-halton-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2.8: 200 points in the unit square: pseudo-random uniforms (left) cluster and leave voids; Halton points in bases 2 and 3 (right) spread evenly. For integration, even coverage means smaller approximation error from the same number of points.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>And since draws from any distribution are just a quantile function applied to points in <span class="math inline">\((0,1)\)</span> — the lesson of the inverse transform — Halton points convert into “Halton draws” from any distribution: <code>qnorm(halton(R, 2))</code> yields evenly-spread normal draws. This is precisely the substitution promised in the Normal example above, and it is standard practice in mixed logit estimation, where a few hundred Halton draws routinely match the accuracy of a thousand or more pseudo-random ones <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 9.3.4</a>)</span>. We will quantify that claim with our own experiment in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>.</p>
+<p>Two cautions for later. First, successive Halton points are highly structured, so they are suited to <em>integration</em>, not to simulating data meant to look like the real world — keep using pseudo-random draws for the data-simulation work of <a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>. Second, in high dimensions (large prime bases) the early points of Halton sequences show unwanted correlation patterns across dimensions; remedies exist (scrambling, dropping initial points), and we will note them when they matter.</p>
+<p>A simpler cousin, <strong>antithetic draws</strong>, deserves a sentence: pair each uniform draw <span class="math inline">\(u\)</span> with its mirror <span class="math inline">\(1-u\)</span>. The pairing induces negative correlation between paired evaluations, which reduces the variance of their average. It costs one line of code and we will use it occasionally.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">2.6</span> Key Learnings</h2>
+<ul>
+<li>All simulation in this book flows from Uniform<span class="math inline">\((0,1)\)</span> pseudo-random numbers. They are deterministic given the seed — set the seed, and your work is reproducible everywhere, forever.</li>
+<li>The inverse transform method converts uniforms into draws from any distribution with a computable quantile function: <span class="math inline">\(X = F^{-1}(U)\)</span> (<a href="#eq-invtrans" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>). We derived <span class="math inline">\(F^{-1}\)</span> by hand for the exponential, Gumbel, and logistic distributions; the Gumbel one-liner <code>-log(-log(runif(R)))</code> generates the errors of every logit model we will simulate.</li>
+<li>Simulation is also a tool for <em>checking distribution theory</em>: we verified visually that the difference of two Gumbels is logistic — the fact underlying the binary logit.</li>
+<li>Standard draws become tailored draws by transformation: location–scale shifts, the lognormal for sign-restricted coefficients, and truncation via <a href="#eq-trunc" class="quarto-xref">Equation&nbsp;<span>2.2</span></a>. The truncated normal function <code>rtnorm()</code> will power the probit samplers of Part IV.</li>
+<li>Multivariate normal draws come from the Cholesky root: <span class="math inline">\(\mathbf{w} = \boldsymbol{\mu} + L\mathbf{z}\)</span> with <span class="math inline">\(LL' = \Sigma\)</span> (<a href="#eq-mvn-transform" class="quarto-xref">Equation&nbsp;<span>2.4</span></a>). This is the backbone of every heterogeneity model in Parts II–III. Mind the transpose in <code>t(chol(Sigma))</code>, and always verify with sample moments.</li>
+<li>When draws serve to approximate integrals, evenly-spaced beats random: Halton sequences cover the space systematically and will sharply reduce the number of draws needed in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>.</li>
+</ul>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
 </div>
 </section>
-</section>
-<section id="accept-reject-methods" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="accept-reject-methods"><span class="header-section-number">2.4</span> Accept-Reject Methods</h2>
-<!-- for densities without invertible CDFs; simple example; note MCMC (ch 15) as the eventual general-purpose answer -->
-</section>
-<section id="transforming-draws" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="transforming-draws"><span class="header-section-number">2.5</span> Transforming Draws</h2>
-<!-- location-scale: mu + sigma*z; lognormal via exp(z) (preview: price coefficients in ch 13); triangular/uniform via inverse transform; see Rchoice §2.3 for the standard menu -->
-</section>
-<section id="the-multivariate-normal" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="the-multivariate-normal"><span class="header-section-number">2.6</span> The Multivariate Normal</h2>
-<!-- Cholesky root: y = mu + L z; verify with empirical covariance; this exact operation reappears in ch 13 (correlated random coefficients) and ch 16-17 (hierarchical draws) -->
-<section id="example-correlated-normal-draws" class="level3" data-number="2.6.1">
-<h3 data-number="2.6.1" class="anchored" data-anchor-id="example-correlated-normal-draws"><span class="header-section-number">2.6.1</span> Example: Correlated Normal Draws</h3>
-</section>
-</section>
-<section id="truncated-distributions" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="truncated-distributions"><span class="header-section-number">2.7</span> Truncated Distributions</h2>
-<!-- truncated normal via inverse-CDF on a restricted range; needed for data augmentation in ch 16 (Albert-Chib) and ch 19-20 (MNP Gibbs) -->
-</section>
-<section id="quasi-random-draws" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="quasi-random-draws"><span class="header-section-number">2.8</span> Quasi-Random Draws</h2>
-<!-- Halton sequences and antithetic draws; why coverage beats randomness for integration; DCMS Ch 9; used in ch 12-13 (MSL) -->
-</section>
-<section id="key-learnings" class="level2" data-number="2.9">
-<h2 data-number="2.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">2.9</span> Key Learnings</h2>
-
-
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>There are hardware devices that harvest physical noise, but statistical computing neither needs nor wants them. Determinism is a feature: it buys us reproducibility.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The same idea, not the same numbers: <code>rnorm()</code> uses a faster algorithm (inversion applied more cleverly), so the two lines above produce different values even from the same seed.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>One wrinkle: R’s <code>chol()</code> returns the <em>upper</em>-triangular factor — call it <span class="math inline">\(U\)</span>, with <span class="math inline">\(U'U = \Sigma\)</span> — so the lower-triangular <span class="math inline">\(L\)</span> in our notation is <code>t(chol(Sigma))</code>. Forgetting the transpose is a classic bug: using <span class="math inline">\(U\)</span> in place of <span class="math inline">\(L\)</span> yields draws with covariance <span class="math inline">\(UU'\)</span>, which is not <span class="math inline">\(\Sigma\)</span> — in our example below, the first component’s variance comes out around 1.36 instead of 1.0. The good news is that the check we always run — <code>cov()</code> on a large sample — catches it immediately.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

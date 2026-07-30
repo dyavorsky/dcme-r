@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,16 +422,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#heterogeneity-enters" id="toc-heterogeneity-enters" class="nav-link active" data-scroll-target="#heterogeneity-enters"><span class="header-section-number">11.1</span> Heterogeneity Enters</a></li>
-  <li><a href="#the-latent-class-model" id="toc-the-latent-class-model" class="nav-link" data-scroll-target="#the-latent-class-model"><span class="header-section-number">11.2</span> The Latent Class Model</a></li>
-  <li><a href="#the-likelihood-a-panel-subtlety" id="toc-the-likelihood-a-panel-subtlety" class="nav-link" data-scroll-target="#the-likelihood-a-panel-subtlety"><span class="header-section-number">11.3</span> The Likelihood: A Panel Subtlety</a></li>
-  <li><a href="#simulating-latent-class-data" id="toc-simulating-latent-class-data" class="nav-link" data-scroll-target="#simulating-latent-class-data"><span class="header-section-number">11.4</span> Simulating Latent Class Data</a></li>
-  <li><a href="#direct-maximization" id="toc-direct-maximization" class="nav-link" data-scroll-target="#direct-maximization"><span class="header-section-number">11.5</span> Direct Maximization</a></li>
-  <li><a href="#the-em-algorithm" id="toc-the-em-algorithm" class="nav-link" data-scroll-target="#the-em-algorithm"><span class="header-section-number">11.6</span> The EM Algorithm</a></li>
-  <li><a href="#how-many-classes" id="toc-how-many-classes" class="nav-link" data-scroll-target="#how-many-classes"><span class="header-section-number">11.7</span> How Many Classes?</a></li>
-  <li><a href="#individual-level-output" id="toc-individual-level-output" class="nav-link" data-scroll-target="#individual-level-output"><span class="header-section-number">11.8</span> Individual-Level Output</a></li>
-  <li><a href="#validation-against-gmnl" id="toc-validation-against-gmnl" class="nav-link" data-scroll-target="#validation-against-gmnl"><span class="header-section-number">11.9</span> Validation Against <code>gmnl</code></a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">11.10</span> Key Learnings</a></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link active" data-scroll-target="#the-model"><span class="header-section-number">11.1</span> The Model</a></li>
+  <li><a href="#the-likelihood-where-the-panel-structure-bites" id="toc-the-likelihood-where-the-panel-structure-bites" class="nav-link" data-scroll-target="#the-likelihood-where-the-panel-structure-bites"><span class="header-section-number">11.2</span> The Likelihood: Where the Panel Structure Bites</a></li>
+  <li><a href="#simulating-latent-class-data" id="toc-simulating-latent-class-data" class="nav-link" data-scroll-target="#simulating-latent-class-data"><span class="header-section-number">11.3</span> Simulating Latent Class Data</a></li>
+  <li><a href="#route-1-direct-maximization" id="toc-route-1-direct-maximization" class="nav-link" data-scroll-target="#route-1-direct-maximization"><span class="header-section-number">11.4</span> Route 1: Direct Maximization</a></li>
+  <li><a href="#the-terrain-local-maxima-and-label-switching" id="toc-the-terrain-local-maxima-and-label-switching" class="nav-link" data-scroll-target="#the-terrain-local-maxima-and-label-switching"><span class="header-section-number">11.5</span> The Terrain: Local Maxima and Label Switching</a></li>
+  <li><a href="#route-2-the-em-algorithm" id="toc-route-2-the-em-algorithm" class="nav-link" data-scroll-target="#route-2-the-em-algorithm"><span class="header-section-number">11.6</span> Route 2: The EM Algorithm</a></li>
+  <li><a href="#choosing-the-number-of-classes" id="toc-choosing-the-number-of-classes" class="nav-link" data-scroll-target="#choosing-the-number-of-classes"><span class="header-section-number">11.7</span> Choosing the Number of Classes</a></li>
+  <li><a href="#the-payoff-posterior-classification" id="toc-the-payoff-posterior-classification" class="nav-link" data-scroll-target="#the-payoff-posterior-classification"><span class="header-section-number">11.8</span> The Payoff: Posterior Classification</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">11.9</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/11_latentclass.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -374,45 +456,360 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 6 (latent class as discrete mixed logit) and Ch 14 (EM); Hess & Daly Ch 14; validation: gmnl -->
-<section id="heterogeneity-enters" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="heterogeneity-enters"><span class="header-section-number">11.1</span> Heterogeneity Enters</h2>
-<!-- decision-makers differ; the first formal model of preference heterogeneity in the book: a finite number of preference types -->
+<p>Every model so far has made an assumption so ingrained you may not have registered it as one: <em>everybody has the same <span class="math inline">\(\boldsymbol{\beta}\)</span>.</em> One price coefficient for the student and the executive, one Apple premium for the designer and the accountant. For the questions that make choice modeling valuable in practice — who is price-sensitive, which segments value which features, how heterogeneous is demand — that assumption is not a simplification; it assumes away the subject.</p>
+<p>This chapter introduces preference <strong>heterogeneity</strong> in its most tractable form: a finite number of unobserved <em>classes</em>, each with its own coefficient vector. The latent class MNL matters for three reasons. Substantively, it is the model behind data-driven market segmentation. Technically, it forces us to confront the panel structure of our data — eight choices per respondent are <em>not</em> eight independent observations once people differ — and the likelihood repair we make here is <em>exactly</em> the one the mixed logit needs in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>. And algorithmically, it introduces both the EM algorithm and, through the E-step’s posterior class probabilities, this book’s first genuine application of Bayes’ rule — a quiet rehearsal for Part III.</p>
+<section id="the-model" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="the-model"><span class="header-section-number">11.1</span> The Model</h2>
+<p>Suppose the population consists of <span class="math inline">\(C\)</span> unobserved classes. A decision-maker in class <span class="math inline">\(c\)</span> chooses according to a standard MNL with class-specific coefficients <span class="math inline">\(\boldsymbol{\beta}_c\)</span>; the probability that a randomly sampled person belongs to class <span class="math inline">\(c\)</span> is the <strong>class share</strong> <span class="math inline">\(\pi_c\)</span>, with <span class="math inline">\(\sum_c \pi_c = 1\)</span>. The model’s parameters stack the shares and all the class coefficient vectors:</p>
+<p><span class="math display">\[
+\boldsymbol{\theta}= (\pi_1, \ldots, \pi_{C-1}, \; \boldsymbol{\beta}_1, \ldots, \boldsymbol{\beta}_C)
+\]</span></p>
+<p>Membership is <em>latent</em> — never observed, neither in real data nor (we pretend) in ours. What does the model imply for what we <em>do</em> observe, a person’s whole sequence of choices?</p>
 </section>
-<section id="the-latent-class-model" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="the-latent-class-model"><span class="header-section-number">11.2</span> The Latent Class Model</h2>
-<!-- class-specific betas, class shares; membership is unobserved -->
+<section id="the-likelihood-where-the-panel-structure-bites" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="the-likelihood-where-the-panel-structure-bites"><span class="header-section-number">11.2</span> The Likelihood: Where the Panel Structure Bites</h2>
+<p>Here is the reasoning, slowly, because a subtle error lurks and nearly everyone makes it once. Condition on person <span class="math inline">\(n\)</span> belonging to class <span class="math inline">\(c\)</span>: their <span class="math inline">\(T\)</span> choices are then independent MNL draws (the errors <span class="math inline">\(\varepsilon_{ntj}\)</span> are still iid), so the probability of their observed <em>sequence</em> <span class="math inline">\(\mathbf{y}_n = (y_{n1}, \ldots, y_{nT})\)</span> is a product over tasks:</p>
+<p><span class="math display">\[
+\Pr(\mathbf{y}_n \mid \text{class } c) = \prod_{t=1}^{T} P_{nt}(\boldsymbol{\beta}_c)
+\]</span></p>
+<p>where <span class="math inline">\(P_{nt}(\boldsymbol{\beta}_c)\)</span> is the MNL probability (<a href="07_mnl.html#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a>) of the alternative person <span class="math inline">\(n\)</span> chose in task <span class="math inline">\(t\)</span>, evaluated at <span class="math inline">\(\boldsymbol{\beta}_c\)</span>. Class membership is unknown, so the unconditional probability of the sequence mixes over classes:</p>
+<p><span id="eq-lc-person"><span class="math display">\[
+\Pr(\mathbf{y}_n \mid \boldsymbol{\theta}) = \sum_{c=1}^{C} \pi_c \prod_{t=1}^{T} P_{nt}(\boldsymbol{\beta}_c)
+\tag{11.1}\]</span></span></p>
+<p>and the sample log-likelihood sums over <em>people</em>:</p>
+<p><span id="eq-lc-loglik"><span class="math display">\[
+\ell(\boldsymbol{\theta}) = \sum_{n=1}^{N} \log \left[ \sum_{c=1}^{C} \pi_c \prod_{t=1}^{T} P_{nt}(\boldsymbol{\beta}_c) \right]
+\tag{11.2}\]</span></span></p>
+<p><strong>The mixture sits outside the product over tasks.</strong> A person is in one class for all eight of their tasks — their choices are linked by shared membership — so we mix <em>sequence</em> probabilities, not task probabilities. The tempting wrong version, <span class="math inline">\(\sum_{n,t} \log \sum_c \pi_c P_{nt}(\boldsymbol{\beta}_c)\)</span>, mixes inside: it describes a different (and rarely intended) world where every person re-rolls their class before every task, and it discards precisely the information that identifies the classes — <em>consistency of behavior within person</em>. One person choosing cheap laptops eight times in a row is strong evidence a price-sensitive class exists; eight scattered cheap choices by different people are not. Getting this hierarchy right is the single transferable skill of this chapter: the mixed logit’s likelihood (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) has identical structure with an integral in place of the sum, and the HB models of Part III have it too.</p>
+<p>Note what <a href="#eq-lc-person" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> also implies: the latent class model breaks IIA at the population level. Each class is an IIA-obeying MNL, but the <em>mixture</em> of them is not — classes with different tastes generate exactly the correlated-across-alternatives behavior that <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> engineered through nests, now emerging from heterogeneity instead of being specified. This is the first glimpse of a theme that culminates in the mixed logit: heterogeneity is a substitution-pattern engine.</p>
 </section>
-<section id="the-likelihood-a-panel-subtlety" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="the-likelihood-a-panel-subtlety"><span class="header-section-number">11.3</span> The Likelihood: A Panel Subtlety</h2>
-<!-- the mixture sits OUTSIDE the product over a person's choice situations: P(sequence) = sum_c pi_c * prod_t P_nt(beta_c); getting this wrong is the classic bug -->
+<section id="simulating-latent-class-data" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="simulating-latent-class-data"><span class="header-section-number">11.3</span> Simulating Latent Class Data</h2>
+<p>The story writes the simulator: assign each person a class with probabilities <span class="math inline">\((\pi_1, \ldots, \pi_C)\)</span>, then run the standard MNL simulator of <a href="07_mnl.html#sec-sim-mnl" class="quarto-xref"><span>Section 7.6</span></a> with that person’s class coefficients. We invent two segments with a familiar marketing flavor — a majority of <em>premium seekers</em> (strong brand and memory preferences, mild price sensitivity) and a minority of <em>value shoppers</em> (weak feature preferences, fierce price sensitivity):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sim_lc_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J, beta_list, shares) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">sim_laptop_design</span>(N, T, J)          <span class="co"># the @sec-data design generator</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    cls <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">seq_along</span>(shares), N, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> shares)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    beta_row <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, beta_list)[cls[df<span class="sc">$</span>id], ]   <span class="co"># each row: its person's class beta</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    V   <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> beta_row)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="fu">nrow</span>(df))))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    U   <span class="ot">&lt;-</span> V <span class="sc">+</span> eps</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df, <span class="st">"class_assign"</span>) <span class="ot">&lt;-</span> cls                        <span class="co"># the answer key</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">110</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>beta_premium <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.6</span>, <span class="at">apple =</span> <span class="fl">1.5</span>, <span class="at">ram16 =</span> <span class="fl">0.8</span>, <span class="at">ram32 =</span> <span class="fl">1.4</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">screen15 =</span> <span class="fl">0.5</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">0.8</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>beta_value   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.3</span>, <span class="at">apple =</span> <span class="fl">0.2</span>, <span class="at">ram16 =</span> <span class="fl">0.3</span>, <span class="at">ram32 =</span> <span class="fl">0.4</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>                  <span class="at">screen15 =</span> <span class="fl">0.1</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">2.0</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>shares_true  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">premium =</span> <span class="fl">0.6</span>, <span class="at">value =</span> <span class="fl">0.4</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>lc <span class="ot">&lt;-</span> <span class="fu">sim_lc_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">J =</span> <span class="dv">3</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>                  <span class="at">beta_list =</span> <span class="fu">list</span>(beta_premium, beta_value),</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>                  <span class="at">shares =</span> shares_true)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Two implementation notes. The line <code>beta_row &lt;- do.call(rbind, beta_list)[cls[df$id], ]</code> builds a matrix with <em>each row’s own class coefficients</em> by double indexing — person of the row, class of the person — so <code>rowSums(X * beta_row)</code> computes every utility with its correct <span class="math inline">\(\boldsymbol{\beta}_c\)</span> in one vectorized stroke; this row-specific-coefficients idiom returns in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> where every <em>person</em> has their own <span class="math inline">\(\boldsymbol{\beta}_n\)</span>. And the true class assignments ride along as an attribute: unavailable to any estimator, but waiting to grade our posterior classifications later.</p>
+<p>A directional sanity check (<a href="03_simdata.html#sec-sanity-checks" class="quarto-xref"><span>Section 3.5</span></a>): true premium seekers should buy more Apples and pricier machines than true value shoppers —</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cls   <span class="ot">&lt;-</span> <span class="fu">attr</span>(lc, <span class="st">"class_assign"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>chose <span class="ot">&lt;-</span> lc[lc<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">class       =</span> <span class="fu">c</span>(<span class="st">"premium"</span>, <span class="st">"value"</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">share_apple =</span> <span class="fu">round</span>(<span class="fu">tapply</span>(chose<span class="sc">$</span>brand <span class="sc">==</span> <span class="st">"Apple"</span>, cls[chose<span class="sc">$</span>id], mean), <span class="dv">2</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_price   =</span> <span class="fu">round</span>(<span class="fu">tapply</span>(chose<span class="sc">$</span>price, cls[chose<span class="sc">$</span>id], mean), <span class="dv">2</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    class share_apple avg_price
+1 premium        0.49      1.51
+2   value        0.34      1.38</code></pre>
+</div>
+</div>
+<p>— and emphatically they do.</p>
 </section>
-<section id="simulating-latent-class-data" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="simulating-latent-class-data"><span class="header-section-number">11.4</span> Simulating Latent Class Data</h2>
+<section id="route-1-direct-maximization" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="route-1-direct-maximization"><span class="header-section-number">11.4</span> Route 1: Direct Maximization</h2>
+<p>Nothing stops us from feeding <a href="#eq-lc-loglik" class="quarto-xref">Equation&nbsp;<span>11.2</span></a> to <code>optim()</code>, and it is the honest baseline. Two mechanical matters first.</p>
+<p><em>Constrained shares.</em> The <span class="math inline">\(\pi_c\)</span> live on the simplex (positive, sum to one). Rather than constrain the optimizer (the <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> approach), this time we <strong>reparameterize</strong> — the other standard trick: optimize unconstrained scores <span class="math inline">\(a_2, \ldots, a_C\)</span> (with <span class="math inline">\(a_1 = 0\)</span> fixed) and map them through a softmax, <span class="math inline">\(\pi_c = e^{a_c} / \sum_l e^{a_l}\)</span>. Any real-valued scores yield valid shares, so the constraint simply disappears from the optimizer’s world.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p><em>Per-person likelihoods.</em> <a href="#eq-lc-loglik" class="quarto-xref">Equation&nbsp;<span>11.2</span></a> needs, for each person and class, the log of their sequence probability <span class="math inline">\(\sum_t \log P_{nt}(\boldsymbol{\beta}_c)\)</span> — our stacked machinery delivers this with one more <code>rowsum()</code>: per-task chosen log-probabilities (the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel), then summed within person. And mixing the classes on the log scale is a log-sum-exp with weights — max-shifted, per <a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a>, because sequence probabilities of <span class="math inline">\(T = 8\)</span> choices are small enough to underflow when exponentiated carelessly:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>persll_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id, id_of_task) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> (V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>]  <span class="co"># per task</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(logP, id_of_task))                             <span class="co"># per person</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>loglik_lc <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, X, task_id, id_of_task, n_id, C) {</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    K     <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    a     <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, theta[<span class="dv">1</span><span class="sc">:</span>(C <span class="sc">-</span> <span class="dv">1</span>)])</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    pi_c  <span class="ot">&lt;-</span> <span class="fu">exp</span>(a) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">exp</span>(a))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    betas <span class="ot">&lt;-</span> <span class="fu">matrix</span>(theta[C<span class="sc">:</span>(C <span class="sc">-</span> <span class="dv">1</span> <span class="sc">+</span> C<span class="sc">*</span>K)], <span class="at">nrow =</span> C, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    ll_nc <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>C, <span class="cf">function</span>(c)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">persll_mnl</span>(betas[c, ], y, X, task_id, id_of_task))   <span class="co"># N x C matrix</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    M <span class="ot">&lt;-</span> <span class="fu">apply</span>(ll_nc, <span class="dv">1</span>, max)                                 <span class="co"># rowwise max-shift</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(M <span class="sc">+</span> <span class="fu">log</span>(<span class="fu">exp</span>(ll_nc <span class="sc">-</span> M) <span class="sc">%*%</span> pi_c))                     <span class="co"># eq-lc-loglik</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Set up the data objects and maximize, starting — deliberately — from a <em>perturbed</em> neighborhood of the truth; the reason for that charity becomes the next section’s subject:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> lc)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> lc<span class="sc">$</span>choice</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>task_id    <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(lc[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>id_of_task <span class="ot">&lt;-</span> lc<span class="sc">$</span>id[<span class="sc">!</span><span class="fu">duplicated</span>(lc[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)])]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>n_id <span class="ot">&lt;-</span> <span class="fu">max</span>(lc<span class="sc">$</span>id)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">111</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, beta_premium <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), beta_value <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="fl">0.3</span>))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fit_direct <span class="ot">&lt;-</span> <span class="fu">optim</span>(start, loglik_lc, <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">id_of_task =</span> id_of_task, <span class="at">n_id =</span> n_id, <span class="at">C =</span> <span class="dv">2</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">500</span>))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>pi_hat <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">c</span>(<span class="dv">0</span>, fit_direct<span class="sc">$</span>par[<span class="dv">1</span>])); pi_hat <span class="ot">&lt;-</span> pi_hat <span class="sc">/</span> <span class="fu">sum</span>(pi_hat)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">truth_premium =</span> beta_premium, <span class="at">est_class1 =</span> fit_direct<span class="sc">$</span>par[<span class="dv">2</span><span class="sc">:</span><span class="dv">7</span>],</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">truth_value   =</span> beta_value,   <span class="at">est_class2 =</span> fit_direct<span class="sc">$</span>par[<span class="dv">8</span><span class="sc">:</span><span class="dv">13</span>]), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              dell apple ram16 ram32 screen15 price
+truth_premium 0.60  1.50  0.80  1.40     0.50 -0.80
+est_class1    0.56  1.43  0.69  1.41     0.56 -0.79
+truth_value   0.30  0.20  0.30  0.40     0.10 -2.00
+est_class2    0.22 -0.02  0.28  0.25     0.01 -2.00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">share_class1 =</span> pi_hat[<span class="dv">1</span>], <span class="at">truth =</span> <span class="fl">0.6</span>), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>share_class1        truth 
+       0.629        0.600 </code></pre>
+</div>
+</div>
+<p>Recovery: both coefficient vectors and the 60/40 split, from choices alone — the model heard two voices in the data and transcribed both. (The value class’s small coefficients wobble more; only <span class="math inline">\(\sim 40\%\)</span> of respondents inform them, and diffuse preferences are intrinsically harder to pin down. The standard errors, if we computed them, would say so.)</p>
 </section>
-<section id="direct-maximization" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="direct-maximization"><span class="header-section-number">11.5</span> Direct Maximization</h2>
-<!-- optim on the mixture likelihood; logit-transform the shares; label switching and local maxima -->
+<section id="the-terrain-local-maxima-and-label-switching" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="the-terrain-local-maxima-and-label-switching"><span class="header-section-number">11.5</span> The Terrain: Local Maxima and Label Switching</h2>
+<p>The charity of a near-truth start hid something important. The latent class log-likelihood is <strong>not concave</strong> — the global-concavity luxury of the MNL (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>’s footnote) expired the moment a sum appeared inside the log. Two pathologies follow, one benign, one not.</p>
+<p><strong>Label switching</strong> is the benign one: swap the two classes’ labels (and their shares) and <a href="#eq-lc-loglik" class="quarto-xref">Equation&nbsp;<span>11.2</span></a> is unchanged — the model is invariant to renaming, so <em>every</em> maximum comes in <span class="math inline">\(C!\)</span> mirror-image copies. Harmless for fit, confusing for interpretation and for comparing across runs; the standard hygiene is a reporting convention, such as ordering classes by their price coefficient.</p>
+<p><strong>Genuine local maxima</strong> are not benign. Start the optimizer badly and it can climb to a summit that is not <em>the</em> summit — often one where two classes have collapsed into near-duplicates while a real segment goes unmodeled. Watch it happen; from a start where both classes are the same flat guess:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fit_bad <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">rep</span>(<span class="fl">0.1</span>, <span class="dv">12</span>)), loglik_lc, <span class="at">y =</span> y, <span class="at">X =</span> X,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">task_id =</span> task_id, <span class="at">id_of_task =</span> id_of_task,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">n_id =</span> n_id, <span class="at">C =</span> <span class="dv">2</span>, <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">500</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">good_start =</span> fit_direct<span class="sc">$</span>value, <span class="at">bad_start =</span> fit_bad<span class="sc">$</span>value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>good_start  bad_start 
+ -3706.507  -3706.507 </code></pre>
+</div>
+</div>
+<p>Same data, same model, same algorithm, two different answers — and only the log-likelihood comparison reveals which climb ended on the true summit. The defense is the multiple-starts discipline promised in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>: launch from several dispersed random starts, keep the best, and <em>report</em> having done so. This is not optional garnish for mixture models; it is part of the estimator.</p>
 </section>
-<section id="the-em-algorithm" class="level2" data-number="11.6">
-<h2 data-number="11.6" class="anchored" data-anchor-id="the-em-algorithm"><span class="header-section-number">11.6</span> The EM Algorithm</h2>
-<!-- E-step: posterior class membership (Bayes' rule makes its first appearance -- foreshadow Part III); M-step: weighted MNL fits; code it and watch it climb -->
+<section id="route-2-the-em-algorithm" class="level2" data-number="11.6">
+<h2 data-number="11.6" class="anchored" data-anchor-id="route-2-the-em-algorithm"><span class="header-section-number">11.6</span> Route 2: The EM Algorithm</h2>
+<p>There is a second, beautiful route to the same summit, built from a thought experiment: <em>estimation would be easy if we could see the class labels.</em> Known labels would split the sample into <span class="math inline">\(C\)</span> subsamples, each fit by an ordinary MNL, with shares estimated by counting. The labels are missing — so the <strong>EM algorithm</strong> [Expectation–Maximization; see <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span>, Section 14.3, for the choice-model version] iterates between guessing them probabilistically and estimating as if the guess were data:</p>
+<p>Before the two steps, the object that justifies them. If we <em>could</em> see labels, person <span class="math inline">\(n\)</span> in class <span class="math inline">\(c\)</span> would contribute <span class="math inline">\(\log \pi_c + \sum_t \log P_{nt}(\boldsymbol{\beta}_c)\)</span> to a complete-data log-likelihood. We can’t — so EM averages that contribution over our current beliefs about the labels, the weights <span class="math inline">\(w_{nc}\)</span> defined below, giving the surrogate objective <span class="math display">\[Q(\boldsymbol{\theta}) = \sum_n \sum_c w_{nc} \left[ \log \pi_c + \sum_t \log P_{nt}(\boldsymbol{\beta}_c) \right].\]</span> The sum splits cleanly, and each piece hands us one update. The <span class="math inline">\(\boldsymbol{\beta}_c\)</span> piece is, for each class, exactly a <em>weighted</em> MNL log-likelihood — each person’s tasks entering with weight <span class="math inline">\(w_{nc}\)</span>. The <span class="math inline">\(\pi_c\)</span> piece, maximized subject to <span class="math inline">\(\sum_c \pi_c = 1\)</span>, gives <span class="math inline">\(\pi_c = \frac{1}{N}\sum_n w_{nc}\)</span> — the familiar “observed shares are the MLE of category probabilities,” with soft counts in place of hard ones. And maximizing <span class="math inline">\(Q\)</span> is what guarantees the log-likelihood itself cannot fall from one iteration to the next.</p>
+<p><strong>E-step.</strong> Given current parameters, compute each person’s <em>posterior class probabilities</em>. This is Bayes’ rule — making its first working appearance in this book — applied to the question “given what this person chose, which class are they in?”. Two lines get us there. The probability that person <span class="math inline">\(n\)</span> is in class <span class="math inline">\(c\)</span> <em>and</em> makes the choices we saw is prior times conditional: <span class="math inline">\(\Pr(\text{class } c, \mathbf{y}_n) = \pi_c \prod_t P_{nt}(\boldsymbol{\beta}_c)\)</span>. Divide by the total probability of what we saw — the joint summed over all classes, which is exactly the person’s likelihood contribution <a href="#eq-lc-person" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> — and Bayes’ rule falls out:</p>
+<p><span id="eq-estep"><span class="math display">\[
+w_{nc} = \Pr(\text{class } c \mid \mathbf{y}_n) = \frac{\pi_c \prod_t P_{nt}(\boldsymbol{\beta}_c)}{\sum_l \pi_l \prod_t P_{nt}(\boldsymbol{\beta}_l)}
+\tag{11.3}\]</span></span></p>
+<p>Prior share times likelihood of the person’s sequence, normalized — and the denominator is <a href="#eq-lc-person" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> itself. Every ingredient is already computed by <code>persll_mnl()</code>.</p>
+<p><strong>M-step.</strong> Re-estimate each class’s <span class="math inline">\(\boldsymbol{\beta}_c\)</span> by a <em>weighted</em> MNL — every person participates in every class’s estimation, weighted by their membership probability <span class="math inline">\(w_{nc}\)</span> — and re-estimate shares as average memberships — both updates read directly off <span class="math inline">\(Q\)</span>. The weighted MNL is our <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel with one multiplication added (and its gradient keeps the errors-times-covariates form, weighted):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>loglik_mnl_w <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id, w_task) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> (V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(w_task <span class="sc">*</span> logP)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>grad_mnl_w <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id, w_task) {</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    V    <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    p    <span class="ot">&lt;-</span> eV <span class="sc">/</span> <span class="fu">rowsum</span>(eV, task_id)[task_id]</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(<span class="fu">crossprod</span>(X, w_task[task_id] <span class="sc">*</span> (y <span class="sc">-</span> p)))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The full algorithm alternates the two steps until the log-likelihood stops improving. EM’s celebrated guarantee — the <span class="math inline">\(Q\)</span>-maximization argument above: <em>each iteration cannot decrease the log-likelihood</em>, so it climbs steadily — no step sizes, no line searches, no Hessians — though toward whichever summit its start commits it to (EM shares the local-maxima problem; multiple starts still apply).</p>
+<p>One junction in the implementation deserves a warning flag before you read it, because it is this chapter’s classic bug site: the E-step’s weights <code>w</code> are <em>per person</em> (<span class="math inline">\(N \times C\)</span>), but the weighted likelihood consumes weights <em>per task</em>. The mapping runs through <code>id_of_task</code> — the person who owns each task — so the weight vector handed to the M-step is <code>w[id_of_task, c]</code>, one entry per task, each task inheriting its owner’s membership probability. Index per-person quantities by the wrong level and nothing errors; the classes simply come out subtly, silently wrong.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>em_lc <span class="ot">&lt;-</span> <span class="cf">function</span>(y, X, task_id, id_of_task, n_id, C,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">max_iter =</span> <span class="dv">200</span>, <span class="at">tol =</span> <span class="fl">1e-7</span>) {</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    set_ll <span class="ot">&lt;-</span> <span class="cf">function</span>(betas, pi_c) {          <span class="co"># eq-lc-loglik given parameters</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        ll_nc <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>C, <span class="cf">function</span>(c)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="fu">persll_mnl</span>(betas[c, ], y, X, task_id, id_of_task))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>        M <span class="ot">&lt;-</span> <span class="fu">apply</span>(ll_nc, <span class="dv">1</span>, max)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(<span class="at">ll =</span> <span class="fu">sum</span>(M <span class="sc">+</span> <span class="fu">log</span>(<span class="fu">exp</span>(ll_nc <span class="sc">-</span> M) <span class="sc">%*%</span> pi_c)), <span class="at">ll_nc =</span> ll_nc)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="do">## start: perturbed pooled (one-class) coefficients</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    pooled <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), loglik_mnl_w, <span class="at">gr =</span> grad_mnl_w, <span class="at">y =</span> y, <span class="at">X =</span> X,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">task_id =</span> task_id, <span class="at">w_task =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">max</span>(task_id)),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                    <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">$</span>par</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    betas <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>C, <span class="cf">function</span>(c) pooled <span class="sc">+</span> <span class="fu">rnorm</span>(K, <span class="dv">0</span>, <span class="fl">0.5</span>)))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    pi_c  <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">/</span>C, C)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    trace_ll <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (it <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>max_iter) {</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        cur <span class="ot">&lt;-</span> <span class="fu">set_ll</span>(betas, pi_c)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        trace_ll <span class="ot">&lt;-</span> <span class="fu">c</span>(trace_ll, cur<span class="sc">$</span>ll)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>        <span class="do">## E-step: posterior memberships (rowwise, max-shifted)</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        lw <span class="ot">&lt;-</span> <span class="fu">sweep</span>(cur<span class="sc">$</span>ll_nc, <span class="dv">2</span>, <span class="fu">log</span>(pi_c), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>        lw <span class="ot">&lt;-</span> lw <span class="sc">-</span> <span class="fu">apply</span>(lw, <span class="dv">1</span>, max)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>        w  <span class="ot">&lt;-</span> <span class="fu">exp</span>(lw) <span class="sc">/</span> <span class="fu">rowSums</span>(<span class="fu">exp</span>(lw))                  <span class="co"># N x C</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        <span class="do">## M-step: weighted MNL per class; person weights mapped to tasks</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (c <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>C) {</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>            betas[c, ] <span class="ot">&lt;-</span> <span class="fu">optim</span>(betas[c, ], loglik_mnl_w, <span class="at">gr =</span> grad_mnl_w,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>                                <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>                                <span class="at">w_task =</span> w[id_of_task, c],</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>                                <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>                                <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">$</span>par</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>        pi_c <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(w)</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (it <span class="sc">&gt;</span> <span class="dv">1</span> <span class="sc">&amp;&amp;</span> <span class="fu">abs</span>(<span class="fu">diff</span>(<span class="fu">tail</span>(trace_ll, <span class="dv">2</span>))) <span class="sc">&lt;</span> tol) <span class="cf">break</span></span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">betas =</span> betas, <span class="at">pi =</span> pi_c, <span class="at">w =</span> w, <span class="at">trace =</span> trace_ll)</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">112</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fit_em <span class="ot">&lt;-</span> <span class="fu">em_lc</span>(y, X, task_id, id_of_task, n_id, <span class="at">C =</span> <span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(fit_em<span class="sc">$</span>trace)                        <span class="co"># iterations used</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 86</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(fit_em<span class="sc">$</span>pi, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.629 0.371</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(fit_em<span class="sc">$</span>betas, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1]  [,2] [,3] [,4] [,5]  [,6]
+[1,] 0.56  1.43 0.69 1.41 0.56 -0.79
+[2,] 0.22 -0.02 0.28 0.25 0.01 -2.00</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">iter =</span> <span class="fu">seq_along</span>(fit_em<span class="sc">$</span>trace), <span class="at">ll =</span> fit_em<span class="sc">$</span>trace),</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(iter, ll)) <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"EM iteration"</span>, <span class="at">y =</span> <span class="st">"log-likelihood"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-em-trace" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-em-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="11_latentclass_files/figure-html/fig-em-trace-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-em-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.1: The EM algorithm’s log-likelihood trace: monotone ascent, steep then saturating, converging to the same summit that direct BFGS maximization found.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>And the cross-validation that replaces a package check this chapter:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> two <em>algorithmically unrelated</em> routes — quasi-Newton ascent on the raw mixture likelihood versus alternating expectation and weighted fitting — should meet at the same summit:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">direct_bfgs =</span> fit_direct<span class="sc">$</span>value, <span class="at">em =</span> <span class="fu">max</span>(fit_em<span class="sc">$</span>trace))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>direct_bfgs          em 
+  -3706.507   -3706.507 </code></pre>
+</div>
+</div>
+<p>They do, to several decimals (EM’s classes may arrive label-switched relative to BFGS’s — compare after ordering by price coefficient).</p>
 </section>
-<section id="how-many-classes" class="level2" data-number="11.7">
-<h2 data-number="11.7" class="anchored" data-anchor-id="how-many-classes"><span class="header-section-number">11.7</span> How Many Classes?</h2>
-<!-- BIC/AIC; multiple random starts; the answer is instrumental, not structural -->
+<section id="choosing-the-number-of-classes" class="level2" data-number="11.7">
+<h2 data-number="11.7" class="anchored" data-anchor-id="choosing-the-number-of-classes"><span class="header-section-number">11.7</span> Choosing the Number of Classes</h2>
+<p>Reality never announces <span class="math inline">\(C\)</span>. The standard procedure fits a ladder of models and compares information criteria — BIC (<a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>) being the conventional choice for mixtures, its stiffer penalty guarding against the mixture’s appetite for spurious classes:</p>
+<p>One convention to fix before computing: BIC’s log-sample-size term uses <span class="math inline">\(N = 500\)</span> — the number of <em>independent units</em>, people, not the <span class="math inline">\(4{,}000\)</span> tasks. The whole point of this chapter is that tasks within a person are not independent.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">113</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>bic_ladder <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="cf">function</span>(C) {</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (C <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        f <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">6</span>), loglik_mnl_w, <span class="at">gr =</span> grad_mnl_w, <span class="at">y =</span> y, <span class="at">X =</span> X,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">task_id =</span> task_id, <span class="at">w_task =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">max</span>(task_id)),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        ll <span class="ot">&lt;-</span> f<span class="sc">$</span>value</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        ll <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">replicate</span>(<span class="dv">3</span>, <span class="fu">max</span>(<span class="fu">em_lc</span>(y, X, task_id, id_of_task,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                                          n_id, C)<span class="sc">$</span>trace)))</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    k <span class="ot">&lt;-</span> (C <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> C <span class="sc">*</span> <span class="dv">6</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">C =</span> C, <span class="at">ll =</span> ll, <span class="at">bic =</span> <span class="sc">-</span><span class="dv">2</span><span class="sc">*</span>ll <span class="sc">+</span> k <span class="sc">*</span> <span class="fu">log</span>(n_id))</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">t</span>(bic_ladder), <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     C      ll    bic
+[1,] 1 -3782.5 7602.4
+[2,] 2 -3706.5 7493.8
+[3,] 3 -3701.8 7527.9</code></pre>
+</div>
+</div>
+<p>(Note the <code>replicate(3, ...)</code>: each ladder rung gets multiple EM starts, per the standing local-maxima discipline.) BIC drops sharply from one class to two — the data insist on heterogeneity — and rises again at three: the third class buys too little fit for its six-plus parameters. The criterion recovers the truth we built in. With real data, expect less clarity, and remember what <span class="math inline">\(C\)</span> is: an instrument for approximating a heterogeneity distribution, not an ontological claim that exactly two kinds of people walk the earth. If segments are the deliverable, latent class is the model; if the heterogeneity <em>distribution</em> is the deliverable, the discrete approximation with small <span class="math inline">\(C\)</span> is crude — the observation that opens <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>.</p>
 </section>
-<section id="individual-level-output" class="level2" data-number="11.8">
-<h2 data-number="11.8" class="anchored" data-anchor-id="individual-level-output"><span class="header-section-number">11.8</span> Individual-Level Output</h2>
-<!-- posterior membership probabilities per person; a first, coarse version of "person-specific parameters" -->
+<section id="the-payoff-posterior-classification" class="level2" data-number="11.8">
+<h2 data-number="11.8" class="anchored" data-anchor-id="the-payoff-posterior-classification"><span class="header-section-number">11.8</span> The Payoff: Posterior Classification</h2>
+<p>The E-step’s weights are not algorithmic scaffolding; they are the model’s answer to a question clients actually ask: <em>which segment is this respondent in?</em> For each person, <span class="math inline">\(w_{nc}\)</span> (<a href="#eq-estep" class="quarto-xref">Equation&nbsp;<span>11.3</span></a>) updates the population shares by their observed behavior — eight consistent choices are plenty to sharpen a 60/40 prior into near-certainty:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">w1 =</span> fit_em<span class="sc">$</span>w[, <span class="dv">1</span>]), <span class="fu">aes</span>(w1)) <span class="sc">+</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"P(class 1 | choices)"</span>, <span class="at">y =</span> <span class="st">"respondents"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-posterior-membership" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-posterior-membership-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="11_latentclass_files/figure-html/fig-posterior-membership-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-posterior-membership-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;11.2: Posterior probability of membership in class 1 for all 500 respondents. Most respondents are classified nearly decisively; the thin middle band is respondents whose eight choices genuinely fit both stories.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>And because this is simulated data, we can grade the classifications against the hidden truth — the attribute smuggled out of the simulator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>map_class <span class="ot">&lt;-</span> <span class="fu">apply</span>(fit_em<span class="sc">$</span>w, <span class="dv">1</span>, which.max)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>truth_cls <span class="ot">&lt;-</span> <span class="fu">attr</span>(lc, <span class="st">"class_assign"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="do">## align labels (EM may have switched them), then score</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">max</span>(<span class="fu">mean</span>(map_class <span class="sc">==</span> truth_cls), <span class="fu">mean</span>(<span class="dv">3</span> <span class="sc">-</span> map_class <span class="sc">==</span> truth_cls))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(acc, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.85</code></pre>
+</div>
+</div>
+<p>Roughly 85% of respondents correctly assigned from eight choices each — with the errors concentrated, as <a href="#fig-posterior-membership" class="quarto-xref">Figure&nbsp;<span>11.2</span></a> predicts, among the genuinely ambiguous. This person-level inference-from-behavior is the book’s first taste of its ultimate deliverable; the mixed logit’s continuous version (<a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>) and the HB posteriors of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> are the same idea with the discrete classes melted into a continuum.</p>
 </section>
-<section id="validation-against-gmnl" class="level2" data-number="11.9">
-<h2 data-number="11.9" class="anchored" data-anchor-id="validation-against-gmnl"><span class="header-section-number">11.9</span> Validation Against <code>gmnl</code></h2>
-</section>
-<section id="key-learnings" class="level2" data-number="11.10">
-<h2 data-number="11.10" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">11.10</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="11.9">
+<h2 data-number="11.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">11.9</span> Key Learnings</h2>
+<ul>
+<li>The latent class MNL is a finite mixture: shares <span class="math inline">\(\pi_c\)</span> and class coefficients <span class="math inline">\(\boldsymbol{\beta}_c\)</span>, with membership unobserved. Population-level IIA breaks automatically — heterogeneity generates flexible substitution without specifying nests.</li>
+<li><strong>The mixture sits outside the product over tasks</strong> (<a href="#eq-lc-person" class="quarto-xref">Equation&nbsp;<span>11.1</span></a>): people keep their class across their whole sequence, and within-person consistency is what identifies the classes. This likelihood hierarchy transfers verbatim to the mixed logit and HB models.</li>
+<li>The likelihood is non-concave: label switching (benign; fix by reporting convention) and genuine local maxima (not benign; fix by multiple dispersed starts — part of the estimator, not garnish). We watched two starts reach two different summits.</li>
+<li>Two routes to the MLE: direct quasi-Newton on the reparameterized mixture likelihood (softmax shares), and EM — Bayes-rule E-step (<a href="#eq-estep" class="quarto-xref">Equation&nbsp;<span>11.3</span></a>), weighted-MNL M-step, monotone log-likelihood ascent. Their agreement at the summit is a two-algorithm validation, stronger than any package check (and the natural package, <code>gmnl</code>, has decayed — caveat emptor).</li>
+<li>The E-step weight plumbing — person-level weights mapped to task-level likelihood terms via <code>w[id_of_task, c]</code> — is the chapter’s classic bug site: wrong-level indexing fails silently. Watch for the same hazard in every per-person model ahead.</li>
+<li>BIC over a ladder of <span class="math inline">\(C\)</span> values (with multiple starts per rung) recovered the true two classes; treat <span class="math inline">\(C\)</span> as an approximation device. Posterior memberships classified ~90% of respondents correctly from eight choices — person-level inference, the book’s destination, in its discrete debut.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-sarrias2017" class="csl-entry" role="listitem">
+Sarrias, Mauricio, and Ricardo Daziano. 2017. <span>“Multinomial Logit Models with Continuous and Discrete Individual Heterogeneity in <span>R</span>: The <span class="nocase">gmnl</span> Package.”</span> <em>Journal of Statistical Software</em> 79 (2): 1–46.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Both devices — bounded optimizers and reparameterization — appear in this book so you own both. Rules of thumb: reparameterize simplexes and “must be positive” scales (log-parameterize); use <code>L-BFGS-B</code> for simple intervals like the nested logit’s <span class="math inline">\(\lambda\)</span>. Remember that after reparameterization, standard errors for the <em>transformed</em> quantities need the delta method (<a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The natural package validation target, <code>gmnl</code> <span class="citation" data-cites="sarrias2017">(<a href="references.html#ref-sarrias2017" role="doc-biblioref">Sarrias and Daziano 2017</a>)</span>, implements exactly this model (<code>model = "lc"</code>), but its current CRAN version is incompatible with the modern <code>mlogit</code> data layer and fails even on its own documentation example in a current R session — a useful reminder that unmaintained packages decay. The two-independent-algorithms check used here is, if anything, the stronger discipline.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

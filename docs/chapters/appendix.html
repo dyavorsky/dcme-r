@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -70,6 +90,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -368,17 +417,230 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="r-packages-for-discrete-choice" class="level2" data-number="A.1">
 <h2 data-number="A.1" class="anchored" data-anchor-id="r-packages-for-discrete-choice"><span class="header-section-number">A.1</span> R Packages for Discrete Choice</h2>
-<!-- survey with pointers: mlogit (canonical, data formats), gmnl (frequentist heterogeneity), mixl (speed), Rchoice (binary/ordered RP), bayesm (HB workhorse), apollo, Stan/brms; what this book's hand-coded estimators were validated against, chapter by chapter -->
+<p>This book estimated everything by hand on principle; your research need not. The ecosystem below is where hand-coded understanding meets production convenience — and each package served as a validation target somewhere in these pages, so you have seen their output next to ours.</p>
+<p><strong>mlogit</strong> <span class="citation" data-cites="croissant2020">(<a href="references.html#ref-croissant2020" role="doc-biblioref">Croissant 2020</a>)</span> is the canonical starting point: multinomial, nested, and mixed logit (by MSL with Halton draws), plus heteroskedastic and probit variants, built on the <code>dfidx</code> indexed-data-frame layer whose conventions mirror our long-format contract (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>). It validated our MNL (<a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>), nested logit (<a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>), and mixed logit (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>). Its formula interface — three parts, separated by <code>|</code>, for alternative-varying/generic, individual-specific, and alternative-varying/alternative-specific-coefficient variables — takes an afternoon to internalize and repays it.</p>
+<p><strong>gmnl</strong> <span class="citation" data-cites="sarrias2017">(<a href="references.html#ref-sarrias2017" role="doc-biblioref">Sarrias and Daziano 2017</a>)</span> extends the frequentist heterogeneity menu: latent class, mixed-mixed, and G-MNL models with one interface. A caution from experience (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>): its current CRAN build has decayed against the modern <code>mlogit</code> data layer — verify against its own examples before trusting it with your data. <strong>Rchoice</strong> <span class="citation" data-cites="sarrias2016">(<a href="references.html#ref-sarrias2016" role="doc-biblioref">Sarrias 2016</a>)</span> covers random-parameter binary and ordered models, and its documentation contains one of the most compact published tutorials on simulated-likelihood mechanics. <strong>mixl</strong> <span class="citation" data-cites="molloy2021">(<a href="references.html#ref-molloy2021" role="doc-biblioref">Molloy et al. 2021</a>)</span> compiles user-specified utilities to C++ for very large mixed logit problems — the industrial version of <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s advice.</p>
+<p><strong>bayesm</strong> <span class="citation" data-cites="rossi2005">(<a href="references.html#ref-rossi2005" role="doc-biblioref">Rossi, Allenby, and McCulloch 2005</a>)</span> is the Bayesian workhorse and the direct ancestor of this book’s Part III–IV samplers: <code>rhierMnlRwMixture</code> is <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> with a mixture-of-normals population layer, <code>rmnpGibbs</code> is <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s route 2, and hierarchical MNP, volumetric models, and more live alongside. Its data formats are list-heavy and its identification conventions (differencing base, post-sampling normalization) must be matched carefully — <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s validation section is a worked example of exactly that care.</p>
+<p>Beyond CRAN’s choice-specific corner: <strong>Stan</strong> (via <code>rstan</code>/<code>brms</code>/<code>cmdstanr</code>) estimates any model in this book by Hamiltonian Monte Carlo — less transparent than your own Gibbs sampler, far more general; the <strong>Apollo</strong> package is the transportation field’s full-featured platform; and Sawtooth Software’s Lighthouse Studio is the commercial conjoint standard whose HB engine is, at heart, <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>’s sampler.</p>
 </section>
 <section id="notation-glossary" class="level2" data-number="A.2">
 <h2 data-number="A.2" class="anchored" data-anchor-id="notation-glossary"><span class="header-section-number">A.2</span> Notation Glossary</h2>
-<!-- one table: every symbol, its meaning, and the chapter where it first appears -->
+<div id="tbl-notation" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-notation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;A.1: Notation used throughout the book.
+</figcaption>
+<div aria-describedby="tbl-notation-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symbol</th>
+<th>Meaning</th>
+<th>First appears</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(n = 1, \ldots, N\)</span></td>
+<td>decision-makers (respondents)</td>
+<td><a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(t = 1, \ldots, T\)</span></td>
+<td>choice situations (tasks) per person</td>
+<td><a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(j = 1, \ldots, J\)</span></td>
+<td>alternatives within a task</td>
+<td><a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r = 1, \ldots, R\)</span></td>
+<td>simulation draws</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(s = 1, \ldots, S\)</span></td>
+<td>MCMC iterations</td>
+<td><a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(y\)</span>, <span class="math inline">\(y_{nt}\)</span>, <span class="math inline">\(y_{ntj}\)</span></td>
+<td>choice outcome; indicator form</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{x}_{ntj}\)</span>, <span class="math inline">\(\mathbf{X}\)</span></td>
+<td>attribute vector; stacked design matrix</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\boldsymbol{\beta}\)</span>, <span class="math inline">\(\boldsymbol{\beta}_n\)</span></td>
+<td>utility coefficients; person-specific version</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>, <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\boldsymbol{\varepsilon}\)</span>, <span class="math inline">\(\varepsilon_{ntj}\)</span></td>
+<td>unobserved utility components</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(h(\cdot)\)</span>, <span class="math inline">\(f(\cdot)\)</span></td>
+<td>behavioral rule; density of unobservables</td>
+<td><a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(U_{ntj}\)</span>, <span class="math inline">\(V_{ntj}\)</span></td>
+<td>total and representative utility</td>
+<td><a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P_{ntj}\)</span></td>
+<td>choice probability</td>
+<td><a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\ell(\cdot)\)</span>, <span class="math inline">\(L(\cdot)\)</span></td>
+<td>log-likelihood; likelihood</td>
+<td><a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(s(\boldsymbol{\beta})\)</span>, <span class="math inline">\(H(\boldsymbol{\beta})\)</span></td>
+<td>score (gradient); Hessian</td>
+<td><a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span></td>
+<td>an estimate (MLE unless stated)</td>
+<td><a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\pi_c\)</span>, <span class="math inline">\(\boldsymbol{\beta}_c\)</span></td>
+<td>class share; class coefficients</td>
+<td><a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\Sigma\)</span></td>
+<td>population mean and covariance of tastes</td>
+<td><a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lambda\)</span></td>
+<td>nested logit dissimilarity parameter</td>
+<td><a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(I_{ntm}\)</span></td>
+<td>inclusive value (log-sum) of nest <span class="math inline">\(m\)</span></td>
+<td><a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\Omega\)</span></td>
+<td>raw <span class="math inline">\(J \times J\)</span> MNP error covariance</td>
+<td><a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tilde\Omega\)</span></td>
+<td>differenced <span class="math inline">\((J-1) \times (J-1)\)</span> covariance, normalized so <span class="math inline">\(\tilde\omega_{11}=1\)</span>: <span class="math inline">\(\tilde\Omega = M\Omega M' / (M\Omega M')_{11}\)</span></td>
+<td><a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(W\)</span></td>
+<td>unnormalized differenced covariance sampled in Gibbs; identified: <span class="math inline">\(W/w_{11}\)</span> and <span class="math inline">\(\boldsymbol{\beta}/\sqrt{w_{11}}\)</span></td>
+<td><a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>proposal step size (MCMC); budget (ext. 2)</td>
+<td><a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>, <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\gamma\)</span></td>
+<td>no-choice (none) constant</td>
+<td><a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(IW(\nu_0, V_0)\)</span></td>
+<td>inverse-Wishart prior</td>
+<td><a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\widehat{R}\)</span>, ESS</td>
+<td>convergence ratio; effective sample size</td>
+<td><a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{d}_{nt}\)</span></td>
+<td>latent base-differenced utilities <span class="math inline">\((d_2, d_3)\)</span></td>
+<td><a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(M\)</span>, <span class="math inline">\(A_j\)</span></td>
+<td>differencing matrix; per-chosen-alternative transformation</td>
+<td><a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>, <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(g = 1, \ldots, G\)</span>; <span class="math inline">\(w_g\)</span></td>
+<td>grid points and weights (flexible mixing) — not the covariance elements <span class="math inline">\(w_{11}, w_{12}, w_{22}\)</span> of <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a></td>
+<td><a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(g(\boldsymbol{\beta})\)</span></td>
+<td>function of parameters (WTP ratio, shares) — distinct from the grid index <span class="math inline">\(g\)</span></td>
+<td><a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(CV\)</span></td>
+<td>compensating variation (log-sum change, in dollars)</td>
+<td><a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>acceptance probability (MCMC); budget-utility weight (ext. 2)</td>
+<td><a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>, <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
 </section>
 <section id="common-numerical-errors-and-their-symptoms" class="level2" data-number="A.3">
 <h2 data-number="A.3" class="anchored" data-anchor-id="common-numerical-errors-and-their-symptoms"><span class="header-section-number">A.3</span> Common Numerical Errors and Their Symptoms</h2>
-<!-- optional quick-reference: overflow in exp, singular Hessians, perfect separation, non-convergence checklists -->
+<p>A field guide to the failures this book staged deliberately, for the day they happen to you accidentally.</p>
+<p><strong>The likelihood returns <code>-Inf</code> or <code>NaN</code>.</strong> Almost always <code>exp()</code> overflow/underflow or <code>log(0)</code>. Check for a missing log-sum-exp max-shift (<a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a>), a probability that underflowed before its log (<a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a>), or mis-scaled data (price in dollars instead of thousands, <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>).</p>
+<p><strong>The optimizer “converges” instantly at the starting values.</strong> Gradient numerically zero at the start — typically a flat region from saturated probabilities (again scaling) or a bug returning a constant. Evaluate the objective at a few hand-picked points before blaming the optimizer (<a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a>’s candidate-scoring table is the template).</p>
+<p><strong>Estimates match no truth, but two implementations agree.</strong> Then the estimator is fine and the <em>comparison</em> is wrong: check identification normalizations (scale, base alternative, reference levels — <a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a>, <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>) before checking code. Sign-flipped, uniformly-rescaled estimates are the signature of a differencing-convention mismatch (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s <code>bayesm</code> footnote).</p>
+<p><strong>An MSL fit wanders or won’t converge.</strong> Are the draws fixed across evaluations? Re-drawn randomness inside the objective is the classic self-inflicted wound (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>, demonstrated). Also check draw counts via the doubling diagnostic.</p>
+<p><strong>Wild individual-level estimates.</strong> Per-person estimation with small <span class="math inline">\(T\)</span> — perfect separation and incidental parameters (<a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>). The cure is pooling: conditional means or a hierarchy, never a bigger iteration cap.</p>
+<p><strong>MCMC traces drift and never settle, but the answers look right.</strong> If the drifting quantities are unidentified (MNP scale) while identified <em>functions</em> of them are stable, the sampler is healthy — diagnose the normalized series (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>). If identified quantities drift: too little burn-in, a step size at an extreme acceptance rate (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>), or blocks updating on stale values (a coding bug).</p>
+<p><strong>Mixture or hierarchy estimates depend on the run.</strong> Local maxima (multiple starts, compare summits — <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>) or label switching (order classes by a coefficient before comparing). For hierarchical variance parameters that refuse to approach zero: that is the inverse-Wishart floor, a prior property, not a bug (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>).</p>
+<p><strong>Grouped computations silently wrong.</strong> The sort-order contract (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>): <code>rowsum()</code>, <code>ave()</code>, and index-broadcasting all assume rows grouped as promised, and person-level weights indexed at the wrong level (task vs person, <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>) fail without errors. <code>stopifnot()</code> guards are cheap; use them.</p>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-croissant2020" class="csl-entry" role="listitem">
+Croissant, Yves. 2020. <span>“Estimation of Random Utility Models in <span>R</span>: The <span class="nocase">mlogit</span> Package.”</span> <em>Journal of Statistical Software</em> 95 (11): 1–41.
+</div>
+<div id="ref-molloy2021" class="csl-entry" role="listitem">
+Molloy, Joseph, Felix Becker, Basil Schmid, and Kay W. Axhausen. 2021. <span>“Mixl: An Open-Source <span>R</span> Package for Estimating Complex Choice Models on Large Datasets.”</span> <em>Journal of Choice Modelling</em> 39.
+</div>
+<div id="ref-rossi2005" class="csl-entry" role="listitem">
+Rossi, Peter E., Greg M. Allenby, and Robert McCulloch. 2005. <em>Bayesian Statistics and Marketing</em>. John Wiley &amp; Sons.
+</div>
+<div id="ref-sarrias2016" class="csl-entry" role="listitem">
+Sarrias, Mauricio. 2016. <span>“Discrete Choice Models with Random Parameters in <span>R</span>: The <span>Rchoice</span> Package.”</span> <em>Journal of Statistical Software</em> 74 (10): 1–31.
+</div>
+<div id="ref-sarrias2017" class="csl-entry" role="listitem">
+Sarrias, Mauricio, and Ricardo Daziano. 2017. <span>“Multinomial Logit Models with Continuous and Discrete Individual Heterogeneity in <span>R</span>: The <span class="nocase">gmnl</span> Package.”</span> <em>Journal of Statistical Software</em> 79 (2): 1–46.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

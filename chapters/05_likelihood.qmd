@@ -4,38 +4,275 @@
 
 # From Choice Data to Likelihood {#sec-likelihood}
 
-<!-- Sources: Greene 2008 (binary choice MLE in full detail); Hansen/Abramovich for MLE theory citations; DCMS Ch 3 intro -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+We can now specify a choice model (@sec-choice), draw from any density it involves (@sec-draws), simulate data from it (@sec-simdata), and organize those data for computation (@sec-data). This chapter builds the bridge that runs the other way --- from observed data back toward the unknown parameters. The bridge is the *likelihood function*, and it is the single most important object in this book: Part II maximizes it, @sec-msl approximates it, and Part III explores a posterior that is proportional to it. Every estimator we construct is some maneuver performed on the function this chapter teaches you to write.
 
 ## The Likelihood Function
 
-<!-- the probability of the observed data as a function of the parameters; likelihood vs probability; the model (ch 1) supplies p(y|x,theta), the data supply y and x -->
+Start from what the model gives us. A specified choice model delivers, for any parameter value, the probability of each possible outcome in a single choice situation: $p(y_n \,|\, \x_n, \bfbeta)$. In @sec-choice we used this object in its natural direction --- parameters known, probabilities of outcomes computed. Data reverse the situation: after the study is run, the outcomes $y_1, \ldots, y_N$ are *known*, and $\bfbeta$ is not.
+
+The likelihood function is the same mathematical expression read in the reverse direction:
+
+$$
+L(\bfbeta) = p(\y \,|\, \mathbf{X}, \bfbeta) \quad \text{viewed as a function of } \bfbeta \text{, with the data fixed.}
+$$ {#eq-lik-def}
+
+Read it as: *how probable were the choices we actually observed, if the true parameter vector were $\bfbeta$?* Every candidate $\bfbeta$ gets a score. A candidate under which the observed data would have been unremarkable scores high; a candidate under which the data would have been a miracle scores low. The principle of maximum likelihood --- coming formally in a few pages --- says to prefer the candidate with the highest score.
+
+The distinction between probability and likelihood trips up everyone at first pass, so let me put it plainly. $p(y|\x,\bfbeta)$ is one formula with two readings: as a function of $y$ with $\bfbeta$ fixed, it is a probability distribution (non-negative, sums to one over outcomes); as a function of $\bfbeta$ with $y$ fixed, it is a likelihood (non-negative, but sums to nothing in particular over $\bfbeta$ --- it is not a distribution over parameters).[^1] Same formula, different axis held fixed.
+
+[^1]: Wanting a distribution over parameters is a legitimate desire --- it is *the* Bayesian desire, and @sec-bayes-mnl shows what must be added to the likelihood to get one (a prior). Until then, the likelihood is a scoring function, not a belief.
 
 ## Independence and the Product Form
 
-<!-- independence across decision-makers (and, for now, across choice situations); the likelihood as a product of choice probabilities; panel subtleties deferred to ch 11/13 -->
+For a dataset rather than a single observation, we need the *joint* probability of all the observed choices. Our models make this easy by assumption: conditional on the observables and parameters, the unobservables $\varepsilon_n$ are drawn independently across choice situations --- look back at the simulator of @sec-sim_binary, where `rlogis(N)` draws exactly that way. Independent unobservables make the choices conditionally independent, and the joint probability of independent events is the product of their probabilities:
+
+$$
+L(\bfbeta) = \prod_{n=1}^{N} p(y_n \,|\, \x_n, \bfbeta)
+$$ {#eq-lik-product}
+
+For the binary logit, each factor takes a form worth writing carefully. Denote $P_n = \Pr(y_n = 1 | \x_n, \bfbeta) = e^{\x_n'\bfbeta} / (1 + e^{\x_n'\bfbeta})$ from @eq-binlogit_prob. Shopper $n$ contributes $P_n$ if they bought and $1 - P_n$ if they didn't, which a classic piece of notation compresses into one expression:
+
+$$
+L(\bfbeta) = \prod_{n=1}^{N} P_n^{\,y_n} \, (1 - P_n)^{1 - y_n}
+$$ {#eq-binlogit-lik}
+
+The exponents $y_n \in \{0,1\}$ act as switches, turning on exactly the factor that matches what shopper $n$ actually did. This switch trick generalizes: in @sec-mnl-mle, the same device (an indicator exponent selecting the chosen alternative's probability) builds the MNL likelihood.
+
+A word on the independence assumption, because we will renegotiate it later. Independence across *shoppers* is usually innocuous. Independence across *multiple choices by the same shopper* is not --- respondent $n$'s eight tasks share whatever is persistent about respondent $n$ --- and how to honor that dependence is precisely the story of the panel-data models in @sec-latentclass and @sec-mixed-msl. For this chapter's cross-sectional data (one choice per shopper), the product form is exactly right.
 
 ## The Log-Likelihood
 
-<!-- why logs: products underflow, sums don't; monotone transform preserves the argmax; numerical demonstration of underflow in R -->
+@eq-lik-product is mathematically pleasant and computationally disastrous. Each factor is a probability, typically between 0.2 and 0.8; multiply five hundred of them and the result is on the order of $0.5^{500} \approx 10^{-151}$. Multiply a few thousand --- our laptop study has 4,000 choices --- and the product is smaller than the smallest positive number a computer can represent (about $10^{-308}$ for standard doubles). The computed likelihood becomes exactly zero, for *every* candidate $\bfbeta$, and all information is annihilated. Watch it happen:
 
-## Example: The Binary Logit Log-Likelihood in R
+```{r}
+probs <- runif(5000, 0.2, 0.8)   # plausible per-choice probabilities
+prod(probs[1:100])                # fine
+prod(probs[1:500])                # vanishing...
+prod(probs)                       # gone: underflow to exactly 0
+```
 
-<!-- tiny dataset computed by hand, then a loglik(beta, y, X) function; evaluate at several beta values -->
+The remedy is to work with the *logarithm* of the likelihood. Logs turn products into sums, and sums of a few thousand moderate negative numbers are computationally trivial:
+
+$$
+\ell(\bfbeta) = \log L(\bfbeta) = \sum_{n=1}^{N} \log p(y_n \,|\, \x_n, \bfbeta)
+$$ {#eq-loglik}
+
+```{r}
+sum(log(probs))                   # no drama
+```
+
+Nothing is lost by the transformation: the logarithm is strictly increasing, so $L$ and $\ell$ rank every pair of candidates identically and share exactly the same maximizer. For the binary logit, taking logs of @eq-binlogit-lik gives the form we will implement:
+
+$$
+\ell(\bfbeta) = \sum_{n=1}^{N} \Big[ y_n \log P_n + (1 - y_n) \log (1 - P_n) \Big]
+$$ {#eq-binlogit-loglik}
+
+From here on, "the likelihood" in conversation almost always means the log-likelihood in computation, and $\ell(\bfbeta)$ is the function our code evaluates. Note its sign conventions: each term is the log of a probability, hence negative, so $\ell(\bfbeta)$ is a negative number, and *less negative is better*.
+
+## Coding the Binary Logit Log-Likelihood {#sec-loglik-binary}
+
+Let's turn @eq-binlogit-loglik into R, in the transparent-first style we committed to. The function takes a candidate parameter vector plus the data --- in the design-matrix form of @sec-data --- and returns one number:
+
+```{r}
+loglik_binary <- function(beta, y, X) {
+    ll <- 0
+    for (n in 1:length(y)) {
+        v  <- sum(X[n, ] * beta)            # V_n = x_n' beta
+        P  <- exp(v) / (1 + exp(v))         # P_n
+        ll <- ll + y[n]*log(P) + (1 - y[n])*log(1 - P)
+    }
+    ll
+}
+```
+
+The loop is a line-by-line transcription of the math: representative utility, choice probability, the switch expression, accumulate. Transcription fidelity is the point --- when you can see the equation in the code, you can debug the code against the equation. (The vectorized version, several hundred times faster, appears in @sec-performance; the answers are identical.)
+
+To exercise it we need data with known truth --- the simulator from @sec-sim-function, reproduced here so this chapter stands alone:
+
+```{r}
+sim_binary_data <- function(N, beta, X = NULL,
+                            dist = c("logistic", "normal")) {
+    dist <- match.arg(dist)
+    if (is.null(X)) {
+        price <- runif(N, min = 0.8, max = 2.4)
+        ram16 <- rbinom(N, size = 1, prob = 0.5)
+        X <- cbind(1, price, ram16)
+    }
+    eps <- switch(dist,
+                  logistic = rlogis(N),
+                  normal   = rnorm(N))
+    U <- as.vector(X %*% beta) + eps
+    data.frame(y = as.integer(U > 0), X[, -1, drop = FALSE])
+}
+
+set.seed(50)
+beta_true <- c(1.0, -1.2, 0.6)
+d <- sim_binary_data(N = 500, beta = beta_true)
+y <- d$y
+X <- cbind(1, d$price, d$ram16)
+```
+
+Now the payoff. The log-likelihood scores candidates; let's score a few, including the truth and some pretenders:
+
+```{r}
+cands <- rbind(
+    truth        = c( 1.0, -1.2,  0.6),
+    zero_price   = c( 1.0,  0.0,  0.6),
+    flipped_sign = c( 1.0,  1.2,  0.6),
+    all_zero     = c( 0.0,  0.0,  0.0)
+)
+apply(cands, 1, function(b) loglik_binary(b, y, X))
+```
+
+The ranking behaves exactly as the likelihood principle promises. The true parameters score best. Ignoring price entirely costs dozens of log-likelihood points; *flipping* the price coefficient's sign --- claiming shoppers prefer expensive laptops --- is catastrophically implausible given these data. And the all-zero candidate, which says every shopper flips a fair coin, does poorly in a specific, interpretable way: its score is exactly $N \log(0.5) = `r round(500*log(0.5), 1)`$, a number we will meet again as the *null log-likelihood* when @sec-mnl-mle builds fit measures around it.
+
+One more scoring note: the true $\bfbeta$ is the best candidate *of these four*, but it will not be the exact maximizer of $\ell$ --- the maximizer adapts to this particular sample's noise. How far the maximizer wanders from the truth, sample to sample, is the entire subject of standard errors.
 
 ## Maximum Likelihood Estimation
 
-<!-- the estimator: argmax of the log-likelihood; brief statement of consistency, asymptotic normality, invariance with citations (not derivations) -->
+The estimator this scoring logic suggests has a one-line definition:
 
-## The Score, the Hessian, and the Information Matrix
+$$
+\hat{\bfbeta} = \arg\max_{\bfbeta} \; \ell(\bfbeta)
+$$ {#eq-mle-def}
 
-<!-- gradient and curvature; why curvature at the max delivers standard errors (used in ch 6 and ch 8); analytic vs numerical derivatives preview -->
+The *maximum likelihood estimator* (MLE) is the parameter value that makes the observed data most probable. Note carefully what kind of object @eq-mle-def is, in the taxonomy from the introduction: it is an *estimator* --- a rule mapping data to a value --- not yet an estimate (that requires data) and certainly not the model (which supplied $\ell$'s formula). One model, many possible estimators; maximum likelihood is our first because it is general (any model with a computable likelihood), principled, and --- for the well-behaved models of Part II --- as statistically efficient as any estimator can be.
 
-## A First Estimator: Grid Search
+That efficiency claim is part of a package of classical results that I will state and use but not prove; @abramovich2023 and @hansen2 give full treatments. Under regularity conditions our models satisfy:
 
-<!-- one-parameter binary logit; plot the log-likelihood curve, find the max by brute force; recover the true beta from ch 3's simulated data -- the first complete simulate-and-recover -->
+- **Consistency**: as $N \to \infty$, $\hat{\bfbeta} \to \bfbeta^\ast$. More data concentrates the likelihood around the truth.
+- **Asymptotic normality**: $\sqrt{N}(\hat{\bfbeta} - \bfbeta^\ast)$ converges to a normal distribution whose covariance the next section identifies. This is what licenses confidence intervals and $z$-statistics.
+- **Efficiency**: among (regular) consistent estimators, the MLE achieves the smallest asymptotic variance --- it wrings the most out of each observation.
+- **Invariance**: the MLE of any function $g(\bfbeta)$ is $g(\hat{\bfbeta})$. Estimate the model once, and quantities like willingness-to-pay --- ratios of coefficients, as @sec-postestimation develops --- come free by plugging in.
+
+These are *asymptotic* promises, and simulation is how we audit them at the sample sizes we actually face: the replication study in @sec-mnl-mle will watch consistency and asymptotic normality emerge (or not) at $N = 4{,}000$ choices.
+
+## The Score and the Hessian
+
+Two derivative objects of $\ell$ carry the theory and drive the computation of the next chapter. Their names are worth memorizing now.
+
+The **score** is the gradient --- the $K$-vector of first derivatives:
+
+$$
+s(\bfbeta) = \frac{\partial \ell(\bfbeta)}{\partial \bfbeta}
+$$ {#eq-score}
+
+At an interior maximum the score is zero; that is what "maximum" means. So the MLE can be characterized as the solution to $s(\hat{\bfbeta}) = \mathbf{0}$, and the numerical methods of @sec-optimization are, at heart, root-finders for the score.
+
+For the binary logit the score has a form so clean it feels like a reward. Differentiating @eq-binlogit-loglik is worth doing once in full. Write $v_n = \x_n'\bfbeta$, so $P_n = e^{v_n}/(1+e^{v_n})$ and, more conveniently, $\log P_n = v_n - \log(1+e^{v_n})$ and $\log(1-P_n) = -\log(1+e^{v_n})$. Since $\partial v_n/\partial \bfbeta = \x_n$,
+$$
+\frac{\partial \log P_n}{\partial \bfbeta} = \x_n - \frac{e^{v_n}}{1+e^{v_n}}\,\x_n = (1-P_n)\,\x_n,
+\qquad
+\frac{\partial \log(1-P_n)}{\partial \bfbeta} = -P_n \x_n.
+$$
+Each observation therefore contributes $y_n(1-P_n)\x_n - (1-y_n)P_n\x_n = (y_n - P_n)\x_n$, and summing over observations gives the score. (The same algebra yields $\partial P_n/\partial \bfbeta = P_n(1-P_n)\x_n$, which we will need for the Hessian in @sec-optimization.)
+
+$$
+s(\bfbeta) = \sum_{n=1}^{N} (y_n - P_n)\, \x_n = \mathbf{X}'(\y - \mathbf{P})
+$$ {#eq-binlogit-score}
+
+where $\mathbf{X}$ stacks the row vectors $\x_n'$ into an $N \times K$ matrix, and $\y$ and $\mathbf{P}$ are the $N$-vectors collecting the $y_n$ and $P_n$.
+
+The score is the sum of *prediction errors times covariates*. At the maximum, errors are exactly uncorrelated with every covariate --- the likelihood's echo of least squares' normal equations. We will verify @eq-binlogit-score numerically in @sec-optimization and derive its MNL sibling in @sec-mnl-mle.
+
+The **Hessian** is the $K \times K$ matrix of second derivatives:
+
+$$
+H(\bfbeta) = \frac{\partial^2 \ell(\bfbeta)}{\partial \bfbeta \, \partial \bfbeta'}
+$$ {#eq-hessian}
+
+At the maximum, $H$ is negative definite (the surface curves down in every direction), and *how sharply* it curves is the information content of the data. Intuition: a knife-edge peak means tiny parameter movements make the data noticeably less probable --- the data pin the parameters down; a broad mesa means many candidates explain the data near-equally --- the data are less informative. The classical results make this exact: the asymptotic covariance of the MLE is the inverse of the (expected) negative Hessian, so in practice
+
+$$
+\widehat{\var}(\hat{\bfbeta}) = \left[ -H(\hat{\bfbeta}) \right]^{-1}
+$$ {#eq-mle-vcov}
+
+whose diagonal, square-rooted, gives the standard errors reported next to every estimate in this book.[^2] If you are wondering where the $\sqrt{N}$ of the asymptotic-normality statement went: it is hiding inside $H$. The Hessian sums over all $N$ observations, so it grows in proportion to $N$, and its inverse shrinks like $1/N$ --- @eq-mle-vcov is the $\sqrt{N}$ statement with the scaling already folded in. (Watch it happen empirically at the end of @sec-optimization, where quadrupling $N$ roughly halves the standard errors.) Curvature is variance, inverted. Hold onto that sentence; it is the entire connection between optimization output and statistical inference, and @sec-optimization cashes it in.
+
+[^2]: The negative expected Hessian is the *Fisher information matrix*; evaluating the actual Hessian at $\hat{\bfbeta}$ estimates it. Alternative covariance estimators (outer-product-of-scores, sandwich) matter when models are misspecified; @greene2008 catalogs them. For our simulate-and-recover work, where the model is true by construction, @eq-mle-vcov is the natural choice.
+
+## A First Estimator: Grid Search {#sec-grid-search}
+
+We have the objective (@eq-binlogit-loglik) and the target (@eq-mle-def). The only missing ingredient is a way to *find* the maximizer, and the most naive method is fully within our powers: evaluate $\ell$ on a grid of candidates and take the best. Crude, but it completes the simulate-and-recover loop for the first time in this book, and its failure mode motivates everything in @sec-optimization.
+
+Start in one dimension to build intuition: fix the intercept and memory coefficients at their true values and slice the log-likelihood along the price coefficient alone (a *slice*, not the "profile likelihood" of the testing literature, which re-maximizes over the other parameters at each point):
+
+```{r}
+#| label: fig-loglik-1d
+#| fig-cap: "A slice of the log-likelihood along the price coefficient (intercept and memory coefficients held at truth). The maximizer (dashed) sits near, but not exactly at, the true value of -1.2 (solid): the difference is sampling noise, the raw material of standard errors."
+#| fig-width: 6
+#| fig-height: 3.2
+b_price <- seq(-3, 1, by = 0.01)
+ll <- sapply(b_price, function(b)
+    loglik_binary(c(1.0, b, 0.6), y, X))
+
+ggplot(data.frame(b_price, ll), aes(b_price, ll)) +
+    geom_line() +
+    geom_vline(xintercept = -1.2, linewidth = 0.3) +
+    geom_vline(xintercept = b_price[which.max(ll)], linetype = "dashed") +
+    labs(x = expression(beta[price]), y = "log-likelihood")
+```
+
+The curve is smooth, single-peaked, and --- look closely at the dashed line --- peaks at `r round(b_price[which.max(ll)], 2)`, close to but not exactly $-1.2$. That gap *is* sampling variation; rerun the simulation with a different seed and the peak lands somewhere else nearby. The curvature at the peak is what @eq-mle-vcov converts into a standard error --- a sharper peak would mean the data confine $\beta_{\text{price}}$ more tightly.
+
+Now search over two parameters jointly (intercept and price, memory held at truth), which also lets us *see* a log-likelihood surface --- worth a long look, because the algorithms of @sec-optimization live on surfaces like this one:
+
+```{r}
+#| label: fig-loglik-2d
+#| fig-cap: "Log-likelihood contours over the intercept and price coefficient. The X marks the grid maximizer; the dot marks the truth. The elongated, tilted contours mean the two parameters are partially confounded in these data: raising the intercept while steepening price sensitivity leaves the data almost as probable."
+#| fig-width: 6
+#| fig-height: 4
+grid <- expand.grid(b0 = seq(0, 2, length.out = 80),
+                    bp = seq(-2.4, -0.2, length.out = 80))
+grid$ll <- mapply(function(b0, bp)
+    loglik_binary(c(b0, bp, 0.6), y, X), grid$b0, grid$bp)
+
+best <- grid[which.max(grid$ll), ]
+
+ggplot(grid, aes(b0, bp, z = ll)) +
+    geom_contour(bins = 25, color = "grey50") +
+    annotate("point", x = 1.0, y = -1.2, size = 2) +
+    annotate("point", x = best$b0, y = best$bp, shape = 4, size = 3, stroke = 1.2) +
+    labs(x = expression(beta[0]), y = expression(beta[price]))
+```
+
+```{r}
+best
+```
+
+Recovery, again: the grid maximizer lands near $(1.0, -1.2)$. Notice the *shape* of the contours --- elongated and tilted, not circular. The tilt says the data partially confound the two parameters (a higher baseline buying propensity plus stronger price aversion mimics the original pair), and its algebraic signature is a large off-diagonal element in $H^{-1}$: correlated estimation errors. Surfaces like this are easy terrain; @sec-mixed-msl will show you surfaces with ridges and plateaus where the confounding is severe, and reading contour geometry will pay off.
 
 ## Why Grid Search Fails at Scale
 
-<!-- curse of dimensionality; motivates ch 6 -->
+So why isn't this book twenty pages long? Count evaluations. A grid with 100 points per axis costs $100^K$ evaluations for $K$ parameters:
+
+| $K$ | evaluations at 100 points/axis |
+|----:|-------------------------------:|
+| 1 | 100 |
+| 2 | 10,000 |
+| 3 | $10^6$ |
+| 6 (our MNL, @sec-mnl) | $10^{12}$ |
+| 27 (mixed MNL with full covariance, @sec-mixed-msl) | $10^{54}$ |
+
+: The curse of dimensionality for grid search. {#tbl-grid-curse}
+
+At a million evaluations per second, the six-parameter MNL takes eleven days; the mixed MNL needs $10^{48}$ seconds --- about thirty orders of magnitude longer than the age of the universe. And a 100-point grid is *coarse* --- refining it multiplies the cost further. Exhaustive search dies exponentially in $K$.
+
+But our two figures whisper the escape route. These surfaces are smooth and hill-shaped, so the local slope --- the score, @eq-binlogit-score, which we can *compute* --- always points uphill. A climber who consults the gradient needs no grid: from any starting point, walk uphill until the slope vanishes. Making that idea precise, fast, and robust is the business of numerical optimization, and it is where we turn next.
 
 ## Key Learnings
+
+- The likelihood is the model's probability formula read in reverse: data fixed, parameters free (@eq-lik-def). It scores every candidate $\bfbeta$ by how probable it renders the observed choices.
+- Independence of the unobservables across choice situations --- visible as one line in our simulator --- makes the likelihood a product (@eq-lik-product); the 0/1 exponent trick (@eq-binlogit-lik) selects each observation's realized outcome.
+- Products of thousands of probabilities underflow to zero; the log-likelihood (@eq-loglik) converts them to benign sums with the same maximizer. Code computes $\ell$, always.
+- `loglik_binary()` is @eq-binlogit-loglik transcribed line by line: utility, probability, switch, accumulate --- and it ranked truth above pretenders on simulated data, with the all-zero candidate scoring the null value $N\log(0.5)$.
+- The MLE (@eq-mle-def) is consistent, asymptotically normal, efficient, and invariant. The score (@eq-score) vanishes at the maximum --- for the binary logit it is the elegant $\mathbf{X}'(\y - \mathbf{P})$ --- and the inverse negative Hessian (@eq-mle-vcov) converts peak curvature into standard errors.
+- Grid search completed our first simulate-and-recover loop and drew us two instructive pictures --- but it costs $100^K$ evaluations and dies exponentially in dimension (@tbl-grid-curse). Smooth, gradient-bearing surfaces invite hill-climbing instead: @sec-optimization.

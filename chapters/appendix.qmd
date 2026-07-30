@@ -1,13 +1,76 @@
+::: {.content-hidden}
+{{< include ../latex-header.tex >}}
+:::
+
 # Appendix {#sec-appendix}
 
 ## R Packages for Discrete Choice
 
-<!-- survey with pointers: mlogit (canonical, data formats), gmnl (frequentist heterogeneity), mixl (speed), Rchoice (binary/ordered RP), bayesm (HB workhorse), apollo, Stan/brms; what this book's hand-coded estimators were validated against, chapter by chapter -->
+This book estimated everything by hand on principle; your research need not. The ecosystem below is where hand-coded understanding meets production convenience --- and each package served as a validation target somewhere in these pages, so you have seen their output next to ours.
+
+**mlogit** [@croissant2020] is the canonical starting point: multinomial, nested, and mixed logit (by MSL with Halton draws), plus heteroskedastic and probit variants, built on the `dfidx` indexed-data-frame layer whose conventions mirror our long-format contract (@sec-data). It validated our MNL (@sec-mnl-mle), nested logit (@sec-iia), and mixed logit (@sec-mixed-msl). Its formula interface --- three parts, separated by `|`, for alternative-varying/generic, individual-specific, and alternative-varying/alternative-specific-coefficient variables --- takes an afternoon to internalize and repays it.
+
+**gmnl** [@sarrias2017] extends the frequentist heterogeneity menu: latent class, mixed-mixed, and G-MNL models with one interface. A caution from experience (@sec-latentclass): its current CRAN build has decayed against the modern `mlogit` data layer --- verify against its own examples before trusting it with your data. **Rchoice** [@sarrias2016] covers random-parameter binary and ordered models, and its documentation contains one of the most compact published tutorials on simulated-likelihood mechanics. **mixl** [@molloy2021] compiles user-specified utilities to C++ for very large mixed logit problems --- the industrial version of @sec-performance's advice.
+
+**bayesm** [@rossi2005] is the Bayesian workhorse and the direct ancestor of this book's Part III--IV samplers: `rhierMnlRwMixture` is @sec-hb-mnl with a mixture-of-normals population layer, `rmnpGibbs` is @sec-mnp-est's route 2, and hierarchical MNP, volumetric models, and more live alongside. Its data formats are list-heavy and its identification conventions (differencing base, post-sampling normalization) must be matched carefully --- @sec-mnp-est's validation section is a worked example of exactly that care.
+
+Beyond CRAN's choice-specific corner: **Stan** (via `rstan`/`brms`/`cmdstanr`) estimates any model in this book by Hamiltonian Monte Carlo --- less transparent than your own Gibbs sampler, far more general; the **Apollo** package is the transportation field's full-featured platform; and Sawtooth Software's Lighthouse Studio is the commercial conjoint standard whose HB engine is, at heart, @sec-hb-mnl's sampler.
 
 ## Notation Glossary
 
-<!-- one table: every symbol, its meaning, and the chapter where it first appears -->
+| Symbol | Meaning | First appears |
+|---|---|---|
+| $n = 1, \ldots, N$ | decision-makers (respondents) | @sec-simdata |
+| $t = 1, \ldots, T$ | choice situations (tasks) per person | @sec-data |
+| $j = 1, \ldots, J$ | alternatives within a task | @sec-data |
+| $r = 1, \ldots, R$ | simulation draws | @sec-choice |
+| $s = 1, \ldots, S$ | MCMC iterations | @sec-bayes-mnl |
+| $y$, $y_{nt}$, $y_{ntj}$ | choice outcome; indicator form | @sec-choice, @sec-mnl-mle |
+| $\x_{ntj}$, $\mathbf{X}$ | attribute vector; stacked design matrix | @sec-choice, @sec-data |
+| $\bfbeta$, $\bfbeta_n$ | utility coefficients; person-specific version | @sec-choice, @sec-mixed-msl |
+| $\beps$, $\varepsilon_{ntj}$ | unobserved utility components | @sec-choice |
+| $h(\cdot)$, $f(\cdot)$ | behavioral rule; density of unobservables | @sec-choice |
+| $U_{ntj}$, $V_{ntj}$ | total and representative utility | @sec-mnl |
+| $P_{ntj}$ | choice probability | @sec-mnl |
+| $\ell(\cdot)$, $L(\cdot)$ | log-likelihood; likelihood | @sec-likelihood |
+| $s(\bfbeta)$, $H(\bfbeta)$ | score (gradient); Hessian | @sec-likelihood |
+| $\hat{\bfbeta}$ | an estimate (MLE unless stated) | @sec-likelihood |
+| $\pi_c$, $\bfbeta_c$ | class share; class coefficients | @sec-latentclass |
+| $\bar{\bfbeta}$, $\Sigma$ | population mean and covariance of tastes | @sec-mixed-msl |
+| $\lambda$ | nested logit dissimilarity parameter | @sec-iia |
+| $I_{ntm}$ | inclusive value (log-sum) of nest $m$ | @sec-iia |
+| $\Omega$ | raw $J \times J$ MNP error covariance | @sec-mnp |
+| $\tilde\Omega$ | differenced $(J-1) \times (J-1)$ covariance, normalized so $\tilde\omega_{11}=1$: $\tilde\Omega = M\Omega M' / (M\Omega M')_{11}$ | @sec-mnp |
+| $W$ | unnormalized differenced covariance sampled in Gibbs; identified: $W/w_{11}$ and $\bfbeta/\sqrt{w_{11}}$ | @sec-mnp-est |
+| $\tau$ | proposal step size (MCMC); budget (ext. 2) | @sec-bayes-mnl, @sec-extensions |
+| $\gamma$ | no-choice (none) constant | @sec-extensions |
+| $IW(\nu_0, V_0)$ | inverse-Wishart prior | @sec-hb-mnl |
+| $\widehat{R}$, ESS | convergence ratio; effective sample size | @sec-bayes-mnl |
+| $\mathbf{d}_{nt}$ | latent base-differenced utilities $(d_2, d_3)$ | @sec-mnp-est |
+| $M$, $A_j$ | differencing matrix; per-chosen-alternative transformation | @sec-mnp, @sec-mnp-est |
+| $g = 1, \ldots, G$; $w_g$ | grid points and weights (flexible mixing) --- not the covariance elements $w_{11}, w_{12}, w_{22}$ of @sec-mnp-est | @sec-extensions |
+| $g(\bfbeta)$ | function of parameters (WTP ratio, shares) --- distinct from the grid index $g$ | @sec-postestimation |
+| $CV$ | compensating variation (log-sum change, in dollars) | @sec-postestimation |
+| $\alpha$ | acceptance probability (MCMC); budget-utility weight (ext. 2) | @sec-bayes-mnl, @sec-extensions |
+
+: Notation used throughout the book. {#tbl-notation}
 
 ## Common Numerical Errors and Their Symptoms
 
-<!-- optional quick-reference: overflow in exp, singular Hessians, perfect separation, non-convergence checklists -->
+A field guide to the failures this book staged deliberately, for the day they happen to you accidentally.
+
+**The likelihood returns `-Inf` or `NaN`.** Almost always `exp()` overflow/underflow or `log(0)`. Check for a missing log-sum-exp max-shift (@sec-logsumexp), a probability that underflowed before its log (@sec-likelihood), or mis-scaled data (price in dollars instead of thousands, @sec-optimization).
+
+**The optimizer "converges" instantly at the starting values.** Gradient numerically zero at the start --- typically a flat region from saturated probabilities (again scaling) or a bug returning a constant. Evaluate the objective at a few hand-picked points before blaming the optimizer (@sec-likelihood's candidate-scoring table is the template).
+
+**Estimates match no truth, but two implementations agree.** Then the estimator is fine and the *comparison* is wrong: check identification normalizations (scale, base alternative, reference levels --- @sec-mnl-identification, @sec-mnp) before checking code. Sign-flipped, uniformly-rescaled estimates are the signature of a differencing-convention mismatch (@sec-mnp-est's `bayesm` footnote).
+
+**An MSL fit wanders or won't converge.** Are the draws fixed across evaluations? Re-drawn randomness inside the objective is the classic self-inflicted wound (@sec-msl, demonstrated). Also check draw counts via the doubling diagnostic.
+
+**Wild individual-level estimates.** Per-person estimation with small $T$ --- perfect separation and incidental parameters (@sec-limits). The cure is pooling: conditional means or a hierarchy, never a bigger iteration cap.
+
+**MCMC traces drift and never settle, but the answers look right.** If the drifting quantities are unidentified (MNP scale) while identified *functions* of them are stable, the sampler is healthy --- diagnose the normalized series (@sec-mnp-est). If identified quantities drift: too little burn-in, a step size at an extreme acceptance rate (@sec-bayes-mnl), or blocks updating on stale values (a coding bug).
+
+**Mixture or hierarchy estimates depend on the run.** Local maxima (multiple starts, compare summits --- @sec-latentclass) or label switching (order classes by a coefficient before comparing). For hierarchical variance parameters that refuse to approach zero: that is the inverse-Wishart floor, a prior property, not a bug (@sec-hb-mnl).
+
+**Grouped computations silently wrong.** The sort-order contract (@sec-data): `rowsum()`, `ave()`, and index-broadcasting all assume rows grouped as promised, and person-level weights indexed at the wrong level (task vs person, @sec-latentclass) fail without errors. `stopifnot()` guards are cheap; use them.

@@ -4,48 +4,277 @@
 
 # Bayesian Estimation of the MNL {#sec-bayes-mnl}
 
-<!-- Sources: allenby-2004-hb-revolution.md (zero-prereq intro); allenby-rossi-2006 (practitioner intro); Hess & Daly Ch 22 (Lenk); mcelreath2018/bda3 for citations; DCMS Ch 12 opening -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+Part III begins with a promise made in @sec-limits: build the estimator *out of* Bayes' rule, and the person-level inference problem dissolves. Keeping that promise takes three chapters. This one changes the philosophical engine while keeping the model deliberately familiar --- the plain MNL on the same laptop study we estimated by maximum likelihood in @sec-mnl-mle --- so that everything new is *method*, nothing is model. By the end you will have sampled a posterior with an algorithm you coded yourself, diagnosed its health, and discovered that it reproduces @sec-mnl-mle's answers almost exactly. That near-redundancy is the point: on a model this simple, Bayes buys little. The machine we assemble here, though, is precisely the machine that scales to the hierarchical models where Bayes buys everything --- and its hot inner loop is, literally, the `loglik_mnl()` function you already own.
 
 ## The Bayesian Mindset
 
-<!-- parameters as uncertain quantities; posterior proportional to prior times likelihood; contrast with the MLE view; same likelihood, different question -->
+The likelihood tradition of Part II treats $\bfbeta$ as a fixed unknown constant and asks: *which value makes the data most probable?* Uncertainty lives in the data --- the sampling distribution of $\hat{\bfbeta}$ across hypothetical replications (@sec-mnl-recovery ran them) --- and is reported as standard errors.
+
+The Bayesian tradition treats $\bfbeta$ itself as an uncertain quantity and asks a different question: *given what we observed, what should we believe about $\bfbeta$?* Beliefs before the data are the **prior** $p(\bfbeta)$; the data speak through the **likelihood** $p(\y \mid \bfbeta)$ --- the *identical* object we built in @sec-likelihood, no modification --- and Bayes' rule combines them into the **posterior**:
+
+$$
+p(\bfbeta \mid \y) = \frac{ p(\y \mid \bfbeta) \, p(\bfbeta) }{ p(\y) }
+\;\propto\; p(\y \mid \bfbeta) \, p(\bfbeta)
+$$ {#eq-bayes-rule}
+
+The denominator $p(\y) = \int p(\y|\bfbeta)p(\bfbeta)d\bfbeta$ --- the *marginal likelihood* --- is a constant with respect to $\bfbeta$: it rescales the posterior to integrate to one but does not change its shape. Hold onto that observation; it is about to carry the whole chapter.
+
+You have already met this arithmetic twice without the label. The E-step of @sec-latentclass (@eq-estep) was Bayes' rule over discrete classes; the conditional distribution of @sec-limits (@eq-conditional-dist) was Bayes' rule over a person's coefficients with the population as prior. Both times, the rule was a *bolt-on* to a likelihood-estimated model. The move now is to apply it to *everything we don't know* --- in this chapter just $\bfbeta$; by @sec-hb-mnl, every person's $\bfbeta_n$ and the population parameters above them, in one coherent joint posterior.
+
+The output format changes too, and the change is an upgrade. Maximum likelihood reports a point and a curvature-based wobble (@eq-mle-vcov). The posterior is an entire *distribution*: its mean is a point estimate, its standard deviation an uncertainty, its quantiles honest interval statements ("with probability 0.95, $\beta_{\text{price}}$ lies in..."), and --- crucially for @sec-postestimation --- any *function* of parameters inherits a full distribution by pushing draws through it. No delta method, no asymptotic appeal; finite-sample statements, exact up to sampling of the posterior itself.
 
 ## Priors
 
-<!-- what they encode; weakly informative defaults used in this book; sensitivity as a practice, not a fear -->
+The prior is the ingredient likelihood analysis doesn't have, and it deserves a plain-spoken paragraph rather than an ideological one. A prior encodes what is credible about parameters before the current data --- from previous studies, theory, or mere scale knowledge ("utility coefficients of magnitude 100 do not occur in conjoint data"). When data are rich, as ours are (4,000 choices bearing on six parameters), any reasonable prior is overwhelmed by the likelihood and the posterior barely notices it; when data are thin --- individual-level parameters from eight tasks, the exact situation of @sec-hb-mnl --- the prior matters enormously and *usefully*, supplying the regularization that made @sec-limits's conditional means sane where per-person MLE exploded.
+
+For this chapter: independent normals, generous scale,
+
+$$
+\beta_k \sim N(0, 5^2), \quad k = 1, \ldots, K
+$$ {#eq-mnl-prior}
+
+--- "weakly informative" in the standard sense [@gelman2020]: no direction favored, magnitudes beyond $\pm 10$ gently discouraged, everything our simulate-and-recover truths could plausibly be, easily accommodated. The honest practice is not agonizing over the perfect prior but *checking sensitivity*: refit with the scale at 2 and at 20 and confirm nothing you report moves. (With this chapter's data, nothing does; we verify at the end.)
+
+In code, the prior joins the likelihood on the log scale --- and note that the sum below is the entire Bayesian addition to Part II's machinery:
+
+```{r}
+log_prior <- function(beta, sd = 5) sum(dnorm(beta, 0, sd, log = TRUE))
+log_post  <- function(beta, y, X, task_id)
+    loglik_mnl(beta, y, X, task_id) + log_prior(beta)
+```
 
 ## The Posterior Has No Closed Form Either
 
-<!-- for the MNL, the normalizing constant is intractable -- the same wall as ch 12, met with a different tool: sample from the posterior instead of maximizing it -->
+For a handful of textbook pairings (normal likelihood, normal prior --- @sec-gibbs exploits them), the posterior is a named distribution you can look up. The MNL is not one of them: multiply @eq-mnl-loglik's exponentiated form by a normal prior and the result matches no catalog. Concretely, we can evaluate the posterior's *shape* --- @eq-bayes-rule's numerator, our `log_post()` --- at any $\bfbeta$ we like, but we cannot integrate it: no normalizing constant, no posterior means, no quantiles, nothing summable in closed form.
 
-## Summarizing Distributions with Draws
+This should feel familiar. It is @sec-msl's predicament --- a needed integral with no formula --- met this time not by approximating the integral but by a more radical maneuver: *never compute it at all.* If we can manufacture **draws** from the posterior, then every summary we want is a sample statistic: posterior mean $\approx$ mean of draws, quantiles $\approx$ sample quantiles, exactly the @sec-draws logic of summarizing distributions by sampling them. The entire Bayesian computation problem reduces to: *sample from a distribution known only up to a constant.* Enter the second-most-cited algorithm of twentieth-century science.
 
-<!-- ch 2's skill repurposed: given posterior draws, means/quantiles/intervals are trivial; the entire output of Bayesian estimation is a matrix of draws -->
+## The Metropolis--Hastings Algorithm
 
-## The Metropolis-Hastings Algorithm
+**The idea.** Take a random walk through parameter space, but a biased one: propose a small random move; if the move goes *uphill* on the posterior surface, take it; if downhill, take it *sometimes* --- with probability equal to the ratio of posterior heights. Formally, from current position $\bfbeta^{(s)}$:
 
-### The Idea
+1. Propose $\bfbeta' = \bfbeta^{(s)} + \text{step}$, with the step drawn symmetrically (ours: $N(\mathbf{0}, \tau^2 I)$).
+2. Compute the acceptance probability
+$$
+\alpha = \min\left(1, \; \frac{p(\bfbeta' \mid \y)}{p(\bfbeta^{(s)} \mid \y)} \right)
+$$ {#eq-mh-ratio}
+3. With probability $\alpha$ set $\bfbeta^{(s+1)} = \bfbeta'$ (accept); otherwise $\bfbeta^{(s+1)} = \bfbeta^{(s)}$ (stay --- the repeat is part of the sample).
 
-<!-- wander over the posterior, accepting moves by relative height; only ratios needed, so the intractable constant cancels -->
+A naming note that pays off next chapter: @eq-mh-ratio is really the *Metropolis* ratio, valid only because our proposal is symmetric --- a step from $\bfbeta^{(s)}$ to $\bfbeta'$ is exactly as probable as the reverse step. Hastings' generalization handles an asymmetric proposal density $q$ by reweighting:
+$$\alpha = \min\left(1, \; \frac{p(\bfbeta' \mid \y)\; q(\bfbeta^{(s)} \mid \bfbeta')}{p(\bfbeta^{(s)} \mid \y)\; q(\bfbeta' \mid \bfbeta^{(s)})} \right)$$
+With symmetric $q$ the correction cancels and we recover @eq-mh-ratio. We will need the general form exactly once --- in @sec-gibbs, to see why a Gibbs draw is an M-H step that never rejects.
 
-### A Toy Target First
+Two observations make the algorithm sing. First, the ratio in @eq-mh-ratio involves the posterior at two points --- so the unknowable normalizing constant *cancels*: the algorithm needs only our computable `log_post()`, up-to-a-constant being exactly enough. Second, computed on the log scale (as a difference, accepted when $\log u < \Delta$) it is immune to the underflow that raw probability ratios invite --- @sec-performance's stay-on-the-log-scale doctrine, now load-bearing.
 
-<!-- code M-H for a known 1-d density; watch the histogram converge to the truth -->
+Why does the wandering produce posterior draws? The one-paragraph honest answer: the accept/reject rule is engineered so that posterior-density flow between any two locations balances --- from where the posterior is high, many walkers depart, but proportionally many are sent back --- in symbols, detailed balance requires $p(\bfbeta \mid \y)\, q(\bfbeta' \mid \bfbeta)\, \alpha(\bfbeta \to \bfbeta') = p(\bfbeta' \mid \y)\, q(\bfbeta \mid \bfbeta')\, \alpha(\bfbeta' \to \bfbeta)$, and @eq-mh-ratio satisfies it by construction: whichever direction is "downhill" accepts with probability equal to the posterior ratio, which is precisely the factor that equalizes the two sides (plug in $\alpha$ for the case $p(\bfbeta' \mid \y) < p(\bfbeta \mid \y)$ and check) --- making the posterior the walk's *stationary distribution*: once the chain forgets its starting point, each step is a (serially correlated) draw from the posterior. The full argument is detailed balance plus Markov chain convergence theory [@train2009, Ch. 12 sketches it; @bda3 gives it properly]; we will do what computational people do and *verify stationarity empirically*, on a target we know.
 
-### Why It Works
+**A toy target first.** Before trusting the algorithm with a posterior we cannot check, aim it at a density we can --- the @sec-sanity-checks discipline applied to samplers. A deliberately awkward target: a bimodal mixture of normals, known only up to a constant (we "forget" the constant on purpose):
 
-<!-- detailed balance in one intuitive page, citations for the theory -->
+```{r}
+log_target <- function(x) log(dnorm(x, -2, 0.7) + 0.6 * dnorm(x, 1.5, 1))
+
+mh_1d <- function(log_f, x0, tau, S) {
+    x   <- numeric(S); x[1] <- x0
+    acc <- 0
+    for (s in 2:S) {
+        prop <- x[s-1] + rnorm(1, 0, tau)
+        if (log(runif(1)) < log_f(prop) - log_f(x[s-1])) {
+            x[s] <- prop; acc <- acc + 1
+        } else x[s] <- x[s-1]
+    }
+    list(draws = x, acc_rate = acc / (S - 1))
+}
+
+set.seed(150)
+chain <- mh_1d(log_target, x0 = 0, tau = 1.5, S = 20000)
+chain$acc_rate
+```
+
+```{r}
+#| label: fig-mh-toy
+#| fig-cap: "20,000 Metropolis-Hastings draws against the true (renormalized) bimodal target density. The sampler was given the density only up to a constant and no knowledge of the modes; the histogram finds both, in the right proportions."
+#| fig-width: 6
+#| fig-height: 3
+norm_const <- integrate(function(x) exp(log_target(x)), -8, 8)$value
+ggplot(data.frame(x = chain$draws[-(1:500)]), aes(x)) +
+    geom_histogram(aes(y = after_stat(density)), bins = 80, fill = "grey70") +
+    geom_function(fun = function(x) exp(log_target(x)) / norm_const,
+                  linewidth = 0.8) +
+    labs(x = "x", y = "density")
+```
+
+The histogram *is* the target. Twenty lines of code, no constants, no formulas for means or modes --- just evaluations of an unnormalized density and coin flips.
+
+**The step size is a real decision.** The proposal scale $\tau$ trades off two failure modes, best seen than described --- the same chain with $\tau$ far too small, well-chosen, and far too large:
+
+```{r}
+#| label: fig-mh-stepsize
+#| fig-cap: "The step-size dilemma, in traces of the chain's first 2,000 iterations. Tiny steps (top: acceptance 97%) inch along and explore nothing; sensible steps (middle: 42%) traverse both modes freely; huge steps (bottom: 4%) are almost always rejected, freezing the chain for long stretches."
+#| fig-width: 6.5
+#| fig-height: 4
+set.seed(151)
+taus <- c(0.05, 1.5, 25)
+traces <- do.call(rbind, lapply(taus, function(tt) {
+    ch <- mh_1d(log_target, 0, tt, 2000)
+    data.frame(iter = 1:2000, x = ch$draws,
+               tau = sprintf("tau = %.2f (acc %.0f%%)", tt, 100 * ch$acc_rate))
+}))
+ggplot(traces, aes(iter, x)) +
+    geom_line(linewidth = 0.25) +
+    facet_wrap(~ tau, ncol = 1) +
+    labs(x = "iteration", y = "x")
+```
+
+Small steps accept almost everything but move nowhere --- the chain is a slug, and its draws are so correlated they carry almost no information each. Huge steps propose leaps into the improbable, get rejected, and the chain fossilizes. Between them lies a broad sweet spot, conventionally targeted through the *acceptance rate*: theory for random-walk proposals puts the optimum near 23% in high dimensions and ~44% in one dimension [the folklore range 20--40% serves fine; @train2009, Section 12.5]. Tuning $\tau$ to hit that range --- by hand now, adaptively in @sec-hb-mnl --- is the algorithm's one knob.
 
 ## M-H for the MNL
 
-<!-- the punchline of the book's design: the target evaluates `loglik_mnl()` from ch 8 plus a log-prior; random-walk proposals; tuning the step size and acceptance rate -->
+Now the real target. Load the laptop study (same data as @sec-mnl-mle --- comparability is the experiment), bring back the likelihood kernel, and point the sampler at the posterior --- note the multivariate generalization is only that proposals perturb all six coordinates at once:
 
-## MCMC Diagnostics
+```{r}
+study   <- readRDS("../data/laptop_study.rds")
+laptops <- study$data
+X <- model.matrix(~ brand + ram + screen + price, data = laptops)[, -1]
+y <- laptops$choice
+task_id <- cumsum(!duplicated(laptops[, c("id", "task")]))
+K <- ncol(X)
 
-<!-- trace plots, burn-in, autocorrelation and effective sample size, multiple chains and R-hat; what convergence failure looks like (deliberately break it) -->
+loglik_mnl <- function(beta, y, X, task_id) {          # @sec-mnl-mle, verbatim
+    V    <- as.vector(X %*% beta)
+    Vmax <- ave(V, task_id, FUN = max)
+    eV   <- exp(V - Vmax)
+    sum((V - Vmax - log(rowsum(eV, task_id)[task_id]))[y == 1])
+}
 
-## Bayes Meets MLE
+mh_mnl <- function(y, X, task_id, S, tau, beta0 = rep(0, ncol(X)),
+                   prior_sd = 5) {
+    K     <- ncol(X)
+    draws <- matrix(NA_real_, S, K)                     # preallocate (@sec-performance)
+    beta  <- beta0
+    lp    <- loglik_mnl(beta, y, X, task_id) +
+             sum(dnorm(beta, 0, prior_sd, log = TRUE))
+    acc <- 0
+    for (s in 1:S) {
+        prop    <- beta + rnorm(K, 0, tau)
+        lp_prop <- loglik_mnl(prop, y, X, task_id) +
+                   sum(dnorm(prop, 0, prior_sd, log = TRUE))
+        if (log(runif(1)) < lp_prop - lp) {
+            beta <- prop; lp <- lp_prop; acc <- acc + 1
+        }
+        draws[s, ] <- beta
+    }
+    list(draws = draws, acc_rate = acc / S)
+}
+```
 
-<!-- posterior means vs ch 8's MLEs on the same data: nearly identical with diffuse priors (Bernstein-von Mises intuition, cite); so why bother? because this machinery scales to models MLE cannot reach -- next two chapters -->
+Study the inner loop and count what is new relative to Part II: the proposal line, the prior line, the comparison line. Everything else --- the entire cost of each iteration --- is one call to `loglik_mnl()`. The function we wrote in @sec-mnl-mle, vectorized in @sec-performance, and audited in @sec-mixed-msl is the engine of the Bayesian machine too; @tbl-eval-count's MCMC row is now literal.
+
+Tune briefly (a few short pilot runs, not shown, put $\tau = 0.045$ in the low-20s acceptance range for these data --- six dimensions, so we aim low per the theory) and run four chains from dispersed starts, because multiple chains are about to be a diagnostic:
+
+```{r}
+#| cache: false
+set.seed(152)
+S <- 20000
+chains <- lapply(1:4, function(c)
+    mh_mnl(y, X, task_id, S = S, tau = 0.045,
+           beta0 = rnorm(K, 0, 1)))
+sapply(chains, `[[`, "acc_rate")
+```
+
+## Reading a Chain: Diagnostics
+
+An MCMC run hands you numbers unconditionally; whether they are *posterior draws* is a judgment the diagnostics inform. The workflow, on our chains:
+
+**Trace plots first, always.** The chain's path over iterations, for one parameter, all four chains:
+
+```{r}
+#| label: fig-mnl-trace
+#| fig-cap: "Trace of the price coefficient: four chains from dispersed starts. The early iterations show the chains migrating from their starting points to the posterior's neighborhood (burn-in, discarded); thereafter the four traces are statistically indistinguishable 'fuzzy caterpillars' -- the visual signature of convergence to a common stationary distribution."
+#| fig-width: 6.5
+#| fig-height: 3.2
+tr <- do.call(rbind, lapply(1:4, function(c)
+    data.frame(iter = 1:S, chain = factor(c),
+               price = chains[[c]]$draws[, 6])))
+ggplot(tr[tr$iter %% 10 == 0, ], aes(iter, price, color = chain)) +
+    geom_line(linewidth = 0.2) +
+    scale_color_grey(end = 0.7) +
+    labs(x = "iteration", y = expression(beta[price]))
+```
+
+The reading: an initial transient as each chain walks in from its arbitrary start --- that stretch reflects the starting point, not the posterior, and is discarded as **burn-in** (we drop 2,000, generous for this well-behaved problem) --- followed by stable, overlapping fuzz. Four chains agreeing about *where* to fuzz is the point of dispersed starts: any one chain can look settled while stuck; four independent walkers telling the same story is far harder to fake.
+
+**$\widehat{R}$ makes "telling the same story" numerical.** Compare variance between chains to variance within them: at convergence the ratio's root is 1; meaningfully above (folk threshold 1.01--1.05), the chains disagree and none should be trusted:
+
+```{r}
+rhat <- function(mat) {          # mat: iterations x chains, post burn-in
+    m <- ncol(mat); n <- nrow(mat)
+    B <- n * var(colMeans(mat))
+    W <- mean(apply(mat, 2, var))
+    sqrt(((n - 1)/n * W + B/n) / W)
+}
+post <- lapply(chains, function(c) c$draws[-(1:2000), ])
+round(sapply(1:K, function(k)
+    rhat(sapply(post, function(p) p[, k]))), 3)
+```
+
+All within rounding of 1. **Effective sample size** answers the remaining question --- serial correlation means 72,000 retained draws are worth fewer independent ones:
+
+```{r}
+ess <- function(x) {
+    rho <- acf(x, lag.max = 200, plot = FALSE)$acf[-1]
+    rho <- rho[1:min(which(rho < 0.05), length(rho))]   # truncate the tail
+    length(x) / (1 + 2 * sum(rho))
+}
+round(sapply(1:K, function(k) mean(sapply(post, function(p) ess(p[, k])))))
+```
+
+A few hundred effective draws per chain per parameter --- random-walk M-H is not efficient, just simple and general[^1] --- but summed across chains, ample for means and intervals: Monte Carlo error on the posterior mean is posterior-sd$/\sqrt{\text{ESS}}$, well below reporting precision here.
+
+[^1]: The inefficiency has famous cures --- gradient-guided proposals (Hamiltonian Monte Carlo, as in Stan) among them. Our purposes favor transparency, and, in @sec-gibbs, a different route to efficiency: proposals so good they are never rejected.
+
+**And when it breaks?** Re-run any chain with $\tau = 1$ (acceptance collapses to a fraction of a percent; the trace becomes long flat shelves) or $\tau = 0.001$ (acceptance 99%; the trace is a slow drift that four chains show *not* mixing across). We already staged exactly these pathologies in @fig-mh-stepsize; on real problems they look the same, and now you know their names when you see them in your own traces.
+
+## Bayes Meets Maximum Likelihood
+
+The confrontation this chapter was built for. Pool the post-burn-in draws and summarize the posterior next to @sec-mnl-mle's MLE results and the truth:
+
+```{r}
+draws <- do.call(rbind, post)
+fit_ml <- optim(rep(0, K), loglik_mnl, y = y, X = X, task_id = task_id,
+                method = "BFGS", control = list(fnscale = -1), hessian = TRUE)
+
+tab <- data.frame(
+    truth      = study$beta_true,
+    mle        = fit_ml$par,
+    se         = sqrt(diag(solve(-fit_ml$hessian))),
+    post_mean  = colMeans(draws),
+    post_sd    = apply(draws, 2, sd),
+    q2.5       = apply(draws, 2, quantile, 0.025),
+    q97.5      = apply(draws, 2, quantile, 0.975)
+)
+rownames(tab) <- colnames(X)
+round(tab, 3)
+```
+
+Posterior means match MLEs to the third decimal; posterior standard deviations match standard errors likewise; the 95% credible intervals lie atop the confidence intervals. This is the **Bernstein--von Mises phenomenon**: with abundant data and a prior too diffuse to argue, the posterior converges to a normal centered at the MLE with the MLE's covariance --- the two philosophies' answers coincide even as their interpretations differ.[^2] The promised prior-sensitivity check completes the picture: rerunning one chain with `prior_sd = 2` and `20` moves no reported digit (try it --- one argument).
+
+[^2]: Which also means the expensive part of this chapter bought us nothing statistical *on this model* --- 80,000 likelihood evaluations to reproduce what BFGS found in a hundred. The purchase was the machine, not the numbers. Models where the two approaches genuinely diverge --- and where only one of them remains feasible --- start in the next chapter.
+
+So why the new machinery? Look again at what `draws` *is*: not a point and a curvature, but 72,000 samples of $\bfbeta$ jointly. Want the posterior of the 32GB-vs-16GB premium? `draws[,4] - draws[,3]`, done --- full distribution, no delta method. The posterior probability that Apple's premium exceeds Dell's by more than 0.3? `mean(draws[,2] - draws[,1] > 0.3)`. Every downstream quantity in @sec-postestimation --- WTP distributions, market shares under counterfactual prices --- inherits exact finite-sample uncertainty by pushing draws through functions. And the sampler that produced them neither knows nor cares that the posterior had no closed form --- which is why, unlike the closed-form-hunting of Part II, *this* machine walks into the hierarchical wilderness of @sec-hb-mnl without modification. It only needs help with efficiency --- the subject of Gibbs sampling, next.
 
 ## Key Learnings
+
+- Bayes' rule (@eq-bayes-rule) turns the Part II likelihood plus a prior into a posterior *distribution* over parameters; the normalizing constant is unknowable and, it turns out, unnecessary. Output is draws; every summary is a sample statistic.
+- Priors encode pre-data credibility; weakly informative normals (@eq-mnl-prior) suffice when data are rich, and sensitivity checking --- not prior perfectionism --- is the working discipline. The prior's real power arrives with thin data, in @sec-hb-mnl.
+- Metropolis--Hastings samples any density evaluable up to a constant: propose symmetrically, accept by the (log-scale) posterior ratio (@eq-mh-ratio). Twenty lines; verified on a known bimodal target before deployment --- samplers get sanity checks too.
+- Step size is the knob: tiny steps crawl, huge steps freeze; tune to ~20--40% acceptance (@fig-mh-stepsize). Diagnostics are non-optional: trace plots from multiple dispersed chains, $\widehat{R} \approx 1$, and ESS to price the serial correlation.
+- The M-H inner loop *is* `loglik_mnl()` --- Part II's kernel powering Part III's engine, as promised since @sec-mnl-mle.
+- On the plain MNL, posterior $\approx$ MLE (Bernstein--von Mises): same numbers, different philosophy, plus the joint draws that make downstream inference trivial. The payoff model --- where likelihood strains and Bayes glides --- is two chapters away; first, Gibbs.

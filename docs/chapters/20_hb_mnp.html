@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -340,10 +423,11 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#the-model" id="toc-the-model" class="nav-link active" data-scroll-target="#the-model"><span class="header-section-number">20.1</span> The Model</a></li>
-  <li><a href="#the-sampler" id="toc-the-sampler" class="nav-link" data-scroll-target="#the-sampler"><span class="header-section-number">20.2</span> The Sampler</a></li>
-  <li><a href="#coding-the-hb-mnp-sampler" id="toc-coding-the-hb-mnp-sampler" class="nav-link" data-scroll-target="#coding-the-hb-mnp-sampler"><span class="header-section-number">20.3</span> Coding the HB-MNP Sampler</a></li>
-  <li><a href="#hb-mnl-or-hb-mnp" id="toc-hb-mnl-or-hb-mnp" class="nav-link" data-scroll-target="#hb-mnl-or-hb-mnp"><span class="header-section-number">20.4</span> HB-MNL or HB-MNP?</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">20.5</span> Key Learnings</a></li>
+  <li><a href="#the-sampler-no-metropolis-anywhere" id="toc-the-sampler-no-metropolis-anywhere" class="nav-link" data-scroll-target="#the-sampler-no-metropolis-anywhere"><span class="header-section-number">20.2</span> The Sampler: No Metropolis Anywhere</a></li>
+  <li><a href="#coding-it" id="toc-coding-it" class="nav-link" data-scroll-target="#coding-it"><span class="header-section-number">20.3</span> Coding It</a></li>
+  <li><a href="#running-it" id="toc-running-it" class="nav-link" data-scroll-target="#running-it"><span class="header-section-number">20.4</span> Running It</a></li>
+  <li><a href="#hb-mnl-or-hb-mnp" id="toc-hb-mnl-or-hb-mnp" class="nav-link" data-scroll-target="#hb-mnl-or-hb-mnp"><span class="header-section-number">20.5</span> HB-MNL or HB-MNP?</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">20.6</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/20_hb_mnp.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -369,27 +453,215 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: rossi-1996 (hierarchical MNP with demographics; App A conditionals); mcculloch-rossi-1994 §hierarchical extension -->
+<p>This short chapter is the book’s technical summit, and the climb is gentler than the altitude suggests. The <strong>hierarchical Bayesian MNP</strong> puts person-specific coefficients over the probit kernel — both of the deep generalizations this book has built, <em>simultaneously</em>: flexible substitution through a free error covariance (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>) and taste heterogeneity through a population distribution (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>), in one model, estimated by one sampler. It is the model of <span class="citation" data-cites="rossi1996">Rossi, McCulloch, and Allenby (<a href="references.html#ref-rossi1996" role="doc-biblioref">1996</a>)</span>, who used it to price the value of purchase-history data, and its construction here is nearly pure assembly — which is itself the chapter’s lesson: augmentation and hierarchy <em>compose</em>.</p>
+<p>There is one genuinely delightful surprise waiting in the sampler, so let us get to it.</p>
 <section id="the-model" class="level2" data-number="20.1">
 <h2 data-number="20.1" class="anchored" data-anchor-id="the-model"><span class="header-section-number">20.1</span> The Model</h2>
-<!-- person-level beta_n over the MNP kernel; upper level as in ch 17, optionally with covariates (beta_n = Delta z_n + v_n, Rossi et al. 1996); what the extra flexibility buys over HB-MNL -->
+<p>Stack the layers. The data layer is <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>’s differenced MNP, now with person-owned coefficients; the population and prior layers are <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>’s, plus a prior for the error covariance:</p>
+<p><span id="eq-hb-mnp"><span class="math display">\[
+\begin{aligned}
+\text{utilities:} \quad &amp; \mathbf{d}_{nt} = \tilde{X}_{nt} \boldsymbol{\beta}_n + \mathbf{e}_{nt},
+    \qquad \mathbf{e}_{nt} \sim N(\mathbf{0}, W), \qquad y_{nt} = \text{(who wins)} \\
+\text{people:} \quad &amp; \boldsymbol{\beta}_n \sim N(\bar{\boldsymbol{\beta}}, \Sigma) \\
+\text{priors:} \quad &amp; \bar{\boldsymbol{\beta}} \sim N(\mathbf{0}, 100 I), \quad
+    \Sigma \sim IW(\nu_0, V_0), \quad W \sim IW(\nu_w, V_w)
+\end{aligned}
+\tag{20.1}\]</span></span></p>
+<p>where <span class="math inline">\(\mathbf{d}_{nt}\)</span> is the pair of base-differenced utilities, <span class="math inline">\(\tilde{X}_{nt}\)</span> stacks the two differenced attribute rows (<code>Xd2</code> and <code>Xd3</code> in code), and <span class="math inline">\(W\)</span> is, as in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>, the unnormalized differenced error covariance — the sampled stand-in for <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>’s <span class="math inline">\(\tilde\Omega\)</span>, recovered as <span class="math inline">\(W/w_{11}\)</span>. Identification: everything from <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a> still applies, resolved the McCulloch–Rossi way — sample unidentified, then normalize every saved draw at its own rate: the utility-scale objects (<span class="math inline">\(\boldsymbol{\beta}_n\)</span>, <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>, and the heterogeneity standard deviations <span class="math inline">\(\sqrt{\operatorname{diag}\Sigma}\)</span>) divide by <span class="math inline">\(\sqrt{w_{11}}\)</span>; the covariance-scale objects (<span class="math inline">\(\Sigma\)</span> and <span class="math inline">\(W\)</span> itself) divide by <span class="math inline">\(w_{11}\)</span>. The identified error covariance is <span class="math inline">\(\tilde\Omega = W/w_{11}\)</span>, exactly as in <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a> — the code’s <code>scd</code> and <code>W</code> ratios implement precisely this.</p>
+<p>Why want both generalizations at once? Because they answer different questions that real categories pose simultaneously: the error covariance captures <em>alternative-level</em> similarity (Windows machines sharing unobserved appeal — for everyone), while <span class="math inline">\(\Sigma\)</span> captures <em>person-level</em> persistence (an Apple lover across all eight tasks). A model with only one channel forces the other’s behavior into the wrong container, and both containers feed the substitution patterns that pricing decisions consume.</p>
 </section>
-<section id="the-sampler" class="level2" data-number="20.2">
-<h2 data-number="20.2" class="anchored" data-anchor-id="the-sampler"><span class="header-section-number">20.2</span> The Sampler</h2>
-<!-- ch 19's augmentation blocks nested inside ch 17's hierarchy; enumerate all blocks; note which are conjugate (all of them -- the beauty of augmentation here) -->
+<section id="the-sampler-no-metropolis-anywhere" class="level2" data-number="20.2">
+<h2 data-number="20.2" class="anchored" data-anchor-id="the-sampler-no-metropolis-anywhere"><span class="header-section-number">20.2</span> The Sampler: No Metropolis Anywhere</h2>
+<p>List the full conditionals, each inherited from a chapter that already built it:</p>
+<ol type="1">
+<li><strong>Latent utilities <span class="math inline">\(\mathbf{d}_{nt}\)</span></strong> given <span class="math inline">\(\boldsymbol{\beta}_n, W\)</span>: truncated bivariate normals, region set by the observed choice — <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s block, verbatim, with each row’s mean using its <em>own person’s</em> <span class="math inline">\(\boldsymbol{\beta}_n\)</span>.</li>
+<li><strong>Each <span class="math inline">\(\boldsymbol{\beta}_n\)</span></strong> given that person’s utilities, <span class="math inline">\(W\)</span>, <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>, <span class="math inline">\(\Sigma\)</span>: and here is the surprise — with the utilities in hand, person <span class="math inline">\(n\)</span>’s data layer is <em>linear and normal</em>, so this is a <strong>conjugate Bayesian regression</strong> (<a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>’s normal–normal update with prior <span class="math inline">\(N(\bar{\boldsymbol{\beta}}, \Sigma)\)</span>): an exact multivariate normal draw. The Metropolis step that the HB-MNL needed for exactly this block — because the <em>logit</em> kernel resists conjugacy — is unnecessary. No step size, no adaptation, no acceptance monitoring.</li>
+<li><strong><span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span> and <span class="math inline">\(\Sigma\)</span></strong> given the <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s: <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>’s conjugate draws, unchanged.</li>
+<li><strong><span class="math inline">\(W\)</span></strong> given residuals: <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s inverse-Wishart, unchanged.</li>
+</ol>
+<p>Every block exact. Data augmentation didn’t just rescue the MNP’s likelihood; it made the probit’s <em>hierarchy</em> fully conjugate — strictly cleaner machinery than the logit’s, a genuine argument for the MNP that only becomes visible from inside the sampler.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 </section>
-<section id="coding-the-hb-mnp-sampler" class="level2" data-number="20.3">
-<h2 data-number="20.3" class="anchored" data-anchor-id="coding-the-hb-mnp-sampler"><span class="header-section-number">20.3</span> Coding the HB-MNP Sampler</h2>
-<!-- assembled from parts the reader has already written; simulate-and-recover -->
+<section id="coding-it" class="level2" data-number="20.3">
+<h2 data-number="20.3" class="anchored" data-anchor-id="coding-it"><span class="header-section-number">20.3</span> Coding It</h2>
+<p>Simulate the study — <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>’s heterogeneity truth combined with <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>’s error-correlation truth — then the sampler:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">200</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>bar_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>sd_true  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">0</span>, <span class="fl">0.6</span>, <span class="dv">0</span>, <span class="fl">0.7</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>rc <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>Omega_true <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">0.6</span>, <span class="dv">0</span>,  <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">0</span>,  <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">500</span>; T <span class="ot">&lt;-</span> <span class="dv">8</span>; J <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">id =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T<span class="sc">*</span>J),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">task =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">alt =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>), <span class="at">times =</span> N<span class="sc">*</span>T),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                 <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>,<span class="st">"Dell"</span>,<span class="st">"Apple"</span>)),</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">ram =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                 <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                    <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="fl">0.8</span>, <span class="fl">2.4</span>), <span class="dv">2</span>))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> alt <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>betas <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(bar_true, <span class="at">each =</span> N), N, K)          <span class="co"># person betas</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> rc) betas[, k] <span class="ot">&lt;-</span> betas[, k] <span class="sc">+</span> sd_true[k] <span class="sc">*</span> <span class="fu">rnorm</span>(N)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">chol</span>(Omega_true))</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(L <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(n_rows), <span class="at">nrow =</span> J))  <span class="co"># within-task correlation</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> betas[df<span class="sc">$</span>id, ]) <span class="sc">+</span> eps</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="do">## differenced objects (@sec-mnp-est) and the person index of each task</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>i1 <span class="ot">&lt;-</span> <span class="fu">which</span>(df<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Acer"</span>); i2 <span class="ot">&lt;-</span> <span class="fu">which</span>(df<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Dell"</span>)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>i3 <span class="ot">&lt;-</span> <span class="fu">which</span>(df<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Apple"</span>)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>Xd2 <span class="ot">&lt;-</span> X[i2, ] <span class="sc">-</span> X[i1, ]; Xd3 <span class="ot">&lt;-</span> X[i3, ] <span class="sc">-</span> X[i1, ]</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>chosen <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(df<span class="sc">$</span>alt[df<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>person <span class="ot">&lt;-</span> df<span class="sc">$</span>id[<span class="sc">!</span><span class="fu">duplicated</span>(task_id)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hb_mnp <span class="ot">&lt;-</span> <span class="cf">function</span>(Xd2, Xd3, chosen, person, S_iter, burn,</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nu0 =</span> <span class="fu">ncol</span>(Xd2) <span class="sc">+</span> <span class="dv">3</span>, <span class="at">V0 =</span> <span class="fu">diag</span>(<span class="fu">ncol</span>(Xd2)) <span class="sc">*</span> (<span class="fu">ncol</span>(Xd2) <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">*</span> <span class="fl">0.1</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">nu_w =</span> <span class="dv">5</span>, <span class="at">V_w =</span> <span class="fu">diag</span>(<span class="dv">2</span>) <span class="sc">*</span> <span class="dv">5</span>, <span class="at">A0 =</span> <span class="fl">0.01</span>) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(Xd2); n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(Xd2); N <span class="ot">&lt;-</span> <span class="fu">max</span>(person)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, N, K); bar <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, K); Sig <span class="ot">&lt;-</span> <span class="fu">diag</span>(K); W <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">2</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    d2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>); d3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    rows_of <span class="ot">&lt;-</span> <span class="fu">split</span>(<span class="fu">seq_len</span>(n), person)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">bar =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, K),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">sd =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, K),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">W =</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S_iter, <span class="dv">3</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">Bsum =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, N, K), <span class="at">nkeep =</span> <span class="dv">0</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S_iter) {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="do">## 1. latent utilities (rows use their person's beta)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        Brow <span class="ot">&lt;-</span> B[person, ]</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        m2 <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(Xd2 <span class="sc">*</span> Brow); m3 <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(Xd3 <span class="sc">*</span> Brow)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        c21 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>W[<span class="dv">2</span>,<span class="dv">2</span>]; v21 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">1</span>] <span class="sc">-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>W[<span class="dv">2</span>,<span class="dv">2</span>]</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        c12 <span class="ot">&lt;-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>W[<span class="dv">1</span>,<span class="dv">1</span>]; v12 <span class="ot">&lt;-</span> W[<span class="dv">2</span>,<span class="dv">2</span>] <span class="sc">-</span> W[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">^</span><span class="dv">2</span><span class="sc">/</span>W[<span class="dv">1</span>,<span class="dv">1</span>]</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        lo2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="fu">pmax</span>(<span class="dv">0</span>, d3), <span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>        hi2 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">2</span>, <span class="cn">Inf</span>, <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">0</span>, d3))</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        d2  <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(n, m2 <span class="sc">+</span> c21<span class="sc">*</span>(d3 <span class="sc">-</span> m3), <span class="fu">sqrt</span>(v21), lo2, hi2)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>        lo3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="fu">pmax</span>(<span class="dv">0</span>, d2), <span class="sc">-</span><span class="cn">Inf</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>        hi3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">3</span>, <span class="cn">Inf</span>, <span class="fu">ifelse</span>(chosen <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">0</span>, d2))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>        d3  <span class="ot">&lt;-</span> <span class="fu">rtnorm</span>(n, m3 <span class="sc">+</span> c12<span class="sc">*</span>(d2 <span class="sc">-</span> m2), <span class="fu">sqrt</span>(v12), lo3, hi3)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>        <span class="do">## 2. each beta_n: conjugate regression, prior N(bar, Sig)</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        Li  <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="fu">t</span>(<span class="fu">chol</span>(W)))</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>        Y1  <span class="ot">&lt;-</span> Li[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">*</span>d2 <span class="sc">+</span> Li[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">*</span>d3;   Y2  <span class="ot">&lt;-</span> Li[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">*</span>d2 <span class="sc">+</span> Li[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">*</span>d3</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        Xw1 <span class="ot">&lt;-</span> Li[<span class="dv">1</span>,<span class="dv">1</span>]<span class="sc">*</span>Xd2 <span class="sc">+</span> Li[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">*</span>Xd3; Xw2 <span class="ot">&lt;-</span> Li[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">*</span>Xd2 <span class="sc">+</span> Li[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">*</span>Xd3</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        Sinv <span class="ot">&lt;-</span> <span class="fu">solve</span>(Sig); Sb <span class="ot">&lt;-</span> Sinv <span class="sc">%*%</span> bar</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (nn <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>            r  <span class="ot">&lt;-</span> rows_of[[nn]]</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>            Vb <span class="ot">&lt;-</span> <span class="fu">chol2inv</span>(<span class="fu">chol</span>(<span class="fu">crossprod</span>(Xw1[r, , <span class="at">drop =</span> <span class="cn">FALSE</span>]) <span class="sc">+</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">crossprod</span>(Xw2[r, , <span class="at">drop =</span> <span class="cn">FALSE</span>]) <span class="sc">+</span> Sinv))</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            mb <span class="ot">&lt;-</span> Vb <span class="sc">%*%</span> (<span class="fu">crossprod</span>(Xw1[r, , <span class="at">drop =</span> <span class="cn">FALSE</span>], Y1[r]) <span class="sc">+</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">crossprod</span>(Xw2[r, , <span class="at">drop =</span> <span class="cn">FALSE</span>], Y2[r]) <span class="sc">+</span> Sb)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>            B[nn, ] <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(mb <span class="sc">+</span> <span class="fu">t</span>(<span class="fu">chol</span>(Vb)) <span class="sc">%*%</span> <span class="fu">rnorm</span>(K))</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>        <span class="do">## 3. bar and Sigma (@sec-hb-mnl blocks)</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>        Vbb <span class="ot">&lt;-</span> <span class="fu">solve</span>(N <span class="sc">*</span> Sinv <span class="sc">+</span> <span class="fu">diag</span>(A0, K))</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>        bar <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Vbb <span class="sc">%*%</span> (Sinv <span class="sc">%*%</span> <span class="fu">colSums</span>(B)) <span class="sc">+</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">t</span>(<span class="fu">chol</span>(Vbb)) <span class="sc">%*%</span> <span class="fu">rnorm</span>(K))</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>        Dev <span class="ot">&lt;-</span> B <span class="sc">-</span> <span class="fu">rep</span>(bar, <span class="at">each =</span> N)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>        Sig <span class="ot">&lt;-</span> <span class="fu">rinvwishart</span>(nu0 <span class="sc">+</span> N, V0 <span class="sc">+</span> <span class="fu">crossprod</span>(Dev))</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>        <span class="do">## 4. W (@sec-mnp-est block, residuals at person betas)</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>        Brow <span class="ot">&lt;-</span> B[person, ]</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>        e2 <span class="ot">&lt;-</span> d2 <span class="sc">-</span> <span class="fu">rowSums</span>(Xd2 <span class="sc">*</span> Brow); e3 <span class="ot">&lt;-</span> d3 <span class="sc">-</span> <span class="fu">rowSums</span>(Xd3 <span class="sc">*</span> Brow)</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>        Sres <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="fu">sum</span>(e2<span class="sc">^</span><span class="dv">2</span>), <span class="fu">sum</span>(e2<span class="sc">*</span>e3)), <span class="fu">c</span>(<span class="fu">sum</span>(e2<span class="sc">*</span>e3), <span class="fu">sum</span>(e3<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>        W <span class="ot">&lt;-</span> <span class="fu">rinvwishart</span>(nu_w <span class="sc">+</span> n, V_w <span class="sc">+</span> Sres)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>bar[s, ] <span class="ot">&lt;-</span> bar; out<span class="sc">$</span>sd[s, ] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(Sig))</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>        out<span class="sc">$</span>W[s, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(W[<span class="dv">1</span>,<span class="dv">1</span>], W[<span class="dv">1</span>,<span class="dv">2</span>], W[<span class="dv">2</span>,<span class="dv">2</span>])</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (s <span class="sc">&gt;</span> burn) {                      <span class="co"># store normalized person betas</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            out<span class="sc">$</span>Bsum <span class="ot">&lt;-</span> out<span class="sc">$</span>Bsum <span class="sc">+</span> B <span class="sc">/</span> <span class="fu">sqrt</span>(W[<span class="dv">1</span>,<span class="dv">1</span>]); out<span class="sc">$</span>nkeep <span class="ot">&lt;-</span> out<span class="sc">$</span>nkeep <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(An unshown chunk carries <code>rtnorm()</code> and <code>rinvwishart()</code> from previous chapters.) Two notes before running. The <code>for (nn in 1:N)</code> loop over persons is unavoidable here — each person’s conjugate update solves their own <span class="math inline">\(K \times K\)</span> system — but it is tolerable by <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s own doctrine: five hundred small Cholesky solves per iteration, milliseconds in total. And we adopt the <em>tightened</em> <span class="math inline">\(\Sigma\)</span> prior (<span class="math inline">\(V_0\)</span> scaled by 0.1) as the default, applying <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>’s practical lesson rather than re-learning it.</p>
 </section>
-<section id="hb-mnl-or-hb-mnp" class="level2" data-number="20.4">
-<h2 data-number="20.4" class="anchored" data-anchor-id="hb-mnl-or-hb-mnp"><span class="header-section-number">20.4</span> HB-MNL or HB-MNP?</h2>
-<!-- an honest cost-benefit: run time, mixing, parameter count in Sigma and Omega, and whether the application needs flexible substitution; guidance for practice -->
+<section id="running-it" class="level2" data-number="20.4">
+<h2 data-number="20.4" class="anchored" data-anchor-id="running-it"><span class="header-section-number">20.4</span> Running It</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">201</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">hb_mnp</span>(Xd2, Xd3, chosen, person, <span class="at">S_iter =</span> <span class="dv">2500</span>, <span class="at">burn =</span> <span class="dv">500</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="dv">501</span><span class="sc">:</span><span class="dv">2500</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>scd  <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(fit<span class="sc">$</span>W[post, <span class="dv">1</span>])                 <span class="co"># per-draw identification scaling</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="do">## identified truth for the scoreboard</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>M  <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">0</span>), <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Ot <span class="ot">&lt;-</span> M <span class="sc">%*%</span> Omega_true <span class="sc">%*%</span> <span class="fu">t</span>(M); sc <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(Ot[<span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth_bar =</span> bar_true <span class="sc">/</span> sc,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">post_bar  =</span> <span class="fu">colMeans</span>(fit<span class="sc">$</span>bar[post, ] <span class="sc">/</span> scd),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth_het_sd =</span> sd_true <span class="sc">/</span> sc,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">post_het_sd  =</span> <span class="fu">colMeans</span>(fit<span class="sc">$</span>sd[post, ] <span class="sc">/</span> scd)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(X)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(tab, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         truth_bar post_bar truth_het_sd post_het_sd
+altDell       0.56     0.72         0.00        0.30
+altApple      1.12     1.24         0.89        0.92
+ram16         0.67     0.63         0.00        0.27
+ram32         1.01     1.05         0.67        0.68
+screen15      0.34     0.36         0.00        0.27
+price        -1.34    -1.42         0.78        0.72</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">w12 =</span> <span class="fu">mean</span>(fit<span class="sc">$</span>W[post,<span class="dv">2</span>]<span class="sc">/</span>fit<span class="sc">$</span>W[post,<span class="dv">1</span>]),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">w22 =</span> <span class="fu">mean</span>(fit<span class="sc">$</span>W[post,<span class="dv">3</span>]<span class="sc">/</span>fit<span class="sc">$</span>W[post,<span class="dv">1</span>]),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">truth_w12 =</span> Ot[<span class="dv">1</span>,<span class="dv">2</span>]<span class="sc">/</span>Ot[<span class="dv">1</span>,<span class="dv">1</span>], <span class="at">truth_w22 =</span> Ot[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>Ot[<span class="dv">1</span>,<span class="dv">1</span>]), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      w12       w22 truth_w12 truth_w22 
+     0.75      2.95      0.50      2.50 </code></pre>
+</div>
+</div>
+<p>Read the scoreboard against everything Part III and IV have taught. The population means track their identified truths. The heterogeneity pattern is recovered — the three truly-random coefficients estimated largest, the truly-fixed ones floored near 0.3 by the (tightened) IW prior, the <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> phenomenon at its expected magnitude. (<code>post_het_sd</code> is the posterior mean of each coefficient’s heterogeneity standard deviation — a point estimate of taste <em>spread</em>, not a posterior uncertainty; <a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>’s <code>post_sd</code> column, by contrast, was exactly a posterior uncertainty. Column names deserve the same care as symbols.) And the error covariance parameters — the <em>other</em> substitution channel — are recovered alongside: the model successfully attributed the within-task correlation to <span class="math inline">\(W\)</span> and the cross-task persistence to <span class="math inline">\(\Sigma\)</span>, the two containers sorted correctly.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Individual-level payoff, one number for the record:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Bhat <span class="ot">&lt;-</span> fit<span class="sc">$</span>Bsum <span class="sc">/</span> fit<span class="sc">$</span>nkeep</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(Bhat[, <span class="dv">6</span>], betas[, <span class="dv">6</span>] <span class="sc">/</span> sc), <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.55</code></pre>
+</div>
+</div>
+<p>Person-level tracking comparable to the HB-MNL’s on analogous data, now with correlated errors underneath. All of it from a sampler with <em>zero</em> tuning parameters.</p>
 </section>
-<section id="key-learnings" class="level2" data-number="20.5">
-<h2 data-number="20.5" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">20.5</span> Key Learnings</h2>
+<section id="hb-mnl-or-hb-mnp" class="level2" data-number="20.5">
+<h2 data-number="20.5" class="anchored" data-anchor-id="hb-mnl-or-hb-mnp"><span class="header-section-number">20.5</span> HB-MNL or HB-MNP?</h2>
+<p>The applied researcher’s closing question for Part IV. Honest guidance, informed by everything built:</p>
+<p><strong>Default to the HB-MNL.</strong> The logit kernel’s closed form makes every likelihood-adjacent computation — fit statistics, holdout validation, the market simulators of <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> — cheap and simple; its single Metropolis block is well-understood; the ecosystem (from <code>bayesm</code> to every commercial conjoint platform) is built around it; and with rich attribute data, random coefficients already generate most realistic substitution patterns <span class="citation" data-cites="mcfaddentrain2000">(<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">McFadden and Train 2000</a>’s theorem, practically vindicated)</span>.</p>
+<p><strong>Reach for the HB-MNP when the errors are the story.</strong> Categories with strong alternative-level similarity that attributes don’t capture (store brands, platform ecosystems); scanner-data settings where the same few labeled alternatives recur and <span class="math inline">\(W\)</span> is well-fed; or when the deliverable turns on substitution among specific rivals rather than attribute-level demand. The costs are real — the latent-utility machinery, identification bookkeeping at every step, probabilities that need GHK even <em>after</em> estimation for the simulators of <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> — and they buy exactly one thing: covariance where the logit has independence. Pay when that purchase matters; <span class="citation" data-cites="rossi1996">Rossi, McCulloch, and Allenby (<a href="references.html#ref-rossi1996" role="doc-biblioref">1996</a>)</span>’s targeting application is the canonical case where it did.</p>
+<p>Either way — and this is the point of having built both — the choice is now yours to make on substance, not forced by what your tools can estimate.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="20.6">
+<h2 data-number="20.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">20.6</span> Key Learnings</h2>
+<ul>
+<li>The HB-MNP stacks this book’s two deep generalizations — free error covariance and coefficient heterogeneity — in one model (<a href="#eq-hb-mnp" class="quarto-xref">Equation&nbsp;<span>20.1</span></a>), with each substitution channel answering a different behavioral question.</li>
+<li>Its sampler is assembly with a bonus: latent utilities (<a href="19_mnp_estimation.html" class="quarto-xref"><span>Chapter 19</span></a>) + per-person conjugate regressions + population blocks (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>) + <span class="math inline">\(W\)</span>’s inverse-Wishart — and because augmentation makes the data layer linear-normal, <strong>no Metropolis step exists anywhere</strong>. The probit’s hierarchy is cleaner than the logit’s.</li>
+<li>Identification is handled by sampling free and normalizing every draw — now including the person-level draws — by <span class="math inline">\(\sqrt{w_{11}}\)</span>.</li>
+<li>Recovery sorted the two channels correctly: heterogeneity into <span class="math inline">\(\Sigma\)</span> (with the familiar, prior-managed floor on null variances), error correlation into <span class="math inline">\(W\)</span>, person-level estimates tracking truth. Zero tuning parameters were involved.</li>
+<li>Model choice guidance: HB-MNL by default (ecosystem, simplicity, closed-form kernel); HB-MNP when alternative-level error correlation is the substantive point. You can now estimate either from scratch — which was the promise of this book’s cover.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcfaddentrain2000" class="csl-entry" role="listitem">
+McFadden, Daniel, and Kenneth Train. 2000. <span>“Mixed MNL Models for Discrete Response.”</span> <em>Journal of Applied Econometrics</em> 15 (5): 447–70.
+</div>
+<div id="ref-rossi1996" class="csl-entry" role="listitem">
+Rossi, Peter E., Robert E. McCulloch, and Greg M. Allenby. 1996. <span>“The Value of Purchase History Data in Target Marketing.”</span> <em>Marketing Science</em> 15 (4): 321–40.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The trade-off ledger: the probit pays instead in the latent-utility block (which the HB-MNL doesn’t have) and its per-person regression loop. Roughly comparable total compute here; the probit’s structural advantage grows with the amount of hierarchy, the logit’s with the number of alternatives.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Not perfectly, of course — with <span class="math inline">\(T = 8\)</span> the two channels compete for the same evidence, and their posteriors are correlated. This gentle confounding is intrinsic to the model class, not to the estimator; more tasks per person separates them.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

@@ -4,54 +4,302 @@
 
 # Extensions: Building Your Own Model {#sec-extensions}
 
-<!-- The chapter the book was written for: three worked demonstrations of the recipe. Sources: brazell-2006/diener-2006/hung-2025 x2 (no-choice/dual response); pachali-2022 (budget); train-2016 (flexible mixing) -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
 
-## The Recipe
+Every chapter until now taught you models other people built. This one teaches the move that matters for your own research: *changing* a model --- because your data have a feature the standard models ignore, or your theory implies behavior they cannot express. The introduction promised that the true value of choice modeling is the ability to create tailor-made models; here is where the promise is kept, three times, on three extensions drawn from live research literatures.
 
-<!-- everything in this book was one loop: specify utility and error -> derive/simulate the choice probability -> build the likelihood or the sampler -> simulate data -> recover parameters -> only then, real data; a custom model is just a new pass through the loop -->
+The method is the one this book has been rehearsing since @sec-choice, now stated as a recipe:
 
-## Extension 1: The No-Choice Option and Dual Response
+1. **Change the model** --- a new term in utility, a new choice rule $h$, a new distribution somewhere in the hierarchy.
+2. **Re-derive the choice probability** (or recognize that a known one still applies).
+3. **Write the simulator first.** If you cannot simulate it, you do not understand it yet.
+4. **Modify the likelihood or the sampler** --- usually a handful of lines in code you already have.
+5. **Simulate-and-recover before real data ever enters.** The answer key is the only proof your estimator works.
 
-<!-- motivation: forced choice distorts demand estimates -->
+Watch the recipe's economy in what follows: each extension changes remarkably little code, because Part I's architecture --- stacked data, kernel likelihood functions, modular samplers --- was designed to be extended. That was the point all along.
 
-### Modeling "None"
+## Extension 1: The No-Choice Option {#sec-ext-nochoice}
 
-<!-- outside good as a zero-utility alternative with an ASC (Brazell); what the ASC absorbs -->
+**The problem.** Our laptop study forces a choice: every task ends with one of three laptops "bought." Real shoppers walk away, and a model estimated on forced choices systematically overstates demand --- every simulated market in @sec-postestimation implicitly assumed everyone buys *something*. The standard repair adds a **no-choice option** ("I would not buy any of these") to each task [@brazell2006].
 
-### Dual-Response Designs and Their Likelihoods
+**The model change.** The none option is a fourth alternative whose utility has no attributes --- nothing about it varies --- so it is pure constant plus noise:
 
-<!-- the two-stage question; DR-AnyMax vs DR-2Max likelihoods (Diener); the stacked-data trick that reuses our standard MNL code -->
+$$
+U_{nt,\text{none}} = \gamma + \varepsilon_{nt,\text{none}}
+$$ {#eq-none-utility}
 
-### What Changes in the Code
+One new parameter. And here @sec-data-intercept's groundwork pays off: in the long data format, the none option is *just another row* --- attribute columns zero, a `none` dummy equal to one --- and the MNL machinery does not know or care that one alternative is special. The choice probabilities, likelihood, gradient, and code are all unchanged.[^1]
 
-<!-- walk the recipe: new likelihood, small edits to ch 8/17 code; simulate-and-recover -->
+[^1]: The identification bookkeeping: adding a constant-utility alternative is what *anchors* the utility scale for "buying nothing," making statements like "share who buy nothing at these prices" meaningful --- the quantity @sec-postestimation flagged as missing. The deeper behavioral question --- is the none utility really constant across tasks? --- is live research: @hung2025nochoice find respondents update the none option's appeal as tasks teach them market prices, and model exactly that.
 
-## Extension 2: A Budget Constraint
+**Simulate, estimate, recover** --- the recipe executed in one block. The simulator is @sec-sim-mnl's with a fourth row per task; the estimator is *literally* `loglik_mnl()`:
 
-<!-- motivation: high-ticket categories; standard models overstate demand at high prices (Pachali) -->
+```{r}
+#| cache: false
+set.seed(220)
+sim_none_data <- function(N, T, beta, gamma_none) {
+    J <- 3; n_rows <- N * T * J
+    df <- data.frame(
+        id = rep(seq_len(N), each = T*J),
+        task = rep(rep(seq_len(T), each = J), times = N),
+        alt = rep(1:J, times = N*T),
+        brand = factor(sample(c("Acer","Dell","Apple"), n_rows, TRUE),
+                       levels = c("Acer","Dell","Apple")),
+        ram = factor(sample(c("8","16","32"), n_rows, TRUE),
+                     levels = c("8","16","32")),
+        screen = factor(sample(c("13","15"), n_rows, TRUE),
+                        levels = c("13","15")),
+        price = round(runif(n_rows, 0.8, 2.4), 2))
+    X <- cbind(model.matrix(~ brand + ram + screen + price, df)[, -1],
+               none = 0)
+    ## append one none row per task: all-zero attributes, none dummy = 1
+    Xn <- X[df$alt == 1, ]; Xn[] <- 0; Xn[, "none"] <- 1
+    X  <- rbind(X, Xn)
+    ids  <- c(df$id,   df$id[df$alt == 1])
+    tsks <- c(df$task, df$task[df$alt == 1])
+    ord  <- order(ids, tsks, c(df$alt, rep(4, sum(df$alt == 1))))
+    X <- X[ord, ]; ids <- ids[ord]; tsks <- tsks[ord]
 
-### The Model
+    task_id <- cumsum(!duplicated(cbind(ids, tsks)))
+    U <- as.vector(X %*% c(beta, gamma_none)) - log(-log(runif(nrow(X))))
+    choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+    list(X = X, y = choice, task_id = task_id, id = ids)
+}
 
-<!-- latent budget tau_n screens the choice set; utility responds to log(tau_n - p); sign-constrained heterogeneity -->
+beta_true <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9,
+               screen15 = 0.3, price = -1.2)
+gamma_true <- -0.5                      # none is mildly unattractive
+d1 <- sim_none_data(500, 8, beta_true, gamma_true)
+mean(rowsum(d1$y * (d1$X[, "none"] == 1), d1$task_id))   # share choosing none
+```
 
-### What Changes in the Code
+About a fifth of tasks end in "none" --- real demand information the forced design threw away. Estimation requires nothing new:
 
-<!-- the likelihood gains a screening step; the hierarchy gains a budget layer; modify the ch 17 sampler -->
+```{r}
+#| cache: false
+loglik_mnl <- function(beta, y, X, task_id) {           # @sec-mnl-mle, untouched
+    V <- as.vector(X %*% beta); Vmax <- ave(V, task_id, FUN = max)
+    eV <- exp(V - Vmax)
+    sum((V - Vmax - log(rowsum(eV, task_id)[task_id]))[y == 1])
+}
+fit1 <- optim(rep(0, 7), loglik_mnl, y = d1$y, X = d1$X, task_id = d1$task_id,
+              method = "BFGS", control = list(fnscale = -1), hessian = TRUE)
+round(rbind(truth = c(beta_true, none = gamma_true),
+            est = fit1$par,
+            se = sqrt(diag(solve(-fit1$hessian)))), 2)
+```
 
-## Extension 3: Flexible Mixing Distributions
+Recovery, including the new parameter. Total new code: a simulator variant. Total new estimation code: zero --- the none option was a *data* change, which is the least expensive kind of extension there is.
 
-<!-- motivation: why should tastes be normal? (Train 2016: sometimes they're bimodal) -->
+**The dual-response refinement**, in brief, because practice uses it heavily [@diener2006; @brazell2006]: asking "which would you choose?" *and then* "would you actually buy it?" keeps the forced task's statistical efficiency while measuring purchase intent. The likelihood treats the two answers as two choices sharing parameters --- the first over the $J$ products, the second between the winner and none --- and @diener2006's practical insight is that the second response can be *stacked as an additional pseudo-task* in the long data, after which standard MNL/HB software estimates it unmodified: another extension executed entirely in the data layer. The modern frontier connects the none utility to economic primitives --- @hung2025dual derive it from a budget constraint, which is precisely where our second extension goes.
 
-### The Logit-Mixed Logit Model
+## Extension 2: A Budget Constraint {#sec-ext-budget}
 
-<!-- the mixing distribution itself gets a logit form over a grid; latent class as a special case -->
+**The problem.** For laptops --- or cars, or houses --- some shoppers simply *cannot* pay premium prices, no matter their tastes. A linear price term says a \$2,400 laptop is merely less attractive; a **budget** says it is not an option. Models that ignore binding budgets misestimate price response exactly where pricing decisions live, overstating premium demand --- the bias @pachali2022 document in conjoint studies of exactly our product category.
 
-### What Changes in the Code
+**The model change** --- and this one, unlike Extension 1, changes the behavioral rule $h$ itself. Following the spirit of @pachali2022 (simplified to a common budget $\tau$ for transparency): alternatives priced above $\tau$ are *screened out* --- infeasible, never chosen --- and money left under the budget enters utility with diminishing returns:
 
-<!-- MSL with precomputed kernels; modify the ch 13 estimator -->
+$$
+U_{ntj} = \begin{cases}
+\x_{ntj}'\bfbeta + \alpha \log(\tau - p_{ntj}) + \varepsilon_{ntj} & p_{ntj} < \tau \\
+-\infty & p_{ntj} \ge \tau
+\end{cases}
+$$ {#eq-budget-utility}
 
-## Where to Go from Here
+(The $\log(\tau - p)$ term is the utility of the outside numeraire --- what the unspent budget buys --- and it is where the price sensitivity now lives; there is no separate linear price coefficient.[^2]) The MNL probability survives with two amendments: the choice set shrinks to the feasible alternatives, and utilities gain curvature in price that grows explosive as $p \to \tau$. Both are *visible in behavior* --- shoppers never choosing above a ceiling, and price sensitivity concentrating near it --- which is what identifies $\tau$.
 
-<!-- volumetric/Kuhn-Tucker demand (Allenby-Kim-Rossi 2015), WTP-space models, ordered/rank data, endogeneity; and the reader's own model, which does not exist yet -->
+[^2]: This is the direct-utility formulation of @allenby2019 and @pachali2022: choose one product plus outside spending subject to the budget; substitute the constraint into utility; the $\log$ delivers diminishing marginal utility of money. Our simplification is the common $\tau$; the research version makes $\tau_n$ heterogeneous, which the road map below restores.
+
+**Simulator first**, per the recipe --- and note how @eq-budget-utility transcribes:
+
+```{r}
+#| cache: false
+set.seed(221)
+sim_budget_data <- function(N, T, beta, alpha, tau) {
+    J <- 3; n_rows <- N * T * J
+    df <- data.frame(
+        id = rep(seq_len(N), each = T*J),
+        task = rep(rep(seq_len(T), each = J), times = N),
+        alt = rep(1:J, times = N*T),
+        brand = factor(sample(c("Acer","Dell","Apple"), n_rows, TRUE),
+                       levels = c("Acer","Dell","Apple")),
+        ram = factor(sample(c("8","16","32"), n_rows, TRUE),
+                     levels = c("8","16","32")),
+        screen = factor(sample(c("13","15"), n_rows, TRUE),
+                        levels = c("13","15")),
+        price = round(runif(n_rows, 0.8, 2.4), 2))
+    X <- model.matrix(~ brand + ram + screen, data = df)[, -1]  # note: no price column
+    V <- as.vector(X %*% beta) +
+         ifelse(df$price < tau, alpha * log(tau - df$price), -Inf)
+    U <- V - log(-log(runif(n_rows)))
+    task_id <- cumsum(!duplicated(df[, c("id","task")]))
+    df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+    list(df = df, X = X, task_id = task_id)
+}
+
+beta_np <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9, screen15 = 0.3)
+alpha_true <- 1.4; tau_true <- 2.6         # budget $2,600: binding for top prices
+d2 <- sim_budget_data(500, 8, beta_np, alpha_true, tau_true)
+max(d2$df$price[d2$df$choice == 1])         # nobody chose above tau... check
+```
+
+(A task where *all three* laptops exceed $\tau$ would have no feasible option; with our price range topping out at \$2,400 < $\tau$, the issue does not arise here, but your own version must decide what shoppers do then --- a none option, Extension 1, is the natural coupling. Model changes interact; simulators surface the interactions before referees do.)
+
+**The likelihood** amends the @sec-mnl-mle kernel in exactly the two places the model changed --- the utility line gains the budget term, and infeasible rows carry $-\infty$ (which the log-sum-exp machinery handles gracefully: $e^{-\infty} = 0$ drops them from the denominator):
+
+```{r}
+#| cache: false
+loglik_budget <- function(theta, y, X, price, task_id) {
+    K <- ncol(X)
+    beta <- theta[1:K]; alpha <- theta[K+1]; tau <- theta[K+2]
+    if (tau <= max(price[y == 1])) return(-1e10)   # chosen>tau impossible
+    V <- as.vector(X %*% beta) + alpha * log(pmax(tau - price, 1e-12))
+    V[price >= tau] <- -Inf
+    Vmax <- ave(V, task_id, FUN = max)
+    eV <- exp(V - Vmax)
+    sum((V - Vmax - log(rowsum(eV, task_id)[task_id]))[y == 1])
+}
+```
+
+One wrinkle deserves its sentence: the feasibility screen makes the likelihood *zero* for any $\tau$ below the highest chosen price --- the data flatly refute such budgets --- so the parameter space has a data-dependent boundary, and the surface is non-smooth in $\tau$ at every observed price point. Textbook MLE regularity has left the building.[^3] Practical estimation is untroubled: profile the likelihood on a grid of $\tau$ (grid search's redemption arc, from @sec-grid-search) with the smooth parameters maximized at each point:
+
+```{r}
+#| cache: false
+taus <- seq(2.45, 3.2, by = 0.025)
+prof <- sapply(taus, function(tt) {
+    f <- optim(c(rep(0, 5), 1), function(th, ...)
+                   loglik_budget(c(th, tt), ...),
+               y = d2$df$choice, X = d2$X, price = d2$df$price,
+               task_id = d2$task_id,
+               method = "BFGS", control = list(fnscale = -1, maxit = 300))
+    c(tau = tt, ll = f$value, f$par)
+})
+best <- prof[, which.max(prof["ll", ])]
+round(rbind(truth = c(beta_np, alpha = alpha_true, tau = tau_true),
+            est   = c(best[3:7], best[8], best["tau"])), 2)
+```
+
+```{r}
+#| label: fig-budget-profile
+#| fig-cap: "The profile log-likelihood over the budget parameter. The data reject budgets below the highest chosen price outright (left boundary), climb to a well-defined peak near the true $2,600, and fall away as larger budgets flatten the log(tau - p) curvature the choices exhibit."
+#| fig-width: 6
+#| fig-height: 3
+ggplot(data.frame(tau = prof["tau", ], ll = prof["ll", ]), aes(tau, ll)) +
+    geom_line() + geom_point(size = 0.8) +
+    geom_vline(xintercept = tau_true, linetype = "dashed") +
+    labs(x = expression(tau~"($1,000s)"), y = "profile log-likelihood")
+```
+
+Recovery --- including a latent budget no survey question asked about, identified purely from where price sensitivity concentrates. **The research road map** from here is @pachali2022's: make $\tau_n$ person-specific with a hierarchical prior (the @sec-hb-mnl machinery --- the budget becomes one more transformed coefficient, log-normal to stay positive, sampled in the person-level Metropolis block), let stated budget questions enter as noisy *indicators* of $\tau_n$ rather than truth, and watch premium-price demand curves correct themselves by double-digit percentages. Every component is in your toolkit already.
+
+## Extension 3: A Flexible Mixing Distribution {#sec-ext-flexmix}
+
+**The problem.** Parts II--III assumed tastes are *normally* distributed --- always unimodal, symmetric, thin-tailed. Suppose the true market is polarized: a budget segment and a premium segment with little in between. A normal mixing distribution will report the average of two camps and the spread between them --- a distribution centered where almost nobody lives (@sec-postestimation's warning, at the population level).
+
+**The model change**, following @train2016's *logit-mixed logit* in one dimension: replace the price coefficient's normal distribution with a **nonparametric distribution on a grid**. Fix $G$ candidate values $b_1, \ldots, b_G$ spanning the plausible range; estimate the probability mass $w_g$ on each, via a softmax in free parameters ($w_g \propto e^{\theta_g}$ --- @sec-latentclass's device). One normalization before coding it: adding a constant to every $\theta_g$ leaves the softmax weights unchanged --- the level unidentifiability of @sec-mnl-identification, back again --- so we pin $\theta_1 = 0$ and estimate the remaining $G-1$ free parameters. That is the `c(0, theta)` in the code below. The reader who has reached this chapter sees immediately what this *is*: a latent class model where the class locations are frozen to a grid and only the shares are estimated --- flexibility through many cheap classes rather than a few expensive ones.
+
+**The estimation insight** that makes it practical --- and this is the trick worth stealing for other models: person $n$'s sequence likelihood at grid point $g$,
+$$L_{ng} = \prod_{t=1}^{T} P_{nt}\big(y_{nt} \mid \beta_{\text{price}} = b_g\big)$$
+--- the ordinary MNL likelihood of person $n$'s whole sequence with the price coefficient frozen at grid value $b_g$ (and the other coefficients at their step-1 values; `persll_at()` returns its log, one column of an $N \times G$ matrix per grid point) --- *does not depend on the weights*. Compute the $N \times G$ matrix of $L_{ng}$ **once**; thereafter the log-likelihood
+
+$$
+\ell(\bftheta) = \sum_n \log \sum_g w_g(\bftheta) \, L_{ng}
+$$ {#eq-lml}
+
+costs a matrix-vector product per evaluation --- the optimizer runs on a *precomputed* likelihood, and estimation takes seconds regardless of how expensive the kernel was [@train2016 reports 69 mixing parameters estimated in 18 seconds; ours is humbler]:
+
+```{r}
+#| cache: false
+set.seed(222)
+## simulate a polarized market: price coefficient is bimodal, others fixed
+sim_laptop_design <- function(N, T, J) {
+    n_rows <- N * T * J
+    data.frame(id = rep(seq_len(N), each = T*J),
+               task = rep(rep(seq_len(T), each = J), times = N),
+               alt = rep(seq_len(J), times = N*T),
+               brand = factor(sample(c("Acer","Dell","Apple"), n_rows, TRUE),
+                              levels = c("Acer","Dell","Apple")),
+               ram = factor(sample(c("8","16","32"), n_rows, TRUE),
+                            levels = c("8","16","32")),
+               screen = factor(sample(c("13","15"), n_rows, TRUE),
+                               levels = c("13","15")),
+               price = round(runif(n_rows, 0.8, 2.4), 2))
+}
+N <- 1000; T <- 8
+df <- sim_laptop_design(N, T, 3)
+X  <- model.matrix(~ brand + ram + screen + price, data = df)[, -1]
+K  <- ncol(X)
+task_id <- cumsum(!duplicated(df[, c("id","task")]))
+
+b_fixed <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9, screen15 = 0.3)
+bp_n <- ifelse(runif(N) < 0.55, rnorm(N, -2.0, 0.25), rnorm(N, -0.6, 0.25))
+V <- as.vector(X[, 1:5] %*% b_fixed) + X[, 6] * bp_n[df$id]
+U <- V - log(-log(runif(nrow(X))))
+df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+```
+
+```{r}
+#| cache: false
+## step 1 (approximation, disclosed): fix non-price coefficients at MNL estimates
+mnl <- optim(rep(0, K), loglik_mnl, y = df$choice, X = X, task_id = task_id,
+             method = "BFGS", control = list(fnscale = -1))
+
+## step 2: precompute person-by-gridpoint log-likelihoods
+grid_b <- seq(-3.2, 0.2, length.out = 18)
+id_of_task <- df$id[!duplicated(task_id)]
+persll_at <- function(bp) {
+    V <- as.vector(X[, 1:5] %*% mnl$par[1:5]) + X[, 6] * bp
+    Vmax <- ave(V, task_id, FUN = max)
+    eV <- exp(V - Vmax)
+    logP <- (V - Vmax - log(rowsum(eV, task_id)[task_id]))[df$choice == 1]
+    as.vector(rowsum(logP, id_of_task))
+}
+llng <- sapply(grid_b, persll_at)             # N x G, computed ONCE
+
+## step 3: maximize over the weights -- each evaluation is trivial
+loglik_lml <- function(theta, llng) {
+    lw <- c(0, theta) - log(sum(exp(c(0, theta))))    # log softmax weights
+    M  <- apply(sweep(llng, 2, lw, `+`), 1, max)
+    sum(M + log(rowSums(exp(sweep(llng, 2, lw, `+`) - M))))
+}
+fit3 <- optim(rep(0, length(grid_b) - 1), loglik_lml, llng = llng,
+              method = "BFGS", control = list(fnscale = -1, maxit = 1000))
+w_hat <- exp(c(0, fit3$par)); w_hat <- w_hat / sum(w_hat)
+```
+
+```{r}
+#| label: fig-lml
+#| fig-cap: "The estimated nonparametric distribution of the price coefficient (bars: mass at each grid point) against the true bimodal density (line). Nobody told the model there were two segments; eighteen grid weights found them. A normal mixing distribution, by construction, could report only the average of the two camps."
+#| fig-width: 6
+#| fig-height: 3.2
+true_dens <- function(x) 0.55*dnorm(x, -2.0, 0.25) + 0.45*dnorm(x, -0.6, 0.25)
+gap <- diff(grid_b)[1]
+ggplot(data.frame(b = grid_b, w = w_hat / gap), aes(b, w)) +
+    geom_col(width = gap * 0.9, fill = "grey70") +
+    geom_function(fun = true_dens, linewidth = 0.8) +
+    labs(x = expression(beta[price]), y = "density")
+```
+
+Two modes, correct locations, correct proportions --- from choice data alone, with a mixing distribution the model was free to shape.[^4] The disclosed shortcut (fixing the other coefficients first) is the honest price of a demonstration; @train2016's full treatment estimates everything jointly, adds smoothness through spline or polynomial structure on the weights, and extends to multiple dimensions. And the Bayesian reader has already noticed that @eq-lml's grid weights would make a lovely Dirichlet-prior Gibbs block --- extensions compose across Parts II and III alike.
+
+[^4]: Sharp eyes will connect this figure to @sec-hb-mnl's normal-prior HB: run on these polarized data, the normal hierarchy would shrink both camps toward a middle where no one lives. Flexible mixing is not decoration; on the wrong population shape, the normal assumption distorts every downstream deliverable in @sec-postestimation.
+
+## Where to Go From Here
+
+Three extensions, three different entry points into the machinery --- the data layer (none option), the behavioral rule (budget), the population distribution (flexible mixing) --- and none required more than a page of new code. The pattern generalizes to the research frontier: volumetric and multiple-discreteness models change the choice rule to Kuhn--Tucker conditions [@allenby2019]; WTP-space models reparameterize utility so preference heterogeneity lives in dollar units [@train2016; @benakiva2019]; context-dependent none utilities track what respondents learn across tasks [@hung2025nochoice]; and the unified framework of @marshall2002 shows ratings, rankings, and choices as different observation layers over one latent-utility core --- extensions of the *data* model rather than the utility model.
+
+Your own extension will not be on this list; that is the point of it being yours. The recipe at the chapter's head does not care: change the model, re-derive the probability, *simulate first*, adjust the estimator, recover before real data. You now own every tool the recipe calls for --- which is what this book was for.
 
 ## Key Learnings
+
+- Custom models are the recipe: model change $\to$ probability $\to$ **simulator first** $\to$ estimator tweak $\to$ simulate-and-recover. The architecture built in Part I is what makes each step small.
+- The no-choice option is a *data-layer* extension: one all-zero row with an ASC per task, zero new estimation code, and it restores the walk-away margin that forced choice suppresses (with dual-response designs as the practice-standard refinement, also executable in the data layer).
+- The budget constraint changes $h$ itself: screening plus $\log(\tau - p)$ curvature. Its likelihood has a data-dependent boundary and kinks in $\tau$ --- profiled grid search handles what BFGS regularity cannot --- and a latent budget is identified from behavior alone. The hierarchical version is @pachali2022 and everything it needs is in @sec-hb-mnl.
+- Flexible mixing replaces the normal population with estimated grid weights --- latent class with frozen locations --- and Train's precomputed-likelihood trick ($L_{ng}$ once, then @eq-lml in microseconds) makes it nearly free. On polarized data it finds the two camps a normal distribution would average away.
+- Extensions enter through the data, the rule, or the population --- and compose, with each other and with both estimation philosophies. Go build yours.

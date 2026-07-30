@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,14 +422,12 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#estimates-are-not-answers" id="toc-estimates-are-not-answers" class="nav-link active" data-scroll-target="#estimates-are-not-answers"><span class="header-section-number">21.1</span> Estimates Are Not Answers</a></li>
-  <li><a href="#inference-on-functions-of-parameters" id="toc-inference-on-functions-of-parameters" class="nav-link" data-scroll-target="#inference-on-functions-of-parameters"><span class="header-section-number">21.2</span> Inference on Functions of Parameters</a></li>
-  <li><a href="#willingness-to-pay" id="toc-willingness-to-pay" class="nav-link" data-scroll-target="#willingness-to-pay"><span class="header-section-number">21.3</span> Willingness-to-Pay</a></li>
-  <li><a href="#attribute-importance" id="toc-attribute-importance" class="nav-link" data-scroll-target="#attribute-importance"><span class="header-section-number">21.4</span> Attribute Importance</a></li>
-  <li><a href="#market-simulation" id="toc-market-simulation" class="nav-link" data-scroll-target="#market-simulation"><span class="header-section-number">21.5</span> Market Simulation</a></li>
-  <li><a href="#elasticities" id="toc-elasticities" class="nav-link" data-scroll-target="#elasticities"><span class="header-section-number">21.6</span> Elasticities</a></li>
-  <li><a href="#using-individual-level-estimates" id="toc-using-individual-level-estimates" class="nav-link" data-scroll-target="#using-individual-level-estimates"><span class="header-section-number">21.7</span> Using Individual-Level Estimates</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">21.8</span> Key Learnings</a></li>
+  <li><a href="#inference-on-functions-of-parameters" id="toc-inference-on-functions-of-parameters" class="nav-link active" data-scroll-target="#inference-on-functions-of-parameters"><span class="header-section-number">21.1</span> Inference on Functions of Parameters</a></li>
+  <li><a href="#willingness-to-pay-and-its-traps" id="toc-willingness-to-pay-and-its-traps" class="nav-link" data-scroll-target="#willingness-to-pay-and-its-traps"><span class="header-section-number">21.2</span> Willingness-to-Pay, and Its Traps</a></li>
+  <li><a href="#market-simulation" id="toc-market-simulation" class="nav-link" data-scroll-target="#market-simulation"><span class="header-section-number">21.3</span> Market Simulation</a></li>
+  <li><a href="#elasticities-and-substitution" id="toc-elasticities-and-substitution" class="nav-link" data-scroll-target="#elasticities-and-substitution"><span class="header-section-number">21.4</span> Elasticities and Substitution</a></li>
+  <li><a href="#using-the-individual-level-estimates" id="toc-using-the-individual-level-estimates" class="nav-link" data-scroll-target="#using-the-individual-level-estimates"><span class="header-section-number">21.5</span> Using the Individual-Level Estimates</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">21.6</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/21_postestimation.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -372,39 +453,245 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: allenby-2014/2019 (WTP vs pseudo-WTP; economic valuation); chapman-2013 (practitioner pitfalls); cbc-handbook-2022 (importance, simulators, demand curves); DCMS derivatives/elasticities -->
-<section id="estimates-are-not-answers" class="level2" data-number="21.1">
-<h2 data-number="21.1" class="anchored" data-anchor-id="estimates-are-not-answers"><span class="header-section-number">21.1</span> Estimates Are Not Answers</h2>
-<!-- clients and coauthors ask about products and prices, not coefficients; this chapter turns draws and estimates into answers -->
+<p>No one who commissions a choice study wants a coefficient. They want answers: <em>what is the memory upgrade worth in dollars? What share does our configuration win at $1,499? Who are the price-insensitive customers?</em> Between the estimates of Parts II–IV and those answers sits one more layer of craft — transforming parameters into decision quantities, with uncertainty carried through honestly. The layer is thin (mostly arithmetic on things we already have) but it is where analyses most often go wrong in practice, because the arithmetic has traps with famous names. This chapter builds the transformations and disarms the traps.</p>
+<p>Two fits power the chapter, both already on disk: the plain MNL of <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> (refit inline below — it takes a second) and the HB-MNL draws saved by <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>study   <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/laptop_study.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>laptops <span class="ot">&lt;-</span> study<span class="sc">$</span>data</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> laptops)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> laptops<span class="sc">$</span>choice</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(laptops[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>loglik_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta); Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    eV <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>mle <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), loglik_mnl, <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>), <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>vc  <span class="ot">&lt;-</span> <span class="fu">solve</span>(<span class="sc">-</span>mle<span class="sc">$</span>hessian)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>hb <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/hb_mnl_fit.rds"</span>)     <span class="co"># bar_draws, sd_draws, B_draws</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="inference-on-functions-of-parameters" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="inference-on-functions-of-parameters"><span class="header-section-number">21.1</span> Inference on Functions of Parameters</h2>
+<p>The recurring problem: the quantity of interest is <span class="math inline">\(g(\boldsymbol{\beta})\)</span>, not <span class="math inline">\(\boldsymbol{\beta}\)</span> — a ratio, a probability, a share — and it needs a standard error or interval. Three standard tools, in ascending order of generality.</p>
+<p><strong>The delta method</strong> linearizes: if <span class="math inline">\(\hat{\boldsymbol{\beta}} \sim N(\boldsymbol{\beta}, V)\)</span> approximately, then</p>
+<p><span id="eq-delta"><span class="math display">\[
+g(\hat{\boldsymbol{\beta}}) \;\dot\sim\; N\!\left( g(\boldsymbol{\beta}), \; \nabla g' \, V \, \nabla g \right)
+\tag{21.1}\]</span></span></p>
+<p>— the function’s gradient maps parameter uncertainty into quantity uncertainty. Exact for linear <span class="math inline">\(g\)</span>, an approximation otherwise, and increasingly strained as <span class="math inline">\(g\)</span> curves (ratios near a small denominator being the canonical strain). We used a special case in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> to convert log-scale standard errors; here is the general workhorse. The one-line reason: a first-order expansion <span class="math inline">\(g(\hat{\boldsymbol{\beta}}) \approx g(\boldsymbol{\beta}) + \nabla g(\boldsymbol{\beta})'(\hat{\boldsymbol{\beta}} - \boldsymbol{\beta})\)</span> makes <span class="math inline">\(g(\hat{\boldsymbol{\beta}})\)</span> approximately a linear function of an approximately normal vector, and the variance of a linear function <span class="math inline">\(\mathbf{a}'\hat{\boldsymbol{\beta}}\)</span> is <span class="math inline">\(\mathbf{a}' V \mathbf{a}\)</span>.</p>
+<p><strong>Krinsky–Robb</strong> <span class="citation" data-cites="krinsky1986">(<a href="references.html#ref-krinsky1986" role="doc-biblioref">Krinsky and Robb 1986</a>)</span> simulates instead: draw many <span class="math inline">\(\boldsymbol{\beta}^{(r)} \sim N(\hat{\boldsymbol{\beta}}, V)\)</span> from the estimated asymptotic distribution, push each through <span class="math inline">\(g\)</span>, and read summaries off the resulting sample. No gradients, no linearization — <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>’s summarize-by-sampling logic applied to frequentist output. It is the poor astronomer’s posterior: same mechanics as the Bayesian version, different justification.</p>
+<p><strong>Bayesian draws</strong> make the problem dissolve: the posterior sample of <span class="math inline">\(\boldsymbol{\beta}\)</span> <em>is</em> a posterior sample of <span class="math inline">\(g(\boldsymbol{\beta})\)</span> after applying <span class="math inline">\(g\)</span> row by row — the quiet superpower advertised in <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>, no approximation anywhere.</p>
+<p>Watch all three on one question — <em>the dollar value of upgrading 16GB to 32GB</em> — and note how they cluster:</p>
+<p><span id="eq-wtp-ratio"><span class="math display">\[
+g(\boldsymbol{\beta}) = \frac{\beta_{\texttt{ram32}} - \beta_{\texttt{ram16}}}{-\beta_{\texttt{price}}} \times \$1{,}000
+\tag{21.2}\]</span></span></p>
+<p>(Utility difference of the upgrade divided by the utility of a dollar: the scale factor from <a href="07_mnl.html#sec-mnl-identification" class="quarto-xref"><span>Section 7.5</span></a> cancels in the ratio, which is precisely why ratios are the preferred currency.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(b) <span class="dv">1000</span> <span class="sc">*</span> (b[<span class="dv">4</span>] <span class="sc">-</span> b[<span class="dv">3</span>]) <span class="sc">/</span> (<span class="sc">-</span>b[<span class="dv">6</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="do">## delta method: numerical gradient of g (via @sec-optimization's num_grad idea)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>grad_g <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    e <span class="ot">&lt;-</span> <span class="fu">replace</span>(<span class="fu">numeric</span>(K), k, <span class="fl">1e-6</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">g</span>(mle<span class="sc">$</span>par <span class="sc">+</span> e) <span class="sc">-</span> <span class="fu">g</span>(mle<span class="sc">$</span>par <span class="sc">-</span> e)) <span class="sc">/</span> <span class="fl">2e-6</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>se_delta <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">t</span>(grad_g) <span class="sc">%*%</span> vc <span class="sc">%*%</span> grad_g)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Krinsky-Robb: draws from the asymptotic normal (@sec-mvnorm transform)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">210</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>kr <span class="ot">&lt;-</span> <span class="fu">apply</span>(mle<span class="sc">$</span>par <span class="sc">+</span> <span class="fu">t</span>(<span class="fu">chol</span>(vc)) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(K<span class="sc">*</span><span class="dv">5000</span>), K), <span class="dv">2</span>, g)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Bayesian: transform the posterior draws of the population means</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>bayes <span class="ot">&lt;-</span> <span class="fu">apply</span>(hb<span class="sc">$</span>bar_draws, <span class="dv">1</span>, g)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">data.frame</span>(</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">method   =</span> <span class="fu">c</span>(<span class="st">"delta"</span>, <span class="st">"Krinsky-Robb"</span>, <span class="st">"Bayes (HB bar)"</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">c</span>(<span class="fu">g</span>(mle<span class="sc">$</span>par), <span class="fu">mean</span>(kr), <span class="fu">mean</span>(bayes)),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_or_sd =</span> <span class="fu">c</span>(se_delta, <span class="fu">sd</span>(kr), <span class="fu">sd</span>(bayes)),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">lo95     =</span> <span class="fu">c</span>(<span class="fu">g</span>(mle<span class="sc">$</span>par) <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>se_delta, <span class="fu">quantile</span>(kr, .<span class="dv">025</span>), <span class="fu">quantile</span>(bayes, .<span class="dv">025</span>)),</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">hi95     =</span> <span class="fu">c</span>(<span class="fu">g</span>(mle<span class="sc">$</span>par) <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se_delta, <span class="fu">quantile</span>(kr, .<span class="dv">975</span>), <span class="fu">quantile</span>(bayes, .<span class="dv">975</span>))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>)[, <span class="sc">-</span><span class="dv">1</span>], <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  estimate se_or_sd lo95 hi95
+1      217       44  130  305
+2      218       45  132  305
+3      228       53  127  335</code></pre>
+</div>
+</div>
+<p>Same answer to rounding — roughly $250 with an interval of <span class="math inline">\(\pm\)</span>$70-ish — with the small differences instructive: delta and Krinsky–Robb share inputs and differ only by linearization; the Bayesian row differs slightly more because it comes from a different model fit (the HB’s population mean) on different data-processing of the same study. When the three <em>disagree materially</em>, the usual culprit is a denominator too close to zero for <a href="#eq-delta" class="quarto-xref">Equation&nbsp;<span>21.1</span></a>’s linearization — at which point trust the sampling-based rows.</p>
 </section>
-<section id="inference-on-functions-of-parameters" class="level2" data-number="21.2">
-<h2 data-number="21.2" class="anchored" data-anchor-id="inference-on-functions-of-parameters"><span class="header-section-number">21.2</span> Inference on Functions of Parameters</h2>
-<!-- classical: the delta method, and simulating from the asymptotic distribution (Krinsky-Robb); Bayesian: just transform the posterior draws -- one of the quiet superpowers of MCMC output -->
+<section id="willingness-to-pay-and-its-traps" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="willingness-to-pay-and-its-traps"><span class="header-section-number">21.2</span> Willingness-to-Pay, and Its Traps</h2>
+<p><a href="#eq-wtp-ratio" class="quarto-xref">Equation&nbsp;<span>21.2</span></a> is a <strong>marginal WTP</strong>: the rate at which a consumer trades dollars for an attribute, all else equal. For small, single-attribute comparisons it is the right object. Two traps surround it.</p>
+<p><strong>Trap one: the heterogeneous ratio.</strong> With HB output it is tempting to compute each <em>person’s</em> WTP by applying <a href="#eq-wtp-ratio" class="quarto-xref">Equation&nbsp;<span>21.2</span></a> to their <span class="math inline">\(\boldsymbol{\beta}_n\)</span> draws. Legitimate — and dangerous, because our population model makes <span class="math inline">\(\beta_{\text{price},n}\)</span> normal, so some mass sits near (and past) zero, and dividing by near-zero produces WTP draws in the tens of thousands of dollars with the wrong sign. Watch:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>wtp_n <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="sc">*</span> (hb<span class="sc">$</span>B_draws[, , <span class="dv">4</span>] <span class="sc">-</span> hb<span class="sc">$</span>B_draws[, , <span class="dv">3</span>]) <span class="sc">/</span> (<span class="sc">-</span>hb<span class="sc">$</span>B_draws[, , <span class="dv">6</span>])</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(wtp_n), <span class="at">median =</span> <span class="fu">median</span>(wtp_n),</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">q01 =</span> <span class="fu">quantile</span>(wtp_n, .<span class="dv">01</span>), <span class="at">q99 =</span> <span class="fu">quantile</span>(wtp_n, .<span class="dv">99</span>)), <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   mean  median  q01.1% q99.99% 
+   -155     210   -6552    7865 </code></pre>
+</div>
+</div>
+<p>The mean is inflated (or even nonsensical) while the median and inner quantiles are sane — the textbook signature of a ratio with a denominator crossing zero. Remedies, in rising order of principle: report medians and quantiles, never means; re-estimate with a sign-constrained (lognormal) price coefficient, as flagged in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>; or reparameterize the whole model in <em>WTP space</em> so the ratio is a parameter rather than a quotient <span class="citation" data-cites="train2016">Ben-Akiva, McFadden, and Train (<a href="references.html#ref-benakiva2019" role="doc-biblioref">2019</a>)</span>. What is not acceptable is publishing the mean of an unconstrained ratio — a mistake with a long paper trail.</p>
+<p><strong>Trap two: pseudo-WTP versus market value.</strong> The ratio answers “utility compensation for one attribute, one option, no competition.” It does <em>not</em> answer “what is the feature worth to a firm” — in a market, a better product steals share from rivals, rivals reprice, and the value of a feature is an equilibrium object. <span class="citation" data-cites="allenby2014">Allenby et al. (<a href="references.html#ref-allenby2014" role="doc-biblioref">2014</a>)</span> make the accounting vivid: ratio-based “WTP” can overstate what pricing can capture by an order of magnitude or more, and the honest firm-side calculation runs through the market simulator below (and, fully, through equilibrium pricing — beyond our scope but built from exactly these pieces). The economist’s consumer-surplus version for the logit has a closed form worth knowing. The expected maximum utility of a Gumbel choice set is <span class="math inline">\(\ln \sum_j e^{V_j}\)</span> plus a constant (Euler’s <span class="math inline">\(\gamma \approx 0.577\)</span>, the Gumbel mean — it cancels the moment we take <em>differences</em> between scenarios), a classic result we state rather than derive <span class="citation" data-cites="small1981 train2009">(<a href="references.html#ref-small1981" role="doc-biblioref">Small and Rosen 1981</a>; <a href="references.html#ref-train2009" role="doc-biblioref">K. E. Train 2009, sec. 3.5</a>)</span> — <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>’s log-sum, in its third and final starring role. Dividing the change in expected utility by <span class="math inline">\(-\beta_{\text{price}}\)</span>, the marginal utility of a dollar, converts utils to dollars — legitimate because our linear-in-price utility makes that marginal utility constant. The <em>compensating variation</em> for any change in the choice set is therefore:</p>
+<p><span id="eq-logsum-cv"><span class="math display">\[
+CV = \frac{ \ln \sum_j e^{V_j^{\text{after}}} - \ln \sum_j e^{V_j^{\text{before}}} }{ -\beta_{\text{price}} }
+\tag{21.3}\]</span></span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## market context: three laptops; upgrade the Acer's memory 16 -&gt; 32</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>V_of <span class="ot">&lt;-</span> <span class="cf">function</span>(prods, b) <span class="fu">as.vector</span>(prods <span class="sc">%*%</span> b)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>market <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">acer  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.2</span>),     <span class="co"># dell,apple,ram16,ram32,screen15,price</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">dell  =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="fl">1.6</span>),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">apple =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="fl">2.0</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>market2 <span class="ot">&lt;-</span> market; market2[<span class="st">"acer"</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="dv">1000</span> <span class="sc">*</span> (<span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(<span class="fu">V_of</span>(market2, mle<span class="sc">$</span>par)))) <span class="sc">-</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(<span class="fu">V_of</span>(market,  mle<span class="sc">$</span>par))))) <span class="sc">/</span> (<span class="sc">-</span>mle<span class="sc">$</span>par[<span class="dv">6</span>])</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">ratio_wtp =</span> <span class="fu">g</span>(mle<span class="sc">$</span>par), <span class="at">market_cv =</span> cv), <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ratio_wtp market_cv 
+      217        73 </code></pre>
+</div>
+</div>
+<p>The market-context value is a fraction of the all-else-equal ratio — because in a market with good substitutes, consumers escape a mediocre product rather than pay for its upgrade. Neither number is wrong; they answer different questions, and attaching the right number to the right question is the analyst’s job.</p>
 </section>
-<section id="willingness-to-pay" class="level2" data-number="21.3">
-<h2 data-number="21.3" class="anchored" data-anchor-id="willingness-to-pay"><span class="header-section-number">21.3</span> Willingness-to-Pay</h2>
-<!-- the ratio beta_k/beta_price and its distribution problems; pseudo-WTP vs true WTP via the log-sum (Allenby 2014: the 25-100x overstatement warning); WTP-space reparameterization mention -->
+<section id="market-simulation" class="level2" data-number="21.3">
+<h2 data-number="21.3" class="anchored" data-anchor-id="market-simulation"><span class="header-section-number">21.3</span> Market Simulation</h2>
+<p>The workhorse deliverable. A <strong>market simulator</strong> takes a hypothetical market — a set of products with attributes — and returns predicted choice shares, built from nothing but the model’s probability formula and the estimated (distribution of) coefficients. With HB draws, shares come with uncertainty attached: compute the share under each posterior draw of each person’s <span class="math inline">\(\boldsymbol{\beta}_n\)</span>, average over people (the market), and summarize over draws (the uncertainty):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>simulate_shares <span class="ot">&lt;-</span> <span class="cf">function</span>(products, B_draws) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    S <span class="ot">&lt;-</span> <span class="fu">dim</span>(B_draws)[<span class="dv">1</span>]; Jm <span class="ot">&lt;-</span> <span class="fu">nrow</span>(products)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    shares <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA_real_</span>, S, Jm)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>S) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        V <span class="ot">&lt;-</span> B_draws[s, , ] <span class="sc">%*%</span> <span class="fu">t</span>(products)      <span class="co"># persons x products</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        V <span class="ot">&lt;-</span> V <span class="sc">-</span> <span class="fu">apply</span>(V, <span class="dv">1</span>, max)                 <span class="co"># @sec-logsumexp, always</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        P <span class="ot">&lt;-</span> <span class="fu">exp</span>(V) <span class="sc">/</span> <span class="fu">rowSums</span>(<span class="fu">exp</span>(V))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        shares[s, ] <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(P)                <span class="co"># average person = market share</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">colnames</span>(shares) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(products)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    shares</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>sh <span class="ot">&lt;-</span> <span class="fu">simulate_shares</span>(market, hb<span class="sc">$</span>B_draws)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">share =</span> <span class="fu">colMeans</span>(sh),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">lo95 =</span> <span class="fu">apply</span>(sh, <span class="dv">2</span>, quantile, .<span class="dv">025</span>),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">hi95 =</span> <span class="fu">apply</span>(sh, <span class="dv">2</span>, quantile, .<span class="dv">975</span>)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       acer  dell apple
+share 0.302 0.394 0.304
+lo95  0.273 0.368 0.280
+hi95  0.329 0.421 0.329</code></pre>
+</div>
+</div>
+<p>Read the structure of <code>simulate_shares()</code> once more, because it encodes the two averaging levels that must not be confused: <code>colMeans(P)</code> averages <em>people</em> (heterogeneity — part of the market, inside each draw), while summaries over <code>s</code> average <em>posterior draws</em> (uncertainty — reported as intervals). Collapse them in the wrong order — computing shares at the <em>average</em> <span class="math inline">\(\boldsymbol{\beta}\)</span> — and the simulator inherits the MNL’s IIA at the population level, forfeiting exactly the substitution realism the heterogeneity bought (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>’s aggregation insight, now with money on the line).</p>
+<p>Demand curves are the simulator in a loop — sweep one product’s price, watch its share:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.8</span>, <span class="fl">2.4</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dc <span class="ot">&lt;-</span> <span class="fu">sapply</span>(grid, <span class="cf">function</span>(p) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">&lt;-</span> market; m[<span class="st">"acer"</span>, <span class="dv">6</span>] <span class="ot">&lt;-</span> p</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">simulate_shares</span>(m, hb<span class="sc">$</span>B_draws)[, <span class="st">"acer"</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>dfd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">price =</span> grid, <span class="at">share =</span> <span class="fu">colMeans</span>(dc),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                  <span class="at">lo =</span> <span class="fu">apply</span>(dc, <span class="dv">2</span>, quantile, .<span class="dv">025</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                  <span class="at">hi =</span> <span class="fu">apply</span>(dc, <span class="dv">2</span>, quantile, .<span class="dv">975</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfd, <span class="fu">aes</span>(price, share)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lo, <span class="at">ymax =</span> hi), <span class="at">fill =</span> <span class="st">"grey80"</span>) <span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Acer price ($1,000s)"</span>, <span class="at">y =</span> <span class="st">"preference share"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-demand-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-demand-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="21_postestimation_files/figure-html/fig-demand-curve-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-demand-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21.1: Simulated demand curve for the Acer configuration against its two rivals, with 95% posterior bands: the market simulator swept over price. The curve’s every point carries honest uncertainty inherited from the full posterior.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>One vocabulary discipline, due to <span class="citation" data-cites="chapman2013">Chapman (<a href="references.html#ref-chapman2013" role="doc-biblioref">2013</a>)</span> and hard-won industry experience: the simulator outputs <strong>preference shares</strong> — shares of choices among these products, by these respondents, under forced attention to the choice task. Real <em>market</em> shares also run through awareness, distribution, availability, and the option to buy nothing. Preference shares inform decisions powerfully (especially <em>differences</em> between scenarios, where the omitted factors partially cancel); presenting them as market share forecasts is the fastest way for a good model to lose a client’s trust. (The “buy nothing” piece, at least, the model can absorb — the no-choice option of <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a>.)</p>
 </section>
-<section id="attribute-importance" class="level2" data-number="21.4">
-<h2 data-number="21.4" class="anchored" data-anchor-id="attribute-importance"><span class="header-section-number">21.4</span> Attribute Importance</h2>
-<!-- range-based importance; its dependence on the design; report with care (Chapman) -->
+<section id="elasticities-and-substitution" class="level2" data-number="21.4">
+<h2 data-number="21.4" class="anchored" data-anchor-id="elasticities-and-substitution"><span class="header-section-number">21.4</span> Elasticities and Substitution</h2>
+<p>Differentiating the MNL probability gives the textbook elasticity formulas — own-price <span class="math inline">\(e_{jj} = \beta_p p_j (1 - P_j)\)</span> and the IIA-flavored cross-price elasticity that is <em>identical for all rivals</em> <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">K. E. Train 2009, sec. 3.6</a>)</span>. Rather than memorize formulas, note that the simulator computes any elasticity numerically — nudge a price, difference the shares — and, run on HB draws, it exhibits the realistic substitution the population mixture creates. The <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a> experiment, replayed with estimated parameters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bump <span class="ot">&lt;-</span> market; bump[<span class="st">"dell"</span>, <span class="dv">6</span>] <span class="ot">&lt;-</span> bump[<span class="st">"dell"</span>, <span class="dv">6</span>] <span class="sc">*</span> <span class="fl">0.9</span>   <span class="co"># Dell cuts price 10%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(<span class="fu">simulate_shares</span>(bump, hb<span class="sc">$</span>B_draws)) <span class="sc">-</span> <span class="fu">colMeans</span>(sh)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">base_share =</span> <span class="fu">colMeans</span>(sh), <span class="at">change =</span> delta,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">pct_change =</span> delta <span class="sc">/</span> <span class="fu">colMeans</span>(sh)), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             acer  dell  apple
+base_share  0.302 0.394  0.304
+change     -0.025 0.045 -0.020
+pct_change -0.084 0.114 -0.064</code></pre>
+</div>
+</div>
+<p>Dell’s gain comes disproportionately from the rival whose <em>buyers look most like Dell’s buyers</em> in taste space — proportional-substitution arithmetic broken by heterogeneity alone, no nests required. This table, produced for a client’s actual scenario, is the applied payoff of every substitution-pattern discussion since <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>.</p>
 </section>
-<section id="market-simulation" class="level2" data-number="21.5">
-<h2 data-number="21.5" class="anchored" data-anchor-id="market-simulation"><span class="header-section-number">21.5</span> Market Simulation</h2>
-<!-- share-of-preference from individual-level estimates; competitive scenarios; why preference share is not market share (Chapman); demand curves from a price sweep -->
+<section id="using-the-individual-level-estimates" class="level2" data-number="21.5">
+<h2 data-number="21.5" class="anchored" data-anchor-id="using-the-individual-level-estimates"><span class="header-section-number">21.5</span> Using the Individual-Level Estimates</h2>
+<p>Finally, the deliverable that only Part III could license: person-level quantities. Each respondent’s posterior WTP (medians, per the trap above) supports targeting — and one summary picture enforces this book’s most repeated interpretive warning:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>wtp_person <span class="ot">&lt;-</span> <span class="fu">apply</span>(wtp_n, <span class="dv">2</span>, median)          <span class="co"># per-person posterior median</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="at">w =</span> wtp_person), <span class="fu">aes</span>(w)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(wtp_person), <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">quantile</span>(wtp_person, <span class="fu">c</span>(.<span class="dv">005</span>, .<span class="dv">995</span>))) <span class="sc">+</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"median WTP for 32GB upgrade ($)"</span>, <span class="at">y =</span> <span class="st">"respondents"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-wtp-heterogeneity" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-wtp-heterogeneity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="21_postestimation_files/figure-html/fig-wtp-heterogeneity-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-wtp-heterogeneity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;21.2: The distribution of respondent-level median WTP for the 32GB upgrade. The dashed line is the population average – a number that describes almost nobody: most respondents sit well below it, a long tail sits far above. Averages hide the distribution; the distribution is the market.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Segments fall out of such distributions directly (the right tail is the premium-upgrade target list, by respondent ID), and every claim about them inherits posterior uncertainty from the draws. This is <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>’s wish list, fully cashed: person-level, honest, decision-ready.</p>
 </section>
-<section id="elasticities" class="level2" data-number="21.6">
-<h2 data-number="21.6" class="anchored" data-anchor-id="elasticities"><span class="header-section-number">21.6</span> Elasticities</h2>
-<!-- own- and cross-price; MNL's proportional cross-elasticities vs mixed/MNP patterns; compute from draws -->
-</section>
-<section id="using-individual-level-estimates" class="level2" data-number="21.7">
-<h2 data-number="21.7" class="anchored" data-anchor-id="using-individual-level-estimates"><span class="header-section-number">21.7</span> Using Individual-Level Estimates</h2>
-<!-- targeting and segmentation on posterior means; averages hide the distribution -- always plot the heterogeneity; the ch 17 payoff cashed in -->
-</section>
-<section id="key-learnings" class="level2" data-number="21.8">
-<h2 data-number="21.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">21.8</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="21.6">
+<h2 data-number="21.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">21.6</span> Key Learnings</h2>
+<ul>
+<li>Decision quantities are functions of parameters, and their uncertainty comes from three tools: the delta method (<a href="#eq-delta" class="quarto-xref">Equation&nbsp;<span>21.1</span></a>; fast, linearized), Krinsky–Robb (simulate the asymptotic normal), and posterior draws (exact, trivial). They agree when <span class="math inline">\(g\)</span> is tame; when they diverge, suspect the linearization.</li>
+<li>Marginal WTP is a scale-free ratio (<a href="#eq-wtp-ratio" class="quarto-xref">Equation&nbsp;<span>21.2</span></a>) — but ratios of heterogeneous coefficients explode when the denominator crosses zero (report medians; or constrain signs; or move to WTP-space), and ratio-WTP is <em>not</em> market value: the log-sum compensating variation (<a href="#eq-logsum-cv" class="quarto-xref">Equation&nbsp;<span>21.3</span></a>) and the simulator answer the market question, usually with much smaller numbers <span class="citation" data-cites="allenby2014">(<a href="references.html#ref-allenby2014" role="doc-biblioref">Allenby et al. 2014</a>)</span>.</li>
+<li>The market simulator is the model’s probability formula pointed at hypothetical products; with HB draws it averages people <em>inside</em> each draw and summarizes uncertainty <em>across</em> draws — never share-at-the-average-beta, which resurrects IIA.</li>
+<li>Simulated shares are preference shares, not market shares (<span class="citation" data-cites="chapman2013">Chapman (<a href="references.html#ref-chapman2013" role="doc-biblioref">2013</a>)</span>); differences between scenarios travel better than levels.</li>
+<li>Heterogeneity is the deliverable: person-level WTP distributions, targeting lists, and substitution patterns that put competition where the taste overlap is. The average consumer, meanwhile, describes almost nobody — plot the distribution.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-allenby2014" class="csl-entry" role="listitem">
+Allenby, Greg M., Jeff D. Brazell, John R. Howell, and Peter E. Rossi. 2014. <span>“Economic Valuation of Product Features.”</span> <em>Quantitative Marketing and Economics</em> 12: 421–56.
+</div>
+<div id="ref-benakiva2019" class="csl-entry" role="listitem">
+Ben-Akiva, Moshe, Daniel McFadden, and Kenneth Train. 2019. <em>Foundations of Stated Preference Elicitation: Consumer Behavior and Choice-Based Conjoint Analysis</em>. Vol. 10. Foundations and Trends in Econometrics 1–2. Now Publishers.
+</div>
+<div id="ref-chapman2013" class="csl-entry" role="listitem">
+Chapman, Christopher N. 2013. <span>“9 Things Clients Get Wrong about Conjoint Analysis.”</span> In <em>Sawtooth Software Conference Proceedings</em>.
+</div>
+<div id="ref-krinsky1986" class="csl-entry" role="listitem">
+Krinsky, Itzhak, and A. Leslie Robb. 1986. <span>“On Approximating the Statistical Properties of Elasticities.”</span> <em>The Review of Economics and Statistics</em> 68 (4): 715–19.
+</div>
+<div id="ref-small1981" class="csl-entry" role="listitem">
+Small, Kenneth A., and Harvey S. Rosen. 1981. <span>“Applied Welfare Economics with Discrete Choice Models.”</span> <em>Econometrica</em> 49 (1): 105–30.
+</div>
+<div id="ref-train2016" class="csl-entry" role="listitem">
+Train, Kenneth. 2016. <span>“Mixed Logit with a Flexible Mixing Distribution.”</span> <em>Journal of Choice Modelling</em> 19: 40–53.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

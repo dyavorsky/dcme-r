@@ -4,36 +4,376 @@
 
 # The Mixed MNL Model by MSL {#sec-mixed-msl}
 
-<!-- Sources: DCMS Ch 6 (esp §6.6 on MSL for mixed logit); McFadden-Train 2000 (Thm 1, estimation machinery); validation: mlogit/gmnl/mixl -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
 
-## Random Coefficients
+This chapter assembles the summit model of the likelihood track. The **mixed multinomial logit** --- MNL choice behavior with coefficients that vary continuously across people --- is where Part II has been heading since heterogeneity entered in @sec-latentclass: the discrete classes melt into a continuous distribution, the random intercept of @sec-msl grows into a random *vector*, and every tool we have built gets used at once. It is also, not coincidentally, the single most-used model in applied choice work, from transportation demand to virtually every commercial conjoint study run today [@mcfaddentrain2000; @train2009, Ch. 6].
 
-<!-- beta_n drawn from a population distribution; two readings of the same model: taste heterogeneity, or error components that break IIA; MMNL approximates any RUM (McFadden-Train Thm 1, stated not proved) -->
+By the end of the chapter the model will be simulated, estimated by MSL, validated against `mlogit`, and audited for simulation error --- and we will have felt, concretely, where the approach strains. That strain is data for @sec-limits.
 
-## Choosing Mixing Distributions
+## Random Coefficients, Two Ways to Read Them
 
-<!-- normal as default; lognormal for signed coefficients (price); triangular/uniform for bounded support; the choice is a modeling decision with consequences (cite Train 2016 for what's at stake) -->
+The model adds one letter to the MNL. Utility is still linear with Gumbel errors, but the coefficient vector now belongs to the person:
 
-## The Mixed MNL Likelihood
+$$
+U_{ntj} = \x_{ntj}'\bfbeta_n + \varepsilon_{ntj}, \qquad
+\bfbeta_n \sim N(\bar{\bfbeta}, \Sigma), \qquad
+\varepsilon_{ntj} \iid \text{Gumbel}
+$$ {#eq-mixed-model}
 
-<!-- the panel structure again, now continuous: integrate over beta_n OUTSIDE the product over t (same lesson as ch 11); write the integral, then its simulator -->
+Each person draws their taste vector $\bfbeta_n$ once from a multivariate normal population --- mean $\bar{\bfbeta}$, covariance $\Sigma$ --- and carries it through all their choice tasks. The estimation targets are the *population* parameters $\bftheta = (\bar{\bfbeta}, \Sigma)$: what tastes are like on average, how much they vary, and (through $\Sigma$'s off-diagonals) which tastes travel together.
 
-## Simulating Mixed MNL Data
+Two readings of @eq-mixed-model coexist, and both matter:
 
-<!-- one extra line vs ch 7: draw beta_n per person via ch 2's Cholesky transform -->
+- **The taste-heterogeneity reading.** People genuinely differ --- some care intensely about price, some about brand --- and $\Sigma$ *is* the market's heterogeneity, the quantity segmentation and targeting monetize.
+- **The substitution-pattern reading.** Integrate the person-level MNL over the population and the resulting *aggregate* choice probabilities no longer satisfy IIA: people who like Apples are the same people across tasks, so alternatives similar in attribute space draw from overlapping customer pools --- correlation in utilities, achieved through coefficients rather than @sec-iia's nests, and *estimated* rather than pre-specified. This is the data-driven substitution flexibility that @sec-gev-family promised.
 
-## Coding the Simulated Log-Likelihood
+The second reading has a remarkable theoretical guarantee: @mcfaddentrain2000 prove that a mixed logit with appropriately chosen variables and mixing distribution can approximate *any* random utility model's choice probabilities arbitrarily well. Nested logit, probit, anything --- all live in the mixed logit's closure. The theorem is an existence result, not a recipe (it doesn't say the approximating specification is parsimonious or findable), but it explains the model's status: this is not one more family member; it is a universal chassis.
 
-<!-- draws per person, fixed across iterations; Cholesky parameterization to keep Sigma positive definite; wrap the vectorized ch 9 kernel -->
+## Specification Choices
+
+@eq-mixed-model as written leaves the modeler three decisions.
+
+**Which coefficients vary?** Nothing requires all $K$. Our specification --- motivated the way an applied researcher would --- lets tastes vary where taste variation is behaviorally plausible and commercially interesting: the Apple premium (Mac people versus the indifferent), the top-memory premium (power users versus browsers), and price sensitivity (budgets differ). The `dell`, `ram16`, and `screen15` coefficients stay fixed.[^1] In the notation below, `rc` indexes the random subset.
+
+[^1]: This is a genuine modeling choice, not a computational dodge --- though it is also computationally kind, and packages' "make everything random" default deserves more skepticism than it gets: each additional random coefficient must be *identified* from within-person choice consistency, and $T = 8$ tasks support only so much.
+
+**What mixing distribution?** Normal, here. Its known weakness: it puts mass on *both signs* of every random coefficient, so our specification implies some fraction of consumers with positive price coefficients --- about $\Phi(-1.2/0.7) \approx 4\%$ prefer expensive, all else equal, under the truth below. For this chapter we accept the blemish (it is small, and normality keeps every layer transparent); the standard fix --- a lognormal for the price coefficient, built from the @sec-draws transformation --- is deployed in @sec-hb-mnl, and more flexible mixing distributions are @sec-extensions material [@train2016].
+
+**Correlated or independent?** A full $\Sigma$ has $K_r(K_r+1)/2$ free elements for $K_r$ random coefficients, kept positive-definite by optimizing over its Cholesky factor $L$ (@sec-mvnorm --- estimate $L$'s elements, log-parameterizing the diagonal, and $\Sigma = LL'$ is valid by construction). We estimate the *diagonal* (independent) version: three standard deviations, log-parameterized as in @sec-msl. The reason is worth stating baldly now and remembering at the chapter's end: with MSL, every step toward a full covariance matrix costs real optimization pain, and we will tally that cost rather than pay it --- then watch @sec-hb-mnl get the full matrix essentially for free.
+
+The truth for our study:
+
+$$
+\bar{\bfbeta}^\ast = (0.5, \; 1.0, \; 0.6, \; 0.9, \; 0.3, \; -1.2), \qquad
+\sigma^\ast_{\texttt{apple}} = 0.8, \;\;
+\sigma^\ast_{\texttt{ram32}} = 0.6, \;\;
+\sigma^\ast_{\texttt{price}} = 0.7
+$$ {#eq-mixed-truth}
+
+Means as always (@eq-beta-true); spreads large enough that heterogeneity is the story, not a garnish --- a price-coefficient standard deviation of $0.7$ around $-1.2$ makes the market's price sensitivity range enormously.
+
+## The Likelihood
+
+Assemble it by the now-familiar hierarchy logic --- third time, so briskly. Conditional on $\bfbeta_n$: the person's sequence probability is a product of MNL terms over their tasks. Unconditional: integrate over the population,
+
+$$
+\Pr(\y_n \mid \bftheta) = \int \left[ \prod_{t=1}^{T} P_{nt}(\bfbeta) \right] f(\bfbeta \mid \bar{\bfbeta}, \Sigma) \, d\bfbeta
+$$ {#eq-mixed-lik}
+
+--- the integral outside the product (the person keeps their draw), no closed form (logit kernel against normal density, now in $K_r$ dimensions), and therefore MSL (@sec-msl): fixed standard-normal draws $\mathbf{z}_n^{(r)}$, mapped through candidate parameters, averaged on the log scale. The only novelty versus @sec-msl is dimension --- and dimension is precisely where simulation's advantage over quadrature lives (@sec-msl's footnote, now cashed).
+
+One bookkeeping note: @eq-mixed-lik is written over the full coefficient vector, but with `dell`, `ram16`, and `screen15` held fixed their "distribution" is a point mass --- those dimensions integrate out trivially, and the integral we actually simulate is $K_r = 3$-dimensional, over the random subset only.
+
+## Simulating the Study
+
+The simulator is @sec-sim-mnl's with one insertion --- person-level coefficient draws, via the location-scale map (diagonal case) that @sec-draws built:
+
+```{r}
+#| echo: false
+sim_laptop_design <- function(N, T, J) {
+    n_rows <- N * T * J
+    data.frame(
+        id    = rep(seq_len(N), each = T * J),
+        task  = rep(rep(seq_len(T), each = J), times = N),
+        alt   = rep(seq_len(J), times = N * T),
+        brand = factor(sample(c("Acer","Dell","Apple"), n_rows, replace = TRUE),
+                       levels = c("Acer","Dell","Apple")),
+        ram   = factor(sample(c("8","16","32"), n_rows, replace = TRUE),
+                       levels = c("8","16","32")),
+        screen = factor(sample(c("13","15"), n_rows, replace = TRUE),
+                        levels = c("13","15")),
+        price = round(runif(n_rows, min = 0.8, max = 2.4), 2)
+    )
+}
+halton <- function(n, base) {
+    r <- numeric(n)
+    for (i in 1:n) { f <- 1; x <- 0; k <- i
+        while (k > 0) { f <- f/base; x <- x + f*(k %% base); k <- k %/% base }
+        r[i] <- x }
+    r
+}
+```
+
+```{r}
+sim_mixed_data <- function(N, T, J, bar_beta, sd_beta, rc) {
+    df <- sim_laptop_design(N, T, J)
+    X  <- model.matrix(~ brand + ram + screen + price, data = df)[, -1]
+    K  <- ncol(X)
+    task_id <- cumsum(!duplicated(df[, c("id", "task")]))
+
+    betas <- matrix(rep(bar_beta, each = N), N, K)      # start everyone at the mean
+    for (k in rc) betas[, k] <- betas[, k] + sd_beta[k] * rnorm(N)
+
+    V   <- rowSums(X * betas[df$id, ])                  # each row: its person's beta
+    eps <- -log(-log(runif(nrow(df))))
+    U   <- V + eps
+    df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+    attr(df, "betas") <- betas                          # answer key, person level
+    df
+}
+
+set.seed(130)
+bar_true <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9,
+              screen15 = 0.3, price = -1.2)
+sd_true  <- c(0, 0.8, 0, 0.6, 0, 0.7)
+rc       <- c(2, 4, 6)                                  # apple, ram32, price
+
+d <- sim_mixed_data(N = 500, T = 8, J = 3, bar_true, sd_true, rc)
+X <- model.matrix(~ brand + ram + screen + price, data = d)[, -1]
+y <- d$choice
+task_id <- cumsum(!duplicated(d[, c("id", "task")]))
+id <- d$id; n_id <- 500; K <- ncol(X)
+```
+
+The `betas[df$id, ]` indexing is @sec-latentclass's row-specific-coefficients idiom with classes replaced by persons. And note we stored the true individual $\bfbeta_n$'s as an attribute --- @sec-limits will grade individual-level estimates against them.
+
+A heterogeneity-specific sanity check joins the usual battery: *within-person* behavior should be more consistent than the population is. Cheap version --- among people who ever bought the most expensive laptop in a task, what fraction of their other choices were also top-priced, versus the population rate?
+
+```{r}
+chosen <- d[d$choice == 1, ]
+top_price <- as.integer(ave(d$price, task_id, FUN = max)[d$choice == 1] == chosen$price)
+person_rate <- tapply(top_price, chosen$id, mean)
+c(population_rate = round(mean(top_price), 2),
+  sd_across_people = round(sd(person_rate), 2))
+```
+
+The across-person spread in that rate is far larger than binomial noise from eight tasks would produce --- persistent individual differences, visible before any model is fit. (The formal version of this check is the LM test of @mcfaddentrain2000; the informal version usually suffices to know heterogeneity is worth modeling.)
+
+## The Simulated Likelihood, With Its Gradient
+
+Here is the estimation engine --- the chapter's centerpiece function. It computes the simulated log-likelihood of @eq-mixed-lik and, optionally, its *analytic gradient*; the parameter vector stacks the $K$ means and the log standard deviations of the random subset:
+
+```{r}
+msl_mixed <- function(theta, y, X, task_id, id, n_id, rc, Z,
+                      want_grad = FALSE) {
+    K   <- ncol(X)
+    R   <- dim(Z)[2]
+    bar <- theta[1:K]
+    s   <- exp(theta[(K+1):(K+length(rc))])
+    id_of_task <- id[!duplicated(task_id)]
+
+    lseq <- matrix(0, n_id, R)          # log P(sequence_n | draw r)
+    if (want_grad) {
+        Gbar <- array(0, c(n_id, R, K))
+        Gs   <- array(0, c(n_id, R, length(rc)))
+    }
+    for (r in 1:R) {
+        betas <- matrix(rep(bar, each = n_id), n_id, K)
+        for (jj in seq_along(rc))
+            betas[, rc[jj]] <- betas[, rc[jj]] + s[jj] * Z[, r, jj]
+        V    <- rowSums(X * betas[id, ])
+        Vmax <- ave(V, task_id, FUN = max)
+        eV   <- exp(V - Vmax)
+        logP <- V - Vmax - log(rowsum(eV, task_id)[task_id])
+        lseq[, r] <- as.vector(rowsum(logP[y == 1], id_of_task))
+        if (want_grad) {
+            p  <- eV / rowsum(eV, task_id)[task_id]
+            Gp <- rowsum(X * (y - p), id)              # per-person MNL score
+            Gbar[, r, ] <- Gp                       # d l_nr / d bar_beta
+            for (jj in seq_along(rc))
+                Gs[, r, jj] <- Gp[, rc[jj]] * Z[, r, jj] * s[jj]   # d l_nr / d log sigma_jj
+        }
+    }
+    M  <- apply(lseq, 1, max)                          # log-mean-exp, per person
+    W  <- exp(lseq - M)
+    Sw <- rowSums(W)
+    ll <- sum(M + log(Sw / R))
+    if (!want_grad) return(ll)
+
+    w    <- W / Sw                                     # person-by-draw weights
+    gbar <- sapply(1:K, function(k) sum(w * Gbar[, , k]))
+    gs   <- sapply(seq_along(rc), function(jj) sum(w * Gs[, , jj]))
+    list(ll = ll, grad = c(gbar, gs))
+}
+```
+
+Read it in layers, because every layer is a callback with a job:
+
+- **The draw loop** (`for (r in 1:R)`) is @sec-performance's *tolerable* loop --- $R$ iterations, each one fully vectorized over all 12,000 rows via the @sec-mnl-mle kernel (max-shift, `rowsum()`, broadcast). Per-person sequence log-probabilities come from one more `rowsum(..., id_of_task)`.
+- **The log-mean-exp across draws** is @sec-msl's device: sequence probabilities are underflow bait, so the average over draws happens under a per-person max-shift.
+- **The gradient** is where the mathematics rewards attention. Write $\ell_{nr} = \log \prod_t P_{nt}(\bfbeta_n^{(r)})$ for person $n$'s log sequence probability under draw $r$ --- the code's `lseq[n, r]`, a *building block* of the log-likelihood, not the log-likelihood $\ell(\bftheta)$ itself. The simulated probability is $\widehat{\Pr}(\y_n) = \frac{1}{R}\sum_r e^{\ell_{nr}}$, and differentiating its log is one chain-rule line:
+$$\frac{\partial}{\partial \bftheta} \log \frac{1}{R}\sum_r e^{\ell_{nr}} = \frac{\sum_r e^{\ell_{nr}} \; \partial \ell_{nr}/\partial \bftheta}{\sum_{r'} e^{\ell_{nr'}}}$$
+(the $1/R$ cancels top and bottom) --- a *weighted average of per-draw gradients*, each draw's gradient counted by how well that draw explains the person:
+
+$$
+\frac{\partial}{\partial \bftheta} \log \widehat{\Pr}(\y_n)
+= \sum_{r} w_{nr} \, \frac{\partial \ell_{nr}}{\partial \bftheta},
+\qquad w_{nr} = \frac{e^{\ell_{nr}}}{\sum_{r'} e^{\ell_{nr'}}}
+$$ {#eq-msl-grad}
+
+  And the per-draw gradient is an old friend: with respect to the means it is exactly the MNL score $\mathbf{X}'(\y - \mathbf{p})$ of @eq-mnl-score, summed within person; with respect to $\log\sigma_k$, the chain rule appends a factor $z_{nk}^{(r)} \sigma_k$. Look hard at those weights $w_{nr}$: they are the conditional distribution of "which draw is this person" given their choices --- Bayes' rule, materializing inside a frequentist gradient, and the draw-level twin of @sec-latentclass's class weights $w_{nc}$ (@eq-estep): prior density times sequence likelihood, normalized, with "which class" replaced by "which draw." @sec-limits picks up precisely this object.
+
+Per standing policy, the analytic gradient faces the numerical audit before we trust it:
+
+```{r}
+set.seed(131)
+R <- 50
+Z <- array(0, c(n_id, R, length(rc)))
+bases <- c(2, 3, 5)                     # one prime base per random dimension
+for (jj in seq_along(rc)) {
+    h <- halton(n_id*R + 50, bases[jj])[-(1:50)]
+    Z[, , jj] <- qnorm(matrix((h + runif(1)) %% 1, n_id, R, byrow = TRUE))
+}
+
+theta_test <- c(bar_true, log(c(0.8, 0.6, 0.7)))
+g <- msl_mixed(theta_test, y, X, task_id, id, n_id, rc, Z, want_grad = TRUE)
+num <- sapply(1:9, function(k) {
+    e <- replace(numeric(9), k, 1e-5)
+    (msl_mixed(theta_test + e, y, X, task_id, id, n_id, rc, Z) -
+     msl_mixed(theta_test - e, y, X, task_id, id, n_id, rc, Z)) / 2e-5
+})
+round(rbind(analytic = g$grad, numeric = num), 4)
+```
+
+The draws live in an $N \times R \times K_r$ array: `Z[n, r, jj]` is person $n$'s $r$-th standard-normal draw for the `jj`-th *random* coefficient --- `jj` runs over the random subset `rc`, not over all $K$ columns of $X$; when the math writes $z_{nk}^{(r)}$, $k$ ranges over that subset only.
+
+Agreement to four decimals. (The draws: Halton with a different prime base per dimension --- the multivariate practice promised in @sec-msl --- person $n$ taking segment $n$ of each sequence, randomized by a common shift.)
 
 ## Estimation
 
-<!-- start values from the plain MNL; watch run times grow with draws and dimensions; uncorrelated vs correlated (K(K+1)/2 parameters) -->
+Starting values from the model hierarchy, per @sec-optimization's doctrine: the plain MNL supplies the means (it estimates a taste-blurred but well-centered version of $\bar{\bfbeta}$), and moderate spreads start the $\sigma$'s:
+
+```{r}
+#| cache: false
+loglik_mnl <- function(beta, y, X, task_id) {
+    V <- as.vector(X %*% beta); Vmax <- ave(V, task_id, FUN = max)
+    eV <- exp(V - Vmax)
+    sum((V - Vmax - log(rowsum(eV, task_id)[task_id]))[y == 1])
+}
+mnl <- optim(rep(0, K), loglik_mnl, y = y, X = X, task_id = task_id,
+             method = "BFGS", control = list(fnscale = -1))
+
+start <- c(mnl$par, rep(log(0.5), 3))
+fit50 <- optim(start,
+               fn = function(th, ...) msl_mixed(th, ...),
+               gr = function(th, ...) msl_mixed(th, ..., want_grad = TRUE)$grad,
+               y = y, X = X, task_id = task_id, id = id, n_id = n_id,
+               rc = rc, Z = Z,
+               method = "BFGS", control = list(fnscale = -1, maxit = 300))
+```
+
+The @sec-msl doubling diagnostic --- same fit at $R = 100$, warm-started from the $R = 50$ solution:
+
+```{r}
+#| cache: false
+set.seed(131)
+R2 <- 100
+Z2 <- array(0, c(n_id, R2, length(rc)))
+for (jj in seq_along(rc)) {
+    h <- halton(n_id*R2 + 50, bases[jj])[-(1:50)]
+    Z2[, , jj] <- qnorm(matrix((h + runif(1)) %% 1, n_id, R2, byrow = TRUE))
+}
+fit100 <- optim(fit50$par,
+                fn = function(th, ...) msl_mixed(th, ...),
+                gr = function(th, ...) msl_mixed(th, ..., want_grad = TRUE)$grad,
+                y = y, X = X, task_id = task_id, id = id, n_id = n_id,
+                rc = rc, Z = Z2,
+                method = "BFGS", control = list(fnscale = -1, maxit = 300),
+                hessian = TRUE)
+
+comp <- rbind(truth  = c(bar_true, log(sd_true[rc])),
+              R_50   = fit50$par,
+              R_100  = fit100$par)
+colnames(comp) <- c(colnames(X), paste0("log_sd_", colnames(X)[rc]))
+round(comp, 3)
+```
+
+Stable across the doubling --- $R = 100$ with Halton draws is enough here. The results table, with standard errors from the Hessian and the standard deviations mapped back from the log scale:
+
+```{r}
+se <- sqrt(diag(solve(-fit100$hessian)))
+tab <- data.frame(
+    truth    = c(bar_true, sd_true[rc]),
+    estimate = c(fit100$par[1:6], exp(fit100$par[7:9])),
+    se       = c(se[1:6], exp(fit100$par[7:9]) * se[7:9])   # delta method
+)
+rownames(tab) <- c(colnames(X), paste0("sd_", colnames(X)[rc]))
+round(tab, 3)
+```
+
+Read the table with @sec-mnl-recovery calibration in mind. The six means recover cleanly. The three standard deviations land within roughly one-and-a-half standard errors of the truth --- respectable, and note their standard errors are several times larger than the means': *spreads are simply harder to learn than centers*, because they live in second moments of behavior that eight tasks per person illuminate dimly. (The delta method converts log-scale standard errors to the $\sigma$ scale --- @sec-postestimation treats it properly.)
+
+## Validation Against `mlogit`
+
+`mlogit` estimates mixed logits through its `rpar` argument (naming which coefficients are random and their distribution), with Halton draws and panel weighting --- the same estimator, independently implemented:
+
+```{r}
+#| message: false
+library(dfidx)
+library(mlogit)
+
+md <- d
+md$chid <- task_id; md$choice <- as.logical(md$choice)
+md <- dfidx(md, idx = list(c("chid", "id"), "alt"))
+
+fit_ml <- mlogit(choice ~ brand + ram + screen + price | 0, data = md,
+                 rpar = c(brandApple = "n", ram32 = "n", price = "n"),
+                 R = 100, halton = NA, panel = TRUE)
+
+round(rbind(ours   = c(fit100$par[1:6], exp(fit100$par[7:9])),
+            mlogit = coef(fit_ml)[c(1:6, 7:9)]), 3)
+```
+
+Agreement to the second decimal across all nine parameters --- not exact to five decimals as in @sec-mnl-mle, and the reason is instructive rather than troubling: *two MSL implementations share a model but not a simulated likelihood.* Different Halton details (sequence handling, burn-in, person assignment) mean slightly different objective surfaces whose maximizers differ by simulation noise. Which raises exactly the right question: how big is that noise?
+
+## The Simulation-Error Audit
+
+@sec-msl promised an accounting of the error component that Hessian standard errors ignore: variation in $\hat{\bftheta}$ caused by the *draws*, not the data. Measuring it is refreshingly direct --- re-estimate on the *same data* with several independent draw sets (different randomizing shifts) and watch the estimates move:
+
+```{r}
+#| cache: false
+set.seed(132)
+audit <- sapply(1:5, function(a) {
+    Za <- array(0, c(n_id, R2, length(rc)))
+    for (jj in seq_along(rc)) {
+        h <- halton(n_id*R2 + 50, bases[jj])[-(1:50)]
+        Za[, , jj] <- qnorm(matrix((h + runif(1)) %% 1, n_id, R2, byrow = TRUE))
+    }
+    optim(fit100$par,
+          fn = function(th, ...) msl_mixed(th, ...),
+          gr = function(th, ...) msl_mixed(th, ..., want_grad = TRUE)$grad,
+          y = y, X = X, task_id = task_id, id = id, n_id = n_id,
+          rc = rc, Z = Za,
+          method = "BFGS", control = list(fnscale = -1, maxit = 300))$par
+})
+round(rbind(sim_error_sd  = apply(audit, 1, sd),
+            statistical_se = se), 4)
+```
+
+The verdict at $R = 100$ Halton draws: simulation-induced spread runs an order of magnitude (or more) below the statistical standard errors, for every parameter. The draws are not the binding source of uncertainty --- which is precisely what "enough draws" *means*, now measured rather than assumed. Keep this audit in your repertoire; it costs a few refits and answers the referee's question before it is asked.
 
 ## Feeling the Strain
 
-<!-- an honest accounting: run time, fragile convergence with full covariance, and the estimates are population parameters -- where are the individual betas? sets up ch 14 -->
+Now the honest tally this chapter owes @sec-limits. Everything above *worked* --- and consider what it took and how it scales.
 
-## Validation Against `mlogit`, `gmnl`, and `mixl`
+**Time.** Each $R = 100$ fit above runs in minutes --- entirely tolerable --- but the multiplication table is merciless: the multiple-starts discipline (@sec-latentclass; mixture-like surfaces lurk here too[^2]), the draw-doubling diagnostic, the simulation audit, and any replication study each multiply that base cost. Our modest audit already consumed five fits.
+
+**Dimension.** Three random coefficients, independent, cost 9 parameters. The full menu --- all six random, freely correlated --- costs $6 + 21 = 27$: a Cholesky factor's worth of curvature directions for BFGS to learn, each additional random dimension another prime base of Halton draws, another axis the fixed-$R$ simulator must cover. Published experience and our own arithmetic agree: MSL's practical frontier sits near "a handful of random coefficients, correlations chosen sparingly" [@train2001 documents run times; @sec-hb-mnl re-runs the comparison on our own hardware].
+
+[^2]: Non-concavity is milder here than in latent class models, but real: sign flips in $\sigma$ (resolved by our log-parameterization) and near-flat directions when a $\sigma$ approaches zero. Warm starts from the MNL, as above, are the standard hygiene.
+
+**And the deliverable gap.** After all of it, the output is $(\hat{\bar{\bfbeta}}, \hat\Sigma)$ --- the population. The individual $\bfbeta_n$'s that applications consume are not in the output; extracting them takes a second, bolt-on computation whose uncertainty accounting is awkward at best. That extraction --- what it can do, and exactly where it creaks --- is @sec-limits, the short chapter that closes the likelihood track and opens the Bayesian one.
+
+One housekeeping step first --- save everything the next chapters need (data with its answer key, estimates, draws):
+
+```{r}
+saveRDS(list(data = d, betas_true = attr(d, "betas"),
+             bar_true = bar_true, sd_true = sd_true, rc = rc,
+             theta_hat = fit100$par, Z = Z2),
+        file = "../data/mixed_study.rds")
+```
 
 ## Key Learnings
+
+- The mixed MNL gives each person a coefficient vector drawn from $N(\bar{\bfbeta}, \Sigma)$ (@eq-mixed-model): taste heterogeneity and data-driven, IIA-breaking substitution in one model --- with the McFadden--Train theorem certifying the family can mimic any RUM.
+- Specification is three real choices: which coefficients vary (identification from $T$ tasks is finite), what mixing distribution (normal's wrong-sign mass; lognormal fix deferred to @sec-hb-mnl), and whether correlations enter (Cholesky-parameterized when they do; diagonal here, with the full matrix deliberately deferred).
+- The likelihood is the @sec-latentclass hierarchy with an integral (@eq-mixed-lik), estimated by @sec-msl's MSL: fixed multivariate Halton draws (one prime base per dimension), log-mean-exp across draws, reparameterized scales.
+- The MSL gradient (@eq-msl-grad) is a *conditionally-weighted average of per-draw MNL scores* --- $\mathbf{X}'(\y-\mathbf{p})$ yet again, with Bayes-rule weights foreshadowing @sec-limits. Verified numerically, it cut fit times several-fold.
+- Recovery succeeded (spreads harder than means, visibly), `mlogit` agreed to the second decimal --- with the residual gap correctly attributed to simulation noise, which the five-refit audit then *measured*: an order of magnitude below statistical error at $R = 100$ Halton.
+- The strain is real and structural: costs multiply across starts, draws, audits, and dimensions ($27$ parameters for the full covariance), and the output is still only the population. The person-level deliverable --- and likelihood's last-mile problem with it --- is next.

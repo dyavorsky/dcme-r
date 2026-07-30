@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,15 +422,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#random-coefficients" id="toc-random-coefficients" class="nav-link active" data-scroll-target="#random-coefficients"><span class="header-section-number">13.1</span> Random Coefficients</a></li>
-  <li><a href="#choosing-mixing-distributions" id="toc-choosing-mixing-distributions" class="nav-link" data-scroll-target="#choosing-mixing-distributions"><span class="header-section-number">13.2</span> Choosing Mixing Distributions</a></li>
-  <li><a href="#the-mixed-mnl-likelihood" id="toc-the-mixed-mnl-likelihood" class="nav-link" data-scroll-target="#the-mixed-mnl-likelihood"><span class="header-section-number">13.3</span> The Mixed MNL Likelihood</a></li>
-  <li><a href="#simulating-mixed-mnl-data" id="toc-simulating-mixed-mnl-data" class="nav-link" data-scroll-target="#simulating-mixed-mnl-data"><span class="header-section-number">13.4</span> Simulating Mixed MNL Data</a></li>
-  <li><a href="#coding-the-simulated-log-likelihood" id="toc-coding-the-simulated-log-likelihood" class="nav-link" data-scroll-target="#coding-the-simulated-log-likelihood"><span class="header-section-number">13.5</span> Coding the Simulated Log-Likelihood</a></li>
+  <li><a href="#random-coefficients-two-ways-to-read-them" id="toc-random-coefficients-two-ways-to-read-them" class="nav-link active" data-scroll-target="#random-coefficients-two-ways-to-read-them"><span class="header-section-number">13.1</span> Random Coefficients, Two Ways to Read Them</a></li>
+  <li><a href="#specification-choices" id="toc-specification-choices" class="nav-link" data-scroll-target="#specification-choices"><span class="header-section-number">13.2</span> Specification Choices</a></li>
+  <li><a href="#the-likelihood" id="toc-the-likelihood" class="nav-link" data-scroll-target="#the-likelihood"><span class="header-section-number">13.3</span> The Likelihood</a></li>
+  <li><a href="#simulating-the-study" id="toc-simulating-the-study" class="nav-link" data-scroll-target="#simulating-the-study"><span class="header-section-number">13.4</span> Simulating the Study</a></li>
+  <li><a href="#the-simulated-likelihood-with-its-gradient" id="toc-the-simulated-likelihood-with-its-gradient" class="nav-link" data-scroll-target="#the-simulated-likelihood-with-its-gradient"><span class="header-section-number">13.5</span> The Simulated Likelihood, With Its Gradient</a></li>
   <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">13.6</span> Estimation</a></li>
-  <li><a href="#feeling-the-strain" id="toc-feeling-the-strain" class="nav-link" data-scroll-target="#feeling-the-strain"><span class="header-section-number">13.7</span> Feeling the Strain</a></li>
-  <li><a href="#validation-against-mlogit-gmnl-and-mixl" id="toc-validation-against-mlogit-gmnl-and-mixl" class="nav-link" data-scroll-target="#validation-against-mlogit-gmnl-and-mixl"><span class="header-section-number">13.8</span> Validation Against <code>mlogit</code>, <code>gmnl</code>, and <code>mixl</code></a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">13.9</span> Key Learnings</a></li>
+  <li><a href="#validation-against-mlogit" id="toc-validation-against-mlogit" class="nav-link" data-scroll-target="#validation-against-mlogit"><span class="header-section-number">13.7</span> Validation Against <code>mlogit</code></a></li>
+  <li><a href="#the-simulation-error-audit" id="toc-the-simulation-error-audit" class="nav-link" data-scroll-target="#the-simulation-error-audit"><span class="header-section-number">13.8</span> The Simulation-Error Audit</a></li>
+  <li><a href="#feeling-the-strain" id="toc-feeling-the-strain" class="nav-link" data-scroll-target="#feeling-the-strain"><span class="header-section-number">13.9</span> Feeling the Strain</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">13.10</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/13_mixed_msl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -373,42 +457,360 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 6 (esp §6.6 on MSL for mixed logit); McFadden-Train 2000 (Thm 1, estimation machinery); validation: mlogit/gmnl/mixl -->
-<section id="random-coefficients" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="random-coefficients"><span class="header-section-number">13.1</span> Random Coefficients</h2>
-<!-- beta_n drawn from a population distribution; two readings of the same model: taste heterogeneity, or error components that break IIA; MMNL approximates any RUM (McFadden-Train Thm 1, stated not proved) -->
+<p>This chapter assembles the summit model of the likelihood track. The <strong>mixed multinomial logit</strong> — MNL choice behavior with coefficients that vary continuously across people — is where Part II has been heading since heterogeneity entered in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>: the discrete classes melt into a continuous distribution, the random intercept of <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> grows into a random <em>vector</em>, and every tool we have built gets used at once. It is also, not coincidentally, the single most-used model in applied choice work, from transportation demand to virtually every commercial conjoint study run today <span class="citation" data-cites="mcfaddentrain2000 train2009">(<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">McFadden and Train 2000</a>; <a href="references.html#ref-train2009" role="doc-biblioref">K. E. Train 2009</a>, Ch. 6)</span>.</p>
+<p>By the end of the chapter the model will be simulated, estimated by MSL, validated against <code>mlogit</code>, and audited for simulation error — and we will have felt, concretely, where the approach strains. That strain is data for <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>.</p>
+<section id="random-coefficients-two-ways-to-read-them" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="random-coefficients-two-ways-to-read-them"><span class="header-section-number">13.1</span> Random Coefficients, Two Ways to Read Them</h2>
+<p>The model adds one letter to the MNL. Utility is still linear with Gumbel errors, but the coefficient vector now belongs to the person:</p>
+<p><span id="eq-mixed-model"><span class="math display">\[
+U_{ntj} = \mathbf{x}_{ntj}'\boldsymbol{\beta}_n + \varepsilon_{ntj}, \qquad
+\boldsymbol{\beta}_n \sim N(\bar{\boldsymbol{\beta}}, \Sigma), \qquad
+\varepsilon_{ntj} \stackrel{iid}{\sim}\text{Gumbel}
+\tag{13.1}\]</span></span></p>
+<p>Each person draws their taste vector <span class="math inline">\(\boldsymbol{\beta}_n\)</span> once from a multivariate normal population — mean <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>, covariance <span class="math inline">\(\Sigma\)</span> — and carries it through all their choice tasks. The estimation targets are the <em>population</em> parameters <span class="math inline">\(\boldsymbol{\theta}= (\bar{\boldsymbol{\beta}}, \Sigma)\)</span>: what tastes are like on average, how much they vary, and (through <span class="math inline">\(\Sigma\)</span>’s off-diagonals) which tastes travel together.</p>
+<p>Two readings of <a href="#eq-mixed-model" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> coexist, and both matter:</p>
+<ul>
+<li><strong>The taste-heterogeneity reading.</strong> People genuinely differ — some care intensely about price, some about brand — and <span class="math inline">\(\Sigma\)</span> <em>is</em> the market’s heterogeneity, the quantity segmentation and targeting monetize.</li>
+<li><strong>The substitution-pattern reading.</strong> Integrate the person-level MNL over the population and the resulting <em>aggregate</em> choice probabilities no longer satisfy IIA: people who like Apples are the same people across tasks, so alternatives similar in attribute space draw from overlapping customer pools — correlation in utilities, achieved through coefficients rather than <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>’s nests, and <em>estimated</em> rather than pre-specified. This is the data-driven substitution flexibility that <a href="10_iia.html#sec-gev-family" class="quarto-xref"><span>Section 10.8</span></a> promised.</li>
+</ul>
+<p>The second reading has a remarkable theoretical guarantee: <span class="citation" data-cites="mcfaddentrain2000">McFadden and Train (<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">2000</a>)</span> prove that a mixed logit with appropriately chosen variables and mixing distribution can approximate <em>any</em> random utility model’s choice probabilities arbitrarily well. Nested logit, probit, anything — all live in the mixed logit’s closure. The theorem is an existence result, not a recipe (it doesn’t say the approximating specification is parsimonious or findable), but it explains the model’s status: this is not one more family member; it is a universal chassis.</p>
 </section>
-<section id="choosing-mixing-distributions" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="choosing-mixing-distributions"><span class="header-section-number">13.2</span> Choosing Mixing Distributions</h2>
-<!-- normal as default; lognormal for signed coefficients (price); triangular/uniform for bounded support; the choice is a modeling decision with consequences (cite Train 2016 for what's at stake) -->
+<section id="specification-choices" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="specification-choices"><span class="header-section-number">13.2</span> Specification Choices</h2>
+<p><a href="#eq-mixed-model" class="quarto-xref">Equation&nbsp;<span>13.1</span></a> as written leaves the modeler three decisions.</p>
+<p><strong>Which coefficients vary?</strong> Nothing requires all <span class="math inline">\(K\)</span>. Our specification — motivated the way an applied researcher would — lets tastes vary where taste variation is behaviorally plausible and commercially interesting: the Apple premium (Mac people versus the indifferent), the top-memory premium (power users versus browsers), and price sensitivity (budgets differ). The <code>dell</code>, <code>ram16</code>, and <code>screen15</code> coefficients stay fixed.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> In the notation below, <code>rc</code> indexes the random subset.</p>
+<p><strong>What mixing distribution?</strong> Normal, here. Its known weakness: it puts mass on <em>both signs</em> of every random coefficient, so our specification implies some fraction of consumers with positive price coefficients — about <span class="math inline">\(\Phi(-1.2/0.7) \approx 4\%\)</span> prefer expensive, all else equal, under the truth below. For this chapter we accept the blemish (it is small, and normality keeps every layer transparent); the standard fix — a lognormal for the price coefficient, built from the <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> transformation — is deployed in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>, and more flexible mixing distributions are <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a> material <span class="citation" data-cites="train2016">(<a href="references.html#ref-train2016" role="doc-biblioref">K. Train 2016</a>)</span>.</p>
+<p><strong>Correlated or independent?</strong> A full <span class="math inline">\(\Sigma\)</span> has <span class="math inline">\(K_r(K_r+1)/2\)</span> free elements for <span class="math inline">\(K_r\)</span> random coefficients, kept positive-definite by optimizing over its Cholesky factor <span class="math inline">\(L\)</span> (<a href="02_draws.html#sec-mvnorm" class="quarto-xref"><span>Section 2.4</span></a> — estimate <span class="math inline">\(L\)</span>’s elements, log-parameterizing the diagonal, and <span class="math inline">\(\Sigma = LL'\)</span> is valid by construction). We estimate the <em>diagonal</em> (independent) version: three standard deviations, log-parameterized as in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>. The reason is worth stating baldly now and remembering at the chapter’s end: with MSL, every step toward a full covariance matrix costs real optimization pain, and we will tally that cost rather than pay it — then watch <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> get the full matrix essentially for free.</p>
+<p>The truth for our study:</p>
+<p><span id="eq-mixed-truth"><span class="math display">\[
+\bar{\boldsymbol{\beta}}^\ast = (0.5, \; 1.0, \; 0.6, \; 0.9, \; 0.3, \; -1.2), \qquad
+\sigma^\ast_{\texttt{apple}} = 0.8, \;\;
+\sigma^\ast_{\texttt{ram32}} = 0.6, \;\;
+\sigma^\ast_{\texttt{price}} = 0.7
+\tag{13.2}\]</span></span></p>
+<p>Means as always (<a href="07_mnl.html#eq-beta-true" class="quarto-xref">Equation&nbsp;<span>7.6</span></a>); spreads large enough that heterogeneity is the story, not a garnish — a price-coefficient standard deviation of <span class="math inline">\(0.7\)</span> around <span class="math inline">\(-1.2\)</span> makes the market’s price sensitivity range enormously.</p>
 </section>
-<section id="the-mixed-mnl-likelihood" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="the-mixed-mnl-likelihood"><span class="header-section-number">13.3</span> The Mixed MNL Likelihood</h2>
-<!-- the panel structure again, now continuous: integrate over beta_n OUTSIDE the product over t (same lesson as ch 11); write the integral, then its simulator -->
+<section id="the-likelihood" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="the-likelihood"><span class="header-section-number">13.3</span> The Likelihood</h2>
+<p>Assemble it by the now-familiar hierarchy logic — third time, so briskly. Conditional on <span class="math inline">\(\boldsymbol{\beta}_n\)</span>: the person’s sequence probability is a product of MNL terms over their tasks. Unconditional: integrate over the population,</p>
+<p><span id="eq-mixed-lik"><span class="math display">\[
+\Pr(\mathbf{y}_n \mid \boldsymbol{\theta}) = \int \left[ \prod_{t=1}^{T} P_{nt}(\boldsymbol{\beta}) \right] f(\boldsymbol{\beta}\mid \bar{\boldsymbol{\beta}}, \Sigma) \, d\boldsymbol{\beta}
+\tag{13.3}\]</span></span></p>
+<p>— the integral outside the product (the person keeps their draw), no closed form (logit kernel against normal density, now in <span class="math inline">\(K_r\)</span> dimensions), and therefore MSL (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>): fixed standard-normal draws <span class="math inline">\(\mathbf{z}_n^{(r)}\)</span>, mapped through candidate parameters, averaged on the log scale. The only novelty versus <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> is dimension — and dimension is precisely where simulation’s advantage over quadrature lives (<a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>’s footnote, now cashed).</p>
+<p>One bookkeeping note: <a href="#eq-mixed-lik" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> is written over the full coefficient vector, but with <code>dell</code>, <code>ram16</code>, and <code>screen15</code> held fixed their “distribution” is a point mass — those dimensions integrate out trivially, and the integral we actually simulate is <span class="math inline">\(K_r = 3\)</span>-dimensional, over the random subset only.</p>
 </section>
-<section id="simulating-mixed-mnl-data" class="level2" data-number="13.4">
-<h2 data-number="13.4" class="anchored" data-anchor-id="simulating-mixed-mnl-data"><span class="header-section-number">13.4</span> Simulating Mixed MNL Data</h2>
-<!-- one extra line vs ch 7: draw beta_n per person via ch 2's Cholesky transform -->
+<section id="simulating-the-study" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="simulating-the-study"><span class="header-section-number">13.4</span> Simulating the Study</h2>
+<p>The simulator is <a href="07_mnl.html#sec-sim-mnl" class="quarto-xref"><span>Section 7.6</span></a>’s with one insertion — person-level coefficient draws, via the location-scale map (diagonal case) that <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> built:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sim_mixed_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, J, bar_beta, sd_beta, rc) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">sim_laptop_design</span>(N, T, J)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    X  <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    K  <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    betas <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(bar_beta, <span class="at">each =</span> N), N, K)      <span class="co"># start everyone at the mean</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> rc) betas[, k] <span class="ot">&lt;-</span> betas[, k] <span class="sc">+</span> sd_beta[k] <span class="sc">*</span> <span class="fu">rnorm</span>(N)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    V   <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> betas[df<span class="sc">$</span>id, ])                  <span class="co"># each row: its person's beta</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">log</span>(<span class="sc">-</span><span class="fu">log</span>(<span class="fu">runif</span>(<span class="fu">nrow</span>(df))))</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    U   <span class="ot">&lt;-</span> V <span class="sc">+</span> eps</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(U, task_id, <span class="at">FUN =</span> <span class="cf">function</span>(u) u <span class="sc">==</span> <span class="fu">max</span>(u)))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">attr</span>(df, <span class="st">"betas"</span>) <span class="ot">&lt;-</span> betas                          <span class="co"># answer key, person level</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">130</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>bar_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>              <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>sd_true  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.8</span>, <span class="dv">0</span>, <span class="fl">0.6</span>, <span class="dv">0</span>, <span class="fl">0.7</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>rc       <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>)                                  <span class="co"># apple, ram32, price</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">sim_mixed_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">J =</span> <span class="dv">3</span>, bar_true, sd_true, rc)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> d)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> d<span class="sc">$</span>choice</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(d[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>id <span class="ot">&lt;-</span> d<span class="sc">$</span>id; n_id <span class="ot">&lt;-</span> <span class="dv">500</span>; K <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>betas[df$id, ]</code> indexing is <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s row-specific-coefficients idiom with classes replaced by persons. And note we stored the true individual <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s as an attribute — <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> will grade individual-level estimates against them.</p>
+<p>A heterogeneity-specific sanity check joins the usual battery: <em>within-person</em> behavior should be more consistent than the population is. Cheap version — among people who ever bought the most expensive laptop in a task, what fraction of their other choices were also top-priced, versus the population rate?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>chosen <span class="ot">&lt;-</span> d[d<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>top_price <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">ave</span>(d<span class="sc">$</span>price, task_id, <span class="at">FUN =</span> max)[d<span class="sc">$</span>choice <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">==</span> chosen<span class="sc">$</span>price)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>person_rate <span class="ot">&lt;-</span> <span class="fu">tapply</span>(top_price, chosen<span class="sc">$</span>id, mean)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">population_rate =</span> <span class="fu">round</span>(<span class="fu">mean</span>(top_price), <span class="dv">2</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">sd_across_people =</span> <span class="fu">round</span>(<span class="fu">sd</span>(person_rate), <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> population_rate sd_across_people 
+            0.21             0.15 </code></pre>
+</div>
+</div>
+<p>The across-person spread in that rate is far larger than binomial noise from eight tasks would produce — persistent individual differences, visible before any model is fit. (The formal version of this check is the LM test of <span class="citation" data-cites="mcfaddentrain2000">McFadden and Train (<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">2000</a>)</span>; the informal version usually suffices to know heterogeneity is worth modeling.)</p>
 </section>
-<section id="coding-the-simulated-log-likelihood" class="level2" data-number="13.5">
-<h2 data-number="13.5" class="anchored" data-anchor-id="coding-the-simulated-log-likelihood"><span class="header-section-number">13.5</span> Coding the Simulated Log-Likelihood</h2>
-<!-- draws per person, fixed across iterations; Cholesky parameterization to keep Sigma positive definite; wrap the vectorized ch 9 kernel -->
+<section id="the-simulated-likelihood-with-its-gradient" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="the-simulated-likelihood-with-its-gradient"><span class="header-section-number">13.5</span> The Simulated Likelihood, With Its Gradient</h2>
+<p>Here is the estimation engine — the chapter’s centerpiece function. It computes the simulated log-likelihood of <a href="#eq-mixed-lik" class="quarto-xref">Equation&nbsp;<span>13.3</span></a> and, optionally, its <em>analytic gradient</em>; the parameter vector stacks the <span class="math inline">\(K\)</span> means and the log standard deviations of the random subset:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>msl_mixed <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, X, task_id, id, n_id, rc, Z,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">want_grad =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    K   <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    R   <span class="ot">&lt;-</span> <span class="fu">dim</span>(Z)[<span class="dv">2</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    bar <span class="ot">&lt;-</span> theta[<span class="dv">1</span><span class="sc">:</span>K]</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    s   <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta[(K<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>(K<span class="sc">+</span><span class="fu">length</span>(rc))])</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    id_of_task <span class="ot">&lt;-</span> id[<span class="sc">!</span><span class="fu">duplicated</span>(task_id)]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    lseq <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, n_id, R)          <span class="co"># log P(sequence_n | draw r)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (want_grad) {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        Gbar <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(n_id, R, K))</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        Gs   <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(n_id, R, <span class="fu">length</span>(rc)))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        betas <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(bar, <span class="at">each =</span> n_id), n_id, K)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc))</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            betas[, rc[jj]] <span class="ot">&lt;-</span> betas[, rc[jj]] <span class="sc">+</span> s[jj] <span class="sc">*</span> Z[, r, jj]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        V    <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(X <span class="sc">*</span> betas[id, ])</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        eV   <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        logP <span class="ot">&lt;-</span> V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id])</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        lseq[, r] <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(logP[y <span class="sc">==</span> <span class="dv">1</span>], id_of_task))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (want_grad) {</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>            p  <span class="ot">&lt;-</span> eV <span class="sc">/</span> <span class="fu">rowsum</span>(eV, task_id)[task_id]</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>            Gp <span class="ot">&lt;-</span> <span class="fu">rowsum</span>(X <span class="sc">*</span> (y <span class="sc">-</span> p), id)              <span class="co"># per-person MNL score</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>            Gbar[, r, ] <span class="ot">&lt;-</span> Gp                       <span class="co"># d l_nr / d bar_beta</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc))</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                Gs[, r, jj] <span class="ot">&lt;-</span> Gp[, rc[jj]] <span class="sc">*</span> Z[, r, jj] <span class="sc">*</span> s[jj]   <span class="co"># d l_nr / d log sigma_jj</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    M  <span class="ot">&lt;-</span> <span class="fu">apply</span>(lseq, <span class="dv">1</span>, max)                          <span class="co"># log-mean-exp, per person</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    W  <span class="ot">&lt;-</span> <span class="fu">exp</span>(lseq <span class="sc">-</span> M)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    Sw <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(W)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    ll <span class="ot">&lt;-</span> <span class="fu">sum</span>(M <span class="sc">+</span> <span class="fu">log</span>(Sw <span class="sc">/</span> R))</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>want_grad) <span class="fu">return</span>(ll)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    w    <span class="ot">&lt;-</span> W <span class="sc">/</span> Sw                                     <span class="co"># person-by-draw weights</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    gbar <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>K, <span class="cf">function</span>(k) <span class="fu">sum</span>(w <span class="sc">*</span> Gbar[, , k]))</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    gs   <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">seq_along</span>(rc), <span class="cf">function</span>(jj) <span class="fu">sum</span>(w <span class="sc">*</span> Gs[, , jj]))</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(<span class="at">ll =</span> ll, <span class="at">grad =</span> <span class="fu">c</span>(gbar, gs))</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Read it in layers, because every layer is a callback with a job:</p>
+<ul>
+<li><strong>The draw loop</strong> (<code>for (r in 1:R)</code>) is <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s <em>tolerable</em> loop — <span class="math inline">\(R\)</span> iterations, each one fully vectorized over all 12,000 rows via the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> kernel (max-shift, <code>rowsum()</code>, broadcast). Per-person sequence log-probabilities come from one more <code>rowsum(..., id_of_task)</code>.</li>
+<li><strong>The log-mean-exp across draws</strong> is <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>’s device: sequence probabilities are underflow bait, so the average over draws happens under a per-person max-shift.</li>
+<li><strong>The gradient</strong> is where the mathematics rewards attention. Write <span class="math inline">\(\ell_{nr} = \log \prod_t P_{nt}(\boldsymbol{\beta}_n^{(r)})\)</span> for person <span class="math inline">\(n\)</span>’s log sequence probability under draw <span class="math inline">\(r\)</span> — the code’s <code>lseq[n, r]</code>, a <em>building block</em> of the log-likelihood, not the log-likelihood <span class="math inline">\(\ell(\boldsymbol{\theta})\)</span> itself. The simulated probability is <span class="math inline">\(\widehat{\Pr}(\mathbf{y}_n) = \frac{1}{R}\sum_r e^{\ell_{nr}}\)</span>, and differentiating its log is one chain-rule line: <span class="math display">\[\frac{\partial}{\partial \boldsymbol{\theta}} \log \frac{1}{R}\sum_r e^{\ell_{nr}} = \frac{\sum_r e^{\ell_{nr}} \; \partial \ell_{nr}/\partial \boldsymbol{\theta}}{\sum_{r'} e^{\ell_{nr'}}}\]</span> (the <span class="math inline">\(1/R\)</span> cancels top and bottom) — a <em>weighted average of per-draw gradients</em>, each draw’s gradient counted by how well that draw explains the person:</li>
+</ul>
+<p><span id="eq-msl-grad"><span class="math display">\[
+\frac{\partial}{\partial \boldsymbol{\theta}} \log \widehat{\Pr}(\mathbf{y}_n)
+= \sum_{r} w_{nr} \, \frac{\partial \ell_{nr}}{\partial \boldsymbol{\theta}},
+\qquad w_{nr} = \frac{e^{\ell_{nr}}}{\sum_{r'} e^{\ell_{nr'}}}
+\tag{13.4}\]</span></span></p>
+<p>And the per-draw gradient is an old friend: with respect to the means it is exactly the MNL score <span class="math inline">\(\mathbf{X}'(\mathbf{y}- \mathbf{p})\)</span> of <a href="08_mnl_mle.html#eq-mnl-score" class="quarto-xref">Equation&nbsp;<span>8.4</span></a>, summed within person; with respect to <span class="math inline">\(\log\sigma_k\)</span>, the chain rule appends a factor <span class="math inline">\(z_{nk}^{(r)} \sigma_k\)</span>. Look hard at those weights <span class="math inline">\(w_{nr}\)</span>: they are the conditional distribution of “which draw is this person” given their choices — Bayes’ rule, materializing inside a frequentist gradient, and the draw-level twin of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s class weights <span class="math inline">\(w_{nc}\)</span> (<a href="11_latentclass.html#eq-estep" class="quarto-xref">Equation&nbsp;<span>11.3</span></a>): prior density times sequence likelihood, normalized, with “which class” replaced by “which draw.” <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a> picks up precisely this object.</p>
+<p>Per standing policy, the analytic gradient faces the numerical audit before we trust it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">131</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">50</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(n_id, R, <span class="fu">length</span>(rc)))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>bases <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>)                     <span class="co"># one prime base per random dimension</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc)) {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">&lt;-</span> <span class="fu">halton</span>(n_id<span class="sc">*</span>R <span class="sc">+</span> <span class="dv">50</span>, bases[jj])[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    Z[, , jj] <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">matrix</span>((h <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)) <span class="sc">%%</span> <span class="dv">1</span>, n_id, R, <span class="at">byrow =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>theta_test <span class="ot">&lt;-</span> <span class="fu">c</span>(bar_true, <span class="fu">log</span>(<span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.6</span>, <span class="fl">0.7</span>)))</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">msl_mixed</span>(theta_test, y, X, task_id, id, n_id, rc, Z, <span class="at">want_grad =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>num <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="cf">function</span>(k) {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    e <span class="ot">&lt;-</span> <span class="fu">replace</span>(<span class="fu">numeric</span>(<span class="dv">9</span>), k, <span class="fl">1e-5</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    (<span class="fu">msl_mixed</span>(theta_test <span class="sc">+</span> e, y, X, task_id, id, n_id, rc, Z) <span class="sc">-</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>     <span class="fu">msl_mixed</span>(theta_test <span class="sc">-</span> e, y, X, task_id, id, n_id, rc, Z)) <span class="sc">/</span> <span class="fl">2e-5</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">analytic =</span> g<span class="sc">$</span>grad, <span class="at">numeric =</span> num), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            [,1]   [,2]   [,3]    [,4]   [,5]    [,6]     [,7]    [,8]     [,9]
+analytic 14.5077 6.6827 8.2526 -2.1064 21.196 -9.0848 -15.7974 -6.0929 -13.5267
+numeric  14.5077 6.6827 8.2526 -2.1064 21.196 -9.0848 -15.7974 -6.0929 -13.5267</code></pre>
+</div>
+</div>
+<p>The draws live in an <span class="math inline">\(N \times R \times K_r\)</span> array: <code>Z[n, r, jj]</code> is person <span class="math inline">\(n\)</span>’s <span class="math inline">\(r\)</span>-th standard-normal draw for the <code>jj</code>-th <em>random</em> coefficient — <code>jj</code> runs over the random subset <code>rc</code>, not over all <span class="math inline">\(K\)</span> columns of <span class="math inline">\(X\)</span>; when the math writes <span class="math inline">\(z_{nk}^{(r)}\)</span>, <span class="math inline">\(k\)</span> ranges over that subset only.</p>
+<p>Agreement to four decimals. (The draws: Halton with a different prime base per dimension — the multivariate practice promised in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> — person <span class="math inline">\(n\)</span> taking segment <span class="math inline">\(n\)</span> of each sequence, randomized by a common shift.)</p>
 </section>
 <section id="estimation" class="level2" data-number="13.6">
 <h2 data-number="13.6" class="anchored" data-anchor-id="estimation"><span class="header-section-number">13.6</span> Estimation</h2>
-<!-- start values from the plain MNL; watch run times grow with draws and dimensions; uncorrelated vs correlated (K(K+1)/2 parameters) -->
+<p>Starting values from the model hierarchy, per <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>’s doctrine: the plain MNL supplies the means (it estimates a taste-blurred but well-centered version of <span class="math inline">\(\bar{\boldsymbol{\beta}}\)</span>), and moderate spreads start the <span class="math inline">\(\sigma\)</span>’s:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>loglik_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta); Vmax <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    eV <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>mnl <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, K), loglik_mnl, <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(mnl<span class="sc">$</span>par, <span class="fu">rep</span>(<span class="fu">log</span>(<span class="fl">0.5</span>), <span class="dv">3</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>fit50 <span class="ot">&lt;-</span> <span class="fu">optim</span>(start,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">fn =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ...),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">gr =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ..., <span class="at">want_grad =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>grad,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id, <span class="at">id =</span> id, <span class="at">n_id =</span> n_id,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">rc =</span> rc, <span class="at">Z =</span> Z,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">300</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> doubling diagnostic — same fit at <span class="math inline">\(R = 100\)</span>, warm-started from the <span class="math inline">\(R = 50\)</span> solution:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">131</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>R2 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Z2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(n_id, R2, <span class="fu">length</span>(rc)))</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc)) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    h <span class="ot">&lt;-</span> <span class="fu">halton</span>(n_id<span class="sc">*</span>R2 <span class="sc">+</span> <span class="dv">50</span>, bases[jj])[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)]</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    Z2[, , jj] <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">matrix</span>((h <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)) <span class="sc">%%</span> <span class="dv">1</span>, n_id, R2, <span class="at">byrow =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>fit100 <span class="ot">&lt;-</span> <span class="fu">optim</span>(fit50<span class="sc">$</span>par,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">fn =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ...),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">gr =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ..., <span class="at">want_grad =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>grad,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id, <span class="at">id =</span> id, <span class="at">n_id =</span> n_id,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">rc =</span> rc, <span class="at">Z =</span> Z2,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">300</span>),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>comp <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">truth  =</span> <span class="fu">c</span>(bar_true, <span class="fu">log</span>(sd_true[rc])),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">R_50   =</span> fit50<span class="sc">$</span>par,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>              <span class="at">R_100  =</span> fit100<span class="sc">$</span>par)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(comp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="fu">paste0</span>(<span class="st">"log_sd_"</span>, <span class="fu">colnames</span>(X)[rc]))</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(comp, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      brandDell brandApple ram16 ram32 screen15  price log_sd_brandApple
+truth      0.50      1.000 0.600 0.900    0.300 -1.200            -0.223
+R_50       0.55      1.037 0.614 0.892    0.336 -1.203            -0.402
+R_100      0.55      1.034 0.615 0.891    0.337 -1.217            -0.388
+      log_sd_ram32 log_sd_price
+truth       -0.511       -0.357
+R_50        -0.660       -0.620
+R_100       -0.611       -0.656</code></pre>
+</div>
+</div>
+<p>Stable across the doubling — <span class="math inline">\(R = 100\)</span> with Halton draws is enough here. The results table, with standard errors from the Hessian and the standard deviations mapped back from the log scale:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit100<span class="sc">$</span>hessian)))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">truth    =</span> <span class="fu">c</span>(bar_true, sd_true[rc]),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate =</span> <span class="fu">c</span>(fit100<span class="sc">$</span>par[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="fu">exp</span>(fit100<span class="sc">$</span>par[<span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>])),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">se       =</span> <span class="fu">c</span>(se[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="fu">exp</span>(fit100<span class="sc">$</span>par[<span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>]) <span class="sc">*</span> se[<span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>])   <span class="co"># delta method</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(tab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="fu">paste0</span>(<span class="st">"sd_"</span>, <span class="fu">colnames</span>(X)[rc]))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(tab, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              truth estimate    se
+brandDell       0.5    0.550 0.056
+brandApple      1.0    1.034 0.066
+ram16           0.6    0.615 0.056
+ram32           0.9    0.891 0.062
+screen15        0.3    0.337 0.044
+price          -1.2   -1.217 0.060
+sd_brandApple   0.8    0.679 0.080
+sd_ram32        0.6    0.543 0.085
+sd_price        0.7    0.519 0.099</code></pre>
+</div>
+</div>
+<p>Read the table with <a href="08_mnl_mle.html#sec-mnl-recovery" class="quarto-xref"><span>Section 8.8</span></a> calibration in mind. The six means recover cleanly. The three standard deviations land within roughly one-and-a-half standard errors of the truth — respectable, and note their standard errors are several times larger than the means’: <em>spreads are simply harder to learn than centers</em>, because they live in second moments of behavior that eight tasks per person illuminate dimly. (The delta method converts log-scale standard errors to the <span class="math inline">\(\sigma\)</span> scale — <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a> treats it properly.)</p>
 </section>
-<section id="feeling-the-strain" class="level2" data-number="13.7">
-<h2 data-number="13.7" class="anchored" data-anchor-id="feeling-the-strain"><span class="header-section-number">13.7</span> Feeling the Strain</h2>
-<!-- an honest accounting: run time, fragile convergence with full covariance, and the estimates are population parameters -- where are the individual betas? sets up ch 14 -->
+<section id="validation-against-mlogit" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="validation-against-mlogit"><span class="header-section-number">13.7</span> Validation Against <code>mlogit</code></h2>
+<p><code>mlogit</code> estimates mixed logits through its <code>rpar</code> argument (naming which coefficients are random and their distribution), with Halton draws and panel weighting — the same estimator, independently implemented:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dfidx)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlogit)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> d</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>md<span class="sc">$</span>chid <span class="ot">&lt;-</span> task_id; md<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(md<span class="sc">$</span>choice)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">dfidx</span>(md, <span class="at">idx =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"chid"</span>, <span class="st">"id"</span>), <span class="st">"alt"</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>fit_ml <span class="ot">&lt;-</span> <span class="fu">mlogit</span>(choice <span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price <span class="sc">|</span> <span class="dv">0</span>, <span class="at">data =</span> md,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                 <span class="at">rpar =</span> <span class="fu">c</span>(<span class="at">brandApple =</span> <span class="st">"n"</span>, <span class="at">ram32 =</span> <span class="st">"n"</span>, <span class="at">price =</span> <span class="st">"n"</span>),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">R =</span> <span class="dv">100</span>, <span class="at">halton =</span> <span class="cn">NA</span>, <span class="at">panel =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">ours   =</span> <span class="fu">c</span>(fit100<span class="sc">$</span>par[<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>], <span class="fu">exp</span>(fit100<span class="sc">$</span>par[<span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>])),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">mlogit =</span> <span class="fu">coef</span>(fit_ml)[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)]), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       brandDell brandApple ram16 ram32 screen15  price sd.brandApple sd.ram32
+ours       0.550      1.034 0.615 0.891    0.337 -1.217         0.679    0.543
+mlogit     0.551      1.036 0.614 0.889    0.337 -1.214         0.681    0.537
+       sd.price
+ours      0.519
+mlogit    0.526</code></pre>
+</div>
+</div>
+<p>Agreement to the second decimal across all nine parameters — not exact to five decimals as in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>, and the reason is instructive rather than troubling: <em>two MSL implementations share a model but not a simulated likelihood.</em> Different Halton details (sequence handling, burn-in, person assignment) mean slightly different objective surfaces whose maximizers differ by simulation noise. Which raises exactly the right question: how big is that noise?</p>
 </section>
-<section id="validation-against-mlogit-gmnl-and-mixl" class="level2" data-number="13.8">
-<h2 data-number="13.8" class="anchored" data-anchor-id="validation-against-mlogit-gmnl-and-mixl"><span class="header-section-number">13.8</span> Validation Against <code>mlogit</code>, <code>gmnl</code>, and <code>mixl</code></h2>
+<section id="the-simulation-error-audit" class="level2" data-number="13.8">
+<h2 data-number="13.8" class="anchored" data-anchor-id="the-simulation-error-audit"><span class="header-section-number">13.8</span> The Simulation-Error Audit</h2>
+<p><a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> promised an accounting of the error component that Hessian standard errors ignore: variation in <span class="math inline">\(\hat{\boldsymbol{\theta}}\)</span> caused by the <em>draws</em>, not the data. Measuring it is refreshingly direct — re-estimate on the <em>same data</em> with several independent draw sets (different randomizing shifts) and watch the estimates move:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">132</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>audit <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="cf">function</span>(a) {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    Za <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(n_id, R2, <span class="fu">length</span>(rc)))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (jj <span class="cf">in</span> <span class="fu">seq_along</span>(rc)) {</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        h <span class="ot">&lt;-</span> <span class="fu">halton</span>(n_id<span class="sc">*</span>R2 <span class="sc">+</span> <span class="dv">50</span>, bases[jj])[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        Za[, , jj] <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(<span class="fu">matrix</span>((h <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)) <span class="sc">%%</span> <span class="dv">1</span>, n_id, R2, <span class="at">byrow =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">optim</span>(fit100<span class="sc">$</span>par,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>          <span class="at">fn =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ...),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">gr =</span> <span class="cf">function</span>(th, ...) <span class="fu">msl_mixed</span>(th, ..., <span class="at">want_grad =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>grad,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id, <span class="at">id =</span> id, <span class="at">n_id =</span> n_id,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">rc =</span> rc, <span class="at">Z =</span> Za,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">300</span>))<span class="sc">$</span>par</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">sim_error_sd  =</span> <span class="fu">apply</span>(audit, <span class="dv">1</span>, sd),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">statistical_se =</span> se), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 [,1]   [,2]   [,3]   [,4]   [,5]   [,6]   [,7]   [,8]   [,9]
+sim_error_sd   0.0012 0.0034 0.0009 0.0025 0.0010 0.0020 0.0069 0.0219 0.0197
+statistical_se 0.0560 0.0660 0.0563 0.0618 0.0444 0.0599 0.1174 0.1573 0.1910</code></pre>
+</div>
+</div>
+<p>The verdict at <span class="math inline">\(R = 100\)</span> Halton draws: simulation-induced spread runs an order of magnitude (or more) below the statistical standard errors, for every parameter. The draws are not the binding source of uncertainty — which is precisely what “enough draws” <em>means</em>, now measured rather than assumed. Keep this audit in your repertoire; it costs a few refits and answers the referee’s question before it is asked.</p>
 </section>
-<section id="key-learnings" class="level2" data-number="13.9">
-<h2 data-number="13.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">13.9</span> Key Learnings</h2>
+<section id="feeling-the-strain" class="level2" data-number="13.9">
+<h2 data-number="13.9" class="anchored" data-anchor-id="feeling-the-strain"><span class="header-section-number">13.9</span> Feeling the Strain</h2>
+<p>Now the honest tally this chapter owes <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>. Everything above <em>worked</em> — and consider what it took and how it scales.</p>
+<p><strong>Time.</strong> Each <span class="math inline">\(R = 100\)</span> fit above runs in minutes — entirely tolerable — but the multiplication table is merciless: the multiple-starts discipline (<a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>; mixture-like surfaces lurk here too<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>), the draw-doubling diagnostic, the simulation audit, and any replication study each multiply that base cost. Our modest audit already consumed five fits.</p>
+<p><strong>Dimension.</strong> Three random coefficients, independent, cost 9 parameters. The full menu — all six random, freely correlated — costs <span class="math inline">\(6 + 21 = 27\)</span>: a Cholesky factor’s worth of curvature directions for BFGS to learn, each additional random dimension another prime base of Halton draws, another axis the fixed-<span class="math inline">\(R\)</span> simulator must cover. Published experience and our own arithmetic agree: MSL’s practical frontier sits near “a handful of random coefficients, correlations chosen sparingly” , <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>.</p>
+<p><strong>And the deliverable gap.</strong> After all of it, the output is <span class="math inline">\((\hat{\bar{\boldsymbol{\beta}}}, \hat\Sigma)\)</span> — the population. The individual <span class="math inline">\(\boldsymbol{\beta}_n\)</span>’s that applications consume are not in the output; extracting them takes a second, bolt-on computation whose uncertainty accounting is awkward at best. That extraction — what it can do, and exactly where it creaks — is <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>, the short chapter that closes the likelihood track and opens the Bayesian one.</p>
+<p>One housekeeping step first — save everything the next chapters need (data with its answer key, estimates, draws):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(<span class="fu">list</span>(<span class="at">data =</span> d, <span class="at">betas_true =</span> <span class="fu">attr</span>(d, <span class="st">"betas"</span>),</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">bar_true =</span> bar_true, <span class="at">sd_true =</span> sd_true, <span class="at">rc =</span> rc,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">theta_hat =</span> fit100<span class="sc">$</span>par, <span class="at">Z =</span> Z2),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">file =</span> <span class="st">"../data/mixed_study.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="key-learnings" class="level2" data-number="13.10">
+<h2 data-number="13.10" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">13.10</span> Key Learnings</h2>
+<ul>
+<li>The mixed MNL gives each person a coefficient vector drawn from <span class="math inline">\(N(\bar{\boldsymbol{\beta}}, \Sigma)\)</span> (<a href="#eq-mixed-model" class="quarto-xref">Equation&nbsp;<span>13.1</span></a>): taste heterogeneity and data-driven, IIA-breaking substitution in one model — with the McFadden–Train theorem certifying the family can mimic any RUM.</li>
+<li>Specification is three real choices: which coefficients vary (identification from <span class="math inline">\(T\)</span> tasks is finite), what mixing distribution (normal’s wrong-sign mass; lognormal fix deferred to <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>), and whether correlations enter (Cholesky-parameterized when they do; diagonal here, with the full matrix deliberately deferred).</li>
+<li>The likelihood is the <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> hierarchy with an integral (<a href="#eq-mixed-lik" class="quarto-xref">Equation&nbsp;<span>13.3</span></a>), estimated by <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>’s MSL: fixed multivariate Halton draws (one prime base per dimension), log-mean-exp across draws, reparameterized scales.</li>
+<li>The MSL gradient (<a href="#eq-msl-grad" class="quarto-xref">Equation&nbsp;<span>13.4</span></a>) is a <em>conditionally-weighted average of per-draw MNL scores</em> — <span class="math inline">\(\mathbf{X}'(\mathbf{y}-\mathbf{p})\)</span> yet again, with Bayes-rule weights foreshadowing <a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>. Verified numerically, it cut fit times several-fold.</li>
+<li>Recovery succeeded (spreads harder than means, visibly), <code>mlogit</code> agreed to the second decimal — with the residual gap correctly attributed to simulation noise, which the five-refit audit then <em>measured</em>: an order of magnitude below statistical error at <span class="math inline">\(R = 100\)</span> Halton.</li>
+<li>The strain is real and structural: costs multiply across starts, draws, audits, and dimensions (<span class="math inline">\(27\)</span> parameters for the full covariance), and the output is still only the population. The person-level deliverable — and likelihood’s last-mile problem with it — is next.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcfaddentrain2000" class="csl-entry" role="listitem">
+McFadden, Daniel, and Kenneth Train. 2000. <span>“Mixed MNL Models for Discrete Response.”</span> <em>Journal of Applied Econometrics</em> 15 (5): 447–70.
+</div>
+<div id="ref-train2016" class="csl-entry" role="listitem">
+Train, Kenneth. 2016. <span>“Mixed Logit with a Flexible Mixing Distribution.”</span> <em>Journal of Choice Modelling</em> 19: 40–53.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>This is a genuine modeling choice, not a computational dodge — though it is also computationally kind, and packages’ “make everything random” default deserves more skepticism than it gets: each additional random coefficient must be <em>identified</em> from within-person choice consistency, and <span class="math inline">\(T = 8\)</span> tasks support only so much.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Non-concavity is milder here than in latent class models, but real: sign flips in <span class="math inline">\(\sigma\)</span> (resolved by our log-parameterization) and near-flat directions when a <span class="math inline">\(\sigma\)</span> approaches zero. Warm starts from the MNL, as above, are the standard hygiene.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

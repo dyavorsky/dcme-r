@@ -4,30 +4,200 @@
 
 # Code Performance {#sec-performance}
 
-<!-- Sources: pkg-mixl.md (computational architecture for choice likelihoods); advr (profiling); placement rationale: the loglik gets called ~10^2 times by optim, ~10^4-10^5 times by MSL, ~10^5-10^6 times by MCMC -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+This chapter pauses the march of models to sharpen the tools. It exists because of a compounding arithmetic that is easy to state and easy to underestimate: *the log-likelihood function sits at the bottom of everything, and everything above it multiplies.* A slow likelihood is a minor annoyance in @sec-mnl-mle and a fatal flaw by @sec-hb-mnl. The good news: for the models in this book, a handful of transferable techniques --- measure first, vectorize the hot path, precompute the invariant, preallocate the storage --- buy factors of hundreds, and we already own most of them.
 
 ## Why Speed Matters Now
 
-<!-- count the likelihood evaluations coming in ch 12-13 and 15-17; a 100x slowdown is the difference between a minute and a weekend -->
+Count the likelihood evaluations implied by the chapters ahead. One BFGS fit of the MNL costs on the order of a hundred evaluations (iterations times gradient arithmetic). The replication study of @sec-mnl-recovery multiplied that by 200. And the road ahead is steeper:
+
+| Consumer | Evaluations of the (log-)likelihood kernel |
+|---|---:|
+| One BFGS fit (@sec-mnl-mle) | $\sim 10^2$ |
+| Replication study, 200 runs (@sec-mnl-recovery) | $\sim 10^4$ |
+| One MSL fit, $R = 200$ draws (@sec-mixed-msl) | $\sim 10^4$--$10^5$ |
+| One MCMC run, $10^4$ iterations, per-person steps (@sec-hb-mnl) | $\sim 10^6$ |
+| Prior sensitivity: several MCMC runs (@sec-hb-mnl) | $\sim 10^7$ |
+
+: What will call your likelihood, and how often. {#tbl-eval-count}
+
+A likelihood evaluation costing one second makes the last row a four-month computation; at one millisecond, three hours. Every method in Parts II--IV was *designed* in an era when this arithmetic bound what research was possible, and it still bounds what your afternoon is possible. That is the entire motivation; now the craft.
 
 ## Measure First
 
-<!-- system.time(), bench/microbenchmark, profvis; never optimize what you haven't profiled -->
+The cardinal rule of performance work: **never optimize what you have not measured.** Intuition about where time goes is famously unreliable, and effort spent speeding up a line that consumes 2% of runtime is effort donated to entropy. R's built-in stopwatch is `system.time()`; for the quick comparisons this chapter makes, we wrap it to report a median across repetitions (timings are noisy --- garbage collection, OS scheduling --- and medians resist the noise)[^lazy]:
+
+```{r}
+time_ms <- function(expr, times = 5) {
+    e  <- substitute(expr)
+    pf <- parent.frame()
+    t  <- replicate(times, system.time(eval(e, pf))[["elapsed"]])
+    round(1000 * median(t), 1)
+}
+```
+
+[^lazy]: A subtlety worth stealing: R evaluates function arguments lazily and caches the result, so a naive `replicate(times, system.time(expr))` would time the real computation once and a cached lookup thereafter --- the classic way to convince yourself your code is infinitely fast. `substitute()` captures the unevaluated expression so each repetition genuinely recomputes. Measurement code deserves the same skepticism as model code.
+
+For *profiling* --- finding where a complex computation spends its time, function by function --- R provides `Rprof()` and the friendlier `profvis` package; they matter once code has many moving parts, and I commend them to you for your own projects. Our computations are small enough that targeted timing tells the story.
+
+The test subject is the laptop study likelihood from @sec-mnl-mle, with its data rebuilt as usual:
+
+```{r}
+study   <- readRDS("../data/laptop_study.rds")
+laptops <- study$data
+X <- model.matrix(~ brand + ram + screen + price, data = laptops)[, -1]
+y <- laptops$choice
+task_id <- cumsum(!duplicated(laptops[, c("id", "task")]))
+beta <- study$beta_true
+```
 
 ## Vectorizing the MNL Log-Likelihood
 
-<!-- from the ch 8 loop version to matrix operations, step by step; benchmark each stage -->
+@sec-mnl-mle wrote the likelihood twice and promised a measurement. Here are three implementations, spanning the design space:
+
+**Version 1 --- the pure loop** (from @sec-mnl-mle): visit each task, locate its rows with `which(task_id == i)`, compute locally.
+
+```{r}
+loglik_v1 <- function(beta, y, X, task_id) {
+    ll <- 0
+    for (i in unique(task_id)) {
+        rows <- which(task_id == i)
+        V    <- X[rows, , drop = FALSE] %*% beta
+        ll   <- ll + V[y[rows] == 1] - log(sum(exp(V)))
+    }
+    as.vector(ll)
+}
+```
+
+**Version 2 --- the hybrid**: compute all utilities in one matrix product (vectorized), but handle the per-task aggregation by splitting into a list and looping:
+
+```{r}
+loglik_v2 <- function(beta, y, X, task_id) {
+    V  <- as.vector(X %*% beta)
+    Vs <- split(V, task_id)
+    ys <- split(y, task_id)
+    ll <- 0
+    for (i in seq_along(Vs)) {
+        ll <- ll + Vs[[i]][ys[[i]] == 1] - log(sum(exp(Vs[[i]])))
+    }
+    ll
+}
+```
+
+**Version 3 --- fully grouped** (the @sec-mnl-mle production version): no explicit loop at all; `rowsum()` performs every task's aggregation inside compiled code.
+
+```{r}
+loglik_v3 <- function(beta, y, X, task_id) {
+    V     <- as.vector(X %*% beta)
+    Vmax  <- ave(V, task_id, FUN = max)
+    eV    <- exp(V - Vmax)
+    denom <- rowsum(eV, task_id)
+    sum( (V - Vmax - log(denom[task_id]))[y == 1] )
+}
+```
+
+Same mathematics, same output (check it --- always):
+
+```{r}
+c(v1 = loglik_v1(beta, y, X, task_id),
+  v2 = loglik_v2(beta, y, X, task_id),
+  v3 = loglik_v3(beta, y, X, task_id))
+```
+
+Now the stopwatch:
+
+```{r}
+data.frame(
+    version = c("v1 pure loop", "v2 hybrid", "v3 grouped"),
+    ms = c(time_ms(loglik_v1(beta, y, X, task_id)),
+           time_ms(loglik_v2(beta, y, X, task_id)),
+           time_ms(loglik_v3(beta, y, X, task_id)))
+)
+```
+
+The numbers vary by machine but the *structure* does not: v3 beats v1 by two to three orders of magnitude. Understanding why is more valuable than the numbers. R is an interpreted language: each line of R costs interpreter overhead *per execution*, so 4,000 trips through a loop body pay that overhead 4,000 times --- and v1 adds injury by scanning the entire `task_id` vector inside every iteration (`which(task_id == i)`), making its cost grow with the *square* of the data size. Vectorized calls --- `X %*% beta`, `rowsum()`, arithmetic on whole vectors --- pay the overhead *once* and do the actual work in compiled C loops. "Vectorization" is not magic; it is moving the loop from interpreted code into compiled code.[^1]
+
+[^1]: The v2 hybrid shows the technique's anatomy: vectorizing the matrix product (the arithmetic bulk) captures much of the win; eliminating the residual R-level loop over groups captures the rest. When full vectorization is awkward, the hybrid is often the right stopping point --- @sec-mixed-msl's per-person structure will put us exactly there, and knowing which loop is expensive (per-task, thousands) versus tolerable (per-draw, hundreds) is the judgment this measurement builds.
+
+Multiply the payoff through @tbl-eval-count: at v1 speed, the HB sampler of @sec-hb-mnl is an overnight-or-worse job; at v3 speed, minutes. Same computer, same mathematics.
 
 ## Precompute What Doesn't Change
 
-<!-- build X matrices, index vectors, and choice indicators once outside the optimizer, not inside the likelihood -->
+A likelihood function gets called at hundreds of different $\bfbeta$ values --- but the *data* never change between calls. Anything computable from data alone must be computed once, outside the optimizer, never inside the likelihood. Our code has quietly followed this rule --- `model.matrix()` and `task_id` were always built before `optim()` was called --- but the temptation to violate it arrives disguised as tidiness ("let the function take the raw data frame; it's a nicer interface"):
 
-## Memory Layout and Copies
+```{r}
+loglik_tidy_trap <- function(beta, df) {
+    Xd <- model.matrix(~ brand + ram + screen + price, data = df)[, -1]
+    tid <- cumsum(!duplicated(df[, c("id", "task")]))
+    loglik_v3(beta, df$choice, Xd, tid)
+}
 
-<!-- R's copy-on-modify; growing objects; preallocation (matters for MCMC storage in ch 15-17) -->
+c(precomputed = time_ms(loglik_v3(beta, y, X, task_id)),
+  rebuilds    = time_ms(loglik_tidy_trap(beta, laptops)))
+```
 
-## When R Isn't Enough
+The convenient interface rebuilds a 12,000-row model matrix on every one of the $\sim 10^6$ calls in @tbl-eval-count. The design discipline: *functions called inside optimization loops take prepared numeric objects, full stop.* If you want the friendly interface, write a wrapper that prepares once and then loops --- exactly the division of labor in `build_choice_data()` (@sec-choice-data) followed by `loglik_mnl()`. The same principle, one level up, will matter in @sec-msl: the random draws used by a simulated likelihood are also "data" in this sense, generated once and reused across all evaluations --- there for statistical reasons as well as speed.
 
-<!-- a glimpse of Rcpp on the MNL loglik; when it's worth it and when it isn't (mixl's design as the industrial example) -->
+## Preallocate; Don't Grow
+
+The third habit concerns memory, and its natural habitat is the MCMC chapters ahead, where samplers *store* tens of thousands of parameter draws. R objects are immutable under the hood: "appending" to a vector actually allocates a new, longer vector and copies everything across. Grow a vector inside a loop and you copy $1 + 2 + \cdots + n$ elements --- quadratic cost, invisible in the code's appearance:
+
+```{r}
+grow <- function(n) {
+    out <- numeric(0)
+    for (i in 1:n) out <- c(out, sqrt(i))
+    out
+}
+prealloc <- function(n) {
+    out <- numeric(n)
+    for (i in 1:n) out[i] <- sqrt(i)
+    out
+}
+c(grow_50k     = time_ms(grow(50000), times = 3),
+  prealloc_50k = time_ms(prealloc(50000), times = 3))
+```
+
+Identical output, painful ratio --- and the ratio *worsens* as $n$ grows. The rule writes itself: when the number of results is known (an MCMC run of $S$ draws of $K$ parameters), allocate the full container first --- `draws <- matrix(NA_real_, nrow = S, ncol = K)` --- and fill by index. Every sampler in Parts III--IV is built this way; when you meet `matrix(NA, S, K)` at the top of the Gibbs samplers in @sec-gibbs, this paragraph is why.
+
+A related but distinct caution: R's *copy-on-modify* semantics mean that modifying an object passed into a function, or touched by two names, can trigger a full copy. For our workloads this bites rarely --- we mostly *read* `X` inside tight loops, which is free --- but if you ever find memory ballooning in a sampler, the culprit is usually an innocent-looking modification of a large object inside a loop.
+
+## Numerical Hygiene Is Performance Too
+
+Speed is worthless if the fast answer is `NaN`. Two habits from earlier chapters deserve re-statement as *performance* practices, because numerical failures cost more research time than slow code ever does:
+
+- **The log-sum-exp guard** (@sec-logsumexp) costs two vectorized operations and makes the MNL kernel safe at any $\bfbeta$ an optimizer or sampler will ever try. v3 carries it; keep it.
+- **Stable scalar forms.** The binary logit log-probability $y \log P + (1-y)\log(1-P)$ is prettier as mathematics than as computation; the algebraically equal form $y v - \log(1 + e^{v})$ --- where $v = \x'\bfbeta$ is the binary model's systematic utility --- computed as `y*v - log1p(exp(v))`, avoids catastrophic cancellation for moderate $v$ (that is the form the @sec-optimization contour helper used --- promise kept). R's `log1p()` and `expm1()` exist precisely for "log of one-plus-small" and "e-to-small-minus-one" situations; reach for them whenever a probability sits near 0 or 1.
+
+The general principle: *transform to the scale where the computer's arithmetic is happiest --- almost always the log scale --- and stay there as long as possible.* MCMC will hand us the same lesson from another angle: Metropolis acceptance ratios are computed as differences of log-posteriors, never ratios of posteriors, for exactly this reason (@sec-bayes-mnl).
+
+## When R Isn't Enough: A Glimpse Beyond
+
+Sometimes the hot loop cannot be vectorized --- its iterations depend on each other (the Gibbs samplers of Part III update sequentially by construction), or the group-wise logic outgrows `rowsum()`'s vocabulary. The escape hatch is to write the loop in C++ and call it from R via **Rcpp**. The flavor, for the MNL kernel (display only --- compiling C++ requires the Rtools toolchain on Windows):
+
+```{r}
+#| eval: false
+Rcpp::cppFunction('
+double loglik_mnl_cpp(NumericVector beta, IntegerVector y,
+                      NumericMatrix X, IntegerVector task_id) {
+    // one pass over rows: accumulate per-task max, log-sum, chosen V
+    // ... a dozen lines of straightforward C++ ...
+}')
+```
+
+Rcpp typically buys another factor of 2--20 over well-vectorized R --- valuable, not transformative, precisely *because* good vectorized R already spends most of its time in compiled code. The production-grade example in our domain is the `mixl` package [@molloy2021], which compiles each model's likelihood to C++ with OpenMP parallelism and estimates mixed logits on huge datasets; its design --- specify the model at a high level, generate compiled code underneath --- shows where the craft goes at industrial scale. For this book, we stay in plain R: our vectorized kernels keep every chapter's computation in the minutes-not-hours regime, and transparency is the whole point of the exercise. But know the door exists, and know that everything on this chapter's checklist --- measure, vectorize, precompute, preallocate --- applies unchanged on the other side of it.
 
 ## Key Learnings
+
+- The likelihood kernel is the bottom of a multiplication stack (@tbl-eval-count): optimizers call it hundreds of times, MSL multiplies by draws, MCMC by tens of thousands of iterations. Kernel speed is research feasibility.
+- Measure before optimizing --- `system.time()` medians for comparisons, `profvis` for anatomy. Intuition lies.
+- Vectorization moves loops from interpreted R into compiled code: the grouped MNL kernel (matrix product + `rowsum()` + broadcast) beats the per-task loop by orders of magnitude, and the hybrid version shows which part of the win comes from where.
+- Precompute the invariant: model matrices, index vectors --- and later, MSL draws --- are built once outside the loop. Functions inside optimization loops take prepared numeric objects.
+- Preallocate known-size results (`matrix(NA, S, K)` atop every sampler to come); growing objects in loops is quadratic copying.
+- Numerical hygiene is performance: log-sum-exp guards, `log1p()`/`expm1()`, and staying on the log scale prevent the failures that cost real time. Rcpp is the escape hatch when an unvectorizable loop truly binds --- `mixl` shows the industrial version --- but transparent, vectorized R carries this entire book comfortably.

@@ -4,30 +4,176 @@
 
 # The Multinomial Probit Model {#sec-mnp}
 
-<!-- Sources: DCMS Ch 5; mcculloch-rossi-1994 (identification); Greene 2008 §0.7 -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+Part IV leaves the logit family. Every model so far --- MNL, nested, latent class, mixed, hierarchical --- has Gumbel errors somewhere in its bones, chosen in @sec-mnl for the closed form they buy. The **multinomial probit** (MNP) makes the other choice: multivariate *normal* errors with a freely estimated covariance matrix. Correlation between any pair of alternatives, unobserved-taste patterns of any shape --- nothing pre-specified, everything estimated. The price is the one we have spent two parts learning to pay: the choice probabilities are integrals with no closed form, ever.
+
+That price structure is why the MNP sits here, at the book's culmination, rather than in Part II where its cousins live. Estimating it requires either the simulation-assisted likelihood machinery of @sec-msl or the augmentation-and-Gibbs machinery of @sec-gibbs --- and it is the rare model where *both* routes are standard, which makes it the perfect capstone demonstration that model and estimation method are separate choices (@sec-mnp-est runs the head-to-head). This chapter does the groundwork: the model, its subtle identification, and its simulation.
 
 ## Why Probit?
 
-<!-- normal errors with a free covariance matrix: correlated utilities and flexible substitution without inventing nests; the cost: no closed form, ever -->
+The nested logit of @sec-iia repaired IIA by letting the researcher declare which alternatives share unobserved appeal. The mixed logit of @sec-mixed-msl generated flexible substitution through random coefficients on *observed* attributes. The MNP attacks the unobservables directly:
 
-## The Model
+$$
+U_{ntj} = \x_{ntj}'\bfbeta + \varepsilon_{ntj}, \qquad
+\beps_{nt} = (\varepsilon_{nt1}, \ldots, \varepsilon_{ntJ})' \sim N(\mathbf{0}, \Omega)
+$$ {#eq-mnp-model}
 
-<!-- U = X beta + eps, eps ~ N(0, Omega); the choice probability as a (J-1)-dimensional normal integral over utility differences -->
+with $\Omega$ an unrestricted $J \times J$ covariance matrix. Return to the story that motivated nesting: Windows machines share unobserved OS-related utility. The nested logit *encoded* that as a nest with an estimated $\lambda$. The MNP simply lets the data put a positive covariance between the Acer and Dell errors --- or not --- along with any other pattern among the alternatives: no nests to specify, no researcher declaration of who competes with whom, no IIA anywhere.[^1] For this part we return to the **brand-labeled design** of @sec-iia (one Acer, one Dell, one Apple per task), because a covariance between "the Acer error" and "the Dell error" needs alternatives with stable identities to attach to.
 
-## Identification
+[^1]: The mixed logit already offered estimated substitution flexibility, and @mcfaddentrain2000's theorem says it can mimic the MNP arbitrarily well --- so why bother? Three honest answers: the MNP puts the flexibility exactly where the story says it lives (the error covariance) rather than asking random coefficients to proxy for it; its Bayesian treatment (@sec-mnp-est) is startlingly clean, with *no tuning at all*; and its identification lessons are the sternest in choice modeling --- rite-of-passage material.
 
-<!-- differencing against a base alternative; scale normalization (fix one diagonal element); count the free parameters in Omega; why identification is subtler here than in ch 7 (McCulloch-Rossi treatment) -->
+## The Choice Probability Is an Integral
 
-## Binary Probit as a Warm-up
+The behavioral rule is unchanged --- pick the maximum utility --- so the probability that alternative $j$ is chosen is the probability that $J-1$ utility differences all fall on $j$'s side:
 
-<!-- closed form via pnorm(); MLE with ch 6's tools in a page; everything hard about MNP is about J > 2 -->
+$$
+P_{ntj} = \Pr\left( U_{ntj} > U_{ntk} \;\; \forall \, k \neq j \right)
+= \int_{\text{region where } j \text{ wins}} \phi_J(\beps \mid \mathbf{0}, \Omega) \, d\beps
+$$ {#eq-mnp-prob}
+
+--- on its face a $J$-dimensional integral over the cone where $j$ wins; but only utility *differences* decide the comparison, and differences of normals are normal, so subtracting $U_{ntj}$ from the others collapses it to a $(J-1)$-dimensional normal orthant probability. That differenced form is the one every computation downstream actually uses. For $J = 2$ it collapses to the univariate $\Phi(\cdot)$ of the binary probit --- closed form, essentially. For $J = 3$ it is a bivariate normal probability --- computable by good numerical routines (`pmvnorm`), no longer a formula. For the $J$ of a real supermarket category, it is the reason this model waited until Part IV. Everything hard about the MNP is @eq-mnp-prob; everything in @sec-mnp-est is a strategy for never quite computing it.
+
+## Identification: The Sternest Version Yet
+
+@sec-mnl-identification established two facts about what choice data can reveal --- only utility *differences* matter, and the *scale* of utility is arbitrary --- and the MNL absorbed both with quiet normalizations (no common intercept; error variance fixed by convention). The MNP has to pay the same two taxes, but on a much larger taxable estate, because $\Omega$'s $J(J+1)/2$ free-looking parameters are exactly where the unidentifiability hides. Walk it through for our $J = 3$ study; the logic is @mcculloch1994's, and it governs everything in the next two chapters.
+
+**Differences.** Since only differences matter, subtract a base alternative's utility --- say the Acer's --- from the others. The data can only ever speak about the *differenced* system: two equations, with differenced attributes and a differenced error vector whose covariance is
+
+$$
+\tilde\Omega = M \Omega M', \qquad
+M = \begin{pmatrix} -1 & 1 & 0 \\ -1 & 0 & 1 \end{pmatrix}
+$$ {#eq-mnp-differencing}
+
+$\tilde\Omega$ is $2 \times 2$ symmetric: **three** numbers. The original $\Omega$ had six. Three whole dimensions of $\Omega$ are invisible to choice data --- infinitely many $\Omega$'s produce identical behavior. (This is the multivariate version of "a constant added to all utilities cancels"; adding any common noise to all three alternatives changes nothing.)
+
+**Scale.** Multiply all utilities by $\lambda > 0$: choices unchanged, so one more dimension dies. Convention: fix the first diagonal of the differenced covariance, $\tilde\omega_{11} = 1$. Two bookkeeping notes the next chapter leans on. First, from here on $\tilde\Omega$ means the differenced covariance *after* this normalization; its unnormalized cousin, raw $M \Omega M'$, will reappear in @sec-mnp-est under the name $W$ --- the object the Gibbs sampler actually draws. Second, the scale tax hits $\bfbeta$ as well: dividing the differenced system by $\sqrt{(M\Omega M')_{11}}$ to enforce $\tilde\omega_{11}=1$ divides every utility, so what the data identify is $\bfbeta / \sqrt{(M\Omega M')_{11}}$, not $\bfbeta$ itself. Coefficients scale like utility; covariances like utility squared. Count what survives: $3 - 1 = $ **two** free covariance parameters for our three-alternative study. From six down to two --- the MNP's flexibility is real but far smaller than $\Omega$'s dimensions suggest, and it shrinks further if you forget that each ASC also consumes @sec-mnl-identification's level normalization (our brand-labeled design carries `dell` and `apple` ASCs against the Acer base, exactly as in @sec-iia).
+
+Why belabor this? Because unidentified parameters are the classic MNP implementation disaster, in both estimation routes. Hand an optimizer a likelihood written in terms of raw $\Omega$ and it wanders flat directions forever, "converging" wherever it likes (@sec-optimization's warnings, in their natural habitat); run a Gibbs sampler on raw $\Omega$ and the chain drifts happily along the unidentified ridge --- traces that never settle, $\widehat{R}$ that never approaches 1 --- *while the identified functions of the parameters mix beautifully*. The two routes of @sec-mnp-est handle this differently (the MLE route parameterizes only identified quantities; the Bayesian route samples the unidentified space and reports identified ratios, post-processed), and knowing the identified count in advance --- $(J-1)J/2 - 1$ covariance parameters --- is how you audit either.
+
+## Warming Up: Binary Probit by MLE
+
+For $J = 2$ everything is tractable, and it is worth thirty seconds to close a loop left open since @sec-simdata, where the binary probit was one changed line in the simulator. Its choice probability is $\Phi(\x'\bfbeta)$ (error scale fixed at 1 --- the scale tax, paid), its log-likelihood mirrors @eq-binlogit-loglik with `pnorm` in place of `plogis`, and Part I's machinery does the rest:
+
+```{r}
+set.seed(180)
+N <- 4000
+price <- runif(N, 0.8, 2.4); ram16 <- rbinom(N, 1, 0.5)
+X <- cbind(1, price, ram16)
+beta_true <- c(1.0, -1.2, 0.6)
+y <- as.integer(as.vector(X %*% beta_true) + rnorm(N) > 0)
+
+loglik_bprobit <- function(beta, y, X) {
+    P <- pnorm(as.vector(X %*% beta))
+    sum(y * log(P) + (1 - y) * log(1 - P))
+}
+fit <- optim(rep(0, 3), loglik_bprobit, y = y, X = X, method = "BFGS",
+             control = list(fnscale = -1), hessian = TRUE)
+round(rbind(truth = beta_true, est = fit$par,
+            se = sqrt(diag(solve(-fit$hessian)))), 3)
+```
+
+Recovery, no drama --- and compare with @sec-gibbs's Albert--Chib sampler on data of exactly this form: two estimation philosophies already agree on the binary case. Everything difficult about the MNP is about $J > 2$: the moment a *matrix* of error covariances exists, @eq-mnp-prob stops being `pnorm` and identification stops being automatic.
 
 ## Simulating MNP Data
 
-<!-- multivariate normal errors via ch 2's Cholesky; verify substitution patterns respond to Omega -->
+Simulation, as usual, is the easy direction --- the integral of @eq-mnp-prob never appears, because we run the *mechanics* (draw errors, add, argmax), not the probabilities. The errors are multivariate normal, so @sec-mvnorm's Cholesky transformation is the whole trick. We give the truth the OS-correlation story: Acer and Dell errors correlated at $0.6$, Apple independent, unit variances ---
+
+$$
+\Omega^\ast = \begin{pmatrix} 1 & 0.6 & 0 \\ 0.6 & 1 & 0 \\ 0 & 0 & 1 \end{pmatrix}
+$$ {#eq-omega-true}
+
+--- with the usual attribute coefficients and brand ASCs (@eq-beta-true's values, now interpreted against normal-scale errors[^2]):
+
+[^2]: Alert readers of @sec-mnl-identification will note the scale subtlety: coefficients against unit-normal errors are not numerically comparable to the same values against Gumbel errors. We reuse the familiar numbers for continuity; they simply *mean* slightly different signal-to-noise here. The recovery checks below compare against the correctly transformed identified quantities, which is the only comparison the data license.
+
+```{r}
+sim_mnp_data <- function(N, T, beta, Omega) {
+    J <- 3
+    n_rows <- N * T * J
+    df <- data.frame(
+        id    = rep(seq_len(N), each = T * J),
+        task  = rep(rep(seq_len(T), each = J), times = N),
+        alt   = factor(rep(c("Acer", "Dell", "Apple"), times = N * T),
+                       levels = c("Acer", "Dell", "Apple")),
+        ram   = factor(sample(c("8","16","32"), n_rows, replace = TRUE),
+                       levels = c("8","16","32")),
+        screen = factor(sample(c("13","15"), n_rows, replace = TRUE),
+                        levels = c("13","15")),
+        price = round(runif(n_rows, min = 0.8, max = 2.4), 2)
+    )
+    X <- model.matrix(~ alt + ram + screen + price, data = df)[, -1]
+    V <- as.vector(X %*% beta)
+
+    L   <- t(chol(Omega))                       # @sec-mvnorm
+    eps <- as.vector(L %*% matrix(rnorm(n_rows), nrow = J))  # J x (N*T), stacked back
+    U   <- V + eps
+    task_id <- cumsum(!duplicated(df[, c("id", "task")]))
+    df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+    df
+}
+
+set.seed(181)
+beta_true  <- c(dell = 0.5, apple = 1.0, ram16 = 0.6, ram32 = 0.9,
+                screen15 = 0.3, price = -1.2)
+Omega_true <- matrix(c(1, 0.6, 0,
+                       0.6, 1, 0,
+                       0,   0, 1), 3, 3)
+mnp <- sim_mnp_data(N = 500, T = 8, beta = beta_true, Omega = Omega_true)
+
+## save for the estimation chapters
+saveRDS(list(data = mnp, beta_true = beta_true, Omega_true = Omega_true),
+        file = "../data/mnp_study.rds")
+```
+
+One line rewards a careful look: the error draw reshapes the row vector into a $3 \times (NT)$ matrix so that *each task's three errors* --- one column --- get the $L$ transformation as a unit, then stacks back to row order. Correlation lives *within* tasks, independence *across* them: the covariance structure of @eq-mnp-model, implemented in the shape of the data (@sec-data's sort contract doing silent work --- `alt` varies fastest, so columns are tasks).
+
+The usual battery, plus one check specific to this model. Marginals and directions first:
+
+```{r}
+chosen <- mnp[mnp$choice == 1, ]
+round(prop.table(table(chosen$alt)), 3)
+```
+
+Apple leads, Acer trails --- the ASC ordering, as always. Now the check that matters: *is the error correlation visible in behavior?* Under IIA-obeying errors, how often a shopper's second-favorite brand is the other same-OS machine wouldn't depend on error correlation; under @eq-omega-true it should. A sharper, simpler signature: compare the joint frequency that the two Windows machines *both* beat Apple against what independent errors would produce. Cheapest of all --- lean on the model directly: recompute choice shares after deleting the Dell from every task, using fresh simulations, and watch where its share goes:
+
+```{r}
+set.seed(182)
+sim_shares <- function(Omega, drop_dell = FALSE) {
+    ## one standardized task: identical specs, $1.5k each
+    X_task <- rbind(acer = c(0,0,1,0,1,1.5), dell = c(1,0,1,0,1,1.5),
+                    apple = c(0,1,1,0,1,1.5))
+    keep <- if (drop_dell) c(1, 3) else 1:3
+    V <- as.vector(X_task %*% beta_true)[keep]
+    L <- t(chol(Omega[keep, keep, drop = FALSE]))
+    R <- 200000
+    eps <- L %*% matrix(rnorm(length(keep) * R), nrow = length(keep))
+    tabulate(max.col(t(V + eps)), length(keep)) / R
+}
+before <- sim_shares(Omega_true)
+after  <- sim_shares(Omega_true, drop_dell = TRUE)
+list(before = round(setNames(before, c("acer","dell","apple")), 3),
+     after  = round(setNames(after, c("acer","apple")), 3))
+```
+
+Delete the Dell and its customers flow *disproportionately to the Acer* --- the correlated-error sibling --- not proportionally as MNL arithmetic would insist. The red-bus/blue-bus pathology of @sec-mnl, cured by two off-diagonal numbers. (Run `sim_shares(diag(3))` and the flow turns proportional: the cure really is the correlation, not the normality.)
 
 ## The Estimation Problem Ahead
 
-<!-- evaluating the choice probability IS the obstacle; two roads: simulate the integral inside MLE (ch 19, route 1) or never compute it at all via data augmentation (ch 19, route 2) -->
+Take stock of the asymmetry we have manufactured. Simulating MNP choices: eight lines, all of them Part I material. Estimating MNP parameters: the likelihood needs @eq-mnp-prob --- an integral we can only approximate --- once per task per candidate parameter, inside an optimizer that will make thousands of candidate visits. @sec-msl's playbook applies but needs an unbiased, *smooth* simulator of an orthant probability, which is a subtler object than the mixed logit's average-of-closed-forms; building one (GHK, from @sec-draws's truncated normals) is half of @sec-mnp-est.
+
+The other half never touches the integral. @sec-gibbs's Albert--Chib logic generalizes: conditional on the *latent utilities*, the MNP is just seemingly-related regressions with normal errors --- conjugate territory --- and conditional on parameters and the observed choice, each task's utilities are a multivariate normal truncated to the region where the chosen alternative wins. Draw utilities, draw parameters, repeat: the intractable integral is dissolved into truncated normal draws, at scale, with the identification post-processing that @mcculloch1994 made standard. Two routes, one model, next chapter.
 
 ## Key Learnings
+
+- The MNP replaces Gumbel errors with $N(\mathbf{0}, \Omega)$, $\Omega$ free (@eq-mnp-model): substitution patterns are *estimated in the error covariance* rather than specified in nests or proxied by random coefficients. No IIA anywhere --- our deletion experiment showed Dell's share flowing to its correlated sibling, disproportionately.
+- The choice probability (@eq-mnp-prob) is a $(J-1)$-dimensional normal orthant integral: closed-form at $J=2$ (`pnorm`), numerical at $J=3$, and the central obstacle beyond. Everything in @sec-mnp-est is a strategy for living with it.
+- Identification is unforgiving: differencing kills $J$ of $\Omega$'s dimensions, scale kills one more, leaving $(J-1)J/2 - 1$ free covariance parameters (two, for our study). Unidentified MNP parameterizations produce optimizers that wander and samplers that never converge --- count before you code.
+- Simulation needed none of it: Cholesky-correlated errors within tasks (shaped by the data's sort contract), argmax, done --- plus a saved answer key including $\Omega^\ast$ for the recovery tests ahead.
+- Two estimation routes await: simulate the integral inside MSL (GHK), or augment it away entirely (truncated normals + Bayesian regression). The capstone comparison of the book's two estimation philosophies, on one model.

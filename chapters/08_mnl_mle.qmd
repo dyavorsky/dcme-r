@@ -4,38 +4,359 @@
 
 # Estimating the MNL by Maximum Likelihood {#sec-mnl-mle}
 
-<!-- Sources: DCMS Ch 3; Greene 2008; cbc-handbook-2022.md (fit statistics, worked example); pkg-mlogit.md (validation) -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+This is the chapter Part I was preparing you for. We have data --- the simulated laptop study of @sec-sim-mnl, 500 respondents making 4,000 choices --- and we have every tool the estimation requires: the likelihood principle (@sec-likelihood), the stacked data representation (@sec-data), and the numerical climber (@sec-optimization). What remains is assembly, and assembly is where the details live: the exact form of the MNL log-likelihood, its gradient, a numerical trap and its escape, and the reporting and validation rituals that turn an optimizer's output into research you can defend.
+
+Start by loading the study --- data and answer key --- saved at the end of @sec-mnl:
+
+```{r}
+study     <- readRDS("../data/laptop_study.rds")
+laptops   <- study$data
+beta_true <- study$beta_true
+
+X <- model.matrix(~ brand + ram + screen + price, data = laptops)[, -1]
+y <- laptops$choice
+task_id <- cumsum(!duplicated(laptops[, c("id", "task")]))
+K <- ncol(X)
+c(rows = nrow(X), tasks = max(task_id), K = K)
+```
+
+(The three lines rebuilding `X`, `y`, and `task_id` are `build_choice_data()` from @sec-choice-data written out flat, so this chapter's code is visible end to end.)
 
 ## The MNL Log-Likelihood
 
-<!-- assemble from ch 5's principle and ch 7's probability; write it in summation and matrix form -->
+The recipe of @sec-likelihood: the log-likelihood is the sum, over choice situations, of the log probability of the alternative actually chosen. With the switch-exponent device of @eq-binlogit-lik generalized --- let $y_{ntj} = 1$ if alternative $j$ was chosen in situation $(n,t)$ and 0 otherwise --- the indicator encoding of @eq-mnl-rule's choice, and exactly the `choice` column of our long-format data --- and the MNL probabilities of @eq-mnl-prob plugged in:
+
+$$
+\ell(\bfbeta)
+= \sum_{n=1}^{N} \sum_{t=1}^{T} \sum_{j=1}^{J} y_{ntj} \log P_{ntj}
+= \sum_{n,t} \sum_{j} y_{ntj} \left[ V_{ntj} - \log \sum_{j'=1}^{J} e^{V_{ntj'}} \right]
+$$ {#eq-mnl-loglik}
+
+Because exactly one $y_{ntj}$ per situation equals one, the inner sum simply *selects the chosen row*, and the whole expression collapses to something you can say in words: **the log-likelihood is the sum, over choice situations, of the chosen alternative's utility minus the log-sum of all alternatives' exponentiated utilities.**
+
+$$
+\ell(\bfbeta) = \sum_{n,t} \left[ V_{nt,\text{chosen}} - \log \sum_{j'=1}^{J} e^{V_{ntj'}} \right]
+$$ {#eq-mnl-loglik-compact}
+
+Every term is a competition: how good was what they picked, against the log-sum measure of everything they could have picked. A candidate $\bfbeta$ scores well when it makes chosen alternatives look systematically attractive *relative to their own choice sets* --- not in absolute terms, which, per @sec-mnl-identification, the data could never reveal anyway.
 
 ## Coding `loglik_mnl()`
 
-<!-- a clear loop version first, then the matrix version; THIS function is reused for the rest of the book (MSL wraps it, M-H evaluates it) -->
+Following our transparent-first discipline, the loop version walks tasks one at a time --- for each, extract its rows, compute utilities, apply @eq-mnl-loglik-compact:
 
-## Numerical Stability: The Log-Sum-Exp Trick
+```{r}
+loglik_mnl_loop <- function(beta, y, X, task_id) {
+    ll <- 0
+    for (i in unique(task_id)) {
+        rows <- which(task_id == i)
+        V    <- X[rows, , drop = FALSE] %*% beta
+        ll   <- ll + V[y[rows] == 1] - log(sum(exp(V)))
+    }
+    as.vector(ll)
+}
+```
 
-<!-- overflow in exp(); subtract the max; demonstrate the failure and the fix -->
+Readable, correct, and --- as @sec-performance will measure precisely --- slow, because R pays interpreter overhead 4,000 times per likelihood evaluation, and the optimizer will request many evaluations. The vectorized version eliminates the loop using exactly the grouped-computation pattern rehearsed in @fig-mnl-calibration: compute all utilities in one matrix product, form all task-level log-sums with one `rowsum()` call, and broadcast them back to the rows by indexing:
+
+```{r}
+loglik_mnl <- function(beta, y, X, task_id) {
+    V     <- as.vector(X %*% beta)          # all NTJ utilities at once
+    Vmax  <- ave(V, task_id, FUN = max)     # per-task max (stability; see below)
+    eV    <- exp(V - Vmax)
+    denom <- rowsum(eV, task_id)            # per-task sums, one grouped op
+    sum( (V - Vmax - log(denom[task_id]))[y == 1] )
+}
+```
+
+Line by line against @eq-mnl-loglik-compact: `V` is every $V_{ntj}$; `denom[task_id]` puts each task's $\sum_{j'} e^{V_{ntj'}}$ next to each of its rows (indexing a vector by a group label --- the broadcast idiom); the bracketed expression is every alternative's log probability; and `[y == 1]` selects the chosen rows before summing. The `Vmax` lines are new, and they are the subject of the next section --- ignore them for one moment and confirm the two implementations agree:
+
+```{r}
+c(loop       = loglik_mnl_loop(beta_true, y, X, task_id),
+  vectorized = loglik_mnl(beta_true, y, X, task_id))
+```
+
+Identical. One function, two implementations, same mathematics --- keep the loop version as executable documentation, run the vectorized one.
+
+## The Log-Sum-Exp Trick {#sec-logsumexp}
+
+Now the `Vmax` business. The naive computation of $\log \sum_{j'} e^{V_{j'}}$ evaluates `exp()` first, and `exp()` is an accident waiting to happen: `exp(710)` overflows to `Inf`, and `exp(-746)` underflows to `0`. Our well-scaled laptop data keep utilities around $\pm 3$, but recall the scaling discussion of @sec-optimization: suppose a colleague hands you the same data with price *in dollars*, so the price coefficient should come out near $-0.0012$. En route, the optimizer will surely try $\bfbeta$ values like "$-1.2$ on dollars," producing utilities near $-1800$:
+
+```{r}
+V_bad <- c(-1795, -1801, -1808)      # utilities under a mis-scaled candidate
+log(sum(exp(V_bad)))                  # exp underflows to 0; log(0) = -Inf
+```
+
+An infinite log-likelihood poisons the optimizer --- gradients become `NaN`, BFGS's curvature updates corrupt, and the failure surfaces far from its cause. The escape is an identity: for any constant $m$,
+
+$$
+\log \sum_{j'} e^{V_{j'}} = m + \log \sum_{j'} e^{V_{j'} - m}
+$$ {#eq-logsumexp}
+
+(factor $e^m$ out of the sum). Choose $m = \max_{j'} V_{j'}$: then every exponent is $\le 0$, the largest term is exactly $e^0 = 1$, and neither overflow nor total underflow can occur --- the sum always lies in $[1, J]$:
+
+```{r}
+m <- max(V_bad)
+m + log(sum(exp(V_bad - m)))          # finite, correct
+```
+
+That is what `Vmax` does in `loglik_mnl()`, computed per task by `ave()`. The cost is two cheap vectorized operations; the benefit is a likelihood that cannot blow up anywhere the optimizer wanders. Write it into every softmax-shaped computation you ever produce --- including, later, the probability weights inside MSL (@sec-msl) and the Metropolis acceptance ratios of @sec-bayes-mnl, both of which fail in exactly this way when coded naively.
 
 ## The Analytic Gradient
 
-<!-- derive: X'(y - p); verify against numerical gradient; speed comparison -->
+BFGS will run on numerical gradients, but at $2K$ extra likelihood evaluations per gradient (@eq-central-diff --- two per parameter), analytic derivatives repay their derivation quickly --- and for the MNL the derivation lands somewhere memorable. Differentiate one task's contribution to @eq-mnl-loglik-compact. The chosen alternative's utility is linear, so it contributes $\partial V_{ntj}/\partial \bfbeta = \x_{ntj}$. For the log-sum term, the chain rule gives
+$$\frac{\partial}{\partial \bfbeta} \log \sum_{j'} e^{V_{ntj'}} = \frac{\sum_{j'} e^{V_{ntj'}} \x_{ntj'}}{\sum_{j'} e^{V_{ntj'}}} = \sum_{j'} P_{ntj'} \, \x_{ntj'},$$
+the probability-weighted average of the task's attribute rows --- the model's *expected* $\x$. So each task contributes $\x_{nt,\text{chosen}} - \sum_j P_{ntj} \x_{ntj}$: attributes of what they chose, minus attributes of what the model expected them to choose. Writing the chosen row with the indicators, $\x_{nt,\text{chosen}} = \sum_j y_{ntj} \x_{ntj}$, and merging the two sums row-wise --- stacking the indicators into $\y$ and the probabilities into $\mathbf{p}$, both length-$NTJ$ vectors in the row order of $\mathbf{X}$:
 
-## Estimation with `optim()`
+$$
+s(\bfbeta) = \sum_{n,t,j} \left( y_{ntj} - P_{ntj} \right) \x_{ntj} = \mathbf{X}'(\y - \mathbf{p})
+$$ {#eq-mnl-score}
 
-<!-- put ch 6's machinery to work; hessian=TRUE; standard errors and z-stats -->
+*Identical in form to the binary logit score* @eq-binlogit-score: prediction errors times covariates, now with one error per alternative rather than per observation. At the MLE, the model's predicted choice shares are exactly uncorrelated with every attribute. The implementation reuses the likelihood's plumbing --- and note this means the stability fix comes along free, since the probabilities are computed with the same shifted exponentials:
+
+```{r}
+grad_mnl <- function(beta, y, X, task_id) {
+    V     <- as.vector(X %*% beta)
+    Vmax  <- ave(V, task_id, FUN = max)
+    eV    <- exp(V - Vmax)
+    p     <- eV / rowsum(eV, task_id)[task_id]   # P_ntj for every row
+    as.vector(crossprod(X, y - p))
+}
+```
+
+Audit against the numerical gradient (`num_grad()` from @sec-optimization), per standing policy --- *every analytic gradient gets checked*:
+
+```{r}
+num_grad <- function(fn, beta, h = 1e-6, ...) {
+    g <- numeric(length(beta))
+    for (k in seq_along(beta)) {
+        e    <- replace(numeric(length(beta)), k, h)
+        g[k] <- (fn(beta + e, ...) - fn(beta - e, ...)) / (2*h)
+    }
+    g
+}
+
+beta_test <- rep(0.1, K)
+rbind(analytic = grad_mnl(beta_test, y, X, task_id),
+      numeric  = num_grad(loglik_mnl, beta_test, y = y, X = X,
+                          task_id = task_id))
+```
+
+Six-decimal agreement. The algebra is certified; use the fast one.
+
+## Estimation
+
+All pieces on the board --- objective, gradient, climber. From a zero start (adequate here, per @sec-optimization: the MNL log-likelihood is globally concave, so there is exactly one summit and no wrong basins):
+
+```{r}
+fit <- optim(par     = rep(0, K),
+             fn      = loglik_mnl,
+             gr      = grad_mnl,
+             y = y, X = X, task_id = task_id,
+             method  = "BFGS",
+             control = list(fnscale = -1),
+             hessian = TRUE)
+fit$convergence
+```
+
+Converged. Standard errors from the curvature (@eq-mle-vcov), and the full results table against the answer key:
+
+```{r}
+se <- sqrt(diag(solve(-fit$hessian)))
+results <- data.frame(
+    truth    = beta_true,
+    estimate = fit$par,
+    se       = se,
+    z        = fit$par / se,
+    ci_lo    = fit$par - 1.96*se,
+    ci_hi    = fit$par + 1.96*se
+)
+rownames(results) <- colnames(X)
+round(results, 3)
+```
+
+Study this table for a moment; it is the first full-scale recovery in the book. Every estimate lands within a hair of its true value, every 95% interval covers the truth, and every $|z|$ is enormous --- with 4,000 choices, effects of this size are unmissable. The two memory coefficients illustrate invariance-in-action from @sec-likelihood: their *difference* (the marginal value of going from 16GB to 32GB, $0.9 - 0.6 = 0.3$ in truth) is estimated by the difference of their estimates, `r round(fit$par[4] - fit$par[3], 3)`. And the interpretation discipline of @sec-mnl-identification applies: these are utilities on the arbitrary logit scale; the number a manager can use --- dollars per attribute --- waits for the WTP machinery of @sec-postestimation, which divides through by the price coefficient precisely to cancel the arbitrary scale.
 
 ## Assessing Fit
 
-<!-- null log-likelihood, likelihood ratio test, McFadden's rho-squared, hit rates, AIC/BIC (cbc-handbook-2022 conventions) -->
+An estimate without a fit assessment is a number without a context. Choice modelers lean on a small stable of measures, all built from log-likelihood values, all cheap now that estimation has run.
+
+**The null log-likelihood.** The zero-parameter benchmark: every alternative equally likely, $P = 1/J$ always. Because our unlabeled design has no ASCs, $\bfbeta = \mathbf{0}$ *is* the null model,[^1] so $\ell_0 = \sum_{n,t} \log(1/3) = -4000 \log 3$:
+
+```{r}
+ll_null <- -max(task_id) * log(3)
+c(ll_null = ll_null, ll_fit = fit$value)
+```
+
+[^1]: In a labeled design, the customary null keeps the ASCs (market shares) and drops everything else; the null is then the model's fit with intercepts only, not $N T \log(1/J)$. Know which null a reported statistic uses before comparing across papers.
+
+**The likelihood-ratio test.** Twice the log-likelihood gap, $2(\ell_1 - \ell_0)$ --- where $\ell_1 = \ell(\hat{\bfbeta})$ is the maximized log-likelihood of the fit --- is $\chi^2$ with (here) 6 degrees of freedom under the null. Ours is `r round(2*(fit$value - (-max(task_id)*log(3))))` --- the null is not merely rejected, it is vaporized; unsurprising, since we simulated the alternatives to matter.
+
+**McFadden's $\rho^2$.** The likelihood analogue of $R^2$:
+
+$$
+\rho^2 = 1 - \frac{\ell_1}{\ell_0}
+$$ {#eq-mcfadden-r2}
+
+```{r}
+rho2 <- 1 - fit$value / ll_null
+round(rho2, 3)
+```
+
+Calibrate your expectations: $\rho^2$ runs on a compressed scale, and values of 0.2--0.4 represent excellent fit for choice data [@mcfadden2001 and applied conventions in @eggers2022]. Ours, around `r round(1 - fit$value/(-max(task_id)*log(3)), 2)`, is exactly what a strong-but-noisy choice process yields --- remember, the model's own error term guarantees choices are not deterministic even with $\bfbeta$ known perfectly.
+
+**Hit rate.** The blunt-instrument check: how often is the modeled-most-probable alternative the chosen one?
+
+```{r}
+V   <- as.vector(X %*% fit$par)
+top <- ave(V, task_id, FUN = max) == V
+mean(tapply(top & y == 1, task_id, any))
+```
+
+Against a random-guess baseline of $1/3$. Hit rates ignore probability calibration entirely (a 0.34 favorite and a 0.99 favorite count the same), so treat them as a communication device, not a model selection criterion.
+
+**AIC and BIC.** For comparing *non-nested* specifications, penalized fit: $\mathrm{AIC} = -2\ell + 2K$, $\mathrm{BIC} = -2\ell + K \log(\text{observations})$. They earn their keep when the candidate models multiply --- choosing the number of latent classes in @sec-latentclass is where BIC becomes load-bearing for us.
 
 ## Validation Against `mlogit`
 
-<!-- same data through mlogit; coefficients and standard errors match to reported precision; how to line up output -->
+Our estimator agrees with the truth, but "agrees with the truth on data we simulated" and "correctly implements maximum likelihood" are subtly different claims. The sharper test: an independent implementation, same data, same model --- estimates should agree to numerical precision, not merely statistically. The `mlogit` package [@croissant2020] is the R standard; feeding it requires only the index bookkeeping promised in @sec-data --- a unique choice-situation id, a logical choice column, and `dfidx()`'s declaration of the panel structure:
 
-## A Full Simulate-and-Recover Study
+```{r}
+#| message: false
+library(dfidx)
+library(mlogit)
 
-<!-- many replications: sampling distribution of beta-hat, bias, coverage of confidence intervals; seeing asymptotic theory work -->
+ml_data <- laptops
+ml_data$chid   <- task_id
+ml_data$choice <- as.logical(ml_data$choice)
+ml_data <- dfidx(ml_data, idx = list(c("chid", "id"), "alt"))
+
+fit_ml <- mlogit(choice ~ brand + ram + screen + price | 0, data = ml_data)
+```
+
+(In `mlogit`'s three-part formula, alternative-varying attributes with generic coefficients occupy the first slot; the `| 0` suppresses the ASCs that our unlabeled design must not have, per @sec-data-intercept.) The confrontation:
+
+```{r}
+comparison <- rbind(ours = fit$par, mlogit = coef(fit_ml))
+colnames(comparison) <- colnames(X)
+round(comparison, 5)
+round(rbind(ours = se, mlogit = sqrt(diag(vcov(fit_ml)))), 5)
+c(ours = fit$value, mlogit = as.numeric(logLik(fit_ml)))
+```
+
+Agreement to five decimals in coefficients, standard errors, and the log-likelihood itself. Two entirely separate codebases --- ours, thirty transparent lines; theirs, a mature package --- climbed to the same summit of the same surface. This is the validation ritual every estimator in this book will undergo where a reference implementation exists, and the divergence-hunting skills it builds transfer to the day one *disagrees*: coefficients matching but SEs differing (covariance estimator conventions), likelihoods differing by a constant (dropped combinatorial terms), estimates differing utterly (data-format misalignment --- check the index construction first).
+
+## A Simulate-and-Recover Study {#sec-mnl-recovery}
+
+One recovery is an anecdote. The classical guarantees of @sec-likelihood --- consistency, asymptotic normality, honest standard errors --- are statements about the *distribution* of $\hat{\bfbeta}$ across repeated samples, and simulation lets us observe that distribution directly: rerun the entire pipeline --- fresh study, fresh estimation --- two hundred times and watch the estimator's sampling behavior, not just one draw from it.
+
+```{r}
+#| cache: false
+sim_and_fit <- function(N, T, J, beta) {
+    df <- sim_mnl_data(N, T, J, beta)
+    Xr <- model.matrix(~ brand + ram + screen + price, data = df)[, -1]
+    tid <- cumsum(!duplicated(df[, c("id", "task")]))
+    f <- optim(rep(0, length(beta)), loglik_mnl, gr = grad_mnl,
+               y = df$choice, X = Xr, task_id = tid,
+               method = "BFGS", control = list(fnscale = -1),
+               hessian = TRUE)
+    list(est = f$par, se = sqrt(diag(solve(-f$hessian))))
+}
+```
+
+```{r}
+#| echo: false
+## simulator definitions from @sec-mnl, needed for the replication study
+sim_laptop_design <- function(N, T, J) {
+    n_rows <- N * T * J
+    data.frame(
+        id    = rep(seq_len(N), each = T * J),
+        task  = rep(rep(seq_len(T), each = J), times = N),
+        alt   = rep(seq_len(J), times = N * T),
+        brand = factor(sample(c("Acer","Dell","Apple"), n_rows, replace = TRUE),
+                       levels = c("Acer","Dell","Apple")),
+        ram   = factor(sample(c("8","16","32"), n_rows, replace = TRUE),
+                       levels = c("8","16","32")),
+        screen = factor(sample(c("13","15"), n_rows, replace = TRUE),
+                        levels = c("13","15")),
+        price = round(runif(n_rows, min = 0.8, max = 2.4), 2)
+    )
+}
+sim_mnl_data <- function(N, T, J, beta) {
+    df <- sim_laptop_design(N, T, J)
+    Xs  <- model.matrix(~ brand + ram + screen + price, data = df)[, -1]
+    task_id <- cumsum(!duplicated(df[, c("id", "task")]))
+    eps <- -log(-log(runif(nrow(df))))
+    U   <- as.vector(Xs %*% beta) + eps
+    df$choice <- as.integer(ave(U, task_id, FUN = function(u) u == max(u)))
+    df
+}
+```
+
+```{r}
+set.seed(80)
+reps <- 200
+runs <- replicate(reps, sim_and_fit(500, 8, 3, beta_true),
+                  simplify = FALSE)
+est_mat <- t(sapply(runs, `[[`, "est"))
+se_mat  <- t(sapply(runs, `[[`, "se"))
+colnames(est_mat) <- colnames(se_mat) <- colnames(X)
+```
+
+(An unshown chunk re-defines the @sec-mnl simulator functions this study calls; they are unchanged.) Three questions, three answers.
+
+**Is the estimator centered on the truth?** Compare the mean estimate across replications to $\bfbeta^\ast$:
+
+```{r}
+round(rbind(truth = beta_true, mean_estimate = colMeans(est_mat)), 3)
+```
+
+Bias indistinguishable from zero, coefficient by coefficient --- consistency visibly at work at our sample size.
+
+**Is the sampling distribution normal, and are the standard errors honest?** Overlay the 200 price-coefficient estimates with the normal density that the *average estimated standard error* implies:
+
+```{r}
+#| label: fig-sampling-dist
+#| fig-cap: "Sampling distribution of the price coefficient across 200 simulate-and-recover replications, with the normal density implied by the average estimated standard error. Asymptotic theory, audited and confirmed at 4,000 choice situations per replication."
+#| fig-width: 6
+#| fig-height: 3.2
+ggplot(data.frame(b = est_mat[, "price"]), aes(b)) +
+    geom_histogram(aes(y = after_stat(density)), bins = 25, fill = "grey70") +
+    geom_function(fun = dnorm,
+                  args = list(mean = -1.2, sd = mean(se_mat[, "price"])),
+                  linewidth = 0.8) +
+    geom_vline(xintercept = -1.2, linetype = "dashed") +
+    labs(x = expression(hat(beta)[price]), y = "density")
+```
+
+The histogram is the *actual* sampling distribution; the curve is what the Hessian-based theory of @eq-mle-vcov *claims* it should be. They match --- which means the standard error printed in our results table is measuring exactly what it purports to measure. The numerical check: the empirical spread of estimates against the average claimed SE, all coefficients ---
+
+```{r}
+round(rbind(empirical_sd = apply(est_mat, 2, sd),
+            mean_est_se  = colMeans(se_mat)), 4)
+```
+
+**Do 95% intervals cover 95% of the time?**
+
+```{r}
+covered <- abs(sweep(est_mat, 2, beta_true)) <= 1.96 * se_mat
+round(colMeans(covered), 3)
+```
+
+All within Monte Carlo noise of 0.95 (with 200 replications, the coverage estimate itself has an SE of about $\sqrt{0.95 \times 0.05/200} \approx 0.015$). The full classical package --- centering, normality, honest uncertainty --- verified by direct observation rather than trusted from a theorem. This replication audit is cheap insurance we will purchase again at moments of higher doubt: when simulation error enters the likelihood itself (@sec-msl) and when we need to compare frequentist and Bayesian machinery on equal footing (@sec-hb-mnl).
 
 ## Key Learnings
+
+- The MNL log-likelihood is "chosen utility minus log-sum, summed over tasks" (@eq-mnl-loglik-compact). Its vectorized implementation is three grouped operations --- matrix product, `rowsum()`, broadcast-by-indexing --- on the stacked data of @sec-data.
+- `exp()` overflows and underflows; the log-sum-exp identity (@eq-logsumexp) with $m = \max_{j'} V_{j'}$ makes the likelihood unconditionally safe, at negligible cost. Build it in by reflex, here and in every softmax you ever write.
+- The MNL score is $\mathbf{X}'(\y - \mathbf{p})$ (@eq-mnl-score) --- the binary logit's "errors times covariates" form, unchanged. Derived, then audited against numerical differentiation, per standing policy.
+- Estimation recovered @eq-beta-true with tight, honest intervals; global concavity made the zero start safe. Fit was summarized by null log-likelihood, LR test, McFadden's $\rho^2$ (0.2--0.4 is excellent for choice data), hit rate, and AIC/BIC --- all likelihood arithmetic.
+- Validation against `mlogit` agreed to five decimals in coefficients, SEs, and log-likelihood: two independent implementations, one summit. Every estimator in this book faces this ritual.
+- The 200-replication study observed the classical guarantees directly: unbiased centering, normal sampling distribution matching the claimed SEs, and 95% coverage. The MLE machine works --- now we make it fast (@sec-performance) and point it at models that deserve the speed.

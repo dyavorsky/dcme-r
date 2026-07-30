@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -340,16 +423,17 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#when-proportional-substitution-fails" id="toc-when-proportional-substitution-fails" class="nav-link active" data-scroll-target="#when-proportional-substitution-fails"><span class="header-section-number">10.1</span> When Proportional Substitution Fails</a></li>
-  <li><a href="#the-nested-logit-model" id="toc-the-nested-logit-model" class="nav-link" data-scroll-target="#the-nested-logit-model"><span class="header-section-number">10.2</span> The Nested Logit Model</a>
+  <li><a href="#the-nested-logit-model" id="toc-the-nested-logit-model" class="nav-link" data-scroll-target="#the-nested-logit-model"><span class="header-section-number">10.2</span> The Nested Logit Model</a></li>
+  <li><a href="#a-labeled-variant-of-the-study" id="toc-a-labeled-variant-of-the-study" class="nav-link" data-scroll-target="#a-labeled-variant-of-the-study"><span class="header-section-number">10.3</span> A Labeled Variant of the Study</a></li>
+  <li><a href="#sec-sim-nested" id="toc-sec-sim-nested" class="nav-link" data-scroll-target="#sec-sim-nested"><span class="header-section-number">10.4</span> Simulating Nested Logit Data</a>
   <ul class="collapse">
-  <li><a href="#nests-and-the-dissimilarity-parameter" id="toc-nests-and-the-dissimilarity-parameter" class="nav-link" data-scroll-target="#nests-and-the-dissimilarity-parameter"><span class="header-section-number">10.2.1</span> Nests and the Dissimilarity Parameter</a></li>
-  <li><a href="#choice-probabilities-marginal-times-conditional" id="toc-choice-probabilities-marginal-times-conditional" class="nav-link" data-scroll-target="#choice-probabilities-marginal-times-conditional"><span class="header-section-number">10.2.2</span> Choice Probabilities: Marginal times Conditional</a></li>
+  <li><a href="#seeing-the-repaired-substitution" id="toc-seeing-the-repaired-substitution" class="nav-link" data-scroll-target="#seeing-the-repaired-substitution"><span class="header-section-number">10.4.1</span> Seeing the repaired substitution</a></li>
   </ul></li>
-  <li><a href="#simulating-nested-logit-data" id="toc-simulating-nested-logit-data" class="nav-link" data-scroll-target="#simulating-nested-logit-data"><span class="header-section-number">10.3</span> Simulating Nested Logit Data</a></li>
-  <li><a href="#estimating-the-nested-logit" id="toc-estimating-the-nested-logit" class="nav-link" data-scroll-target="#estimating-the-nested-logit"><span class="header-section-number">10.4</span> Estimating the Nested Logit</a></li>
-  <li><a href="#validation-against-mlogit" id="toc-validation-against-mlogit" class="nav-link" data-scroll-target="#validation-against-mlogit"><span class="header-section-number">10.5</span> Validation Against <code>mlogit</code></a></li>
-  <li><a href="#the-gev-family" id="toc-the-gev-family" class="nav-link" data-scroll-target="#the-gev-family"><span class="header-section-number">10.6</span> The GEV Family</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">10.7</span> Key Learnings</a></li>
+  <li><a href="#the-nested-logit-log-likelihood" id="toc-the-nested-logit-log-likelihood" class="nav-link" data-scroll-target="#the-nested-logit-log-likelihood"><span class="header-section-number">10.5</span> The Nested Logit Log-Likelihood</a></li>
+  <li><a href="#estimation" id="toc-estimation" class="nav-link" data-scroll-target="#estimation"><span class="header-section-number">10.6</span> Estimation</a></li>
+  <li><a href="#validation-against-mlogit" id="toc-validation-against-mlogit" class="nav-link" data-scroll-target="#validation-against-mlogit"><span class="header-section-number">10.7</span> Validation Against <code>mlogit</code></a></li>
+  <li><a href="#sec-gev-family" id="toc-sec-gev-family" class="nav-link" data-scroll-target="#sec-gev-family"><span class="header-section-number">10.8</span> The GEV Family</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">10.9</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/10_iia.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -375,41 +459,298 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 4; McFadden 2001 (GEV generating functions); Greene 2008 §0.7; validation: mlogit nested logit -->
+<p>The MNL bought its closed form with the IIA property (<a href="07_mnl.html#eq-iia" class="quarto-xref">Equation&nbsp;<span>7.5</span></a>), and <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> showed the bill can be absurd: paint a bus red and steal car riders. This chapter makes the first — and gentlest — repair. The <strong>nested logit</strong> lets alternatives share unobserved appeal <em>within researcher-specified groups</em>, breaking IIA across groups while preserving a closed-form probability, a tractable likelihood, and everything we know about estimating such things. It is the smallest possible step beyond the MNL, which makes it the ideal place to learn how model generalizations propagate through the estimation machinery: a new parameter, a new likelihood, the same workflow.</p>
+<p>The chapter also marks a small narrative shift in the running example, explained below, and introduces a technique we will use for the rest of the book: simulating data <em>directly from choice probabilities</em> when utility-plus-error simulation is awkward.</p>
 <section id="when-proportional-substitution-fails" class="level2" data-number="10.1">
 <h2 data-number="10.1" class="anchored" data-anchor-id="when-proportional-substitution-fails"><span class="header-section-number">10.1</span> When Proportional Substitution Fails</h2>
-<!-- revisit red-bus/blue-bus with numbers; correlated unobserved utility across similar alternatives -->
+<p>Recall the diagnosis from <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>: the MNL’s independent errors give it no way to know that two alternatives are similar in unobserved ways, so improvement in one alternative draws share from all others <em>in proportion to their shares</em> — never disproportionately from its close substitutes.</p>
+<p>Put that in laptop terms. Suppose unobserved utility has a large operating-system component: some shoppers, on some occasions, are simply in a macOS mood or locked into Windows workflows we don’t measure. Then a Dell and an Acer (both Windows) share unobserved appeal that neither shares with an Apple. If the Dell cuts its price, common sense says it should poach <em>mostly Windows shoppers</em> — Acer’s customers — and pry away few committed Mac buyers. The MNL is structurally incapable of that asymmetry; the nested logit is built for it.</p>
 </section>
 <section id="the-nested-logit-model" class="level2" data-number="10.2">
 <h2 data-number="10.2" class="anchored" data-anchor-id="the-nested-logit-model"><span class="header-section-number">10.2</span> The Nested Logit Model</h2>
-<section id="nests-and-the-dissimilarity-parameter" class="level3" data-number="10.2.1">
-<h3 data-number="10.2.1" class="anchored" data-anchor-id="nests-and-the-dissimilarity-parameter"><span class="header-section-number">10.2.1</span> Nests and the Dissimilarity Parameter</h3>
-<!-- grouping alternatives; lambda as within-nest correlation; RUM-consistency bounds on lambda -->
+<p>Partition the alternatives in a choice situation into <span class="math inline">\(M\)</span> <strong>nests</strong> <span class="math inline">\(B_1, \ldots, B_M\)</span>. Our study: <span class="math inline">\(B_{\text{win}} = \{\text{Acer}, \text{Dell}\}\)</span>, <span class="math inline">\(B_{\text{mac}} = \{\text{Apple}\}\)</span> (a nest may be a singleton). Utility keeps its form <span class="math inline">\(U_{ntj} = V_{ntj} + \varepsilon_{ntj}\)</span>, but the joint distribution of the errors is generalized so that errors <em>within</em> a nest are correlated while errors <em>across</em> nests remain independent. The degree of within-nest correlation is governed by the <strong>dissimilarity parameter</strong> <span class="math inline">\(\lambda_m \in (0, 1]\)</span>: the within-nest error correlation is approximately <span class="math inline">\(1 - \lambda_m^2\)</span> — a standard approximation we take from the literature rather than derive, since the exact correlation has no simple closed form <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 4.2</a>)</span> — so</p>
+<ul>
+<li><span class="math inline">\(\lambda_m = 1\)</span>: no correlation — the nest is cosmetic, and the model collapses to the MNL;</li>
+<li><span class="math inline">\(\lambda_m \to 0\)</span>: perfect correlation — alternatives in the nest are near-clones on unobservables, and competition within the nest becomes ferocious while the nest as a whole competes with others as a unit.</li>
+</ul>
+<p>Values outside <span class="math inline">\((0,1]\)</span> break consistency with random utility maximization,<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> a fact with practical bite: an estimated <span class="math inline">\(\hat\lambda\)</span> above 1 is a specification alarm (the nesting is wrong), and our estimation code below will constrain the search to the valid interval. For this chapter we give both nests a <em>common</em> <span class="math inline">\(\lambda\)</span> — the natural choice when one nest is a singleton, whose own <span class="math inline">\(\lambda\)</span> would be unidentified.</p>
+<p>The choice probability <span class="citation" data-cites="train2009">(derived in <a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 4.2</a>)</span> has a structure that teaches the model’s behavioral content. Define the <strong>inclusive value</strong> of nest <span class="math inline">\(m\)</span>:</p>
+<p><span id="eq-inclusive-value"><span class="math display">\[
+I_{ntm} = \log \sum_{j' \in B_m} e^{V_{ntj'} / \lambda}
+\tag{10.1}\]</span></span></p>
+<p>Then</p>
+<p><span id="eq-nested-prob"><span class="math display">\[
+P_{ntj} = \underbrace{\frac{e^{\lambda I_{ntm(j)}}}{\sum_{m'=1}^{M} e^{\lambda I_{ntm'}}}}_{\Pr(\text{nest } m(j))} \times \underbrace{\frac{e^{V_{ntj}/\lambda}}{\sum_{j' \in B_{m(j)}} e^{V_{ntj'}/\lambda}}}_{\Pr(j \mid \text{nest } m(j))}
+\tag{10.2}\]</span></span></p>
+<p>Read it as a two-stage decision — pick a nest, then pick within the nest — with each stage an MNL. The inclusive value is the bridge between stages: <span class="math inline">\(I_{ntm}\)</span> is the log-sum of nest <span class="math inline">\(m\)</span>, the same “value of a choice set” object that the Gumbel max-stability property produced in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>, now measuring how attractive the nest is <em>as a whole</em> when the upper stage compares nests.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The two-stage reading is a mathematical decomposition, not a claim about sequential cognition; the model is a simultaneous utility maximization with correlated errors that happens to factor this way.</p>
+<p>Verify the two limiting cases against <a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a> by inspection: at <span class="math inline">\(\lambda = 1\)</span>, the <span class="math inline">\(I\)</span>’s become ordinary log-sums and the product collapses to <a href="07_mnl.html#eq-mnl-prob" class="quarto-xref">Equation&nbsp;<span>7.4</span></a>; as <span class="math inline">\(\lambda \to 0\)</span>, the within-nest stage approaches “pick the nest’s best alternative with certainty” while nests compete by their best members. And confirm the IIA repair by forming the odds for <span class="math inline">\(j \in B_a\)</span> and <span class="math inline">\(k \in B_b\)</span> with <span class="math inline">\(a \neq b\)</span>. The across-nest denominator is common to both probabilities and cancels, and using the identity <span class="math inline">\(\sum_{j' \in B_m} e^{V_{ntj'}/\lambda} = e^{I_{ntm}}\)</span> for each within-nest denominator, <span class="math display">\[\frac{P_{ntj}}{P_{ntk}} = \frac{e^{\lambda I_{nta}} \; e^{V_{ntj}/\lambda - I_{nta}}}{e^{\lambda I_{ntb}} \; e^{V_{ntk}/\lambda - I_{ntb}}} = e^{(V_{ntj} - V_{ntk})/\lambda} \; e^{(\lambda - 1)(I_{nta} - I_{ntb})}.\]</span> At <span class="math inline">\(\lambda = 1\)</span> the second factor is 1 and we are back to <a href="07_mnl.html#eq-iia" class="quarto-xref">Equation&nbsp;<span>7.5</span></a>. For <span class="math inline">\(\lambda &lt; 1\)</span>, the odds depend — through <span class="math inline">\(I_{nta}\)</span> and <span class="math inline">\(I_{ntb}\)</span> — on every alternative in the <em>two nests involved</em>: improve the Acer and the Dell/Apple odds shift, because <span class="math inline">\(I_{\text{win}}\)</span> rises. Note the precision of the repair: alternatives in any <em>third</em> nest still cancel exactly, so IIA fails at the boundary between the two nests being compared, survives within nests, and survives with respect to everything else. Choosing the boundary is the researcher’s model specification burden — and the model offers no protection against choosing it wrongly, a limitation the mixed logit (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) and probit (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>) will lift at the cost of the closed form.</p>
 </section>
-<section id="choice-probabilities-marginal-times-conditional" class="level3" data-number="10.2.2">
-<h3 data-number="10.2.2" class="anchored" data-anchor-id="choice-probabilities-marginal-times-conditional"><span class="header-section-number">10.2.2</span> Choice Probabilities: Marginal times Conditional</h3>
-<!-- the two-level decomposition; inclusive value / log-sum -->
+<section id="a-labeled-variant-of-the-study" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="a-labeled-variant-of-the-study"><span class="header-section-number">10.3</span> A Labeled Variant of the Study</h2>
+<p>Nesting is a statement about <em>which alternatives</em> share unobserved appeal, so it attaches most naturally to designs where the alternatives have stable identities. For this chapter we switch the running example to a <strong>brand-labeled design</strong>: every task shows exactly one Acer, one Dell, and one Apple — alternative 1 <em>is</em> the Acer, and so on — with memory, screen, and price still randomized independently. This is a common real-world CBC variant (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a> introduced the labeled/unlabeled distinction; here it earns its keep), and it changes the bookkeeping in one satisfying way: the brand dummies of <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> are now, literally, <strong>alternative-specific constants</strong> — the ASCs that <a href="04_data.html#sec-data-intercept" class="quarto-xref"><span>Section 4.5</span></a> said labeled designs require. Same columns, same true values, new interpretation. The utility specification and true parameters carry over from <a href="07_mnl.html#eq-beta-true" class="quarto-xref">Equation&nbsp;<span>7.6</span></a>, joined by the new structural parameter:</p>
+<p><span class="math display">\[
+\lambda^\ast = 0.5
+\]</span></p>
+<p>— substantial within-nest correlation (about <span class="math inline">\(1 - 0.5^2 = 0.75\)</span>), enough to make the substitution patterns visibly non-MNL.</p>
+</section>
+<section id="sec-sim-nested" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="sec-sim-nested"><span class="header-section-number">10.4</span> Simulating Nested Logit Data</h2>
+<p>Here we hit an instructive wall. Our simulators so far follow the utility recipe: draw errors, add, argmax (<a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>, <a href="07_mnl.html#sec-sim-mnl" class="quarto-xref"><span>Section 7.6</span></a>). For the nested logit, the required error draws — marginally Gumbel, dependent within nests in the precise GEV pattern — have no simple constructive recipe like <code>rlogis()</code> or the Cholesky transform.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> But we don’t need one: <strong>any model whose choice probabilities we can compute can be simulated directly from those probabilities.</strong> Compute <span class="math inline">\(P_{ntj}\)</span> for the task via <a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a>, then draw the choice from the corresponding categorical distribution — in R, <code>sample()</code> with <code>prob =</code>. The utility framework earns its keep in <em>deriving</em> the probabilities; once derived, they are the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sim_nested_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, T, beta, lambda) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    J <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    n_rows <span class="ot">&lt;-</span> N <span class="sc">*</span> T <span class="sc">*</span> J</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">id    =</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(N), <span class="at">each =</span> T <span class="sc">*</span> J),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">task  =</span> <span class="fu">rep</span>(<span class="fu">rep</span>(<span class="fu">seq_len</span>(T), <span class="at">each =</span> J), <span class="at">times =</span> N),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">alt   =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"Acer"</span>, <span class="st">"Dell"</span>, <span class="st">"Apple"</span>), <span class="at">times =</span> N <span class="sc">*</span> T),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">ram   =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"8"</span>,<span class="st">"16"</span>,<span class="st">"32"</span>)),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen =</span> <span class="fu">factor</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>), n_rows, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                        <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"13"</span>,<span class="st">"15"</span>)),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">price =</span> <span class="fu">round</span>(<span class="fu">runif</span>(n_rows, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>), <span class="dv">2</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>alt  <span class="ot">&lt;-</span> <span class="fu">factor</span>(df<span class="sc">$</span>alt, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>, <span class="st">"Dell"</span>, <span class="st">"Apple"</span>))</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>nest <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(df<span class="sc">$</span>alt <span class="sc">==</span> <span class="st">"Apple"</span>, <span class="st">"mac"</span>, <span class="st">"win"</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> alt <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="do">## nested logit probabilities, task by task (eq-nested-prob)</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    P <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n_rows)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(task_id)) {</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>        rows <span class="ot">&lt;-</span> <span class="fu">which</span>(task_id <span class="sc">==</span> i)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>        v    <span class="ot">&lt;-</span> V[rows]; nest <span class="ot">&lt;-</span> df<span class="sc">$</span>nest[rows]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>        Iv   <span class="ot">&lt;-</span> <span class="fu">tapply</span>(v <span class="sc">/</span> lambda, nest, <span class="cf">function</span>(z) <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(z))))</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>        Pnest   <span class="ot">&lt;-</span> <span class="fu">exp</span>(lambda <span class="sc">*</span> Iv) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">exp</span>(lambda <span class="sc">*</span> Iv))</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>        Pwithin <span class="ot">&lt;-</span> <span class="fu">exp</span>(v <span class="sc">/</span> lambda) <span class="sc">/</span> <span class="fu">ave</span>(<span class="fu">exp</span>(v <span class="sc">/</span> lambda), nest, <span class="at">FUN =</span> sum)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>        P[rows] <span class="ot">&lt;-</span> Pnest[nest] <span class="sc">*</span> Pwithin</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="do">## choices: one categorical draw per task</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>    df<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="dv">0</span>L</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(task_id)) {</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>        rows <span class="ot">&lt;-</span> <span class="fu">which</span>(task_id <span class="sc">==</span> i)</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>        df<span class="sc">$</span>choice[rows[<span class="fu">sample.int</span>(J, <span class="dv">1</span>, <span class="at">prob =</span> P[rows])]] <span class="ot">&lt;-</span> <span class="dv">1</span>L</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    df</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">103</span>)</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>beta_true   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">dell =</span> <span class="fl">0.5</span>, <span class="at">apple =</span> <span class="fl">1.0</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>, <span class="at">ram32 =</span> <span class="fl">0.9</span>,</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                 <span class="at">screen15 =</span> <span class="fl">0.3</span>, <span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>lambda_true <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>nested <span class="ot">&lt;-</span> <span class="fu">sim_nested_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">T =</span> <span class="dv">8</span>, <span class="at">beta =</span> beta_true,</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>                          <span class="at">lambda =</span> lambda_true)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(Yes, the simulator loops over tasks — and by <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s own doctrine that is fine: it runs <em>once</em>, not inside an optimizer. Measure before optimizing includes knowing when not to bother.)</p>
+<section id="seeing-the-repaired-substitution" class="level3" data-number="10.4.1">
+<h3 data-number="10.4.1" class="anchored" data-anchor-id="seeing-the-repaired-substitution"><span class="header-section-number">10.4.1</span> Seeing the repaired substitution</h3>
+<p>Before estimating, let’s confirm the model does what it was hired to do. Take a representative task — one laptop per brand, identical specs, $1,500 each — cut the Dell’s price by $300, and ask where its gained share comes from, under the nested model (<span class="math inline">\(\lambda = 0.5\)</span>) versus the MNL (<span class="math inline">\(\lambda = 1\)</span>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>nested_probs <span class="ot">&lt;-</span> <span class="cf">function</span>(V, nest, lambda) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    Iv      <span class="ot">&lt;-</span> <span class="fu">tapply</span>(V <span class="sc">/</span> lambda, nest, <span class="cf">function</span>(z) <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(z))))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    Pnest   <span class="ot">&lt;-</span> <span class="fu">exp</span>(lambda <span class="sc">*</span> Iv) <span class="sc">/</span> <span class="fu">sum</span>(<span class="fu">exp</span>(lambda <span class="sc">*</span> Iv))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    Pwithin <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">/</span> lambda) <span class="sc">/</span> <span class="fu">ave</span>(<span class="fu">exp</span>(V <span class="sc">/</span> lambda), nest, <span class="at">FUN =</span> sum)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(Pnest[nest] <span class="sc">*</span> Pwithin)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>X_task <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="at">acer  =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.5</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">dell  =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.5</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">apple =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">1.5</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>nest   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"win"</span>, <span class="st">"win"</span>, <span class="st">"mac"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>V0 <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X_task <span class="sc">%*%</span> beta_true)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>V1 <span class="ot">&lt;-</span> V0 <span class="sc">+</span> <span class="fu">c</span>(<span class="dv">0</span>, beta_true[<span class="st">"price"</span>] <span class="sc">*</span> <span class="sc">-</span><span class="fl">0.3</span>, <span class="dv">0</span>)   <span class="co"># Dell $300 cheaper: price falls by 0.3 ($000s)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>shares <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">nested_before =</span> <span class="fu">nested_probs</span>(V0, nest, <span class="fl">0.5</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">nested_after  =</span> <span class="fu">nested_probs</span>(V1, nest, <span class="fl">0.5</span>),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">mnl_before    =</span> <span class="fu">nested_probs</span>(V0, nest, <span class="dv">1</span>),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">mnl_after     =</span> <span class="fu">nested_probs</span>(V1, nest, <span class="dv">1</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(shares) <span class="ot">&lt;-</span> <span class="fu">rownames</span>(X_task)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(shares, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               acer  dell apple
+nested_before 0.112 0.303 0.585
+nested_after  0.074 0.412 0.514
+mnl_before    0.186 0.307 0.506
+mnl_after     0.164 0.389 0.447</code></pre>
+</div>
+</div>
+<p>Do the accounting. Under the MNL, the Dell’s gain comes from Acer and Apple in proportion to their prior shares — proportional substitution, as <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> proved it must. Under the nested model, Acer surrenders share at a far higher <em>rate</em> relative to its starting point than Apple does: the price cut plays out mostly as within-nest warfare among the Windows machines, while the Mac buyer barely glances up. That asymmetry — impossible in the MNL — is the entire point of the <span class="math inline">\(\lambda\)</span> parameter.</p>
 </section>
 </section>
-<section id="simulating-nested-logit-data" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="simulating-nested-logit-data"><span class="header-section-number">10.3</span> Simulating Nested Logit Data</h2>
-<!-- drawing correlated EV1 errors within nests; verify substitution patterns differ from MNL -->
+<section id="the-nested-logit-log-likelihood" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="the-nested-logit-log-likelihood"><span class="header-section-number">10.5</span> The Nested Logit Log-Likelihood</h2>
+<p>Estimation needs <span class="math inline">\(\log P_{ntj}\)</span> for the chosen alternatives. One identity does all the work: by the definition <a href="#eq-inclusive-value" class="quarto-xref">Equation&nbsp;<span>10.1</span></a>, the within-nest denominator is <span class="math inline">\(\sum_{j' \in B_{m(j)}} e^{V_{ntj'}/\lambda} = e^{I_{ntm(j)}}\)</span>. So the log of <a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a>’s within-nest factor is <span class="math inline">\(V_{ntj}/\lambda - I_{ntm(j)}\)</span>, the log of its nest-choice factor is <span class="math inline">\(\lambda I_{ntm(j)} - \log \sum_{m'} e^{\lambda I_{ntm'}}\)</span>, and (writing <span class="math inline">\(m(j)\)</span> for the chosen row’s nest) their sum is:</p>
+<p><span id="eq-nested-loglik-term"><span class="math display">\[
+\log P_{ntj} = \underbrace{\left[ \frac{V_{ntj}}{\lambda} - I_{ntm(j)} \right]}_{\text{within-nest}} \; + \; \underbrace{\left[ \lambda I_{ntm(j)} - \log \textstyle\sum_{m'} e^{\lambda I_{ntm'}} \right]}_{\text{across-nest}}
+\tag{10.3}\]</span></span></p>
+<p>Both bracketed terms are “utility minus log-sum” shapes — the MNL pattern of <a href="08_mnl_mle.html#eq-mnl-loglik-compact" class="quarto-xref">Equation&nbsp;<span>8.2</span></a> at two levels. So the vectorized implementation is the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> machinery applied twice: once with rows grouped by <em>(task, nest)</em> to build inclusive values, once with nests grouped by <em>task</em>. The parameter vector stacks the two: <span class="math inline">\(\boldsymbol{\theta}= (\boldsymbol{\beta}, \lambda)\)</span> — <code>theta</code> in the code, unpacked by <code>beta &lt;- theta[1:K]</code> and <code>lambda &lt;- theta[K + 1]</code>; each level gets its own max-shift for numerical stability (the log-sum-exp guard of <a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a>, applied twice):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>loglik_nested <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, X, task_id, nest_id) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    K      <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    beta   <span class="ot">&lt;-</span> theta[<span class="dv">1</span><span class="sc">:</span>K]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    lambda <span class="ot">&lt;-</span> theta[K <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    Vs <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">/</span> lambda</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="do">## level 1: inclusive value per (task, nest) group</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    g      <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">interaction</span>(task_id, nest_id, <span class="at">drop =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    m1_row <span class="ot">&lt;-</span> <span class="fu">ave</span>(Vs, g, <span class="at">FUN =</span> max)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    m1     <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">tapply</span>(m1_row, g, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">1</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    I_g    <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">as.vector</span>(<span class="fu">rowsum</span>(<span class="fu">exp</span>(Vs <span class="sc">-</span> m1_row), g))) <span class="sc">+</span> m1</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    task_of_g <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">tapply</span>(task_id, g, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">1</span>))</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="do">## level 2: log-sum of lambda * I across nests within task</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    lI   <span class="ot">&lt;-</span> lambda <span class="sc">*</span> I_g</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    m2_g <span class="ot">&lt;-</span> <span class="fu">ave</span>(lI, task_of_g, <span class="at">FUN =</span> max)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    m2   <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">tapply</span>(m2_g, task_of_g, <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">1</span>))</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    lse2 <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">as.vector</span>(<span class="fu">rowsum</span>(<span class="fu">exp</span>(lI <span class="sc">-</span> m2_g), task_of_g))) <span class="sc">+</span> m2</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="do">## eq-nested-loglik-term, chosen rows only</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    logP <span class="ot">&lt;-</span> (Vs <span class="sc">-</span> I_g[g]) <span class="sc">+</span> (lambda <span class="sc">*</span> I_g[g] <span class="sc">-</span> lse2[task_id])</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(logP[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The new idiom is <code>interaction(task_id, nest_id, drop = TRUE)</code>: it mints one group label per (task, nest) pair, letting <code>rowsum()</code> and <code>ave()</code> aggregate at the intermediate level, after which <code>I_g[g]</code> and <code>lse2[task_id]</code> broadcast group-level quantities back down — the same label-indexing trick as always, used at two altitudes. Check it the honest way, against a brute-force task-by-task computation of <a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a> at the true parameters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> alt <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> nested)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> nested<span class="sc">$</span>choice</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(nested[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>ll_fast <span class="ot">&lt;-</span> <span class="fu">loglik_nested</span>(<span class="fu">c</span>(beta_true, lambda_true), y, X, task_id, nested<span class="sc">$</span>nest)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta_true); ll_bf <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(task_id)) {</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    rows <span class="ot">&lt;-</span> <span class="fu">which</span>(task_id <span class="sc">==</span> i)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    P <span class="ot">&lt;-</span> <span class="fu">nested_probs</span>(V[rows], nested<span class="sc">$</span>nest[rows], lambda_true)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    ll_bf <span class="ot">&lt;-</span> ll_bf <span class="sc">+</span> <span class="fu">log</span>(P[y[rows] <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">vectorized =</span> ll_fast, <span class="at">brute_force =</span> ll_bf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> vectorized brute_force 
+  -3216.614   -3216.614 </code></pre>
+</div>
+</div>
+<p>Identical. Note in passing what we just did: <em>the simulator and the likelihood were implemented independently</em> (probability formula task-by-task versus grouped log-sum algebra), so their agreement is a genuine cross-check, not a tautology — the same reason <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> validated against <code>mlogit</code> rather than against itself.</p>
 </section>
-<section id="estimating-the-nested-logit" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="estimating-the-nested-logit"><span class="header-section-number">10.4</span> Estimating the Nested Logit</h2>
-<!-- FIML with optim() on the full likelihood; two-step sequential estimation mentioned for history; testing lambda = 1 to recover MNL -->
+<section id="estimation" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="estimation"><span class="header-section-number">10.6</span> Estimation</h2>
+<p>One wrinkle separates this fit from <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>: <span class="math inline">\(\lambda\)</span> must stay in <span class="math inline">\((0, 1]\)</span>, and BFGS knows nothing of bounds. Three standard options: reparameterize (estimate <span class="math inline">\(\alpha\)</span> with <span class="math inline">\(\lambda = 1/(1+e^{-\alpha})\)</span>, unconstrained), penalize, or use a bounded optimizer. We take the third — <code>optim(method = "L-BFGS-B")</code> accepts box constraints directly, and meeting it here matters because bounded parameters recur (class shares in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>, variance parameters in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>, where we will choose reparameterization instead and compare notes):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par     =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">6</span>), <span class="fl">0.8</span>),</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">fn      =</span> loglik_nested,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id, <span class="at">nest_id =</span> nested<span class="sc">$</span>nest,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">method  =</span> <span class="st">"L-BFGS-B"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">lower   =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="dv">6</span>), <span class="fl">0.05</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">upper   =</span> <span class="fu">c</span>(<span class="fu">rep</span>( <span class="cn">Inf</span>, <span class="dv">6</span>), <span class="dv">1</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">hessian =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">solve</span>(<span class="sc">-</span>fit<span class="sc">$</span>hessian)))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">truth    =</span> <span class="fu">c</span>(beta_true, <span class="at">lambda =</span> lambda_true),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">estimate =</span> fit<span class="sc">$</span>par, <span class="at">se =</span> se, <span class="at">z =</span> fit<span class="sc">$</span>par <span class="sc">/</span> se)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(results) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">colnames</span>(X), <span class="st">"lambda"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(results, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         truth estimate    se       z
+altDell    0.5    0.543 0.040  13.674
+altApple   1.0    1.042 0.059  17.653
+ram16      0.6    0.642 0.049  13.220
+ram32      0.9    0.927 0.053  17.502
+screen15   0.3    0.288 0.036   7.982
+price     -1.2   -1.225 0.059 -20.829
+lambda     0.5    0.510 0.033  15.238</code></pre>
+</div>
+</div>
+<p>Recovery across the board, including the structural parameter: <span class="math inline">\(\hat\lambda \approx 0.51\)</span> with a tight standard error, decisively inside <span class="math inline">\((0,1)\)</span> and decisively away from the MNL’s <span class="math inline">\(\lambda = 1\)</span>. Make that last comparison formal with the likelihood-ratio machinery of <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> — the MNL is this model with one parameter pinned, so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>loglik_mnl <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {      <span class="co"># from @sec-mnl-mle</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    V     <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    Vmax  <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    eV    <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>((V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">rowsum</span>(eV, task_id)[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fit_mnl <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">6</span>), loglik_mnl, <span class="at">y =</span> y, <span class="at">X =</span> X, <span class="at">task_id =</span> task_id,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>lr <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> (fit<span class="sc">$</span>value <span class="sc">-</span> fit_mnl<span class="sc">$</span>value)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">LR =</span> <span class="fu">round</span>(lr, <span class="dv">1</span>), <span class="at">p =</span> <span class="fu">signif</span>(<span class="fu">pchisq</span>(lr, <span class="at">df =</span> <span class="dv">1</span>, <span class="at">lower.tail =</span> <span class="cn">FALSE</span>), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       LR         p 
+1.014e+02 7.660e-24 </code></pre>
+</div>
+</div>
+<p>The data, simulated with real nest correlation, reject the MNL emphatically.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Estimating a wrong-by-construction MNL on these data is itself instructive — compare <code>fit_mnl$par</code> to the truth and you’ll find the <em>attribute</em> coefficients survive respectably while the substitution predictions (the model’s whole purpose in a competitive analysis) would be badly off: misspecification often hides in the quantities you don’t tabulate.</p>
 </section>
-<section id="validation-against-mlogit" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="validation-against-mlogit"><span class="header-section-number">10.5</span> Validation Against <code>mlogit</code></h2>
+<section id="validation-against-mlogit" class="level2" data-number="10.7">
+<h2 data-number="10.7" class="anchored" data-anchor-id="validation-against-mlogit"><span class="header-section-number">10.7</span> Validation Against <code>mlogit</code></h2>
+<p><code>mlogit</code> estimates nested logits via its <code>nests</code> argument; <code>un.nest.el = TRUE</code> imposes our common-<span class="math inline">\(\lambda\)</span> assumption. With labeled alternatives, <code>mlogit</code> supplies the ASCs itself (its <code>(Intercept):Dell</code> and <code>(Intercept):Apple</code> are our <code>dell</code> and <code>apple</code> dummies — same reference brand, Acer):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dfidx)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mlogit)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> nested</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>md<span class="sc">$</span>chid   <span class="ot">&lt;-</span> task_id</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>md<span class="sc">$</span>choice <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(md<span class="sc">$</span>choice)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">dfidx</span>(md, <span class="at">idx =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="st">"chid"</span>, <span class="st">"id"</span>), <span class="st">"alt"</span>))</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>fit_ml <span class="ot">&lt;-</span> <span class="fu">mlogit</span>(choice <span class="sc">~</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> md,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                 <span class="at">nests =</span> <span class="fu">list</span>(<span class="at">win =</span> <span class="fu">c</span>(<span class="st">"Acer"</span>, <span class="st">"Dell"</span>), <span class="at">mac =</span> <span class="st">"Apple"</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                 <span class="at">un.nest.el =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">ours =</span> fit<span class="sc">$</span>par, <span class="at">mlogit =</span> <span class="fu">coef</span>(fit_ml)[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>, <span class="dv">7</span>)]), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       (Intercept):Dell (Intercept):Apple ram16  ram32 screen15   price     iv
+ours             0.5434            1.0421 0.642 0.9267   0.2878 -1.2252 0.5098
+mlogit           0.5434            1.0421 0.642 0.9267   0.2878 -1.2252 0.5098</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">ours =</span> fit<span class="sc">$</span>value, <span class="at">mlogit =</span> <span class="fu">as.numeric</span>(<span class="fu">logLik</span>(fit_ml)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     ours    mlogit 
+-3215.509 -3215.509 </code></pre>
+</div>
+</div>
+<p>Coefficient-for-coefficient agreement (their <code>iv</code> is our <span class="math inline">\(\lambda\)</span>), identical log-likelihoods. Two implementations, one summit, again.</p>
 </section>
-<section id="the-gev-family" class="level2" data-number="10.6">
-<h2 data-number="10.6" class="anchored" data-anchor-id="the-gev-family"><span class="header-section-number">10.6</span> The GEV Family</h2>
-<!-- the generating-function recipe (McFadden 2001); cross-nested, paired combinatorial, OGEV as a survey -- specify, don't estimate; the lesson: closed forms are available beyond MNL, at the price of modeling craft -->
+<section id="sec-gev-family" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="sec-gev-family"><span class="header-section-number">10.8</span> The GEV Family</h2>
+<p>The nested logit is one member of a family McFadden constructed with a single generating device <span class="citation" data-cites="mcfadden2001 train2009">(<a href="references.html#ref-mcfadden2001" role="doc-biblioref">McFadden 2001</a>; <a href="references.html#ref-train2009" role="doc-biblioref">Train 2009</a>, Ch. 4)</span>. Take any function <span class="math inline">\(G(e^{V_1}, \ldots, e^{V_J})\)</span> satisfying a short list of properties (non-negativity, homogeneity, sign-alternating derivatives); then</p>
+<p><span id="eq-gev-prob"><span class="math display">\[
+P_j = \frac{e^{V_j} \, G_j(e^{V_1}, \ldots, e^{V_J})}{G(e^{V_1}, \ldots, e^{V_J})}
+\tag{10.4}\]</span></span></p>
+<p>(with <span class="math inline">\(G_j = \partial G / \partial e^{V_j}\)</span>) is the choice probability of a well-defined random utility model with <strong>generalized extreme value</strong> errors — closed-form, RUM-consistent, guaranteed. The family is a probability factory: <span class="math inline">\(G = \sum_j e^{V_j}\)</span> yields the MNL; <span class="math inline">\(G = \sum_m \big( \sum_{j \in B_m} e^{V_j/\lambda_m} \big)^{\lambda_m}\)</span> yields the nested logit (differentiate it and <a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a> falls out); overlapping-nest choices of <span class="math inline">\(G\)</span> yield the <em>cross-nested</em> and <em>paired combinatorial</em> logits, where an alternative belongs partially to several nests — a Dell desktop-replacement laptop that competes in both the “Windows” nest and a “large-screen” nest.</p>
+<p>We won’t estimate these siblings — the workflow is exactly the one this chapter just executed: derive <span class="math inline">\(P\)</span> from <span class="math inline">\(G\)</span>, take logs, write the two-(or three-)level grouped likelihood, constrain the <span class="math inline">\(\lambda\)</span>’s, climb — and one worked example plus a recipe beats three worked examples. The strategic lesson to carry forward instead: within the GEV family, <em>every</em> substitution pattern must be specified in advance through the structure of <span class="math inline">\(G\)</span>. The researcher declares who competes with whom; the data only measure how strongly. When you do not know the competitive structure — the usual situation — you want models where flexible substitution <em>emerges</em> from estimated quantities instead: random coefficients (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) or free error covariance (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>). Both cost the closed form. The next four chapters pay that cost and build the simulation machinery that covers it.</p>
 </section>
-<section id="key-learnings" class="level2" data-number="10.7">
-<h2 data-number="10.7" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">10.7</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="10.9">
+<h2 data-number="10.9" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">10.9</span> Key Learnings</h2>
+<ul>
+<li>The nested logit groups alternatives into nests with correlated unobservables; the dissimilarity parameter <span class="math inline">\(\lambda \in (0,1]\)</span> indexes the correlation (<span class="math inline">\(\lambda = 1\)</span> recovers the MNL), and estimates outside the interval indict the nesting structure itself.</li>
+<li>The probability (<a href="#eq-nested-prob" class="quarto-xref">Equation&nbsp;<span>10.2</span></a>) factors into two MNL stages linked by the inclusive value — the log-sum of <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> in its second starring role — and IIA now fails across nests while surviving within them, exactly as designed: our $300 Dell price cut savaged Acer and barely touched Apple.</li>
+<li>New simulation technique: when errors have no convenient constructive form, simulate <em>from the choice probabilities directly</em> (categorical draws). Computable probabilities are all a simulator needs.</li>
+<li>The log-likelihood is the MNL’s “utility minus log-sum” pattern applied at two levels; <code>interaction()</code> group labels plus <code>rowsum()</code>/broadcast implement it vectorized, with max-shifts at both levels. Simulator and likelihood, implemented independently, agreed at the truth — and <code>mlogit</code> agreed with both.</li>
+<li>Bounded parameters met bounded optimization: <code>L-BFGS-B</code> with box constraints. The LR test rejected <span class="math inline">\(\lambda = 1\)</span> decisively (mind the boundary caveat), and recovery included the structural parameter.</li>
+<li>The GEV generating function (<a href="#eq-gev-prob" class="quarto-xref">Equation&nbsp;<span>10.4</span></a>) mass-produces closed-form RUM models — but all of them require the researcher to pre-specify who competes with whom. Flexible, data-driven substitution requires integrals without closed forms: enter simulation-assisted estimation.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcfadden2001" class="csl-entry" role="listitem">
+McFadden, Daniel. 2001. <span>“Economic Choices.”</span> <em>American Economic Review</em> 91 (3): 351–78.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 4.2 discusses the bounds and the (limited) sense in which <span class="math inline">\(\lambda\)</span> slightly above 1 can be tolerated. The formal foundation — that the nested logit is the GEV member generated by a particular function <span class="math inline">\(G\)</span> — appears at the chapter’s end.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The log-sum’s third appearance is scheduled for <a href="21_postestimation.html" class="quarto-xref"><span>Chapter 21</span></a>, where (divided by the price coefficient) it becomes consumer surplus. One object, three jobs: max-stability byproduct, nest attractiveness, welfare measure.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Constructions exist <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 4.2</a> notes the possibilities)</span>, but they are genuinely awkward, and the probability route is both exact and simpler. The probability route also has a conceptual payoff: it separates “the model” (a distribution over choices given attributes) from “the story that motivated it” (utilities and errors).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>A technical footnote for the careful: the null <span class="math inline">\(\lambda = 1\)</span> sits on the <em>boundary</em> of the parameter space, which makes the usual <span class="math inline">\(\chi^2_1\)</span> reference conservative in general. At an LR statistic this size, no correction changes the verdict.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

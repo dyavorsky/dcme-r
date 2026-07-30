@@ -4,42 +4,299 @@
 
 # Estimating the MNP {#sec-mnp-est}
 
-<!-- The capstone demonstration that model and estimation method are separate choices: one model, both toolkits. Sources: DCMS Ch 5 (AR, smoothed AR, GHK); mcculloch-rossi-1994 (3-block Gibbs); validation: bayesm rmnpGibbs -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
 
-## Route 1: Simulated Likelihood
+One model, both toolkits. The MNP's likelihood is a wall of normal orthant integrals (@eq-mnp-prob); this chapter scales it twice --- once with Part II's machinery (simulate the integral, maximize the simulated likelihood) and once with Part III's (augment the integral away, Gibbs the rest). Beyond estimating the MNP, the chapter is the book's thesis made concrete: *the model is a set of assumptions; the estimator is a separate choice; and a well-built toolkit lets you make that choice on the merits.* By the end, the two routes will sit in one table, agreeing with each other to the second decimal.
 
-### The Accept-Reject Simulator and Its Flaws
+Load the study saved in @sec-mnp, and build the differenced objects that both routes consume --- everything here runs on the identification analysis of @sec-mnp, so the differencing is not preprocessing, it *is* the identified model:
 
-<!-- frequency simulator: not smooth, can be zero; smoothed (logit-kernel) AR as a patch -->
+```{r}
+mnp_study <- readRDS("../data/mnp_study.rds")
+mnp <- mnp_study$data
+X <- model.matrix(~ alt + ram + screen + price, data = mnp)[, -1]
+K <- ncol(X)
 
-### The GHK Simulator
+## rows of each alternative (the design is balanced and ordered: @sec-data contract)
+i1 <- which(mnp$alt == "Acer"); i2 <- which(mnp$alt == "Dell")
+i3 <- which(mnp$alt == "Apple")
 
-<!-- recursive conditioning with truncated normals (ch 2's tool again); code it step by step; verify against pmvnorm on small problems -->
+Xd2 <- X[i2, ] - X[i1, ]      # attributes of (Dell - Acer), one row per task
+Xd3 <- X[i3, ] - X[i1, ]      # attributes of (Apple - Acer)
+chosen <- as.integer(mnp$alt[mnp$choice == 1])   # 1=Acer, 2=Dell, 3=Apple
+n_task <- length(chosen)
+```
 
-### MSL with GHK
+And compute the **identified truth** this chapter must recover --- the @sec-mnp arithmetic executed: difference $\Omega^\ast$ against the base, normalize the covariance by its first diagonal, and rescale $\bfbeta^\ast$ by the *square root* of that diagonal --- $\bfbeta^\ast_{\text{id}} = \bfbeta^\ast/\sqrt{(M\Omega^\ast M')_{11}}$ and $\tilde\Omega^\ast = M\Omega^\ast M'/(M\Omega^\ast M')_{11}$; coefficients live on the utility scale, covariances on the utility-squared scale, so they pay the scale tax at different rates:
 
-<!-- wrap GHK in ch 12's MSL machinery; estimate, recover; run-time and draw-count notes -->
+```{r}
+M  <- rbind(c(-1, 1, 0), c(-1, 0, 1))
+Ot <- M %*% mnp_study$Omega_true %*% t(M)     # differenced covariance
+sc <- sqrt(Ot[1, 1])                           # the scale normalization
+beta_star  <- mnp_study$beta_true / sc
+omega_star <- c(w12 = Ot[1, 2], w22 = Ot[2, 2]) / Ot[1, 1]
+round(c(beta_star, omega_star), 3)
+```
 
-## Route 2: Bayesian Data Augmentation
+Those eight numbers --- six scaled coefficients, one differenced covariance, one differenced variance ratio --- are everything the data can reveal, and the scoreboard for both routes.
 
-### Latent Utilities as Parameters
+## Route 1: Simulated Maximum Likelihood via GHK
 
-<!-- augment with the utility vector per observation; conditional on utilities, everything is linear-normal (ch 16's world) -->
+### Why the obvious simulator fails
 
-### The McCulloch-Rossi Gibbs Sampler
+@sec-choice's frequency simulator applies directly: draw errors, count how often the chosen alternative wins. It is unbiased --- and useless inside an optimizer, for two reasons that @sec-msl equips us to name instantly. It is a *step function* of the parameters (nudge $\bfbeta$ slightly and either no draw changes its vote or one flips discretely), so gradients are zero almost everywhere and undefined elsewhere --- BFGS starves. And for tasks where the chosen alternative was unlikely, all $R$ draws can vote no, returning $\widehat{P} = 0$ and $\log \widehat{P} = -\infty$ --- @sec-mnl-mle's underflow catastrophe, by construction rather than accident. Smoothing the indicator (the logit-kernel AR simulator) patches both at the cost of a tuning parameter and bias [@train2009, Section 5.6]. The field's solution is better than a patch.
 
-<!-- three blocks: truncated-normal utilities consistent with the observed choice / normal beta / Wishart on Sigma-inverse; code it -->
+### The GHK simulator
 
-### Identification Inside the Sampler
+The **GHK simulator** (Geweke--Hajivassiliou--Keane) computes the orthant probability by recursive conditioning, and it is @sec-draws's truncated-normal trick wearing its work clothes. The probability that alternative $j$ was chosen is the probability that a bivariate normal vector $\mathbf{w} = (w_1, w_2)$ --- the utility differences *against* $j$ --- lands entirely below zero. Factor the joint event through the Cholesky root of its covariance, $A_j \tilde\Omega A_j' = LL'$, writing $\mathbf{w} = \boldsymbol{\mu} + L\boldsymbol{\eta}$ with $\boldsymbol{\eta}$ standard normal. Because $L$ is lower triangular with positive diagonal, $w_1 < 0 \iff \eta_1 < b_1 := -\mu_1/\ell_{11}$; and given $\eta_1$, $w_2 < 0 \iff \eta_2 < b_2(\eta_1) := (-\mu_2 - \ell_{21}\eta_1)/\ell_{22}$. The law of total probability, plus the independence of $\eta_2$ from $\eta_1$, then gives:
 
-<!-- sample unidentified, normalize by sigma_11 post hoc (McCulloch-Rossi); why this is legitimate -->
+$$
+\Pr(w_1 < 0, w_2 < 0)
+= \underbrace{\Pr\left( \eta_1 < b_1 \right)}_{p_1}
+\times \mathrm{E}\left[ \underbrace{\Pr\left( \eta_2 < b_2(\eta_1) \right)}_{p_2(\eta_1)} \,\middle|\, \eta_1 < b_1 \right]
+$$ {#eq-ghk}
 
-## The Two Routes Compared
+where $b_1 = -\mu_1 / \ell_{11}$ and $b_2(\eta_1) = (-\mu_2 - \ell_{21}\eta_1)/\ell_{22}$: the first coordinate's constraint is a univariate normal probability, exactly; the second's is a univariate probability *given* the first, averaged over truncated draws of $\eta_1$. GHK draws $\eta_1$ from its truncated distribution by the inverse-CDF trick of @eq-trunc --- `qnorm(u * p1)` maps a uniform into exactly the admissible region --- and averages $p_1 \cdot p_2(\eta_1^{(r)})$ over $R$ draws. Every ingredient is a `pnorm`/`qnorm` call: **smooth** in the parameters (BFGS eats), **strictly positive** (each factor is a genuine probability), and unbiased. For $J$ alternatives the recursion just continues [@train2009, Section 5.6.3 writes out the general case] --- each coordinate truncated given the previous ones, the triangularity of $L$ making each step univariate; you can see in that description why @sec-mvnorm called Cholesky triangularity "the same idea that powers GHK."
 
-<!-- same simulated data through both; estimates agree; contrast effort, run time, and what each hands you; no integral was ever computed on route 2 -->
+One bookkeeping matter: the differences-against-$j$ vector for each chosen alternative is a fixed linear map $A_j$ of the base differences $(d_2, d_3)$ --- e.g., for $j=2$: $(U_1 - U_2, U_3 - U_2) = (-d_2, \; d_3 - d_2)$. All three maps, for the record: $A_1 = I_2$ (Acer chosen: $(d_2, d_3) < \mathbf{0}$ already); $A_2 = \begin{pmatrix} -1 & 0 \\ -1 & 1 \end{pmatrix}$, so $A_2 \mathbf{d} = (-d_2, \; d_3 - d_2)$; $A_3 = \begin{pmatrix} 0 & -1 \\ 1 & -1 \end{pmatrix}$. Row $i$ of $A_j$ simply rewrites $U_k - U_j$ in terms of the base differences. So means transform per task, but the covariance $A_j \tilde\Omega A_j'$ (hence its Cholesky) is computed once per chosen-alternative *type* per likelihood call --- three small factorizations, not four thousand.
+
+```{r}
+## GHK simulated log-likelihood for the 3-alternative MNP
+## theta = (beta [K], a, log b) with differenced-normalized chol Lt = [1 0; a b]
+ghk_loglik <- function(theta, Xd2, Xd3, chosen, U1) {
+    K <- ncol(Xd2)
+    beta <- theta[1:K]; a <- theta[K+1]; b <- exp(theta[K+2])
+    Ot_id <- rbind(c(1, a), c(a, a^2 + b^2))      # identified covariance: first diagonal fixed at 1 (this is Omega-tilde)
+    m2 <- as.vector(Xd2 %*% beta)                   # mean of d2 = U_dell - U_acer
+    m3 <- as.vector(Xd3 %*% beta)
+    A  <- list(diag(2),                             # chosen = Acer:  (d2, d3) < 0
+               rbind(c(-1, 0), c(-1, 1)),           # chosen = Dell:  (-d2, d3-d2) < 0
+               rbind(c(0, -1), c(1, -1)))           # chosen = Apple: (-d3, d2-d3) < 0
+    ll <- 0
+    for (j in 1:3) {
+        idx <- which(chosen == j)
+        mu  <- cbind(m2[idx], m3[idx]) %*% t(A[[j]])
+        Lj  <- t(chol(A[[j]] %*% Ot_id %*% t(A[[j]])))
+        u   <- U1[idx, , drop = FALSE]              # fixed uniforms (@sec-msl!)
+        b1  <- (-mu[, 1]) / Lj[1, 1]
+        p1  <- pmax(pnorm(b1), 1e-12)
+        e1  <- qnorm(pmax(u * p1, 1e-14))           # truncated draws via the inverse-CDF trick (eq-trunc)
+        b2  <- (-mu[, 2] - Lj[2, 1] * e1) / Lj[2, 2]
+        Phat <- pmax(rowMeans(p1 * pnorm(b2)), 1e-300)
+        ll  <- ll + sum(log(Phat))
+    }
+    ll
+}
+```
+
+Note the @sec-msl discipline embedded: the uniforms `U1` are generated *once* and passed in --- fixed draws, rule one --- and the covariance enters through its Cholesky elements with the diagonal log-parameterized, so every candidate the optimizer visits implies a valid matrix. Before trusting it, the mandatory audit --- GHK against an independent oracle, R's numerical bivariate-normal routine, on a handful of tasks:
+
+```{r}
+#| message: false
+library(mvtnorm)
+set.seed(190)
+U1 <- matrix(runif(n_task * 100), n_task, 100)
+
+check <- sapply(1:5, function(i) {
+    mu <- c(sum(Xd2[i, ] * beta_star), sum(Xd3[i, ] * beta_star))
+    Ot_id <- rbind(c(1, omega_star["w12"]),
+                   c(omega_star["w12"], omega_star["w22"]))
+    A  <- list(diag(2), rbind(c(-1,0), c(-1,1)), rbind(c(0,-1), c(1,-1)))[[chosen[i]]]
+    exact <- pmvnorm(upper = c(0, 0), mean = as.vector(A %*% mu),
+                     sigma = A %*% Ot_id %*% t(A))
+    ghk <- {  # one-task GHK, 100 draws
+        Lj <- t(chol(A %*% Ot_id %*% t(A))); mm <- as.vector(A %*% mu)
+        p1 <- pnorm(-mm[1]/Lj[1,1])
+        e1 <- qnorm(U1[i, ] * p1)
+        mean(p1 * pnorm((-mm[2] - Lj[2,1]*e1)/Lj[2,2]))
+    }
+    c(exact = exact, ghk = ghk)
+})
+round(check, 4)
+```
+
+Agreement in the third decimal with 100 draws --- certified. Now the fit, with the covariance parameters box-bounded (the @sec-iia device) to keep the search in well-conditioned territory:
+
+```{r}
+#| cache: false
+fit_ghk <- optim(c(rep(0, K), 0, 0), ghk_loglik,
+                 Xd2 = Xd2, Xd3 = Xd3, chosen = chosen, U1 = U1,
+                 method = "L-BFGS-B",
+                 lower = c(rep(-Inf, K), -5, -2.5),
+                 upper = c(rep( Inf, K),  5,  2.5),
+                 control = list(fnscale = -1, maxit = 500), hessian = TRUE)
+se_ghk <- sqrt(diag(solve(-fit_ghk$hessian)))
+est_ghk <- c(fit_ghk$par[1:K],
+             w12 = fit_ghk$par[K+1],
+             w22 = fit_ghk$par[K+1]^2 + exp(fit_ghk$par[K+2])^2)
+round(data.frame(truth = c(beta_star, omega_star),
+                 ghk = est_ghk,
+                 se = c(se_ghk[1:K], se_ghk[K+1], NA)), 3)
+```
+
+Recovery of all eight identified quantities, including the covariance parameters that carry the substitution story --- the estimated $\tilde\omega_{12}$ is the data confirming that Acer and Dell share unobserved appeal. (The `w22` transformation's standard error needs the delta method; @sec-postestimation, or route 2, where it's free.)
+
+## Route 2: Gibbs with Data Augmentation
+
+Write the differenced system explicitly first, because it is the object the whole route manipulates:
+
+$$\mathbf{d}_{nt} = \tilde{X}_{nt}\bfbeta + \mathbf{e}_{nt}, \qquad \mathbf{e}_{nt} \sim N(\mathbf{0}, W)$$
+
+where $\mathbf{d}_{nt} = (d_2, d_3)$ stacks $d_2 = U_{\text{Dell}} - U_{\text{Acer}}$ and $d_3 = U_{\text{Apple}} - U_{\text{Acer}}$, the rows of $\tilde{X}_{nt}$ are the corresponding rows of `Xd2` and `Xd3`, and $W$ is @sec-mnp's differenced covariance *before* the $\tilde\omega_{11} = 1$ convention --- the unnormalized object the sampler is free to draw. The identified quantities are $\tilde\Omega = W/w_{11}$ and $\bfbeta/\sqrt{w_{11}}$; the sampler never imposes this, and the post-processing recovers it.
+
+Now forget optimization entirely. The @sec-gibbs Albert--Chib logic, scaled up per @mcculloch1994: conditional on the latent *differenced utilities* $\mathbf{d}_{nt} = (d_2, d_3)_{nt}$, the MNP is a two-equation normal regression system --- conjugate everywhere; conditional on parameters and the observed choice, each task's $\mathbf{d}_{nt}$ is bivariate normal truncated to the region its choice implies. Three blocks:
+
+- **Latent utilities.** The regions, read off the choice rule: Acer chosen $\Rightarrow d_2 < 0, d_3 < 0$; Dell $\Rightarrow d_2 > \max(0, d_3)$; Apple $\Rightarrow d_3 > \max(0, d_2)$. Sampling a truncated *bivariate* normal is done by one more level of Gibbs: draw $d_2$ given $d_3$ (a univariate truncated normal --- the conditional mean and variance are the textbook bivariate-normal formulas, the truncation from the region; concretely, if $(d_2, d_3) \sim N\big((m_2, m_3), W\big)$ then $d_2 \mid d_3 \sim N\!\big(m_2 + \tfrac{w_{12}}{w_{22}}(d_3 - m_3), \; w_{11} - \tfrac{w_{12}^2}{w_{22}}\big)$, and symmetrically for $d_3 \mid d_2$ --- the code's `c21`/`v21` and `c12`/`v12`), then $d_3$ given $d_2$. All 4,000 tasks in two vectorized `rtnorm()` calls.
+- **$\bfbeta$.** Given the $\mathbf{d}$'s: generalized least squares dressed as Bayes --- whiten the two-equation system by $W^{-1/2}$ (Cholesky again) and apply the conjugate regression update of @sec-gibbs.
+- **$W$.** Given residuals: a $2 \times 2$ inverse-Wishart.
+
+And the McCulloch--Rossi move that makes it elegant: **sample the unidentified model, report the identified one.** No constraint forces $w_{11} = 1$ during sampling --- the chain wanders the scale ridge freely, conjugacy intact --- and every saved draw is normalized *afterward*: $\bfbeta / \sqrt{w_{11}}$, $W / w_{11}$. Identified functions of unidentified draws are perfectly valid posterior draws of the identified quantities.[^1]
+
+[^1]: This is the resolution of @sec-mnp's warning about samplers on unidentified spaces: the *raw* traces of $\bfbeta$ and $W$ indeed drift along the scale ridge and look unconverged --- diagnose the *normalized* series instead. Try plotting both; it is a five-line experiment and a permanent inoculation.
+
+```{r}
+rtnorm <- function(n, mean, sd, a, b) {                    # @sec-draws
+    Fa <- pnorm(a, mean, sd); Fb <- pnorm(b, mean, sd)
+    u <- pmin(pmax(runif(n, Fa, Fb), 1e-12), 1 - 1e-12)
+    qnorm(u, mean, sd)
+}
+rinvwishart <- function(nu, S) {                           # @sec-hb-mnl
+    K <- nrow(S); L <- t(chol(solve(S)))
+    A <- matrix(0, K, K)
+    diag(A) <- sqrt(rchisq(K, nu - (1:K) + 1))
+    A[lower.tri(A)] <- rnorm(K*(K-1)/2)
+    solve(L %*% A %*% t(A) %*% t(L))
+}
+
+gibbs_mnp <- function(Xd2, Xd3, chosen, S_iter, A0 = 0.01,
+                      nu0 = 5, V0 = diag(2) * 5) {
+    K <- ncol(Xd2); n <- nrow(Xd2)
+    beta <- rep(0, K); W <- diag(2)
+    d2 <- ifelse(chosen == 2, 1, -0.5)          # any region-respecting start
+    d3 <- ifelse(chosen == 3, 1, -0.5)
+    out <- list(beta = matrix(NA_real_, S_iter, K),
+                W = matrix(NA_real_, S_iter, 3))
+    for (s in 1:S_iter) {
+        ## -- latent utilities: two vectorized truncated-normal sweeps --
+        m2 <- as.vector(Xd2 %*% beta); m3 <- as.vector(Xd3 %*% beta)
+        c21 <- W[1,2]/W[2,2]; v21 <- W[1,1] - W[1,2]^2/W[2,2]
+        c12 <- W[1,2]/W[1,1]; v12 <- W[2,2] - W[1,2]^2/W[1,1]
+        lo2 <- ifelse(chosen == 2, pmax(0, d3), -Inf)
+        hi2 <- ifelse(chosen == 2, Inf, ifelse(chosen == 1, 0, d3))
+        d2  <- rtnorm(n, m2 + c21*(d3 - m3), sqrt(v21), lo2, hi2)
+        lo3 <- ifelse(chosen == 3, pmax(0, d2), -Inf)
+        hi3 <- ifelse(chosen == 3, Inf, ifelse(chosen == 1, 0, d2))
+        d3  <- rtnorm(n, m3 + c12*(d2 - m2), sqrt(v12), lo3, hi3)
+        ## -- beta: whiten the 2-equation system, conjugate regression --
+        Li  <- solve(t(chol(W)))
+        Y1  <- Li[1,1]*d2 + Li[1,2]*d3;   Y2  <- Li[2,1]*d2 + Li[2,2]*d3
+        Xw1 <- Li[1,1]*Xd2 + Li[1,2]*Xd3; Xw2 <- Li[2,1]*Xd2 + Li[2,2]*Xd3
+        Vb  <- solve(crossprod(Xw1) + crossprod(Xw2) + diag(A0, K))
+        mb  <- Vb %*% (crossprod(Xw1, Y1) + crossprod(Xw2, Y2))
+        beta <- as.vector(mb + t(chol(Vb)) %*% rnorm(K))
+        ## -- W: inverse-Wishart on residuals --
+        e2 <- d2 - as.vector(Xd2 %*% beta); e3 <- d3 - as.vector(Xd3 %*% beta)
+        Sres <- rbind(c(sum(e2^2), sum(e2*e3)), c(sum(e2*e3), sum(e3^2)))
+        W <- rinvwishart(nu0 + n, V0 + Sres)
+        out$beta[s, ] <- beta
+        out$W[s, ]    <- c(W[1,1], W[1,2], W[2,2])
+    }
+    out
+}
+```
+
+```{r}
+#| cache: false
+set.seed(191)
+g <- gibbs_mnp(Xd2, Xd3, chosen, S_iter = 3000)
+post <- 501:3000
+scd <- sqrt(g$W[post, 1])                        # per-draw normalization
+beta_id <- g$beta[post, ] / scd
+tab_gibbs <- data.frame(
+    truth = c(beta_star, omega_star),
+    gibbs = c(colMeans(beta_id),
+              mean(g$W[post, 2] / g$W[post, 1]),
+              mean(g$W[post, 3] / g$W[post, 1])),
+    post_sd = c(apply(beta_id, 2, sd),
+                sd(g$W[post, 2] / g$W[post, 1]),
+                sd(g$W[post, 3] / g$W[post, 1]))
+)
+rownames(tab_gibbs) <- c(colnames(X), "w12", "w22")
+round(tab_gibbs, 3)
+```
+
+Recovery again --- and notice what this sampler did *not* contain: no likelihood evaluation (the orthant integral never appears --- @sec-gibbs's augmentation promise, delivered at multinomial scale), no Metropolis step, no acceptance rate, no tuning constant of any kind, and posterior uncertainty for the covariance parameters included, no delta method required.
+
+## The Two Routes, Head to Head
+
+```{r}
+head2head <- data.frame(
+    truth = c(beta_star, omega_star),
+    ghk_msl = est_ghk,
+    gibbs   = tab_gibbs$gibbs
+)
+rownames(head2head) <- c(colnames(X), "w12", "w22")
+round(head2head, 3)
+```
+
+Agreement between the routes to roughly the second decimal on every identified quantity --- two philosophies, two codebases, two entirely different computational strategies (one never draws a latent variable, the other never evaluates a probability), one answer. The residual daylight between either column and the *truth* is this dataset's sampling noise, which the two estimators share because they share the data.
+
+The choice between routes, then, rides on everything *around* the point estimates. Tallying this chapter's experience: the Gibbs route was faster here, tuning-free, and delivered exact posterior uncertainty for every identified function --- and, decisively for what comes next, it *extends*: bolting the @sec-hb-mnl hierarchy onto it is @sec-hb-mnp, a short chapter precisely because augmentation composes. The GHK route earns its keep where the Bayesian route strains --- very large $J$ (the truncated-utilities block grows with alternatives), classical inference requirements, or embedding in moment-based estimators --- and GHK itself is a permanent resident of the choice modeler's toolkit [@train2009, Ch. 5]. But for the workhorse cases, the augmentation route is the one modern practice reaches for, and having built both, you know exactly why.
 
 ## Validation Against `bayesm`
 
-<!-- rmnpGibbs -->
+The reference implementation of route 2 is `rmnpGibbs` [@rossi2005]. Its conventions differ from ours in one consequential way --- it differences against the *last* alternative (base $= J$), where we used the first --- so validating requires restating the identified truth in its parameterization: differences against Apple, ASCs for Acer and Dell, normalization by the first differenced variance *in that system*. Getting a reference package's conventions right is not busywork; it is most of what "validation" means in practice, and mismatched differencing conventions produce exactly the kind of sign-flipped, rescaled nonsense that looks like a broken sampler.[^2]
+
+[^2]: Ask me how I know. (The first attempt at this comparison used base $= 1$ and produced beautifully converged garbage.)
+
+```{r}
+#| cache: false
+#| message: false
+#| results: hide
+library(bayesm)
+na <- 4                                          # alt-varying attributes
+Xa <- matrix(0, n_task, 3*na)
+for (a_i in 1:na) {                              # columns: variable-major, alt within
+    Xa[, (a_i-1)*3 + 1] <- X[i1, 2 + a_i]
+    Xa[, (a_i-1)*3 + 2] <- X[i2, 2 + a_i]
+    Xa[, (a_i-1)*3 + 3] <- X[i3, 2 + a_i]
+}
+Xc <- createX(p = 3, na = na, nd = NULL, Xa = Xa, Xd = NULL,
+              INT = TRUE, DIFF = TRUE, base = 3)
+set.seed(192)
+outb <- rmnpGibbs(Data = list(p = 3, y = chosen, X = Xc),
+                  Mcmc = list(R = 3000, keep = 1, nprint = 0))
+```
+
+```{r}
+## identified truth in bayesm's (base = Apple) parameterization
+M3  <- rbind(c(1, 0, -1), c(0, 1, -1))
+Ot3 <- M3 %*% mnp_study$Omega_true %*% t(M3)
+sc3 <- sqrt(Ot3[1, 1])
+truth_b <- c(int_acer = (0 - 1.0)/sc3,      # base = Apple: each ASC is its raw value minus Apple's (1.0)
+             int_dell = (0.5 - 1.0)/sc3,
+             mnp_study$beta_true[3:6]/sc3)
+
+## reuse post = 501:3000: same burn-in convention for bayesm's chain
+s11 <- outb$sigmadraw[post, 1]
+round(rbind(truth  = truth_b,
+            bayesm = colMeans(outb$betadraw[post, ] / sqrt(s11))), 3)
+round(c(w12 = mean(outb$sigmadraw[post, 2] / s11),
+        w22 = mean(outb$sigmadraw[post, 4] / s11),
+        truth_w12 = Ot3[1,2]/Ot3[1,1], truth_w22 = Ot3[2,2]/Ot3[1,1]), 3)
+```
+
+The package agrees --- with our estimates and with the (re-parameterized) truth. Same normalize-after-sampling treatment of its draws, note: `bayesm` also samples unidentified and leaves the division to you.
 
 ## Key Learnings
+
+- The frequency simulator fails inside optimizers for nameable reasons --- non-smooth, can return zero --- and GHK (@eq-ghk) repairs both: recursive conditioning through the Cholesky root turns an orthant probability into a product of exact univariate probabilities averaged over truncated draws. Smooth, positive, unbiased; audited against `pmvnorm` before use.
+- GHK-MSL is @sec-msl verbatim: fixed uniforms, log-parameterized Cholesky, box bounds, BFGS --- and it recovered all eight identified quantities.
+- The augmentation route dissolves the integral instead: truncated-bivariate utility draws (Gibbs-within-Gibbs, two vectorized `rtnorm` sweeps), a whitened conjugate regression for $\bfbeta$, an inverse-Wishart for $W$ --- *no tuning, no likelihood*. Sample the unidentified model, normalize every draw afterward: identified posteriors from an unconstrained chain, per @mcculloch1994.
+- Head to head: second-decimal agreement across routes. The differences that matter are architectural --- Gibbs extends to the hierarchy (next chapter) and prices uncertainty exactly; GHK serves large $J$ and classical pipelines.
+- Validation against `rmnpGibbs` succeeded only after matching its base-alternative convention --- reference-implementation conventions are half the work, and mismatches masquerade as broken code.

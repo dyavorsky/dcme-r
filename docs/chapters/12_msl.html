@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,13 +422,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#choice-probabilities-without-closed-forms" id="toc-choice-probabilities-without-closed-forms" class="nav-link active" data-scroll-target="#choice-probabilities-without-closed-forms"><span class="header-section-number">12.1</span> Choice Probabilities Without Closed Forms</a></li>
-  <li><a href="#the-simulated-choice-probability" id="toc-the-simulated-choice-probability" class="nav-link" data-scroll-target="#the-simulated-choice-probability"><span class="header-section-number">12.2</span> The Simulated Choice Probability</a></li>
-  <li><a href="#the-simulated-log-likelihood-and-its-bias" id="toc-the-simulated-log-likelihood-and-its-bias" class="nav-link" data-scroll-target="#the-simulated-log-likelihood-and-its-bias"><span class="header-section-number">12.3</span> The Simulated Log-Likelihood and Its Bias</a></li>
-  <li><a href="#practical-rules-of-msl" id="toc-practical-rules-of-msl" class="nav-link" data-scroll-target="#practical-rules-of-msl"><span class="header-section-number">12.4</span> Practical Rules of MSL</a></li>
-  <li><a href="#better-draws-halton-and-antithetics" id="toc-better-draws-halton-and-antithetics" class="nav-link" data-scroll-target="#better-draws-halton-and-antithetics"><span class="header-section-number">12.5</span> Better Draws: Halton and Antithetics</a></li>
-  <li><a href="#a-first-msl-estimation" id="toc-a-first-msl-estimation" class="nav-link" data-scroll-target="#a-first-msl-estimation"><span class="header-section-number">12.6</span> A First MSL Estimation</a></li>
-  <li><a href="#relatives-msm-and-mss" id="toc-relatives-msm-and-mss" class="nav-link" data-scroll-target="#relatives-msm-and-mss"><span class="header-section-number">12.7</span> Relatives: MSM and MSS</a></li>
+  <li><a href="#a-likelihood-with-an-integral-in-it" id="toc-a-likelihood-with-an-integral-in-it" class="nav-link active" data-scroll-target="#a-likelihood-with-an-integral-in-it"><span class="header-section-number">12.1</span> A Likelihood With an Integral in It</a></li>
+  <li><a href="#the-simulated-probability" id="toc-the-simulated-probability" class="nav-link" data-scroll-target="#the-simulated-probability"><span class="header-section-number">12.2</span> The Simulated Probability</a></li>
+  <li><a href="#the-simulated-log-likelihood-is-biased" id="toc-the-simulated-log-likelihood-is-biased" class="nav-link" data-scroll-target="#the-simulated-log-likelihood-is-biased"><span class="header-section-number">12.3</span> The Simulated Log-Likelihood Is Biased</a></li>
+  <li><a href="#rule-one-fix-the-draws" id="toc-rule-one-fix-the-draws" class="nav-link" data-scroll-target="#rule-one-fix-the-draws"><span class="header-section-number">12.4</span> Rule One: Fix the Draws</a></li>
+  <li><a href="#better-draws-halton-sequences-at-work" id="toc-better-draws-halton-sequences-at-work" class="nav-link" data-scroll-target="#better-draws-halton-sequences-at-work"><span class="header-section-number">12.5</span> Better Draws: Halton Sequences at Work</a></li>
+  <li><a href="#how-many-draws-an-empirical-answer" id="toc-how-many-draws-an-empirical-answer" class="nav-link" data-scroll-target="#how-many-draws-an-empirical-answer"><span class="header-section-number">12.6</span> How Many Draws? An Empirical Answer</a></li>
+  <li><a href="#the-estimator-named-and-situated" id="toc-the-estimator-named-and-situated" class="nav-link" data-scroll-target="#the-estimator-named-and-situated"><span class="header-section-number">12.7</span> The Estimator, Named and Situated</a></li>
   <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">12.8</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/12_msl.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
@@ -372,39 +455,258 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 10 (MSL/MSM/MSS theory); McFadden-Train 2000 §3 (draw counts, asymptotics); Rchoice §2.3 (mechanics tutorial) -->
-<section id="choice-probabilities-without-closed-forms" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="choice-probabilities-without-closed-forms"><span class="header-section-number">12.1</span> Choice Probabilities Without Closed Forms</h2>
-<!-- mixing distributions and correlated errors produce integrals with no formula; but ch 1 taught us to simulate integrals -- now we put that inside the likelihood -->
+<p>The chapters so far split cleanly in two. When the choice probability has a closed form (logit, nested logit), we write the likelihood and climb it. When it doesn’t — we haven’t faced that case yet, but the mixed logit (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>) and probit (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>) are waiting — the likelihood <em>contains an integral we cannot evaluate</em>. This chapter builds the bridge between the book’s two oldest ideas: integrals can be simulated (<a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>), and likelihoods can be maximized (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>). Put a simulated integral inside a maximized likelihood and you get <strong>maximum simulated likelihood</strong> (MSL), the workhorse frequentist estimator for the models in the rest of this book.</p>
+<p>The combination is not free. Simulation noise inside a likelihood does subtle things — it biases the estimator (slightly, controllably), it can destroy the optimizer (badly, avoidably), and managing both is a small craft with firm rules. We develop the rules on a model chosen to be the <em>smallest honest example</em>: rich enough that its likelihood genuinely requires simulation, small enough that every moving part stays visible.</p>
+<section id="a-likelihood-with-an-integral-in-it" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="a-likelihood-with-an-integral-in-it"><span class="header-section-number">12.1</span> A Likelihood With an Integral in It</h2>
+<p>Return to the binary laptop setting of Part I, with one upgrade. Each of <span class="math inline">\(N\)</span> shoppers now faces <span class="math inline">\(T = 8\)</span> buy/no-buy offers (a panel, as in <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>), and shoppers differ in their <em>baseline propensity to buy</em>: some are in the market, some are barely browsing. Utility for shopper <span class="math inline">\(n\)</span> at offer <span class="math inline">\(t\)</span>:</p>
+<p><span id="eq-repanel-model"><span class="math display">\[
+U_{nt} = \beta_{0n} + \mathbf{x}_{nt}'\boldsymbol{\beta}+ \varepsilon_{nt}, \qquad
+\beta_{0n} \sim N(\mu_0, \sigma_0^2), \qquad
+\varepsilon_{nt} \stackrel{iid}{\sim}\text{Logistic}
+\tag{12.1}\]</span></span></p>
+<p>The intercept is now a <strong>random coefficient</strong>: each person draws their own <span class="math inline">\(\beta_{0n}\)</span> once, keeps it for all eight offers, and we never observe it. This is continuous heterogeneity — <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a>’s discrete classes melted into a normal distribution — and the parameters to estimate are <span class="math inline">\(\boldsymbol{\theta}= (\mu_0, \sigma_0, \boldsymbol{\beta})\)</span>: the <em>population’s</em> mean baseline, its spread, and the common attribute coefficients.</p>
+<p>Follow the likelihood logic of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> exactly. Conditional on <span class="math inline">\(\beta_{0n}\)</span>, person <span class="math inline">\(n\)</span>’s eight choices are independent binary logits, so their sequence probability is a product of <a href="01_choice.html#eq-binlogit_prob" class="quarto-xref">Equation&nbsp;<span>1.6</span></a> terms. Unconditionally, we must average over what <span class="math inline">\(\beta_{0n}\)</span> might have been — but now membership is a continuum, so the class sum becomes an integral:</p>
+<p><span id="eq-repanel-lik"><span class="math display">\[
+\Pr(\mathbf{y}_n \mid \boldsymbol{\theta}) = \int \left[ \prod_{t=1}^{T} P_{nt}(b, \boldsymbol{\beta}) \right] \phi(b \mid \mu_0, \sigma_0^2) \, db
+\tag{12.2}\]</span></span></p>
+<p>with <span class="math inline">\(P_{nt}(b, \boldsymbol{\beta})\)</span> the logit probability of person <span class="math inline">\(n\)</span>’s observed choice at offer <span class="math inline">\(t\)</span> given intercept <span class="math inline">\(b\)</span>, and <span class="math inline">\(\phi(\cdot \mid \mu_0, \sigma_0^2)\)</span> the <span class="math inline">\(N(\mu_0, \sigma_0^2)\)</span> density (mind that R’s <code>dnorm()</code> takes the <em>standard deviation</em>). The mixture-outside-the-product lesson carries over unchanged — the integral wraps the <em>whole sequence</em>, because the person keeps their draw across tasks. And this integral has no closed form. The logistic-kernel-times-normal-density integrand defeats every table of integrals ever compiled;<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> the log-likelihood <span class="math inline">\(\ell(\boldsymbol{\theta}) = \sum_n \log \Pr(\mathbf{y}_n|\boldsymbol{\theta})\)</span> simply cannot be evaluated exactly.</p>
 </section>
-<section id="the-simulated-choice-probability" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="the-simulated-choice-probability"><span class="header-section-number">12.2</span> The Simulated Choice Probability</h2>
-<!-- average the closed-form kernel over R draws of the random piece; unbiasedness of the probability simulator -->
+<section id="the-simulated-probability" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="the-simulated-probability"><span class="header-section-number">12.2</span> The Simulated Probability</h2>
+<p>But we can <em>simulate</em> it — this is precisely <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>’s insight, upgraded from choice probabilities to sequence probabilities. <a href="#eq-repanel-lik" class="quarto-xref">Equation&nbsp;<span>12.2</span></a> is an expectation over <span class="math inline">\(\beta_{0n}\)</span>’s distribution, so draw <span class="math inline">\(R\)</span> values from that distribution and average the integrand:</p>
+<p><span id="eq-sim-prob"><span class="math display">\[
+\widehat{\Pr}(\mathbf{y}_n \mid \boldsymbol{\theta}) = \frac{1}{R} \sum_{r=1}^{R} \prod_{t=1}^{T} P_{nt}\!\left(b_n^{(r)}, \boldsymbol{\beta}\right),
+\qquad b_n^{(r)} = \mu_0 + \sigma_0 z_n^{(r)}, \quad z_n^{(r)} \sim N(0,1)
+\tag{12.3}\]</span></span></p>
+<p>Note carefully <em>how</em> the draws enter: we draw standard normals <span class="math inline">\(z_n^{(r)}\)</span> and map them through the current parameter values — the location-scale transformation of <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>. This detail is about to matter enormously.</p>
+<p>The simulated probability is <strong>unbiased</strong> for the true probability at any <span class="math inline">\(R\)</span> — each term is the integrand at a correctly-distributed draw, so the average’s expectation is the integral. Unbiasedness of the <em>probability</em> simulator is the property everything else leans on. Which makes the next fact sting:</p>
 </section>
-<section id="the-simulated-log-likelihood-and-its-bias" class="level2" data-number="12.3">
-<h2 data-number="12.3" class="anchored" data-anchor-id="the-simulated-log-likelihood-and-its-bias"><span class="header-section-number">12.3</span> The Simulated Log-Likelihood and Its Bias</h2>
-<!-- log of an unbiased simulator is biased (Jensen); why it vanishes as R grows; the R-vs-N asymptotics headline (R/sqrt(N) -> infinity, McFadden-Train) stated plainly -->
+<section id="the-simulated-log-likelihood-is-biased" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="the-simulated-log-likelihood-is-biased"><span class="header-section-number">12.3</span> The Simulated Log-Likelihood Is Biased</h2>
+<p>The likelihood wants <span class="math inline">\(\log \Pr(\mathbf{y}_n)\)</span>, and the log of an unbiased simulator is <em>not</em> an unbiased simulator of the log. The culprit is Jensen’s inequality: the logarithm is concave, so <span class="math inline">\(\mathrm{E}[\log \widehat{P}] &lt; \log \mathrm{E}[\widehat{P}] = \log P\)</span> — simulation noise, passed through a concave function, pushes <em>downward on average</em>. How far downward? Write the simulator’s relative error as <span class="math inline">\(\widehat{P} = P(1 + \epsilon)\)</span> with <span class="math inline">\(\mathrm{E}[\epsilon] = 0\)</span>, and expand the log: <span class="math inline">\(\log \widehat{P} = \log P + \epsilon - \epsilon^2/2 + \cdots\)</span>, so <span class="math inline">\(\mathrm{E}[\log \widehat{P}] - \log P \approx -\tfrac{1}{2}\mathrm{Var}(\epsilon)\)</span>. The bias is, to leading order, <em>minus half the simulator’s relative noise variance</em> — and since <span class="math inline">\(\widehat{P}\)</span> averages <span class="math inline">\(R\)</span> independent terms, that variance, and hence the bias, shrinks like <span class="math inline">\(1/R\)</span>. Anything that reduces noise reduces bias, a fact the Halton section below exploits. Rather than cite Jensen and move on, let’s measure the bias, because seeing its size and its cure builds the right instincts. Take a single known quantity — a sequence probability with true value we can compute to machine precision by brute-force quadrature — and simulate it 2,000 times at each of several <span class="math inline">\(R\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">120</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## one person's integrand: T=8 logit terms at fixed x's and choices</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>V_fix <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span>, <span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">0.1</span>)   <span class="co"># x't*beta for 8 tasks</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>y_fix <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>seq_prob <span class="ot">&lt;-</span> <span class="cf">function</span>(b) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    P <span class="ot">&lt;-</span> <span class="fu">plogis</span>(V_fix <span class="sc">+</span> b)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">prod</span>(<span class="fu">ifelse</span>(y_fix <span class="sc">==</span> <span class="dv">1</span>, P, <span class="dv">1</span> <span class="sc">-</span> P))</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## truth by fine quadrature over b ~ N(0.5, 1)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">7</span>, <span class="at">by =</span> <span class="fl">0.001</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>truth <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">sapply</span>(grid, seq_prob) <span class="sc">*</span> <span class="fu">dnorm</span>(grid, <span class="fl">0.5</span>, <span class="dv">1</span>)) <span class="sc">*</span> <span class="fl">0.001</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>bias_at_R <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">250</span>, <span class="dv">500</span>), <span class="cf">function</span>(R) {</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    lp <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">2000</span>, {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        b <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(R, <span class="fl">0.5</span>, <span class="dv">1</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">log</span>(<span class="fu">mean</span>(<span class="fu">sapply</span>(b, seq_prob)))</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">R =</span> R, <span class="at">bias =</span> <span class="fu">mean</span>(lp) <span class="sc">-</span> <span class="fu">log</span>(truth))</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">data.frame</span>(<span class="fu">t</span>(bias_at_R)), <span class="fu">aes</span>(R, bias)) <span class="sc">+</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dotted"</span>) <span class="sc">+</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"draws R"</span>, <span class="at">y =</span> <span class="st">"bias of log simulated probability"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-jensen-bias" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-jensen-bias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="12_msl_files/figure-html/fig-jensen-bias-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-jensen-bias-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.1: The simulation bias of the log: average simulated log-probability minus the truth, across 2,000 simulation replications, as the number of draws R grows. The probability simulator is unbiased at every R; its log is biased downward, with bias shrinking like 1/R.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Three facts, all visible in the figure and all provable <span class="citation" data-cites="train2009 mcfaddentrain2000">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 10.2</a>; the asymptotic theory is <a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">McFadden and Train 2000, sec. 3</a>)</span>: the bias is negative; it shrinks like <span class="math inline">\(1/R\)</span>, exactly as the expansion predicts (halve it by doubling draws — faster than the <span class="math inline">\(1/\sqrt{R}\)</span> noise rate); and at <span class="math inline">\(R\)</span> in the low hundreds it is already tiny for a probability like this one. The formal requirement for MSL to behave exactly like ML asymptotically is that <span class="math inline">\(R\)</span> grow faster than <span class="math inline">\(\sqrt{N}\)</span> — in practice: <em>more draws for bigger samples, and never trust <span class="math inline">\(R = 10\)</span></em>. We will choose <span class="math inline">\(R\)</span> empirically below, and revisit the question with higher stakes in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>.</p>
 </section>
-<section id="practical-rules-of-msl" class="level2" data-number="12.4">
-<h2 data-number="12.4" class="anchored" data-anchor-id="practical-rules-of-msl"><span class="header-section-number">12.4</span> Practical Rules of MSL</h2>
-<!-- fix the draws across optimizer iterations (chatter); how many draws; common random numbers -->
+<section id="rule-one-fix-the-draws" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="rule-one-fix-the-draws"><span class="header-section-number">12.4</span> Rule One: Fix the Draws</h2>
+<p>Now the rule that separates working MSL code from mysteriously broken MSL code. The optimizer will evaluate the simulated log-likelihood at hundreds of candidate <span class="math inline">\(\boldsymbol{\theta}\)</span> values, and it <em>compares</em> those values — the whole logic of hill-climbing (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>) assumes that when <span class="math inline">\(\ell(\boldsymbol{\theta}_1) &gt; \ell(\boldsymbol{\theta}_2)\)</span>, the surface really is higher at <span class="math inline">\(\boldsymbol{\theta}_1\)</span>. If each evaluation draws <em>fresh</em> randomness, then comparisons mix true surface differences with luck-of-the-draw differences: the surface itself jitters between evaluations. Gradients computed by finite differences (<a href="06_optimization.html#eq-central-diff" class="quarto-xref">Equation&nbsp;<span>6.5</span></a>) are hit hardest — the difference of two nearby, independently-noisy values is mostly noise — and the optimizer stalls, wanders, or “converges” wherever the jitter happened to smile.</p>
+<p>The cure costs nothing, because of how <a href="#eq-sim-prob" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> was written: the randomness enters as <em>standard normal</em> draws <span class="math inline">\(z_n^{(r)}\)</span>, mapped through the candidate parameters. So draw the <span class="math inline">\(z\)</span>’s <strong>once</strong>, before optimization begins, and reuse the same array at every evaluation. The simulated surface becomes a fixed, smooth, deterministic function of <span class="math inline">\(\boldsymbol{\theta}\)</span> — a slightly wrong surface (that’s the bias we just measured), but a <em>stable</em> one that an optimizer can climb.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> This is why the location-scale separation matters: parameters move, draws don’t. File it with <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s precompute-the-invariant principle: the draws are data now.</p>
+<p>Watch the failure and the fix side by side — same data, same optimizer, the only difference being whether the draws are redrawn inside the objective:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">121</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="do">## simulate the panel: N=500 shoppers, T=8 offers each</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">500</span>; T <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>mu0_true <span class="ot">&lt;-</span> <span class="fl">1.0</span>; sig0_true <span class="ot">&lt;-</span> <span class="fl">1.5</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>beta_true <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">price =</span> <span class="sc">-</span><span class="fl">1.2</span>, <span class="at">ram16 =</span> <span class="fl">0.6</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>b0    <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N, mu0_true, sig0_true)          <span class="co"># each person's intercept</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N<span class="sc">*</span>T, <span class="fl">0.8</span>, <span class="fl">2.4</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N<span class="sc">*</span>T, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>id    <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>N, <span class="at">each =</span> T)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>U     <span class="ot">&lt;-</span> b0[id] <span class="sc">+</span> beta_true[<span class="st">"price"</span>]<span class="sc">*</span>price <span class="sc">+</span> beta_true[<span class="st">"ram16"</span>]<span class="sc">*</span>ram16 <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>         <span class="fu">rlogis</span>(N<span class="sc">*</span>T)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>y     <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>Xp    <span class="ot">&lt;-</span> <span class="fu">cbind</span>(price, ram16)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## simulated log-likelihood; draws passed in (fixed) or NULL (redrawn: broken)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sll_re <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, Xp, id, N, <span class="at">Z =</span> <span class="cn">NULL</span>, <span class="at">R =</span> <span class="dv">100</span>) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    mu0  <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    sig0 <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta[<span class="dv">2</span>])                 <span class="co"># reparameterize: sigma &gt; 0 always</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    beta <span class="ot">&lt;-</span> theta[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(Z)) Z <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N<span class="sc">*</span>R), N, R)     <span class="co"># DON'T do this</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="fu">ncol</span>(Z)                          <span class="co"># draw count follows the draws</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    V <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(Xp <span class="sc">%*%</span> beta)           <span class="co"># common part, all NT rows</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    lseq <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, N, R)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        b   <span class="ot">&lt;-</span> mu0 <span class="sc">+</span> sig0 <span class="sc">*</span> Z[, r]        <span class="co"># location-scale map of fixed z's</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        P   <span class="ot">&lt;-</span> <span class="fu">plogis</span>(V <span class="sc">+</span> b[id])          <span class="co"># all NT probabilities under draw r</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>        Pyt <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(y <span class="sc">==</span> <span class="dv">1</span>, P, <span class="dv">1</span> <span class="sc">-</span> P)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        lseq[, r] <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">rowsum</span>(<span class="fu">log</span>(Pyt), id))  <span class="co"># per-person log seq prob</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    M <span class="ot">&lt;-</span> <span class="fu">apply</span>(lseq, <span class="dv">1</span>, max)              <span class="co"># log-sum-exp across draws, per person</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>(M <span class="sc">+</span> <span class="fu">log</span>(<span class="fu">rowMeans</span>(<span class="fu">exp</span>(lseq <span class="sc">-</span> M))))</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Implementation notes before the experiment. The <code>for (r in 1:R)</code> loop is the <em>tolerable</em> loop of <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a>’s hybrid doctrine — a hundred iterations, each fully vectorized over all <span class="math inline">\(NT\)</span> rows, versus thousands if we looped over people. <code>sig0 = exp(theta[2])</code> is the reparameterization promised in <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>’s footnote: optimize <span class="math inline">\(\log\sigma_0\)</span> unconstrained, and positivity takes care of itself. And averaging <span class="math inline">\(\prod_t P_{nt}\)</span> across draws is done on the log scale with a per-person max-shift — <a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a> yet again, essential here because eight-term products are exactly the small numbers that underflow.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">122</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>Z_fixed <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rnorm</span>(N<span class="sc">*</span><span class="dv">100</span>), N, <span class="dv">100</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>start   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">log</span>(<span class="dv">1</span>), <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit_fixed <span class="ot">&lt;-</span> <span class="fu">optim</span>(start, sll_re, <span class="at">y =</span> y, <span class="at">Xp =</span> Xp, <span class="at">id =</span> id, <span class="at">N =</span> N,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Z =</span> Z_fixed, <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>fit_fresh <span class="ot">&lt;-</span> <span class="fu">optim</span>(start, sll_re, <span class="at">y =</span> y, <span class="at">Xp =</span> Xp, <span class="at">id =</span> id, <span class="at">N =</span> N,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Z =</span> <span class="cn">NULL</span>, <span class="at">method =</span> <span class="st">"BFGS"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">maxit =</span> <span class="dv">500</span>))</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(<span class="at">truth =</span> <span class="fu">c</span>(<span class="at">mu0 =</span> <span class="fl">1.0</span>, <span class="at">log_sig0 =</span> <span class="fu">log</span>(<span class="fl">1.5</span>), beta_true),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">fixed =</span> fit_fixed<span class="sc">$</span>par,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">fresh =</span> fit_fresh<span class="sc">$</span>par)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mu0  log_sig0      price     ram16
+truth 1.0000000 0.4054651 -1.2000000 0.6000000
+fixed 1.0198531 0.3013413 -1.1607217 0.5046907
+fresh 0.6719166 0.2649861 -0.8129862 0.1807049</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">fixed_convergence =</span> fit_fixed<span class="sc">$</span>convergence,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fresh_convergence =</span> fit_fresh<span class="sc">$</span>convergence)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>fixed_convergence fresh_convergence 
+                0                 0 </code></pre>
+</div>
+</div>
+<p>The fixed-draw fit recovers everything — note <span class="math inline">\(\exp(\hat\theta_2) \approx 1.35\)</span> against <span class="math inline">\(\sigma_0 = 1.5\)</span>. The fresh-draw fit, <em>on the identical problem</em>, lands far from the truth on every coefficient — and, most instructively, its convergence code is a serene <code>0</code>. The optimizer is not lying, exactly: steps stopped improving the objective, because every proposed move drowned in redrawn noise. It stopped where the jitter trapped it and called that a summit — <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>’s “believing convergence too easily” warning, weaponized. One line of code separates the two fits. This experiment is the cheapest tuition you will ever pay on this topic; the expensive version is three days of debugging a mixed logit.</p>
 </section>
-<section id="better-draws-halton-and-antithetics" class="level2" data-number="12.5">
-<h2 data-number="12.5" class="anchored" data-anchor-id="better-draws-halton-and-antithetics"><span class="header-section-number">12.5</span> Better Draws: Halton and Antithetics</h2>
-<!-- reuse ch 2's quasi-random sections; coverage vs randomness demonstration; fewer Halton draws beat more pseudo-random ones -->
+<section id="better-draws-halton-sequences-at-work" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="better-draws-halton-sequences-at-work"><span class="header-section-number">12.5</span> Better Draws: Halton Sequences at Work</h2>
+<p><a href="02_draws.html#sec-quasirandom" class="quarto-xref"><span>Section 2.5</span></a> promised that quasi-random draws would earn their keep when integrals arrived. They have arrived. Halton draws — <code>qnorm(halton(R, base))</code>, evenly covering the space instead of clumping — reduce the <em>noise</em> of each simulated probability, which reduces both the Jensen bias (driven by noise variance) and the sampling contribution of simulation to the estimator. The standard demonstration: simulate our known sequence probability many times with pseudo-random versus Halton draws<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> and compare accuracy at each <span class="math inline">\(R\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>halton <span class="ot">&lt;-</span> <span class="cf">function</span>(n, base) {              <span class="co"># from @sec-draws</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) { f <span class="ot">&lt;-</span> <span class="dv">1</span>; x <span class="ot">&lt;-</span> <span class="dv">0</span>; k <span class="ot">&lt;-</span> i</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> (k <span class="sc">&gt;</span> <span class="dv">0</span>) { f <span class="ot">&lt;-</span> f<span class="sc">/</span>base; x <span class="ot">&lt;-</span> x <span class="sc">+</span> f<span class="sc">*</span>(k <span class="sc">%%</span> base); k <span class="ot">&lt;-</span> k <span class="sc">%/%</span> base }</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        r[i] <span class="ot">&lt;-</span> x }</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>rmse_at <span class="ot">&lt;-</span> <span class="cf">function</span>(R) {</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    pseudo <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">500</span>, <span class="fu">mean</span>(<span class="fu">sapply</span>(<span class="fu">rnorm</span>(R, <span class="fl">0.5</span>, <span class="dv">1</span>), seq_prob)))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="do">## Halton: shift the sequence by a random offset each replication</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    hbase  <span class="ot">&lt;-</span> <span class="fu">halton</span>(R <span class="sc">+</span> <span class="dv">50</span>, <span class="dv">2</span>)[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)]</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    haltn  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">500</span>, {</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        u <span class="ot">&lt;-</span> (hbase <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)) <span class="sc">%%</span> <span class="dv">1</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(<span class="fu">sapply</span>(<span class="fu">qnorm</span>(u, <span class="fl">0.5</span>, <span class="dv">1</span>), seq_prob))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="at">R =</span> R, <span class="at">pseudo =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((pseudo <span class="sc">-</span> truth)<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">halton =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((haltn <span class="sc">-</span> truth)<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>acc <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">250</span>), rmse_at)))</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">reshape</span>(acc, <span class="at">direction =</span> <span class="st">"long"</span>, <span class="at">varying =</span> <span class="fu">c</span>(<span class="st">"pseudo"</span>, <span class="st">"halton"</span>),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>               <span class="at">v.names =</span> <span class="st">"rmse"</span>, <span class="at">timevar =</span> <span class="st">"type"</span>,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">times =</span> <span class="fu">c</span>(<span class="st">"pseudo"</span>, <span class="st">"halton"</span>)),</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(R, rmse, <span class="at">linetype =</span> type)) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"draws R (log)"</span>, <span class="at">y =</span> <span class="st">"RMSE (log)"</span>, <span class="at">linetype =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-halton-vs-pseudo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-halton-vs-pseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="12_msl_files/figure-html/fig-halton-vs-pseudo-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-halton-vs-pseudo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;12.2: Root mean squared error of the simulated sequence probability against the number of draws, pseudo-random versus Halton (log-log scale). Halton’s systematic coverage delivers the accuracy of several hundred pseudo-random draws with a fraction of the count.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The Halton curve sits well below the pseudo-random curve at every <span class="math inline">\(R\)</span> — reading horizontally, 50 Halton draws deliver roughly the accuracy of hundreds of pseudo-random draws, consistent with the folklore and with published comparisons <span class="citation" data-cites="train2009">(<a href="references.html#ref-train2009" role="doc-biblioref">Train 2009, sec. 9.3.4</a>)</span>. In multi-person MSL the standard practice refines this slightly (different sequence segments per person, a discarded burn-in, randomized shifts as above — and different prime bases per dimension when <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> goes multivariate), but the headline stands: <em>when draws approximate integrals, coverage beats randomness</em>, and the draw budget you save is real computing time (<a href="09_performance.html#tbl-eval-count" class="quarto-xref">Table&nbsp;<span>9.1</span></a>).</p>
 </section>
-<section id="a-first-msl-estimation" class="level2" data-number="12.6">
-<h2 data-number="12.6" class="anchored" data-anchor-id="a-first-msl-estimation"><span class="header-section-number">12.6</span> A First MSL Estimation</h2>
-<!-- smallest interesting example: binary logit with one random coefficient; code the simulated loglik, estimate, recover -->
+<section id="how-many-draws-an-empirical-answer" class="level2" data-number="12.6">
+<h2 data-number="12.6" class="anchored" data-anchor-id="how-many-draws-an-empirical-answer"><span class="header-section-number">12.6</span> How Many Draws? An Empirical Answer</h2>
+<p>Theory says “<span class="math inline">\(R\)</span> growing faster than <span class="math inline">\(\sqrt{N}\)</span>”; practice wants a number. The working procedure is disarmingly simple: <em>re-estimate with increasing <span class="math inline">\(R\)</span> until the answers stop moving at the precision you care about</em> — the same “increase until stable” logic used for grid resolution or chain length, applied to the draw count. On our problem, with Halton draws throughout:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">124</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fit_at_R <span class="ot">&lt;-</span> <span class="cf">function</span>(R) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="do">## person n gets segment n of one long Halton sequence, then a common</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="do">## random shift and the qnorm transform (the scheme @sec-mixed-msl reuses)</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    h    <span class="ot">&lt;-</span> <span class="fu">halton</span>(N<span class="sc">*</span>R <span class="sc">+</span> <span class="dv">50</span>, <span class="dv">2</span>)[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>)]</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    hseg <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">qnorm</span>((h <span class="sc">+</span> <span class="fu">runif</span>(<span class="dv">1</span>)) <span class="sc">%%</span> <span class="dv">1</span>), N, R, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">optim</span>(start, sll_re, <span class="at">y =</span> y, <span class="at">Xp =</span> Xp, <span class="at">id =</span> id, <span class="at">N =</span> N,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">Z =</span> hseg, <span class="at">method =</span> <span class="st">"BFGS"</span>, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">fnscale =</span> <span class="sc">-</span><span class="dv">1</span>))<span class="sc">$</span>par</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>), fit_at_R)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(res) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"mu0"</span>, <span class="st">"log_sig0"</span>, <span class="st">"price"</span>, <span class="st">"ram16"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(res, <span class="at">sigma0 =</span> <span class="fu">exp</span>(res[<span class="dv">2</span>, ])), <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]   [,2]   [,3]   [,4]
+mu0       1.015  0.995  0.998  0.997
+log_sig0  0.312  0.304  0.303  0.299
+price    -1.162 -1.159 -1.161 -1.161
+ram16     0.505  0.504  0.505  0.505
+sigma0    1.367  1.355  1.353  1.349</code></pre>
+</div>
+</div>
+<p>By <span class="math inline">\(R = 100\)</span> the estimates have settled to the second decimal — the reporting precision of any study — and <span class="math inline">\(R = 200\)</span> confirms it. That, not a universal constant, is the answer to “how many draws”: enough that doubling them changes nothing you would report. Note the diagnostic is <em>self-service</em>; no theorem consulted, just the estimator interrogated about its own stability.</p>
 </section>
-<section id="relatives-msm-and-mss" class="level2" data-number="12.7">
-<h2 data-number="12.7" class="anchored" data-anchor-id="relatives-msm-and-mss"><span class="header-section-number">12.7</span> Relatives: MSM and MSS</h2>
-<!-- method of simulated moments/scores in two paragraphs each; when they matter; citations -->
+<section id="the-estimator-named-and-situated" class="level2" data-number="12.7">
+<h2 data-number="12.7" class="anchored" data-anchor-id="the-estimator-named-and-situated"><span class="header-section-number">12.7</span> The Estimator, Named and Situated</h2>
+<p>Assemble the pieces formally. The <strong>maximum simulated likelihood estimator</strong> maximizes <span class="math inline">\(\sum_n \log \widehat{\Pr}(\mathbf{y}_n|\boldsymbol{\theta})\)</span> with the probability simulated by <a href="#eq-sim-prob" class="quarto-xref">Equation&nbsp;<span>12.3</span></a> from draws fixed across evaluations. Its properties <span class="citation" data-cites="mcfaddentrain2000 train2009">(<a href="references.html#ref-mcfaddentrain2000" role="doc-biblioref">McFadden and Train 2000</a>; <a href="references.html#ref-train2009" role="doc-biblioref">Train 2009</a>, Ch. 10)</span>: consistent and asymptotically equivalent to exact ML provided <span class="math inline">\(R\)</span> grows suitably with <span class="math inline">\(N\)</span>; standard errors from the Hessian exactly as in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>MSL has two siblings you should recognize in the literature, both born of the same simulate-the-integral move applied to different estimating equations. The <strong>method of simulated moments</strong> (MSM) simulates the model’s predicted probabilities and matches them to observed choice frequencies; because the simulated probabilities enter <em>linearly</em> (no log), MSM is consistent even at fixed small <span class="math inline">\(R\)</span> — the Jensen problem never arises — at some cost in efficiency and in the craft of choosing moments. The <strong>method of simulated scores</strong> (MSS) simulates the score equation itself, seeking ML’s efficiency without the log’s bias; its difficulty is that unbiased score simulators are hard to construct. MSL’s dominance in practice comes down to convenience: it is the estimator you already know (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>) with a simulator inside, and its bias is manageable by the <span class="math inline">\(R\)</span>-doubling diagnostic above. We follow practice.</p>
+<p>One more sibling deserves a placement note: the random-parameter models estimated here and in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> by MSL are estimated in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> by Markov chain Monte Carlo instead — same models, different engine — and the comparison between the two engines is the hinge on which this book turns (<a href="14_limits.html" class="quarto-xref"><span>Chapter 14</span></a>). Keep the mental bookmark.</p>
 </section>
 <section id="key-learnings" class="level2" data-number="12.8">
 <h2 data-number="12.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">12.8</span> Key Learnings</h2>
+<ul>
+<li>When heterogeneity is continuous, the class sum of <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> becomes an integral (<a href="#eq-repanel-lik" class="quarto-xref">Equation&nbsp;<span>12.2</span></a>) with no closed form — but it is an expectation, so the <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> move applies: simulate it (<a href="#eq-sim-prob" class="quarto-xref">Equation&nbsp;<span>12.3</span></a>), drawing standard normals and mapping them through candidate parameters.</li>
+<li>The probability simulator is unbiased; its <em>log</em> is biased downward by Jensen’s inequality — we measured the bias, watched it die at rate <span class="math inline">\(1/R\)</span>, and noted the formal requirement (<span class="math inline">\(R\)</span> growing faster than <span class="math inline">\(\sqrt{N}\)</span>).</li>
+<li><strong>Fix the draws across evaluations.</strong> Fresh randomness per evaluation makes the objective surface jitter and breaks the optimizer — demonstrated live: identical problems, one line different, recovery versus rubble. Draws are data; precompute them.</li>
+<li>Reparameterize positive parameters (<span class="math inline">\(\sigma = e^\theta\)</span>), average products of probabilities on the log scale with max-shifts, and keep the per-draw loop vectorized over rows — the <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a> and <a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a> habits, now load-bearing.</li>
+<li>Halton draws beat pseudo-random draws decisively for integration (RMSE figure: 50 Halton draws <span class="math inline">\(\approx\)</span> hundreds of pseudo-random ones); choose <span class="math inline">\(R\)</span> by the doubling diagnostic — increase until nothing you’d report moves.</li>
+<li>MSL = <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>’s climber + a fixed-draw simulator inside; MSM and MSS are the linear-in-simulator and score-based siblings. Next: the same machinery, six correlated dimensions — the mixed MNL.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-mcfaddentrain2000" class="csl-entry" role="listitem">
+McFadden, Daniel, and Kenneth Train. 2000. <span>“Mixed MNL Models for Discrete Response.”</span> <em>Journal of Applied Econometrics</em> 15 (5): 447–70.
+</div>
+<div id="ref-train2009" class="csl-entry" role="listitem">
+Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>For <em>one-dimensional</em> integrals like this one, deterministic quadrature (Gauss–Hermite) is actually an excellent alternative and standard in random-effects software. We simulate instead because simulation is the method that <em>scales</em>: <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> needs this same integral in six dimensions, where quadrature’s cost explodes exponentially and simulation’s does not. Learn the scalable tool on the small problem.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The same principle under the name <em>common random numbers</em> also governs comparisons across models or specifications: evaluate both with the same draws and the simulation noise largely cancels from the comparison.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Halton sequences are deterministic, so “many times” needs care: we randomize each replication by shifting the whole sequence by a uniform offset (mod 1) — a <em>randomized</em> quasi-Monte Carlo scheme that preserves the even coverage while making replications comparable.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>With one refinement worth knowing: at modest <span class="math inline">\(R\)</span>, simulation noise adds a small extra variance component that Hessian-based standard errors ignore. The replication audit in the style of <a href="08_mnl_mle.html#sec-mnl-recovery" class="quarto-xref"><span>Section 8.8</span></a> is the honest check, and we run exactly that audit on the full mixed logit in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

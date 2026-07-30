@@ -4,38 +4,271 @@
 
 # Numerical Optimization {#sec-optimization}
 
-<!-- Sources: DCMS Ch 8 (Newton-Raphson/BHHH/BFGS with step-size logic); Hess & Daly Ch 21 (Bunch: definitive frequentist optimization survey) -->
+```{r}
+#| label: setup
+#| message: false
+#| echo: false
+library(ggplot2)
+theme_set(theme_minimal())
+```
+
+@sec-likelihood left us standing at the base of a hill. The log-likelihood $\ell(\bfbeta)$ is a surface over the parameter space; the MLE is its summit; and grid search --- visiting every location and comparing altitudes --- dies exponentially as the space grows dimensions. This chapter builds the climber. The methods here are not specific to choice models; they are the general machinery for maximizing smooth functions, and mastering them pays off every time you write down a new model with a computable likelihood --- which is to say, for the rest of this book and the rest of your research life.
+
+A note on ambition before we start. R ships with excellent optimizers, and by the chapter's end we will happily hand our work to `optim()`. But we first build Newton's method by hand, for the same reason this book simulates before it estimates: optimizers are the least inspectable link in the estimation chain --- data goes in, numbers come out, and when something goes wrong ("convergence code 1"?) the black box offers no comfort. Twenty lines of your own Newton iteration make the box transparent forever.
 
 ## Climbing a Hill You Cannot See
 
-<!-- iterative ascent: current position, direction, step size; all methods differ only in how they pick direction and step -->
+Picture standing on the log-likelihood surface in fog. You cannot see the summit; you can only *feel the ground at your feet* --- evaluate $\ell$, and its derivatives, at your current position. Every practical method is a loop built from that local information:
 
-## Newton-Raphson
+1. From the current position $\bfbeta^{(i)}$, choose a **direction** $\mathbf{d}_i$.
+2. Choose a **step size** $\lambda_i$.
+3. Move: $\bfbeta^{(i+1)} = \bfbeta^{(i)} + \lambda_i \mathbf{d}_i$. Repeat until no direction goes up.
 
-<!-- derive from the quadratic approximation; code it by hand for the binary logit; watch the iterates converge -->
+(The parenthesized superscript counts iterations, just as $\varepsilon^{(r)}$ counted draws in @sec-choice; subscripts on $\bfbeta$ stay reserved for its elements, $\beta_k$.)
 
-## Quasi-Newton Methods: BHHH and BFGS
+The score $s(\bfbeta)$ --- the gradient from @eq-score --- feels the slope, and pointing straight uphill ($\mathbf{d}_i = s(\bfbeta^{(i)})$, *steepest ascent*) seems natural. It is also famously inefficient: on the elongated, tilted contours we saw in @fig-loglik-2d, steepest ascent zigzags across the narrow axis of the valley, inching along its length. The cure is to consult not just the slope but the *curvature*, and that idea has a name.
 
-<!-- avoiding the Hessian: outer product of scores (BHHH), secant updates (BFGS); when each is appropriate (DCMS Ch 8) -->
+## Newton--Raphson
+
+Approximate the surface near the current position by its second-order Taylor expansion --- a quadratic bowl (inverted) with the same slope and curvature:
+
+$$
+\ell(\bfbeta) \approx \ell(\bfbeta^{(i)}) + s_i'(\bfbeta - \bfbeta^{(i)}) + \tfrac{1}{2} (\bfbeta - \bfbeta^{(i)})' H_i \, (\bfbeta - \bfbeta^{(i)})
+$$ {#eq-taylor}
+
+where $s_i$ and $H_i$ are the score and Hessian at $\bfbeta^{(i)}$. A quadratic we can maximize *exactly*: setting the derivative $s_i + H_i(\bfbeta - \bfbeta^{(i)})$ to zero gives the **Newton--Raphson step**
+
+$$
+\bfbeta^{(i+1)} = \bfbeta^{(i)} - H_i^{-1} s_i
+$$ {#eq-newton}
+
+Jump directly to the top of the local quadratic model, re-fit the model there, jump again. Where the surface really is quadratic, one step lands on the summit; where it is merely smooth, convergence near the optimum is *quadratic* --- roughly, the number of correct digits doubles per iteration. Compare @eq-newton with steepest ascent: multiplying the score by $-H_i^{-1}$ rotates and rescales the uphill direction, exactly correcting for the tilted, elongated contours that make steepest ascent zigzag. And notice a happy economy: $-H^{-1}$ evaluated at the *last* step is exactly the covariance estimate @eq-mle-vcov requires (up to the sign, the algorithm's machinery and the inference machinery are the same matrix).
+
+To implement Newton for the binary logit, we need its score and Hessian analytically. The score we derived as @eq-binlogit-score: $s(\bfbeta) = \mathbf{X}'(\y - \mathbf{P})$. One more differentiation --- only $\mathbf{P}$ depends on $\bfbeta$, and $\partial P_n / \partial \bfbeta = P_n(1-P_n)\x_n$ --- gives
+
+$$
+H(\bfbeta) = -\sum_{n=1}^{N} P_n (1 - P_n) \, \x_n \x_n' = -\mathbf{X}' W \mathbf{X}
+$$ {#eq-binlogit-hessian}
+
+with $W = \mathrm{diag}\big(P_n(1-P_n)\big)$. Note $H$ is negative definite everywhere --- the binary logit's log-likelihood is globally concave, one peak and no traps, which is part of why it makes such a good training ground.[^1]
+
+[^1]: Global concavity is a luxury enjoyed by the binary logit and the MNL (@sec-mnl-mle) but *not* by most models later in the book --- file that away for the multiple-starting-values discussion below.
+
+Here is the whole algorithm; the loop body is @eq-newton verbatim:
+
+```{r}
+newton_binary <- function(beta0, y, X, tol = 1e-10, max_iter = 25) {
+    beta <- beta0
+    path <- list(beta)
+    for (i in 1:max_iter) {
+        P <- plogis(as.vector(X %*% beta))       # P_n for all n
+        s <- crossprod(X, y - P)                 # score:   X'(y - P)
+        H <- -crossprod(X * (P * (1 - P)), X)    # hessian: -X' W X
+        step <- solve(H, s)                      # H^{-1} s without inverting
+        beta <- beta - as.vector(step)
+        path[[i + 1]] <- beta
+        if (max(abs(step)) < tol) break
+    }
+    list(beta = beta, hessian = H, iterations = i,
+         path = do.call(rbind, path))
+}
+```
+
+Three implementation notes. `plogis()` computes the logistic CDF --- i.e., our choice probability --- more stably than `exp(v)/(1+exp(v))`. `crossprod(X, v)` is $\mathbf{X}'v$ done efficiently, and multiplying `X` by the weight vector row-wise builds $\mathbf{X}'W\mathbf{X}$ without materializing the $N \times N$ diagonal matrix --- a @sec-performance habit arriving early. And `solve(H, s)` computes $H^{-1}s$ by solving the linear system directly, which is both faster and numerically sounder than forming the inverse.
+
+Simulate data (the @sec-sim-function generator once more) and release the climber from a deliberately poor start:
+
+```{r}
+sim_binary_data <- function(N, beta, X = NULL,
+                            dist = c("logistic", "normal")) {
+    dist <- match.arg(dist)
+    if (is.null(X)) {
+        price <- runif(N, min = 0.8, max = 2.4)
+        ram16 <- rbinom(N, size = 1, prob = 0.5)
+        X <- cbind(1, price, ram16)
+    }
+    eps <- switch(dist, logistic = rlogis(N), normal = rnorm(N))
+    U <- as.vector(X %*% beta) + eps
+    data.frame(y = as.integer(U > 0), X[, -1, drop = FALSE])
+}
+
+set.seed(60)
+beta_true <- c(1.0, -1.2, 0.6)
+d <- sim_binary_data(N = 500, beta = beta_true)
+y <- d$y
+X <- cbind(1, d$price, d$ram16)
+
+fit_nr <- newton_binary(beta0 = c(0, 0, 0), y = y, X = X)
+fit_nr$iterations
+round(fit_nr$path, 4)
+```
+
+Six iterations from the origin to ten-digit convergence, and the path table shows the promised acceleration: the first step covers most of the distance, and the final steps change digits far beyond anything of statistical interest. The quadratic-convergence signature --- correct digits roughly doubling --- is visible down the columns. Seen on the contour map:
+
+```{r}
+#| label: fig-newton-path
+#| fig-cap: "Newton-Raphson's path from the origin across the log-likelihood contours (intercept and price coefficient shown; the memory coefficient also updates each step). Each jump maximizes the local quadratic model of the surface."
+#| fig-width: 6
+#| fig-height: 4
+loglik_binary_vec <- function(beta, y, X) {   # vectorized; loop version in @sec-likelihood
+    v <- as.vector(X %*% beta)
+    sum(y*v - log1p(exp(v)))
+}
+grid <- expand.grid(b0 = seq(-0.5, 2, length.out = 80),
+                    bp = seq(-2.4, 0.4, length.out = 80))
+grid$ll <- mapply(function(b0, bp)
+    loglik_binary_vec(c(b0, bp, fit_nr$beta[3]), y, X), grid$b0, grid$bp)
+
+path <- data.frame(b0 = fit_nr$path[, 1], bp = fit_nr$path[, 2])
+ggplot(grid, aes(b0, bp)) +
+    geom_contour(aes(z = ll), bins = 30, color = "grey60") +
+    geom_path(data = path, arrow = arrow(length = unit(0.2, "cm"),
+                                         type = "closed")) +
+    geom_point(data = path, size = 1.5) +
+    labs(x = expression(beta[0]), y = expression(beta[price]))
+```
+
+(The figure's helper sneaks in the vectorized log-likelihood, because plotting 6,400 grid points with @sec-likelihood's loop version tries one's patience. Why is `y*v - log1p(exp(v))` the same function? With $v_n = \x_n'\bfbeta$: $\log P_n = v_n - \log(1+e^{v_n})$ and $\log(1-P_n) = -\log(1+e^{v_n})$, so $y_n \log P_n + (1-y_n)\log(1-P_n) = y_n v_n - \log(1+e^{v_n})$. The rewrite avoids computing $P_n$ at all, and `log1p()` evaluates $\log(1+e^v)$ accurately when $e^v$ is tiny --- the full stability story waits for @sec-performance.)
+
+## The Quasi-Newton Family: BHHH and BFGS
+
+Newton's appetite is the Hessian: $K(K+1)/2$ second derivatives, re-derived analytically for every new model. For the binary logit that was a pleasure; for the mixed logit of @sec-mixed-msl it is a punishment. The *quasi-Newton* methods keep Newton's step structure but replace $H$ with a cheaper stand-in, and two members of the family matter for us [DCMS Ch. 8 surveys more, including step-size strategies we gloss over; @train2009].
+
+**BHHH** exploits a statistical identity: at the true parameters, the expected outer product of per-observation scores equals the information matrix (the negative expected Hessian). So sum the outer products of the observation-level score contributions --- quantities the score calculation already produces. Write $s_n(\bfbeta)$ for observation $n$'s contribution to the score, so that $s(\bfbeta) = \sum_n s_n(\bfbeta)$ --- for the binary logit, $s_n(\bfbeta) = (y_n - P_n)\x_n$, the individual terms of @eq-binlogit-score. BHHH uses
+
+$$
+\hat{H}_{\textrm{BHHH}} = -\sum_{n=1}^{N} s_n(\bfbeta) \, s_n(\bfbeta)'
+$$ {#eq-bhhh}
+
+No second derivatives at all, and the approximation is guaranteed negative (semi-)definite, so the step always points uphill. The catch: the identity holds *at the truth, in expectation, for a correctly specified model* --- far from the optimum or under misspecification, BHHH's picture of the curvature can be poor and its steps clumsy.
+
+**BFGS**, the default workhorse of numerical optimization, builds its Hessian substitute from the optimization's own history: each iteration's change in the gradient, compared against the step taken, reveals one slice of curvature, and BFGS accumulates these slices into a running approximation --- start with something crude (the identity matrix), let every step teach you a little more geometry. It needs only gradients, tolerates imperfect ones, and converges nearly as fast as true Newton in practice. When we call `optim()` below, BFGS is what we ask for.
 
 ## Numerical Derivatives
 
-<!-- finite differences; step-size pitfalls (Bunch); verifying analytic gradients numerically -- a habit we keep all book -->
+Quasi-Newton methods still want the *gradient*, and deriving even first derivatives analytically becomes real work as models grow. The fallback is numerical differentiation: the definition of the derivative, executed with a small but finite $h$,
 
-## R's Optimizers
+$$
+\frac{\partial \ell}{\partial \beta_k} \approx \frac{\ell(\bfbeta + h\,\mathbf{e}_k) - \ell(\bfbeta - h\,\mathbf{e}_k)}{2h}
+$$ {#eq-central-diff}
 
-<!-- optim() (methods, control, hessian=TRUE), nlm(), maxLik; reading convergence codes; why we mostly use optim(method="BFGS") -->
+where $\mathbf{e}_k$ is the $k$-th standard basis vector --- all zeros except a 1 in position $k$, so the perturbation nudges one coordinate at a time (the *central* difference; the one-sided version is half as accurate for the same cost). (This $h$ is the step size of numerical analysis, no relation to the behavioral rule $h$ of @sec-choice.) Coding it is a five-line loop over coordinates:
+
+```{r}
+num_grad <- function(fn, beta, h = 1e-6, ...) {
+    g <- numeric(length(beta))
+    for (k in seq_along(beta)) {
+        e    <- replace(numeric(length(beta)), k, h)
+        g[k] <- (fn(beta + e, ...) - fn(beta - e, ...)) / (2*h)
+    }
+    g
+}
+```
+
+Choosing $h$ is a genuine tension, not a formality: too large and the secant misrepresents the slope (truncation error); too small and you subtract two nearly equal numbers, amplifying floating-point noise (roundoff error). The engineering compromise near $h \approx 10^{-6}$ works for well-scaled problems, but "well-scaled" is doing real work in that sentence --- one more reason parameter scaling (below) matters. @hessdaly2024's optimization chapter (Bunch) treats these pitfalls with the care they deserve.
+
+Numerical gradients also settle a debt. In @sec-likelihood I asserted the elegant score formula $s(\bfbeta) = \mathbf{X}'(\y - \mathbf{P})$; we can now audit the algebra:
+
+```{r}
+beta_test <- c(0.5, -0.8, 0.2)
+P <- plogis(as.vector(X %*% beta_test))
+analytic <- as.vector(crossprod(X, y - P))
+numeric  <- num_grad(loglik_binary_vec, beta_test, y = y, X = X)
+rbind(analytic, numeric)
+```
+
+Agreement to six decimals. Make this check a reflex: *every* analytic gradient in this book --- and every one you ever derive --- gets verified against @eq-central-diff before it is trusted. It is the cheapest insurance in computational statistics; a silent sign error in a gradient produces optimizers that limp, wander, or confidently stop at nonsense, and none of those symptoms names its cause.
+
+## R's Optimizers: `optim()`
+
+With the concepts in hand, we can read R's general-purpose optimizer fluently. `optim()` wants a starting value, a function, optionally a gradient, and a method. Two conventions need deciding once:
+
+- *Minimize or maximize?* `optim()` minimizes by default. Some authors therefore write negative log-likelihoods everywhere; I find that a standing invitation to sign errors. We keep writing log-likelihoods --- the statistically meaningful object --- and pass `control = list(fnscale = -1)`, which tells `optim()` to maximize.
+- *Which method?* `method = "BFGS"` for the reasons above. (Derivative-free Nelder--Mead, the default, is a robust fallback when gradients are treacherous; we will want it exactly once, and I will flag it.)
+
+```{r}
+fit <- optim(par     = c(0, 0, 0),
+             fn      = loglik_binary_vec,
+             y = y, X = X,
+             method  = "BFGS",
+             control = list(fnscale = -1),
+             hessian = TRUE)
+fit$par
+fit$convergence
+```
+
+Reading the output: `par` is $\hat{\bfbeta}$; `value` is $\ell(\hat{\bfbeta})$; `convergence` of `0` means the algorithm believes it finished (anything else is a warning label, not a result[^2]); and `hessian = TRUE` asks for a numerically differentiated Hessian at the solution --- our inference input. Compare the two climbers:
+
+```{r}
+rbind(newton = fit_nr$beta, bfgs = fit$par, truth = beta_true)
+```
+
+Identical to four decimals (Newton and BFGS found the same summit --- there is only one) and near the truth (recovery, once again). We did not supply a gradient, so BFGS differentiated numerically behind the scenes; passing our analytic `gr` speeds things up and tightens convergence, and we will do so for the MNL in @sec-mnl-mle.
+
+[^2]: `convergence = 1` means the iteration limit was hit --- raise `maxit` and restart from where it stopped. Code `10` signals degeneracy in Nelder--Mead. The messages accompanying nonzero codes are terse; the reflex should be: nonzero code, no trust.
 
 ## Standard Errors from the Hessian
 
-<!-- invert the negative Hessian at the max; connect back to ch 5's information matrix; delta method mention (full treatment ch 21) -->
+The statistical payoff. @eq-mle-vcov said the estimated covariance of $\hat{\bfbeta}$ is the inverse negative Hessian at the peak; `optim()` just handed us that Hessian:
+
+```{r}
+vcov_hat <- solve(-fit$hessian)
+se <- sqrt(diag(vcov_hat))
+
+results <- data.frame(
+    truth    = beta_true,
+    estimate = fit$par,
+    se       = se,
+    z        = fit$par / se,
+    ci_lo    = fit$par - 1.96*se,
+    ci_hi    = fit$par + 1.96*se
+)
+rownames(results) <- c("intercept", "price", "ram16")
+round(results, 3)
+```
+
+This little table is the archetype of estimation output, and every column traces to something we built: estimates from the climber, standard errors from the curvature, $z$-statistics testing "is this coefficient distinguishable from zero," and 95% confidence intervals --- each of which, satisfyingly, covers its true value. (Any single interval fails with 5% probability, of course; @sec-mnl-mle runs the replication study that checks the coverage *rate*.) The price coefficient's interval is the widest relative to its magnitude --- look back at @fig-loglik-2d and its elongated contours to see why: that is the flat direction of the surface, rendered as a number.
+
+Two cautions before we move on. The Hessian route to standard errors assumes the model is correctly specified (true in our simulations by construction; an act of faith with real data --- robust "sandwich" alternatives exist, see @greene2008). And it is *asymptotic*: at small $N$, normality of $\hat{\bfbeta}$ is an approximation whose quality is, again, checkable by simulation --- a theme @sec-mnl-mle takes up in earnest.
 
 ## Practical Realities
 
-<!-- starting values, parameter scaling, local maxima and multiple starts, non-convergence triage -->
+Textbook optimization ends at the previous section. Real optimization involves four recurring frictions, and knowing them in advance converts hours of confusion into minutes of diagnosis.
 
-## End-to-End: Simulate, Estimate, Recover
+**Starting values.** Every climber starts somewhere, and bad starts cost iterations or worse (a flat-region start can stall numerical gradients entirely). Cheap heuristics go far: zeros are serviceable for logit-family models; estimates from a simpler relative are better --- we will start the MNL from zeros, but the mixed logit of @sec-mixed-msl from *the plain MNL's estimates*, and the HB sampler of @sec-hb-mnl likewise. A model hierarchy is also a starting-value hierarchy.
 
-<!-- the payoff of Part I: binary logit from ch 3 simulation through optim() to estimates with standard errors; the true parameters sit inside the confidence intervals -->
+**Scaling.** Optimizers work best when parameters live on comparable scales; a gradient step calibrated for a coefficient of size 1 misbehaves for one of size 1,000. We engineered this away in @sec-running_example by measuring price in \$1,000s --- making all true coefficients order-one --- and that was not an aesthetic choice. If you meet a dataset with price in dollars, *rescale before optimizing*, then translate the estimate back.
+
+**Local maxima.** The binary logit's concavity guarantees one summit, but the guarantee expires later in this book: latent class likelihoods (@sec-latentclass) are riddled with local maxima, and mixed logit surfaces (@sec-mixed-msl) can undulate. The standard defense is disciplined brute force: launch from several dispersed starting points and compare the summits reached. Same summit everywhere: reassuring. Different summits: report the best, and know your surface is treacherous.
+
+**Believing convergence too easily.** A zero convergence code means the stopping rule triggered --- steps got small --- not that the maximum was found. Corroborate: is the gradient actually near zero? Is the Hessian negative definite (all eigenvalues negative)? Does a restart from the "solution" stay put? Thirty seconds of paranoia, applied routinely, catches the rare failures that matter.
+
+## The Complete Loop, End to End
+
+Part I's tools are now all on the bench, and it is worth savoring the moment the loop closes cleanly. The whole simulate-and-recover cycle, in one breath:
+
+```{r}
+set.seed(61)
+d2   <- sim_binary_data(N = 2000, beta = c(1.0, -1.2, 0.6))   # simulate
+X2   <- cbind(1, d2$price, d2$ram16)
+fit2 <- optim(c(0,0,0), loglik_binary_vec, y = d2$y, X = X2,   # estimate
+              method = "BFGS", control = list(fnscale = -1),
+              hessian = TRUE)
+se2  <- sqrt(diag(solve(-fit2$hessian)))
+round(data.frame(truth = c(1.0, -1.2, 0.6),                    # recover?
+                 estimate = fit2$par, se = se2), 3)
+```
+
+Simulate at known truth; hand the estimator *only* the data; watch the truth come back, bracketed by honest uncertainty. Note the standard errors relative to the $N=500$ run --- quadrupling the sample roughly halved them, the $\sqrt{N}$ law making its second appearance (it governed simulation error in @sec-choice; it governs estimation error here).
+
+This loop is the book's heartbeat. Everything that follows elaborates one of its stages: richer models to simulate (@sec-mnl, @sec-mixed-msl), faster likelihood evaluation (@sec-performance), likelihoods that themselves require simulation (@sec-msl), and eventually a different philosophy of the "estimate" step entirely (@sec-bayes-mnl) --- where, I promise, the log-likelihood functions and the paranoid checking habits built here transfer without modification.
 
 ## Key Learnings
+
+- Optimization is climbing in fog: direction and step size from local information, repeated. Consulting curvature, not just slope, is what makes climbing fast on tilted terrain.
+- Newton--Raphson (@eq-newton) maximizes a local quadratic model per step: for the binary logit, with score $\mathbf{X}'(\y-\mathbf{P})$ and Hessian $-\mathbf{X}'W\mathbf{X}$ (@eq-binlogit-hessian), it reaches ten-digit accuracy in six steps --- and its Hessian doubles as the standard-error engine.
+- BHHH substitutes the outer product of scores for the Hessian (@eq-bhhh, valid near the truth under correct specification); BFGS learns curvature from the optimization's own history and is our default method in `optim()` (`fnscale = -1` to maximize; nonzero convergence codes mean *stop and investigate*).
+- Numerical gradients (@eq-central-diff) are the universal fallback and the universal *audit*: every analytic gradient gets checked against them, always.
+- Standard errors are peak curvature inverted: `solve(-hessian)`, diagonal, square root. Flat directions of the surface (@fig-loglik-2d) become the large standard errors in the table.
+- The practical frictions --- starting values, scaling, local maxima, over-trusting convergence --- have standard defenses; we will apply the multiple-starts discipline in @sec-latentclass, where local maxima stop being hypothetical.
+- The simulate-and-recover loop closed: truth in, truth out, with uncertainty that shrinks at the $\sqrt{N}$ rate. Part I is complete.

@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -339,14 +422,13 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#why-simulate" id="toc-why-simulate" class="nav-link active" data-scroll-target="#why-simulate"><span class="header-section-number">3.1</span> Why Simulate?</a></li>
-  <li><a href="#the-anatomy-of-a-simulation-script" id="toc-the-anatomy-of-a-simulation-script" class="nav-link" data-scroll-target="#the-anatomy-of-a-simulation-script"><span class="header-section-number">3.2</span> The Anatomy of a Simulation Script</a></li>
-  <li><a href="#example-simulating-binary-logit-choices" id="toc-example-simulating-binary-logit-choices" class="nav-link" data-scroll-target="#example-simulating-binary-logit-choices"><span class="header-section-number">3.3</span> Example: Simulating Binary Logit Choices</a></li>
-  <li><a href="#example-simulating-binary-probit-choices" id="toc-example-simulating-binary-probit-choices" class="nav-link" data-scroll-target="#example-simulating-binary-probit-choices"><span class="header-section-number">3.4</span> Example: Simulating Binary Probit Choices</a></li>
-  <li><a href="#from-one-choice-to-a-dataset" id="toc-from-one-choice-to-a-dataset" class="nav-link" data-scroll-target="#from-one-choice-to-a-dataset"><span class="header-section-number">3.5</span> From One Choice to a Dataset</a></li>
-  <li><a href="#sanity-checks-on-simulated-data" id="toc-sanity-checks-on-simulated-data" class="nav-link" data-scroll-target="#sanity-checks-on-simulated-data"><span class="header-section-number">3.6</span> Sanity Checks on Simulated Data</a></li>
-  <li><a href="#the-simulate-and-recover-workflow" id="toc-the-simulate-and-recover-workflow" class="nav-link" data-scroll-target="#the-simulate-and-recover-workflow"><span class="header-section-number">3.7</span> The Simulate-and-Recover Workflow</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">3.8</span> Key Learnings</a></li>
+  <li><a href="#the-anatomy-of-a-simulation-script" id="toc-the-anatomy-of-a-simulation-script" class="nav-link active" data-scroll-target="#the-anatomy-of-a-simulation-script"><span class="header-section-number">3.1</span> The Anatomy of a Simulation Script</a></li>
+  <li><a href="#sec-sim_binary" id="toc-sec-sim_binary" class="nav-link" data-scroll-target="#sec-sim_binary"><span class="header-section-number">3.2</span> Example: Simulating Binary Logit Choices</a></li>
+  <li><a href="#example-simulating-binary-probit-choices" id="toc-example-simulating-binary-probit-choices" class="nav-link" data-scroll-target="#example-simulating-binary-probit-choices"><span class="header-section-number">3.3</span> Example: Simulating Binary Probit Choices</a></li>
+  <li><a href="#sec-sim-function" id="toc-sec-sim-function" class="nav-link" data-scroll-target="#sec-sim-function"><span class="header-section-number">3.4</span> Packaging the Simulator as a Function</a></li>
+  <li><a href="#sec-sanity-checks" id="toc-sec-sanity-checks" class="nav-link" data-scroll-target="#sec-sanity-checks"><span class="header-section-number">3.5</span> Sanity Checks on Simulated Data</a></li>
+  <li><a href="#sec-sim-recover" id="toc-sec-sim-recover" class="nav-link" data-scroll-target="#sec-sim-recover"><span class="header-section-number">3.6</span> The Simulate-and-Recover Workflow</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">3.7</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/03_simdata.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -372,39 +454,249 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: DCMS Ch 1-2; Chapman 2013 (simulation-based conjoint teaching); gelman2020 Bayesian workflow for the fake-data ethos -->
-<section id="why-simulate" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="why-simulate"><span class="header-section-number">3.1</span> Why Simulate?</h2>
-<!-- the book's mantra operationalized: if you can simulate from a model you understand its assumptions; simulated data is the only data where you know the right answer, making it the ultimate test of an estimation routine -->
+<p>In <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a> we simulated a <em>probability</em>: many draws of <span class="math inline">\(\varepsilon\)</span> for one fixed choice situation. In this chapter we simulate a <em>dataset</em>: one draw of <span class="math inline">\(\varepsilon\)</span> for each of many choice situations. The code changes less than you might expect — in both cases we draw unobservables and push them through the behavioral rule <span class="math inline">\(h\)</span> — but the interpretation changes completely. The draws now play the role of the real-world unobservables themselves, and the output is a set of synthetic observations that look exactly like data you might collect.</p>
+<p>Why manufacture fake data when the world is full of real data? Three reasons, in increasing order of importance for this book:</p>
+<ol type="1">
+<li><p><strong>Simulation is the proof that you understand the model.</strong> A model is a description of a data generating process. If you cannot write the twenty lines of code that generate data from that process, then somewhere in the chain — the utility specification, the error distribution, the choice rule — sits an assumption you do not actually understand. The mantra from the opening of this book operationalizes here.</p></li>
+<li><p><strong>Simulated data come with an answer key.</strong> You chose the true parameters, so you know exactly what an estimator <em>should</em> find. With real data you can never distinguish “my estimator is broken” from “the world is surprising.” With simulated data there is no ambiguity, which makes simulation the ultimate debugging environment for estimation code.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p></li>
+<li><p><strong>The whole workflow of this book depends on it.</strong> Every estimator we build — maximum likelihood in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>, simulated likelihood in <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>, Gibbs samplers in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> — will be validated the same way: simulate data with known parameters, estimate, compare. This <em>simulate-and-recover</em> loop is the central discipline of computational statistics, and this chapter builds its first half.</p></li>
+</ol>
+<section id="the-anatomy-of-a-simulation-script" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="the-anatomy-of-a-simulation-script"><span class="header-section-number">3.1</span> The Anatomy of a Simulation Script</h2>
+<p>Recall the framework of <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>. A choice model specifies a behavioral rule <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span> and a density <span class="math inline">\(f(\boldsymbol{\varepsilon})\)</span>. To simulate data from the model is to run the data generating process forward, once per observation. Every simulation script in this book — no matter how elaborate the model — has the same six steps:</p>
+<ol type="1">
+<li><strong>Set the sizes.</strong> How many decision-makers <span class="math inline">\(N\)</span>? (Later: how many choice situations <span class="math inline">\(T\)</span>, alternatives <span class="math inline">\(J\)</span>?)</li>
+<li><strong>Set the true parameters.</strong> Choose <span class="math inline">\(\boldsymbol{\beta}\)</span> (and later, covariance matrices, class shares, …). These are the values we will demand our estimators recover.</li>
+<li><strong>Generate the observables.</strong> Create the attribute values <span class="math inline">\(\mathbf{x}\)</span> for every choice situation.</li>
+<li><strong>Draw the unobservables.</strong> One draw of <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> from <span class="math inline">\(f\)</span> per choice situation — the inverse-transform skills of <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>.</li>
+<li><strong>Compute utilities.</strong> Combine steps 2–4 through the utility function.</li>
+<li><strong>Apply the choice rule.</strong> Record <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span> for every observation.</li>
+</ol>
+<p>Steps 3 and 4 both call random number generators but play entirely different roles, and confusing them is a common beginner error. The observables in step 3 are random only because <em>we</em> are inventing a dataset; in a real study they would come from your experimental design or your survey. The unobservables in step 4 are random <em>inside the model</em>: they are the <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> of <a href="01_choice.html#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a>, and their distribution <span class="math inline">\(f\)</span> is part of the model specification. When we later estimate models, step 3’s values will be data we condition on, while step 4’s values will be gone — visible only through their fingerprints on the choices.</p>
 </section>
-<section id="the-anatomy-of-a-simulation-script" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="the-anatomy-of-a-simulation-script"><span class="header-section-number">3.2</span> The Anatomy of a Simulation Script</h2>
-<!-- the invariant recipe: (1) set constants/sizes, (2) choose true parameter values, (3) generate covariates, (4) draw unobservables from f, (5) compute utilities, (6) apply h to record outcomes; map each step to the notation of ch 1 -->
+<section id="sec-sim_binary" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="sec-sim_binary"><span class="header-section-number">3.2</span> Example: Simulating Binary Logit Choices</h2>
+<p>Let’s simulate the laptop-offer setting of <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a> at scale. Each of <span class="math inline">\(N\)</span> shoppers is shown one configured laptop — a price drawn from the study’s range and either the base 8GB or upgraded 16GB memory — and decides whether to buy it. The model, assembled from <a href="01_choice.html#eq-u_binlogit" class="quarto-xref">Equation&nbsp;<span>1.3</span></a> through <a href="01_choice.html#eq-bin_logistic_dist" class="quarto-xref">Equation&nbsp;<span>1.5</span></a>:</p>
+<p><span id="eq-binlogit-dgp"><span class="math display">\[
+U_n = \mathbf{x}_n'\boldsymbol{\beta}+ \varepsilon_n, \qquad
+\varepsilon_n \stackrel{iid}{\sim}\textrm{Logistic}, \qquad
+y_n = I\left[ U_n &gt; 0 \right]
+\tag{3.1}\]</span></span></p>
+<p>with <span class="math inline">\(\mathbf{x}_n = (1, \texttt{price}_n, \texttt{ram16}_n)\)</span> and the true parameter vector we fixed in <a href="01_choice.html#sec-running_example" class="quarto-xref"><span>Section 1.4</span></a>: <span class="math inline">\(\boldsymbol{\beta}^\ast = (1.0, -1.2, 0.6)\)</span>. The subscript <span class="math inline">\(n\)</span> now indexes shoppers, <span class="math inline">\(n = 1, \ldots, N\)</span> — our notation for decision-makers from here on.</p>
+<p>Here is the script, with the six steps labeled:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">30</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## 1. sizes</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">500</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## 2. true parameters</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="do">## 3. observables: one laptop offer per shopper</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>)   <span class="co"># in $1,000s</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)  <span class="co"># memory upgrade?</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)               <span class="co"># N x 3 matrix</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="do">## 4. unobservables</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">&lt;-</span> <span class="fu">rlogis</span>(N)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="do">## 5. utilities</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="do">## 6. choices</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">data.frame</span>(y, price, ram16), <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  y     price ram16
+1 1 0.9580525     0
+2 0 1.5811709     0
+3 1 1.3824588     1
+4 0 1.4729906     0</code></pre>
+</div>
+</div>
+<p>Twenty lines, most of them comments. A few implementation notes deserve attention, because the same patterns recur in every simulator we write:</p>
+<ul>
+<li><strong>The design matrix <code>X</code>.</strong> We assemble the observables into an <span class="math inline">\(N \times K\)</span> matrix whose columns match the entries of <span class="math inline">\(\boldsymbol{\beta}\)</span>, including a leading column of ones for the intercept. The matrix product <code>X %*% beta</code> then computes all <span class="math inline">\(N\)</span> representative utilities <span class="math inline">\(V_n = \mathbf{x}_n'\boldsymbol{\beta}\)</span> (the <span class="math inline">\(V\)</span> of <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a>, now one per shopper) in one operation. This is our first taste of a theme that <a href="09_performance.html" class="quarto-xref"><span>Chapter 9</span></a> develops fully: organizing data as matrices lets R do the arithmetic in compiled code.</li>
+<li><strong><code>as.vector()</code>.</strong> Matrix multiplication returns an <span class="math inline">\(N \times 1\)</span> matrix; coercing to a plain vector avoids surprises when we add the (vector) draws <code>eps</code>. Small thing, classic bug.</li>
+<li><strong>One draw per shopper.</strong> Compare with <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a>, where we took a thousand draws for a <em>single</em> <span class="math inline">\(\mathbf{x}\)</span>. Here each shopper gets exactly one <span class="math inline">\(\varepsilon_n\)</span> — their own private circumstances on decision day.</li>
+</ul>
+<p>How many shoppers bought?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.368</code></pre>
+</div>
+</div>
+<p>About 37% — reasonable for laptops priced deliberately on the expensive side. This single number is already a sanity check: a purchase share of 0.99 or 0.01 would send us hunting for a misplaced sign or a wildly mis-scaled price before writing another line.</p>
 </section>
-<section id="example-simulating-binary-logit-choices" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="example-simulating-binary-logit-choices"><span class="header-section-number">3.3</span> Example: Simulating Binary Logit Choices</h2>
-<!-- one decision-maker at a time; reuse the model from ch 1 but now generate y, not p(y|x) -->
+<section id="example-simulating-binary-probit-choices" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="example-simulating-binary-probit-choices"><span class="header-section-number">3.3</span> Example: Simulating Binary Probit Choices</h2>
+<p>Now the punchline of this pair of examples. The binary <em>probit</em> model is identical to the binary logit in every respect except one: the unobservables are standard normal rather than logistic. In the six-step anatomy, only step 4 changes; in the code, only one line:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">31</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eps_p <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(N)                       <span class="co"># &lt;- the only change</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>U_p   <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps_p</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y_p   <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(U_p <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y_p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.318</code></pre>
+</div>
+</div>
+<p>Everything you believe about a statistical model is a specific line of code in its simulator. The choice of error distribution — the difference between “logit” and “probit,” between closed-form choice probabilities (<a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>) and integrals requiring simulation (<a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a>) — is the difference between <code>rlogis(N)</code> and <code>rnorm(N)</code>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Can you tell the two datasets apart by looking? Here are their purchase rates plotted against price:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">cut</span>(price, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">0.8</span>, <span class="fl">2.4</span>, <span class="at">by =</span> <span class="fl">0.2</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>shares <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">bin =</span> <span class="fu">levels</span>(bins), <span class="at">model =</span> <span class="st">"logit"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">share =</span> <span class="fu">tapply</span>(y,   bins, mean)),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">bin =</span> <span class="fu">levels</span>(bins), <span class="at">model =</span> <span class="st">"probit"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">share =</span> <span class="fu">tapply</span>(y_p, bins, mean))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(shares, <span class="fu">aes</span>(<span class="at">x =</span> bin, <span class="at">y =</span> share, <span class="at">group =</span> model, <span class="at">linetype =</span> model)) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"price bin ($1,000s)"</span>, <span class="at">y =</span> <span class="st">"share who bought"</span>, <span class="at">linetype =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-logit-probit-compare" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-logit-probit-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03_simdata_files/figure-html/fig-logit-probit-compare-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-logit-probit-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: Purchase shares by price bin for one simulated logit dataset and one simulated probit dataset (N = 500 each). The error distribution that separates the two models is essentially invisible in raw data summaries.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Not really — both fall with price, with sampling noise dominating any difference in curve shape. Two lessons hide in this modest picture. First, model assumptions about unobservables are <em>not</em> readable off raw data; distinguishing logit from probit takes likelihood-based tools (and even then, <a href="18_mnp.html" class="quarto-xref"><span>Chapter 18</span></a> will show, the practical differences are subtle). Second, and more optimistically: since the models are so similar, the estimation machinery we build for one will transfer to the other with small changes — the exact program of Part IV.</p>
 </section>
-<section id="example-simulating-binary-probit-choices" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="example-simulating-binary-probit-choices"><span class="header-section-number">3.4</span> Example: Simulating Binary Probit Choices</h2>
-<!-- identical script, one line changed (rlogis -> rnorm); the point: model assumptions live in specific lines of code -->
+<section id="sec-sim-function" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-sim-function"><span class="header-section-number">3.4</span> Packaging the Simulator as a Function</h2>
+<p>We will need to simulate binary choice data again — in <a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a> to feed our first likelihood, in <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> to test our first optimizer, in <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a> to check the Albert–Chib sampler. Copy-pasting the script each time invites drift: a tweak here, a forgotten seed there, and soon no two chapters use quite the same data generating process. The remedy is to package the simulator as a function with explicit arguments.</p>
+<p>Doing so forces a design decision worth pausing over: <em>what should be an argument, and what should be internal?</em> Three reasonable designs:</p>
+<ul>
+<li><strong>(a) Everything internal.</strong> <code>sim_binary_data()</code> with no arguments, returning one canonical dataset. Simple, but useless the moment we want a different <span class="math inline">\(N\)</span> or <span class="math inline">\(\boldsymbol{\beta}\)</span> — and we will want both, e.g., to study how estimator precision varies with sample size in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>.</li>
+<li><strong>(b) Pass the design matrix in.</strong> <code>sim_binary_data(X, beta)</code>. Maximally flexible — the caller controls the covariates entirely — and the right choice when a real study’s design is fixed. But every call now requires boilerplate to build <code>X</code>.</li>
+<li><strong>(c) Generate covariates internally, parameters as arguments.</strong> The function owns the <em>study design</em> (prices uniform on the study range, memory upgrades at random) while the caller controls the <em>scientific quantities</em> (<span class="math inline">\(N\)</span>, <span class="math inline">\(\boldsymbol{\beta}\)</span>).</li>
+</ul>
+<p>We choose (c), with (b)’s escape hatch: covariates are generated internally by default, but a caller who needs custom covariates can supply their own <code>X</code>. This layered design — sensible defaults, full control available — costs three lines and is a pattern worth stealing for your own work:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sim_binary_data <span class="ot">&lt;-</span> <span class="cf">function</span>(N, beta, <span class="at">X =</span> <span class="cn">NULL</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">dist =</span> <span class="fu">c</span>(<span class="st">"logistic"</span>, <span class="st">"normal"</span>)) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    dist <span class="ot">&lt;-</span> <span class="fu">match.arg</span>(dist)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">is.null</span>(X)) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        price <span class="ot">&lt;-</span> <span class="fu">runif</span>(N, <span class="at">min =</span> <span class="fl">0.8</span>, <span class="at">max =</span> <span class="fl">2.4</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        ram16 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(N, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fl">0.5</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, price, ram16)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    eps <span class="ot">&lt;-</span> <span class="cf">switch</span>(dist,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">logistic =</span> <span class="fu">rlogis</span>(N),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">normal   =</span> <span class="fu">rnorm</span>(N))</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta) <span class="sc">+</span> eps</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>(<span class="at">y =</span> <span class="fu">as.integer</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>), X[, <span class="sc">-</span><span class="dv">1</span>, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">32</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="at">N =</span> <span class="dv">500</span>, <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  y    price ram16
+1 0 1.609345     1
+2 0 1.751693     1
+3 0 2.093995     0</code></pre>
+</div>
+</div>
+<p>Note the <code>dist</code> argument: because logit and probit differ by one line, one simulator serves both models, and the difference is now <em>named</em> rather than buried. The function returns a plain data frame — one row per shopper, the choice and the attributes, no intercept column — because that is the shape of real choice data arriving on your desk. Rebuilding the intercept-bearing <code>X</code> matrix from such a data frame is precisely the “organizing the data” work of <a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>.</p>
 </section>
-<section id="from-one-choice-to-a-dataset" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="from-one-choice-to-a-dataset"><span class="header-section-number">3.5</span> From One Choice to a Dataset</h2>
-<!-- N decision-makers, T choice situations each; storing X and y; foreshadow ch 4 on organization -->
+<section id="sec-sanity-checks" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="sec-sanity-checks"><span class="header-section-number">3.5</span> Sanity Checks on Simulated Data</h2>
+<p>You wrote the simulator, so it is correct… probably. Twenty lines is enough room for a sign error, a swapped argument, or a distribution with the wrong scale, and an error here poisons everything downstream: you cannot debug an estimator against data that misrepresent the model. Before any simulated dataset earns our trust, it faces checks of increasing stringency.</p>
+<p><strong>Level 1: marginal summaries.</strong> The purchase share (0.31 above) should be sane, and each covariate should have the intended distribution. One-liners: <code>mean(d$y)</code>, <code>summary(d$price)</code>, <code>table(d$ram16)</code>.</p>
+<p><strong>Level 2: directional relationships.</strong> Choices should respond to attributes in the direction the parameters dictate — buy rates falling with price, rising with the memory upgrade:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tapply</span>(d<span class="sc">$</span>y, d<span class="sc">$</span>ram16, mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        0         1 
+0.2339623 0.3957447 </code></pre>
+</div>
+</div>
+<p>The 16GB laptops sell more often, as <span class="math inline">\(\beta_{\texttt{ram16}} = 0.6 &gt; 0\)</span> demands.</p>
+<p><strong>Level 3: quantitative agreement with theory.</strong> The strongest check compares simulated frequencies against the model’s <em>implied probabilities</em> — the closed-form curve from <a href="01_choice.html#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a>. For the binary logit we know <span class="math inline">\(p(y=1|\mathbf{x}) = e^{\mathbf{x}'\boldsymbol{\beta}}/(1+e^{\mathbf{x}'\boldsymbol{\beta}})\)</span>, so binned empirical purchase rates should scatter around that curve, hugging it more tightly as <span class="math inline">\(N\)</span> grows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">33</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>big <span class="ot">&lt;-</span> <span class="fu">sim_binary_data</span>(<span class="at">N =</span> <span class="dv">20000</span>, <span class="at">beta =</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>b16 <span class="ot">&lt;-</span> big[big<span class="sc">$</span>ram16 <span class="sc">==</span> <span class="dv">1</span>, ]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">cut</span>(b16<span class="sc">$</span>price, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="fl">0.8</span>, <span class="fl">2.4</span>, <span class="at">by =</span> <span class="fl">0.1</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>emp  <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">price =</span> <span class="fu">tapply</span>(b16<span class="sc">$</span>price, bins, mean),</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">share =</span> <span class="fu">tapply</span>(b16<span class="sc">$</span>y,     bins, mean)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(emp, <span class="fu">aes</span>(<span class="at">x =</span> price, <span class="at">y =</span> share)) <span class="sc">+</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(p) <span class="fu">plogis</span>(<span class="fl">1.0</span> <span class="sc">-</span> <span class="fl">1.2</span><span class="sc">*</span>p <span class="sc">+</span> <span class="fl">0.6</span>),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">linewidth =</span> <span class="fl">0.8</span>, <span class="at">color =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"price ($1,000s)"</span>, <span class="at">y =</span> <span class="st">"P(buy)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-sanity-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sanity-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03_simdata_files/figure-html/fig-sanity-curve-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sanity-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Level-3 sanity check: empirical purchase shares by price bin (points, 16GB laptops only, N = 20,000) against the model-implied logit curve (line). Agreement of this quality is strong evidence the simulator implements the model it claims to.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>(We used <code>plogis()</code> — the logistic CDF — to evaluate the logit formula; after <a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a> you know exactly what that function is.) The points ride the curve. If they rode a <em>different</em> curve — shifted, flipped, compressed — the discrepancy’s shape would point to the bug: wrong sign, wrong coefficient, wrong error scale.</p>
+<p>These checks may feel excessive for twenty lines of code, but the habit scales. In <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a> the simulator will have random coefficients drawn through a Cholesky factor; in <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> entire populations of parameters. Simulators grow; the checking discipline is what keeps their complexity honest.</p>
 </section>
-<section id="sanity-checks-on-simulated-data" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="sanity-checks-on-simulated-data"><span class="header-section-number">3.6</span> Sanity Checks on Simulated Data</h2>
-<!-- do choice shares move with x as the model implies? plot p(y) against x'beta; catching bugs before estimation exists -->
+<section id="sec-sim-recover" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sec-sim-recover"><span class="header-section-number">3.6</span> The Simulate-and-Recover Workflow</h2>
+<p>Step back and look at what we can now do. Given any fully specified choice model, we can manufacture a dataset from it — and we know the true <span class="math inline">\(\boldsymbol{\beta}\)</span> behind that dataset. The natural next question defines the rest of Part I: <em>pretending we don’t know <span class="math inline">\(\boldsymbol{\beta}\)</span>, can we get it back from the data alone?</em></p>
+<p>That question, asked and answered on repeat, is the <strong>simulate-and-recover workflow</strong>:</p>
+<ol type="1">
+<li>Choose true parameters <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span>.</li>
+<li>Simulate a dataset from the model at <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span> (this chapter).</li>
+<li>Feed the dataset — <em>not</em> the parameters — to an estimation routine (chapters 5–6 build one).</li>
+<li>Compare the estimate <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> to <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span>.</li>
+</ol>
+<p>If <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> lands close to <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span> — with “close” made precise by the standard errors of <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> and the replication studies of <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> — then model, simulator, and estimator all cohere. When recovery fails, something specific is broken, and the failure pattern usually says what: a sign flip suggests a coding error in the likelihood; estimates biased toward zero suggest an error-scale mismatch; one wild coefficient suggests an identification problem (<a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>). Experienced modelers read recovery failures the way mechanics read engine noises, and the only way to develop that ear is to run the loop many times. We will.</p>
+<p>The loop has one more virtue worth advertising now: it is how you <em>develop</em> new models, not just how you learn old ones. When you invent a custom model for your own research — the destination of <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a> — the first thing you will build is its simulator, and simulate-and-recover will be the test bench that tells you whether your custom estimator actually works before it ever touches real data.</p>
 </section>
-<section id="the-simulate-and-recover-workflow" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="the-simulate-and-recover-workflow"><span class="header-section-number">3.7</span> The Simulate-and-Recover Workflow</h2>
-<!-- preview of the book's core loop: simulate with known theta -> estimate -> compare; we can't "recover" until ch 6, but state the workflow now as the destination -->
-</section>
-<section id="key-learnings" class="level2" data-number="3.8">
-<h2 data-number="3.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">3.8</span> Key Learnings</h2>
+<section id="key-learnings" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">3.7</span> Key Learnings</h2>
+<ul>
+<li>Simulating data from a model is running the data generating process forward: set sizes, set true parameters, generate observables, draw unobservables, compute utilities, apply the choice rule. Every simulator in this book follows these six steps.</li>
+<li>The draws now <em>are</em> the model’s unobservables — one per choice situation — unlike <a href="01_choice.html" class="quarto-xref"><span>Chapter 1</span></a>’s many-draws-per-situation integral approximation. Same generators, different role.</li>
+<li>Model assumptions live in specific lines of code: logit vs probit is <code>rlogis(N)</code> vs <code>rnorm(N)</code>, one line apart and nearly indistinguishable in raw data. (And the two models’ different error variances previewed the scale-identification issue of <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>.)</li>
+<li>Package simulators as functions. Deciding what is an argument (<span class="math inline">\(N\)</span>, <span class="math inline">\(\boldsymbol{\beta}\)</span>, optionally <code>X</code>) and what is internal (the study design) is a real design choice; we chose defaults-with-escape-hatches, a pattern that recurs in all our reusable code.</li>
+<li>Never trust an unchecked simulator. Check marginal summaries, directional effects, and — the gold standard — quantitative agreement between empirical frequencies and model-implied probabilities (<a href="#fig-sanity-curve" class="quarto-xref">Figure&nbsp;<span>3.2</span></a>).</li>
+<li>The simulate-and-recover workflow — simulate at known <span class="math inline">\(\boldsymbol{\beta}^\ast\)</span>, estimate, compare — is the central discipline of this book. We have built the “simulate” half; Part I’s remaining chapters build “recover.”</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-gelman2020" class="csl-entry" role="listitem">
+Gelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C Margossian, Bob Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian Bürkner, and Martin Modrák. 2020. <span>“Bayesian Workflow.”</span> <em>arXiv Preprint arXiv:2011.01808</em>.
+</div>
+<div id="ref-rizzo2019" class="csl-entry" role="listitem">
+Rizzo, Maria L. 2019. <em>Statistical Computing with r</em>. Chapman; Hall/CRC.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The Bayesian workflow literature elevates this practice to a principle: <span class="citation" data-cites="gelman2020">Gelman et al. (<a href="references.html#ref-gelman2020" role="doc-biblioref">2020</a>)</span> recommend fake-data checking before fitting any model to real data. The same advice appears, in frequentist dress, throughout <span class="citation" data-cites="rizzo2019">Rizzo (<a href="references.html#ref-rizzo2019" role="doc-biblioref">2019</a>)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The purchase shares differ between the two runs (0.368 vs 0.318) partly because of the different error distributions and partly because the draws differ. The standard logistic has variance <span class="math inline">\(\pi^2/3 \approx 3.29\)</span>, while the standard normal has variance 1, so the <em>same</em> <span class="math inline">\(\boldsymbol{\beta}\)</span> implies different signal-to-noise ratios in the two models. This scale mismatch is not a nuisance — it is a preview of the identification discussion in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a>: utility scale and error variance are two sides of one coin.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

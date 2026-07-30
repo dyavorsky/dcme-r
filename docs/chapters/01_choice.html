@@ -424,8 +424,13 @@ window.Quarto = {
   <ul>
   <li><a href="#a-framework-for-choice" id="toc-a-framework-for-choice" class="nav-link active" data-scroll-target="#a-framework-for-choice"><span class="header-section-number">1.1</span> A Framework for Choice</a></li>
   <li><a href="#sec-simple_example" id="toc-sec-simple_example" class="nav-link" data-scroll-target="#sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</a></li>
-  <li><a href="#sec-binary_logit" id="toc-sec-binary_logit" class="nav-link" data-scroll-target="#sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">1.4</span> Key Learnings</a></li>
+  <li><a href="#sec-binary_logit" id="toc-sec-binary_logit" class="nav-link" data-scroll-target="#sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Example</a>
+  <ul class="collapse">
+  <li><a href="#a-model-has-implications" id="toc-a-model-has-implications" class="nav-link" data-scroll-target="#a-model-has-implications"><span class="header-section-number">1.3.1</span> A model has implications</a></li>
+  </ul></li>
+  <li><a href="#sec-running_example" id="toc-sec-running_example" class="nav-link" data-scroll-target="#sec-running_example"><span class="header-section-number">1.4</span> The Running Example: A Laptop Choice Study</a></li>
+  <li><a href="#the-road-ahead" id="toc-the-road-ahead" class="nav-link" data-scroll-target="#the-road-ahead"><span class="header-section-number">1.5</span> The Road Ahead</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">1.6</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/01_choice.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -452,7 +457,7 @@ window.Quarto = {
 
 
 <p>It is instructive to start with the first sentence of <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> Section 1.3, “Discrete choice analysis consists of two interrelated tasks: <strong>specification</strong> of the behavioral model and <strong>estimation</strong> of the parameters of that model” (emphasis added). Notably, chapters 1–7 of <span class="citation" data-cites="train2009">Train (<a href="references.html#ref-train2009" role="doc-biblioref">2009</a>)</span> only specify models; there is not even a hint of model estimation. We too begin with a focus on model specification.</p>
-<p>Let me be clear: many students will see <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> later in this section and immediate think about “fitting” a model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There are no data yet. There will be parameters introduced in our choice of model specification, but we are not yet estimating those parameters. Have patience, we will eventually do these things.</p>
+<p>Let me be clear: many students will see <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> later in this section and immediately think about “fitting” a model; that is, they assume they have data that they will put into an estimation routine to find estimates of the parameters of the model. We are not there yet! At this early stage in the book, we are only specifying models; that is, listing sets of assumptions about data generating processes and exploring the implications of those assumptions. There are no data yet. There will be parameters introduced in our choice of model specification, but we are not yet estimating those parameters. Have patience, we will eventually do these things.</p>
 <section id="a-framework-for-choice" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="a-framework-for-choice"><span class="header-section-number">1.1</span> A Framework for Choice</h2>
 <p>Train denotes the outcome in any given choice situation as <span class="math inline">\(y\)</span>, determined by some observable factors collected in the vector <span class="math inline">\(\mathbf{x}\)</span> and some unobservable factors collected in the vector <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>. The factors (<span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>) relate to the agent’s choice (<span class="math inline">\(y\)</span>) through a function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span>. We assume for the moment that we know <span class="math inline">\(h(\cdot)\)</span> and that <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> are length-one vectors (i.e., scalars) denoted <span class="math inline">\(x\)</span> and <span class="math inline">\(\varepsilon\)</span>.</p>
@@ -465,6 +470,7 @@ p(y|x)
 &amp;= \int I \left[ h(x,\varepsilon)=y \right] f(\varepsilon) \, d\varepsilon
 \end{aligned}
 \tag{1.1}\]</span></span></p>
+<p>Read the last line slowly, because the rest of this book lives inside it. The indicator function <span class="math inline">\(I[\cdot]\)</span> equals 1 when the unobserved factors produce the outcome <span class="math inline">\(y\)</span> and equals 0 otherwise. The integral averages that indicator over all the values the unobserved factors might take, weighting by their density <span class="math inline">\(f(\varepsilon)\)</span>. In words: <em>the probability of an outcome is the share of the unobserved-factor distribution that produces that outcome.</em> Every choice probability we compute in this book — logit, probit, nested, mixed, hierarchical — is an instance of <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> with a particular choice of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>.</p>
 <p>For certain special choices of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, a closed-form expression<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> for the integral is available. But more generally, for almost any choice of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, we can approximate the integral through simulation. Train provides pseudo code on how to do so:</p>
 <ol type="1">
 <li>Repeat the following two steps many (<span class="math inline">\(r=1, \ldots, R\)</span>) times:
@@ -474,7 +480,8 @@ p(y|x)
 </ul></li>
 <li>Average the <span class="math inline">\(R\)</span> values of <span class="math inline">\(I\)</span></li>
 </ol>
-<p>Next we look at two examples where we use this procedure to approximate the <span class="math inline">\(p(y|x)\)</span> integral. The first example I made up. The second example is the binary logit model discussed by Train, but for which I’ll show you how to simulate the <span class="math inline">\(p(y|x)\)</span> integral.</p>
+<p>This procedure is called <em>Monte Carlo integration</em>, and it works because of the Law of Large Numbers: the average of many independent realizations of a random quantity converges to its expectation, and <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> is exactly an expectation — the expectation of the indicator <span class="math inline">\(I[h(x,\varepsilon)=y]\)</span> taken over <span class="math inline">\(\varepsilon\)</span>. We will lean on this idea repeatedly: in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a> it will sit <em>inside</em> a likelihood function, and in <a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a> the same “average over draws” logic will summarize posterior distributions.</p>
+<p>Next we look at two examples where we use this procedure to approximate the <span class="math inline">\(p(y|x)\)</span> integral. The first example I made up, and it is deliberately abstract — no economics, just mechanics. The second example is the binary logit model discussed by Train, which we will dress in the story that carries through the entire book: a shopper deciding whether to buy a laptop.</p>
 </section>
 <section id="sec-simple_example" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-simple_example"><span class="header-section-number">1.2</span> A Simple Example</h2>
@@ -497,7 +504,7 @@ h(x, \varepsilon) =
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(r <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>R) {</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    eps  <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="at">min=</span><span class="sc">-</span><span class="dv">1</span>, <span class="at">max=</span><span class="dv">1</span>)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    h    <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> eps </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    h    <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">+</span> eps</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    I[r] <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(h <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(I)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -506,7 +513,7 @@ h(x, \varepsilon) =
 </div>
 </div>
 <p>The simulated value 0.258 approximates the exact value 0.25 and can be made closer by increasing the number of draws used in the simulation.</p>
-<p>Notice that we took draws of <span class="math inline">\(\varepsilon\)</span> to empirical approximate the integral of <span class="math inline">\(p(y|x)\)</span>, but we should not think of these draws as “data” in the sense of a dataset. They are ancillary numbers generated from the distribution of <span class="math inline">\(\varepsilon\)</span> that we use to approximate the integral.</p>
+<p>Notice that we took draws of <span class="math inline">\(\varepsilon\)</span> to empirically approximate the integral of <span class="math inline">\(p(y|x)\)</span>, but we should not think of these draws as “data” in the sense of a dataset. They are ancillary numbers generated from the distribution of <span class="math inline">\(\varepsilon\)</span> that we use to approximate the integral.</p>
 <p>R users will recognize that we can shorten the code by taking advantage of R’s vectorized functions and its conversion of boolean values to 0/1 when used in mathematical operations. Here is a shorter implementation of the simulation; whether it’s “better” code is a matter of preference.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
@@ -517,16 +524,19 @@ h(x, \varepsilon) =
 </div>
 </div>
 <p>That’s it. If you can generate pseudo-random draws from the density <span class="math inline">\(f\)</span> and you know <span class="math inline">\(h\)</span>, approximating a choice probability by simulation might only require a handful of lines of code.</p>
+<p>How good is the approximation? Since each <span class="math inline">\(I^{(r)}\)</span> is a Bernoulli random variable with success probability <span class="math inline">\(p = 0.25\)</span>, the simulation average has standard error <span class="math inline">\(\sqrt{p(1-p)/R}\)</span>, which for <span class="math inline">\(R=1{,}000\)</span> is about 0.014. Quadrupling the number of draws halves the standard error — the familiar (and, when you are impatient, infuriating) square-root rate of Monte Carlo methods. We will return to the accuracy of simulated probabilities with much more care in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>, where it directly affects the quality of our parameter estimates.</p>
 </section>
 <section id="sec-binary_logit" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Model Example</h2>
-<p>As an example of a model with a complete closed-form solution, Train provides the binary logit model. In this example, we’ll let <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> be vectors of length two, and we’ll specify <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span> as follows:</p>
-<p>The “binary” part refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (<span class="math inline">\(y=1\)</span>) or not (<span class="math inline">\(y=0\)</span>). To tie this model into a framework of behavior, we start with a utility function <span class="math inline">\(U\)</span>. In Train’s specific example, utility is specified as</p>
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-binary_logit"><span class="header-section-number">1.3</span> A Binary Logit Example</h2>
+<p>The toy example had no behavioral content: <span class="math inline">\(h\)</span> was an arbitrary rule. Discrete choice models earn the name <em>behavioral</em> by deriving <span class="math inline">\(h\)</span> from a model of decision-making. The standard construction — which we will use, in increasingly elaborate forms, for the rest of the book — is the <em>random utility model</em>: the decision-maker assigns a utility to each available action and picks the action with the highest utility.</p>
+<p>Here is the story we will grow throughout this book. A shopper is considering a laptop. The laptop has observable attributes — its price, its memory, its screen size, its brand — and the shopper has some overall assessment of how much they’d like to own it, which also depends on many things we will never observe: their mood, their current machine’s death rattle, a looming deadline. We collect the observable attributes in a vector <span class="math inline">\(\mathbf{x}\)</span> and bundle everything unobservable into a scalar <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>The “binary” part of the model’s name refers to the aspect of the model whereby the decision maker does one of two things; they either take an action (<span class="math inline">\(y=1\)</span>, buy the laptop) or not (<span class="math inline">\(y=0\)</span>, walk away). To tie this model into a framework of behavior, we start with a utility function <span class="math inline">\(U\)</span> for the action:</p>
 <p><span id="eq-u_binlogit"><span class="math display">\[
 U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) = \mathbf{x}'\boldsymbol{\beta}+ \varepsilon
 \tag{1.3}\]</span></span></p>
-<p>where <span class="math inline">\(\mathbf{x}\)</span> is a vector of observable explanatory variables, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of parameters that through the functional form <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span> effectively serve as weights on the covariates, and <span class="math inline">\(\varepsilon\)</span> is a scalar index collecting the value of information used by the decision maker but unobserved to the researcher. Notice that we’re allowing <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> to be vectors in this example, whereas they were scalars (or equivalently length-one vectors) in the previous example.</p>
-<p>In this model, the threshold for action is 0 because the decision maker takes action (<span class="math inline">\(y=1\)</span>) when utility is positive; conversely, when utility is negative, the decision makes elects not to take the action (i.e., <span class="math inline">\(y=0\)</span>). Therefore we can specify <span class="math inline">\(h\)</span> as:</p>
+<p>where <span class="math inline">\(\mathbf{x}\)</span> is a vector of observable explanatory variables, <span class="math inline">\(\boldsymbol{\beta}\)</span> is a vector of parameters that through the functional form <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span> effectively serve as weights on the attributes, and <span class="math inline">\(\varepsilon\)</span> is a scalar collecting the value of everything relevant to the shopper but unobserved by the researcher. The utility of <em>not</em> buying is normalized to zero — a harmless-seeming convention that we will scrutinize carefully in <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> (identification) and again in <a href="22_extensions.html" class="quarto-xref"><span>Chapter 22</span></a> (the outside option).</p>
+<p>The piece the researcher can compute, <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}\)</span>, is called the <em>representative utility</em> and gets its own letter, <span class="math inline">\(V\)</span>; the model says total utility is representative utility plus noise, <span class="math inline">\(U = V + \varepsilon\)</span>. The split matters: <span class="math inline">\(V\)</span> is where the parameters live, and <span class="math inline">\(\varepsilon\)</span> is what the integral in <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> averages over.</p>
+<p>Notice that <span class="math inline">\(h\)</span> has grown an argument: once we specify utility, the parameters <span class="math inline">\(\boldsymbol{\beta}\)</span> enter the behavioral rule, so we write <span class="math inline">\(h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon)\)</span> and condition the choice probability on <span class="math inline">\(\boldsymbol{\beta}\)</span> as well — <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span>. The framework of <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> is unchanged; <span class="math inline">\(\boldsymbol{\beta}\)</span> simply rides along with <span class="math inline">\(\mathbf{x}\)</span>. The shopper buys when buying is better than not buying, so the behavioral rule <span class="math inline">\(h\)</span> is:</p>
 <p><span id="eq-h_binlogit"><span class="math display">\[
 h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
     \begin{cases}
@@ -534,36 +544,159 @@ h(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) =
         1  &amp; \text{if} \hspace{1ex} U(\mathbf{x}, \boldsymbol{\beta}, \varepsilon) &gt; 0
     \end{cases}
 \tag{1.4}\]</span></span></p>
-<p>The “logit” part of the model’s name refers to the choice of <span class="math inline">\(f\)</span>. The binary logit model assumes <span class="math inline">\(f\)</span> is the logistic distribution:</p>
+<p>The “logit” part of the model’s name refers to the choice of <span class="math inline">\(f\)</span>. The binary logit model assumes <span class="math inline">\(\varepsilon\)</span> follows the standard logistic distribution:</p>
 <p><span id="eq-bin_logistic_dist"><span class="math display">\[
 f(\varepsilon) = \frac{e^{-\varepsilon}}{(1+e^{-\varepsilon})^2}
 \tag{1.5}\]</span></span></p>
-<p>Having specified <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span>, let’s choose some values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span> and use simulation to approximate the integral for <span class="math inline">\(p(y|\mathbf{x},\boldsymbol{\beta})\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Let’s pick <span class="math inline">\(\mathbf{x}=(0.5, 2)\)</span> and <span class="math inline">\(\boldsymbol{\beta}=(3,-1)\)</span> such that <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}= (0.5)(3)+(2)(-1) = 1.5 - 2 = -0.5\)</span>. We know from the closed-form solution to this model provided by Train that, with these values of <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>, the probability the decision maker takes action is:</p>
-<p><span id="eq-binlogit_example"><span class="math display">\[
-p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}'\boldsymbol{\beta}}} = \frac{e^{-0.5}}{1+e^{-0.5}} = 0.3775407
+<p>This particular pairing of <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span> is one of the special cases where the integral in <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a> has a closed form. Let me show you why. Integrating <a href="#eq-bin_logistic_dist" class="quarto-xref">Equation&nbsp;<span>1.5</span></a> gives the logistic CDF, <span class="math inline">\(F(\varepsilon) = 1/(1+e^{-\varepsilon})\)</span> (differentiate it to confirm you get <span class="math inline">\(f\)</span> back). The shopper buys when <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon &gt; 0\)</span>, i.e., when <span class="math inline">\(\varepsilon &gt; -\mathbf{x}'\boldsymbol{\beta}\)</span>, so <span class="math display">\[
+p(y=1|\mathbf{x},\boldsymbol{\beta}) = \Pr(\varepsilon &gt; -\mathbf{x}'\boldsymbol{\beta}) = 1 - F(-\mathbf{x}'\boldsymbol{\beta}) = 1 - \frac{1}{1+e^{\mathbf{x}'\boldsymbol{\beta}}} = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1+e^{\mathbf{x}'\boldsymbol{\beta}}}
+\]</span> No indicator, no integral sign left standing — that is what “closed form” buys us:</p>
+<p><span id="eq-binlogit_prob"><span class="math display">\[
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{\mathbf{x}'\boldsymbol{\beta}}}{1 + e^{\mathbf{x}'\boldsymbol{\beta}}}
 \tag{1.6}\]</span></span></p>
-<p>We can approximate this integral as before. Below I use the function <code>rlogis()</code> to take <code>R=1000</code> draws from the binary logistic distribution, and I approximate the integral with the proportion of times <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon\)</span> is greater than the threshold for action (<span class="math inline">\(0\)</span>):</p>
+<p>Let’s make it concrete. Suppose the laptop on offer costs $1,500 and has 16GB of RAM (an upgrade over a base 8GB configuration). We describe it with the vector <span class="math inline">\(\mathbf{x}= (1, 1.5, 1)\)</span>: a constant, the price in thousands of dollars, and an indicator for the 16GB memory upgrade. And suppose the weights are <span class="math inline">\(\boldsymbol{\beta}^\ast = (1.0, -1.2, 0.6)\)</span> — the asterisk is our standing notation for <em>true</em> parameter values, the ones the data generating process actually uses, as distinct from candidate values <span class="math inline">\(\boldsymbol{\beta}\)</span> we will later evaluate and estimates <span class="math inline">\(\hat{\boldsymbol{\beta}}\)</span> we will later compute. The three values: a baseline pull toward buying, a distaste for price, and a taste for memory.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> Then</p>
+<p><span class="math display">\[
+\mathbf{x}'\boldsymbol{\beta}= (1)(1.0) + (1.5)(-1.2) + (1)(0.6) = -0.2
+\]</span></p>
+<p>and the closed-form probability of purchase is</p>
+<p><span id="eq-binlogit_example"><span class="math display">\[
+p(y=1 | \mathbf{x}, \boldsymbol{\beta}) = \frac{e^{-0.2}}{1+e^{-0.2}} = 0.45
+\tag{1.7}\]</span></span></p>
+<p>Even though we have the closed form, let’s approximate the integral by simulation exactly as before, both to practice the procedure and to verify the closed form is what it claims to be. We use <code>rlogis()</code> to take <span class="math inline">\(R=1{,}000\)</span> draws from the standard logistic distribution, and we approximate the integral with the proportion of times <span class="math inline">\(\mathbf{x}'\boldsymbol{\beta}+ \varepsilon\)</span> exceeds the threshold for action (<span class="math inline">\(0\)</span>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2345</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>x    <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fl">1.5</span>, <span class="dv">1</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">1.2</span>, <span class="fl">0.6</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(x <span class="sc">%*%</span> beta) <span class="sc">+</span> <span class="fu">rlogis</span>(R)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(U <span class="sc">&gt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.364</code></pre>
+<pre><code>[1] 0.434</code></pre>
 </div>
 </div>
-<p>Our simulated value 0.364 approximates the exact value of the integral 0.378.</p>
+<p>Our simulated value 0.434 approximates the exact value 0.45. The two routes — analytic formula and simulation — agree, as they must. Hold onto this dual view. When a closed form exists we will use it (it is faster and exact), but the simulation route never stops being available, and for most of the models in the second half of this book it is the <em>only</em> route.</p>
+<section id="a-model-has-implications" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="a-model-has-implications"><span class="header-section-number">1.3.1</span> A model has implications</h3>
+<p>A specified model is a machine for answering “what if” questions, even before any data exist. What does our model say happens to the purchase probability as price varies? We can trace the whole curve by evaluating <a href="#eq-binlogit_prob" class="quarto-xref">Equation&nbsp;<span>1.6</span></a> over a grid of prices, for both memory configurations:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>price <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fl">0.8</span>, <span class="at">to =</span> <span class="fl">2.4</span>, <span class="at">by =</span> <span class="fl">0.01</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>p_buy <span class="ot">&lt;-</span> <span class="cf">function</span>(price, ram16) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    v <span class="ot">&lt;-</span> <span class="fl">1.0</span> <span class="sc">-</span> <span class="fl">1.2</span><span class="sc">*</span>price <span class="sc">+</span> <span class="fl">0.6</span><span class="sc">*</span>ram16</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">exp</span>(v) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(v))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>curves <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">price =</span> <span class="fu">rep</span>(price, <span class="at">times =</span> <span class="dv">2</span>),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">ram   =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"8GB"</span>, <span class="st">"16GB"</span>), <span class="at">each =</span> <span class="fu">length</span>(price)),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">prob  =</span> <span class="fu">c</span>(<span class="fu">p_buy</span>(price, <span class="at">ram16 =</span> <span class="dv">0</span>), <span class="fu">p_buy</span>(price, <span class="at">ram16 =</span> <span class="dv">1</span>))</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(curves, <span class="fu">aes</span>(<span class="at">x =</span> price, <span class="at">y =</span> prob, <span class="at">linetype =</span> ram)) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="st">"point"</span>, <span class="at">x =</span> <span class="fl">1.5</span>, <span class="at">y =</span> <span class="fu">p_buy</span>(<span class="fl">1.5</span>, <span class="dv">1</span>), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Price ($1,000s)"</span>, <span class="at">y =</span> <span class="st">"P(buy)"</span>, <span class="at">linetype =</span> <span class="st">"Memory"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="fig-price-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-price-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="01_choice_files/figure-html/fig-price-curve-1.png" class="img-fluid figure-img" width="576">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-price-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1.1: Purchase probability implied by the binary logit model as price varies, for the base (8GB) and upgraded (16GB) memory configurations. The point marks the worked example: a $1,500 laptop with 16GB of RAM.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Two things are worth noticing. First, the curves are S-shaped, not straight lines: the model builds in diminishing sensitivity at the extremes, where the shopper is nearly certain to buy or nearly certain to walk away. Second, the vertical gap between the curves is the effect of the memory upgrade, and it is <em>not constant</em> — it is largest where the purchase decision hangs in the balance. Both properties came free with the logit specification. Whether they are <em>right</em> is an empirical question we are not yet equipped to ask; the point for now is that writing down <span class="math inline">\(h\)</span> and <span class="math inline">\(f\)</span> commits you to implications like these, and you should know what you are committing to.</p>
 </section>
-<section id="key-learnings" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">1.4</span> Key Learnings</h2>
-<p>The key learning from this chapter is that with discrete choice models our focus is on the <em>probability</em> of the choie outcome <span class="math inline">\(y\)</span> – that is, <span class="math inline">\(p(y|x)\)</span>. This choice outcome <span class="math inline">\(y\)</span> results from the joint distribution <span class="math inline">\(f\)</span> of unobserved factors <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> and the behavioral model <span class="math inline">\(h\)</span> that relates <span class="math inline">\(y\)</span> to <span class="math inline">\(\mathbf{x}\)</span> (and <span class="math inline">\(\boldsymbol{\varepsilon}\)</span>). The probability of the choice outcome <span class="math inline">\(p(y|x)\)</span> can be written in closed form for only very special choices of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span>, but for almost any choice of <span class="math inline">\(f\)</span> and <span class="math inline">\(h\)</span> we can simulate <span class="math inline">\(p(y|x)\)</span>, as the two examples in this chapter demonstrate.</p>
+</section>
+<section id="sec-running_example" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-running_example"><span class="header-section-number">1.4</span> The Running Example: A Laptop Choice Study</h2>
+<p>The laptop shopper of the previous section is the seed of the example that grows throughout this book. Since the later chapters build on it, let me lay out the full setting now.</p>
+<p>Imagine we field a <em>choice-based conjoint</em> study: we recruit a sample of prospective laptop buyers, and we show each respondent a sequence of choice tasks. In each task, the respondent sees a small set of hypothetical laptops, described by their attributes, and indicates which one they would buy. The attributes and their levels:</p>
+<div id="tbl-laptop-attributes" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-laptop-attributes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1.1: Attributes of the laptop choice study.
+</figcaption>
+<div aria-describedby="tbl-laptop-attributes-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribute</th>
+<th>Levels</th>
+<th>Coding</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Brand</td>
+<td>Acer, Dell, Apple</td>
+<td>dummies <code>dell</code>, <code>apple</code> (Acer is the reference)</td>
+</tr>
+<tr class="even">
+<td>Memory</td>
+<td>8, 16, 32 GB</td>
+<td>dummies <code>ram16</code>, <code>ram32</code> (8GB is the reference)</td>
+</tr>
+<tr class="odd">
+<td>Screen</td>
+<td>13”, 15”</td>
+<td>dummy <code>screen15</code> (13” is the reference)</td>
+</tr>
+<tr class="even">
+<td>Price</td>
+<td>$800 – $2,400</td>
+<td>continuous, in $1,000s</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>This design is modest but honest: it mirrors the structure of real conjoint studies used throughout marketing practice <span class="citation" data-cites="eggers2022">Rao (<a href="references.html#ref-rao2014" role="doc-biblioref">2014</a>)</span>. And it contains, in miniature, everything the models of this book need to exercise: a price for willingness-to-pay questions, brands for intercept-like effects (and, since Apple implies macOS while Dell and Acer imply Windows, a natural <em>nesting</em> of alternatives for <a href="10_iia.html" class="quarto-xref"><span>Chapter 10</span></a>), and attributes over which different respondents plausibly hold different tastes (the heterogeneity that drives everything from <a href="11_latentclass.html" class="quarto-xref"><span>Chapter 11</span></a> onward).</p>
+<p>Because we will <em>simulate</em> this study rather than field it, we will always know the true preference parameters, and every estimation method we build will be judged by one standard: does it recover them? The binary examples of the next five chapters strip the setting down to a single laptop offer — buy or don’t — carrying the true parameters <span class="math inline">\(\boldsymbol{\beta}^\ast = (1.0, -1.2, 0.6)\)</span> from <a href="#sec-binary_logit" class="quarto-xref"><span>Section 1.3</span></a>. In <a href="07_mnl.html" class="quarto-xref"><span>Chapter 7</span></a> the full study arrives: <span class="math inline">\(N=500\)</span> respondents, <span class="math inline">\(T=8\)</span> tasks each, <span class="math inline">\(J=3\)</span> laptops per task, and the complete attribute list of <a href="#tbl-laptop-attributes" class="quarto-xref">Table&nbsp;<span>1.1</span></a>.</p>
+<p>One warning as the example grows: it is <em>simulated</em>. Simulated data are the right tool for learning estimation — the truth is known, so mistakes are visible — but they are silent about the field problems of real conjoint studies (respondent attention, attribute framing, incentive alignment). When you graduate to real data, pair what you learn here with a treatment of those issues <span class="citation" data-cites="benakiva2019 eggers2022">(e.g., <a href="references.html#ref-benakiva2019" role="doc-biblioref">Ben-Akiva, McFadden, and Train 2019</a>; <a href="references.html#ref-eggers2022" role="doc-biblioref">Eggers et al. 2022</a>)</span>.</p>
+</section>
+<section id="the-road-ahead" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="the-road-ahead"><span class="header-section-number">1.5</span> The Road Ahead</h2>
+<p>You now have the two ideas that generate this entire book:</p>
+<ol type="1">
+<li><strong>A discrete choice model is a pair <span class="math inline">\((h, f)\)</span></strong> — a behavioral rule and a distribution for what we don’t observe — and the choice probability is the integral in <a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a>.</li>
+<li><strong>Integrals can be simulated.</strong> Draws from <span class="math inline">\(f\)</span> plus the rule <span class="math inline">\(h\)</span> approximate any choice probability, whether or not a closed form exists.</li>
+</ol>
+<p>What we cannot yet do is the <em>reverse</em> inference. In this chapter we knew <span class="math inline">\(\boldsymbol{\beta}\)</span> and computed choice probabilities; research runs the other way, from observed choices back to unknown parameters. Getting there requires machinery: drawing from all the densities we’ll need (<a href="02_draws.html" class="quarto-xref"><span>Chapter 2</span></a>), simulating entire datasets rather than single probabilities (<a href="03_simdata.html" class="quarto-xref"><span>Chapter 3</span></a>), organizing choice data so a computer can use them (<a href="04_data.html" class="quarto-xref"><span>Chapter 4</span></a>), turning data plus model into a likelihood (<a href="05_likelihood.html" class="quarto-xref"><span>Chapter 5</span></a>), and maximizing that likelihood numerically (<a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a>). That is Part I, and it is deliberately front-loaded: every hour spent there pays compound interest across Parts II through V.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">1.6</span> Key Learnings</h2>
+<ul>
+<li>A discrete choice model is specified by a behavioral function <span class="math inline">\(y = h(\mathbf{x}, \boldsymbol{\varepsilon})\)</span> and a density <span class="math inline">\(f(\boldsymbol{\varepsilon})\)</span> for the unobserved factors. Specification and estimation are distinct tasks, and everything in this chapter was specification.</li>
+<li>Our focus is on the <em>probability</em> of a choice outcome, <span class="math inline">\(p(y|\mathbf{x})\)</span>, which is an integral: the share of the unobserved-factor distribution that produces the outcome (<a href="#eq-int_indicator" class="quarto-xref">Equation&nbsp;<span>1.1</span></a>).</li>
+<li>That integral has a closed form only for special <span class="math inline">\((h, f)\)</span> pairs — the binary logit is one — but it can be approximated by simulation for almost <em>any</em> pair: draw <span class="math inline">\(\boldsymbol{\varepsilon}\)</span> from <span class="math inline">\(f\)</span>, apply <span class="math inline">\(h\)</span>, average the indicator. Monte Carlo error shrinks at the <span class="math inline">\(\sqrt{R}\)</span> rate.</li>
+<li>A fully specified model has testable implications (S-curves, interaction-like gaps) before any data exist. Know what your specification commits you to.</li>
+<li>The running example is set: a laptop choice study with known true parameters, <span class="math inline">\(\boldsymbol{\beta}^\ast = (1.0, -1.2, 0.6)\)</span> in its binary form. The rest of the book is about recovering numbers like these from data.</li>
+</ul>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-benakiva2019" class="csl-entry" role="listitem">
+Ben-Akiva, Moshe, Daniel McFadden, and Kenneth Train. 2019. <em>Foundations of Stated Preference Elicitation: Consumer Behavior and Choice-Based Conjoint Analysis</em>. Vol. 10. Foundations and Trends in Econometrics 1–2. Now Publishers.
+</div>
+<div id="ref-eggers2022" class="csl-entry" role="listitem">
+Eggers, Felix, Henrik Sattler, Thorsten Teichert, and Franziska Völckner. 2022. <span>“Choice-Based Conjoint Analysis.”</span> In <em>Handbook of Market Research</em>, edited by Christian Homburg, Martin Klarmann, and Arnd Vomberg, 781–819. Springer.
+</div>
+<div id="ref-rao2014" class="csl-entry" role="listitem">
+Rao, Vithala R. 2014. <em>Applied Conjoint Analysis</em>. Springer.
+</div>
 <div id="ref-train2009" class="csl-entry" role="listitem">
 Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed. Cambridge University Press. <a href="https://eml.berkeley.edu/books/choice2.html">https://eml.berkeley.edu/books/choice2.html</a>.
 </div>
@@ -572,9 +705,9 @@ Train, Kenneth E. 2009. <em>Discrete Choice Methods with Simulation</em>. 2nd ed
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>In this context, a <em>closed-form expression</em> means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral <span class="math inline">\(\int x \, dx\)</span> has the closed for expression <span class="math inline">\(x^2/2\)</span> plus some constant. We will see later that the Extreme Value distribution is often chosen for <span class="math inline">\(f\)</span> predominantly because it leads to a closed for expression for the choice probability <span class="math inline">\(p(y|x)\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>In this context, a <em>closed-form expression</em> means a way of writing the integral so that the anti-derivative sign is not part of solution. For example, the integral <span class="math inline">\(\int x \, dx\)</span> has the closed form expression <span class="math inline">\(x^2/2\)</span> plus some constant. We will see later that the Extreme Value distribution is often chosen for <span class="math inline">\(f\)</span> predominantly because it leads to a closed form expression for the choice probability <span class="math inline">\(p(y|x)\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>More precisely, <span class="math inline">\(p(y=2|x) = \Pr(x+\varepsilon &gt; 1|x=0.5) = \Pr(\varepsilon &gt; 0.5) = \int_{0.5}^1 f(\varepsilon) d\varepsilon = (0.5\varepsilon)\vert_{0.5}^1 = 0.25\)</span>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Only at the early stage of simulating data from a model to better understand the model do we pick values for <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\boldsymbol{\beta}\)</span>. Typically, <span class="math inline">\(\mathbf{x}\)</span> will part of the data you collect and <span class="math inline">\(\boldsymbol{\beta}\)</span> will be parameters whose values you seek to estimate.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Only at this early stage — exploring a fully specified model — do we pick values for <span class="math inline">\(\boldsymbol{\beta}\)</span>. In real research, <span class="math inline">\(\mathbf{x}\)</span> is data you collect and <span class="math inline">\(\boldsymbol{\beta}\)</span> contains parameters whose values you estimate. These particular values are not arbitrary: they are the <em>true parameters</em> of the running example, and we will spend most of this book trying to recover them from simulated data. Keep an eye on <span class="math inline">\(-1.2\)</span>, the price coefficient; you will see it many times.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

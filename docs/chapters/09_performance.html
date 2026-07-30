@@ -20,7 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -71,6 +125,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -343,9 +426,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#measure-first" id="toc-measure-first" class="nav-link" data-scroll-target="#measure-first"><span class="header-section-number">9.2</span> Measure First</a></li>
   <li><a href="#vectorizing-the-mnl-log-likelihood" id="toc-vectorizing-the-mnl-log-likelihood" class="nav-link" data-scroll-target="#vectorizing-the-mnl-log-likelihood"><span class="header-section-number">9.3</span> Vectorizing the MNL Log-Likelihood</a></li>
   <li><a href="#precompute-what-doesnt-change" id="toc-precompute-what-doesnt-change" class="nav-link" data-scroll-target="#precompute-what-doesnt-change"><span class="header-section-number">9.4</span> Precompute What Doesn’t Change</a></li>
-  <li><a href="#memory-layout-and-copies" id="toc-memory-layout-and-copies" class="nav-link" data-scroll-target="#memory-layout-and-copies"><span class="header-section-number">9.5</span> Memory Layout and Copies</a></li>
-  <li><a href="#when-r-isnt-enough" id="toc-when-r-isnt-enough" class="nav-link" data-scroll-target="#when-r-isnt-enough"><span class="header-section-number">9.6</span> When R Isn’t Enough</a></li>
-  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">9.7</span> Key Learnings</a></li>
+  <li><a href="#preallocate-dont-grow" id="toc-preallocate-dont-grow" class="nav-link" data-scroll-target="#preallocate-dont-grow"><span class="header-section-number">9.5</span> Preallocate; Don’t Grow</a></li>
+  <li><a href="#numerical-hygiene-is-performance-too" id="toc-numerical-hygiene-is-performance-too" class="nav-link" data-scroll-target="#numerical-hygiene-is-performance-too"><span class="header-section-number">9.6</span> Numerical Hygiene Is Performance Too</a></li>
+  <li><a href="#when-r-isnt-enough-a-glimpse-beyond" id="toc-when-r-isnt-enough-a-glimpse-beyond" class="nav-link" data-scroll-target="#when-r-isnt-enough-a-glimpse-beyond"><span class="header-section-number">9.7</span> When R Isn’t Enough: A Glimpse Beyond</a></li>
+  <li><a href="#key-learnings" id="toc-key-learnings" class="nav-link" data-scroll-target="#key-learnings"><span class="header-section-number">9.8</span> Key Learnings</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/dyavorsky/dcme-r/edit/main/chapters/09_performance.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -371,35 +455,232 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<!-- Sources: pkg-mixl.md (computational architecture for choice likelihoods); advr (profiling); placement rationale: the loglik gets called ~10^2 times by optim, ~10^4-10^5 times by MSL, ~10^5-10^6 times by MCMC -->
+<p>This chapter pauses the march of models to sharpen the tools. It exists because of a compounding arithmetic that is easy to state and easy to underestimate: <em>the log-likelihood function sits at the bottom of everything, and everything above it multiplies.</em> A slow likelihood is a minor annoyance in <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> and a fatal flaw by <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>. The good news: for the models in this book, a handful of transferable techniques — measure first, vectorize the hot path, precompute the invariant, preallocate the storage — buy factors of hundreds, and we already own most of them.</p>
 <section id="why-speed-matters-now" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="why-speed-matters-now"><span class="header-section-number">9.1</span> Why Speed Matters Now</h2>
-<!-- count the likelihood evaluations coming in ch 12-13 and 15-17; a 100x slowdown is the difference between a minute and a weekend -->
+<p>Count the likelihood evaluations implied by the chapters ahead. One BFGS fit of the MNL costs on the order of a hundred evaluations (iterations times gradient arithmetic). The replication study of <a href="08_mnl_mle.html#sec-mnl-recovery" class="quarto-xref"><span>Section 8.8</span></a> multiplied that by 200. And the road ahead is steeper:</p>
+<div id="tbl-eval-count" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-eval-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;9.1: What will call your likelihood, and how often.
+</figcaption>
+<div aria-describedby="tbl-eval-count-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 42%">
+<col style="width: 57%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Consumer</th>
+<th style="text-align: right;">Evaluations of the (log-)likelihood kernel</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>One BFGS fit (<a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(\sim 10^2\)</span></td>
+</tr>
+<tr class="even">
+<td>Replication study, 200 runs (<a href="08_mnl_mle.html#sec-mnl-recovery" class="quarto-xref"><span>Section 8.8</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(\sim 10^4\)</span></td>
+</tr>
+<tr class="odd">
+<td>One MSL fit, <span class="math inline">\(R = 200\)</span> draws (<a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(\sim 10^4\)</span>–<span class="math inline">\(10^5\)</span></td>
+</tr>
+<tr class="even">
+<td>One MCMC run, <span class="math inline">\(10^4\)</span> iterations, per-person steps (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(\sim 10^6\)</span></td>
+</tr>
+<tr class="odd">
+<td>Prior sensitivity: several MCMC runs (<a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a>)</td>
+<td style="text-align: right;"><span class="math inline">\(\sim 10^7\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>A likelihood evaluation costing one second makes the last row a four-month computation; at one millisecond, three hours. Every method in Parts II–IV was <em>designed</em> in an era when this arithmetic bound what research was possible, and it still bounds what your afternoon is possible. That is the entire motivation; now the craft.</p>
 </section>
 <section id="measure-first" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="measure-first"><span class="header-section-number">9.2</span> Measure First</h2>
-<!-- system.time(), bench/microbenchmark, profvis; never optimize what you haven't profiled -->
+<p>The cardinal rule of performance work: <strong>never optimize what you have not measured.</strong> Intuition about where time goes is famously unreliable, and effort spent speeding up a line that consumes 2% of runtime is effort donated to entropy. R’s built-in stopwatch is <code>system.time()</code>; for the quick comparisons this chapter makes, we wrap it to report a median across repetitions (timings are noisy — garbage collection, OS scheduling — and medians resist the noise)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>time_ms <span class="ot">&lt;-</span> <span class="cf">function</span>(expr, <span class="at">times =</span> <span class="dv">5</span>) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    e  <span class="ot">&lt;-</span> <span class="fu">substitute</span>(expr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    pf <span class="ot">&lt;-</span> <span class="fu">parent.frame</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    t  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(times, <span class="fu">system.time</span>(<span class="fu">eval</span>(e, pf))[[<span class="st">"elapsed"</span>]])</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="dv">1000</span> <span class="sc">*</span> <span class="fu">median</span>(t), <span class="dv">1</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For <em>profiling</em> — finding where a complex computation spends its time, function by function — R provides <code>Rprof()</code> and the friendlier <code>profvis</code> package; they matter once code has many moving parts, and I commend them to you for your own projects. Our computations are small enough that targeted timing tells the story.</p>
+<p>The test subject is the laptop study likelihood from <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>, with its data rebuilt as usual:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>study   <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/laptop_study.rds"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>laptops <span class="ot">&lt;-</span> study<span class="sc">$</span>data</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> laptops)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> laptops<span class="sc">$</span>choice</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>task_id <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(laptops[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> study<span class="sc">$</span>beta_true</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="vectorizing-the-mnl-log-likelihood" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="vectorizing-the-mnl-log-likelihood"><span class="header-section-number">9.3</span> Vectorizing the MNL Log-Likelihood</h2>
-<!-- from the ch 8 loop version to matrix operations, step by step; benchmark each stage -->
+<p><a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> wrote the likelihood twice and promised a measurement. Here are three implementations, spanning the design space:</p>
+<p><strong>Version 1 — the pure loop</strong> (from <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a>): visit each task, locate its rows with <code>which(task_id == i)</code>, compute locally.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>loglik_v1 <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ll <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">unique</span>(task_id)) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        rows <span class="ot">&lt;-</span> <span class="fu">which</span>(task_id <span class="sc">==</span> i)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        V    <span class="ot">&lt;-</span> X[rows, , drop <span class="ot">=</span> <span class="cn">FALSE</span>] <span class="sc">%*%</span> beta</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        ll   <span class="ot">&lt;-</span> ll <span class="sc">+</span> V[y[rows] <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(V)))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.vector</span>(ll)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Version 2 — the hybrid</strong>: compute all utilities in one matrix product (vectorized), but handle the per-task aggregation by splitting into a list and looping:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>loglik_v2 <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    V  <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    Vs <span class="ot">&lt;-</span> <span class="fu">split</span>(V, task_id)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    ys <span class="ot">&lt;-</span> <span class="fu">split</span>(y, task_id)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    ll <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(Vs)) {</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        ll <span class="ot">&lt;-</span> ll <span class="sc">+</span> Vs[[i]][ys[[i]] <span class="sc">==</span> <span class="dv">1</span>] <span class="sc">-</span> <span class="fu">log</span>(<span class="fu">sum</span>(<span class="fu">exp</span>(Vs[[i]])))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    ll</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Version 3 — fully grouped</strong> (the <a href="08_mnl_mle.html" class="quarto-xref"><span>Chapter 8</span></a> production version): no explicit loop at all; <code>rowsum()</code> performs every task’s aggregation inside compiled code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>loglik_v3 <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, y, X, task_id) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    V     <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(X <span class="sc">%*%</span> beta)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    Vmax  <span class="ot">&lt;-</span> <span class="fu">ave</span>(V, task_id, <span class="at">FUN =</span> max)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    eV    <span class="ot">&lt;-</span> <span class="fu">exp</span>(V <span class="sc">-</span> Vmax)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    denom <span class="ot">&lt;-</span> <span class="fu">rowsum</span>(eV, task_id)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>( (V <span class="sc">-</span> Vmax <span class="sc">-</span> <span class="fu">log</span>(denom[task_id]))[y <span class="sc">==</span> <span class="dv">1</span>] )</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Same mathematics, same output (check it — always):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">v1 =</span> <span class="fu">loglik_v1</span>(beta, y, X, task_id),</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">v2 =</span> <span class="fu">loglik_v2</span>(beta, y, X, task_id),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">v3 =</span> <span class="fu">loglik_v3</span>(beta, y, X, task_id))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      v1       v2       v3 
+-3774.99 -3774.99 -3774.99 </code></pre>
+</div>
+</div>
+<p>Now the stopwatch:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">version =</span> <span class="fu">c</span>(<span class="st">"v1 pure loop"</span>, <span class="st">"v2 hybrid"</span>, <span class="st">"v3 grouped"</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ms =</span> <span class="fu">c</span>(<span class="fu">time_ms</span>(<span class="fu">loglik_v1</span>(beta, y, X, task_id)),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>           <span class="fu">time_ms</span>(<span class="fu">loglik_v2</span>(beta, y, X, task_id)),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">time_ms</span>(<span class="fu">loglik_v3</span>(beta, y, X, task_id)))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       version  ms
+1 v1 pure loop 340
+2    v2 hybrid  20
+3   v3 grouped  20</code></pre>
+</div>
+</div>
+<p>The numbers vary by machine but the <em>structure</em> does not: v3 beats v1 by two to three orders of magnitude. Understanding why is more valuable than the numbers. R is an interpreted language: each line of R costs interpreter overhead <em>per execution</em>, so 4,000 trips through a loop body pay that overhead 4,000 times — and v1 adds injury by scanning the entire <code>task_id</code> vector inside every iteration (<code>which(task_id == i)</code>), making its cost grow with the <em>square</em> of the data size. Vectorized calls — <code>X %*% beta</code>, <code>rowsum()</code>, arithmetic on whole vectors — pay the overhead <em>once</em> and do the actual work in compiled C loops. “Vectorization” is not magic; it is moving the loop from interpreted code into compiled code.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Multiply the payoff through <a href="#tbl-eval-count" class="quarto-xref">Table&nbsp;<span>9.1</span></a>: at v1 speed, the HB sampler of <a href="17_hb_mnl.html" class="quarto-xref"><span>Chapter 17</span></a> is an overnight-or-worse job; at v3 speed, minutes. Same computer, same mathematics.</p>
 </section>
 <section id="precompute-what-doesnt-change" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="precompute-what-doesnt-change"><span class="header-section-number">9.4</span> Precompute What Doesn’t Change</h2>
-<!-- build X matrices, index vectors, and choice indicators once outside the optimizer, not inside the likelihood -->
+<p>A likelihood function gets called at hundreds of different <span class="math inline">\(\boldsymbol{\beta}\)</span> values — but the <em>data</em> never change between calls. Anything computable from data alone must be computed once, outside the optimizer, never inside the likelihood. Our code has quietly followed this rule — <code>model.matrix()</code> and <code>task_id</code> were always built before <code>optim()</code> was called — but the temptation to violate it arrives disguised as tidiness (“let the function take the raw data frame; it’s a nicer interface”):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>loglik_tidy_trap <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, df) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    Xd <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(<span class="sc">~</span> brand <span class="sc">+</span> ram <span class="sc">+</span> screen <span class="sc">+</span> price, <span class="at">data =</span> df)[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    tid <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="sc">!</span><span class="fu">duplicated</span>(df[, <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"task"</span>)]))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">loglik_v3</span>(beta, df<span class="sc">$</span>choice, Xd, tid)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">precomputed =</span> <span class="fu">time_ms</span>(<span class="fu">loglik_v3</span>(beta, y, X, task_id)),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">rebuilds    =</span> <span class="fu">time_ms</span>(<span class="fu">loglik_tidy_trap</span>(beta, laptops)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>precomputed    rebuilds 
+          0          20 </code></pre>
+</div>
+</div>
+<p>The convenient interface rebuilds a 12,000-row model matrix on every one of the <span class="math inline">\(\sim 10^6\)</span> calls in <a href="#tbl-eval-count" class="quarto-xref">Table&nbsp;<span>9.1</span></a>. The design discipline: <em>functions called inside optimization loops take prepared numeric objects, full stop.</em> If you want the friendly interface, write a wrapper that prepares once and then loops — exactly the division of labor in <code>build_choice_data()</code> (<a href="04_data.html#sec-choice-data" class="quarto-xref"><span>Section 4.7</span></a>) followed by <code>loglik_mnl()</code>. The same principle, one level up, will matter in <a href="12_msl.html" class="quarto-xref"><span>Chapter 12</span></a>: the random draws used by a simulated likelihood are also “data” in this sense, generated once and reused across all evaluations — there for statistical reasons as well as speed.</p>
 </section>
-<section id="memory-layout-and-copies" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="memory-layout-and-copies"><span class="header-section-number">9.5</span> Memory Layout and Copies</h2>
-<!-- R's copy-on-modify; growing objects; preallocation (matters for MCMC storage in ch 15-17) -->
+<section id="preallocate-dont-grow" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="preallocate-dont-grow"><span class="header-section-number">9.5</span> Preallocate; Don’t Grow</h2>
+<p>The third habit concerns memory, and its natural habitat is the MCMC chapters ahead, where samplers <em>store</em> tens of thousands of parameter draws. R objects are immutable under the hood: “appending” to a vector actually allocates a new, longer vector and copies everything across. Grow a vector inside a loop and you copy <span class="math inline">\(1 + 2 + \cdots + n\)</span> elements — quadratic cost, invisible in the code’s appearance:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>grow <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) out <span class="ot">&lt;-</span> <span class="fu">c</span>(out, <span class="fu">sqrt</span>(i))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>prealloc <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) out[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(i)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    out</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">grow_50k     =</span> <span class="fu">time_ms</span>(<span class="fu">grow</span>(<span class="dv">50000</span>), <span class="at">times =</span> <span class="dv">3</span>),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">prealloc_50k =</span> <span class="fu">time_ms</span>(<span class="fu">prealloc</span>(<span class="dv">50000</span>), <span class="at">times =</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    grow_50k prealloc_50k 
+        5840            0 </code></pre>
+</div>
+</div>
+<p>Identical output, painful ratio — and the ratio <em>worsens</em> as <span class="math inline">\(n\)</span> grows. The rule writes itself: when the number of results is known (an MCMC run of <span class="math inline">\(S\)</span> draws of <span class="math inline">\(K\)</span> parameters), allocate the full container first — <code>draws &lt;- matrix(NA_real_, nrow = S, ncol = K)</code> — and fill by index. Every sampler in Parts III–IV is built this way; when you meet <code>matrix(NA, S, K)</code> at the top of the Gibbs samplers in <a href="16_gibbs.html" class="quarto-xref"><span>Chapter 16</span></a>, this paragraph is why.</p>
+<p>A related but distinct caution: R’s <em>copy-on-modify</em> semantics mean that modifying an object passed into a function, or touched by two names, can trigger a full copy. For our workloads this bites rarely — we mostly <em>read</em> <code>X</code> inside tight loops, which is free — but if you ever find memory ballooning in a sampler, the culprit is usually an innocent-looking modification of a large object inside a loop.</p>
 </section>
-<section id="when-r-isnt-enough" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="when-r-isnt-enough"><span class="header-section-number">9.6</span> When R Isn’t Enough</h2>
-<!-- a glimpse of Rcpp on the MNL loglik; when it's worth it and when it isn't (mixl's design as the industrial example) -->
+<section id="numerical-hygiene-is-performance-too" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="numerical-hygiene-is-performance-too"><span class="header-section-number">9.6</span> Numerical Hygiene Is Performance Too</h2>
+<p>Speed is worthless if the fast answer is <code>NaN</code>. Two habits from earlier chapters deserve re-statement as <em>performance</em> practices, because numerical failures cost more research time than slow code ever does:</p>
+<ul>
+<li><strong>The log-sum-exp guard</strong> (<a href="08_mnl_mle.html#sec-logsumexp" class="quarto-xref"><span>Section 8.3</span></a>) costs two vectorized operations and makes the MNL kernel safe at any <span class="math inline">\(\boldsymbol{\beta}\)</span> an optimizer or sampler will ever try. v3 carries it; keep it.</li>
+<li><strong>Stable scalar forms.</strong> The binary logit log-probability <span class="math inline">\(y \log P + (1-y)\log(1-P)\)</span> is prettier as mathematics than as computation; the algebraically equal form <span class="math inline">\(y v - \log(1 + e^{v})\)</span> — where <span class="math inline">\(v = \mathbf{x}'\boldsymbol{\beta}\)</span> is the binary model’s systematic utility — computed as <code>y*v - log1p(exp(v))</code>, avoids catastrophic cancellation for moderate <span class="math inline">\(v\)</span> (that is the form the <a href="06_optimization.html" class="quarto-xref"><span>Chapter 6</span></a> contour helper used — promise kept). R’s <code>log1p()</code> and <code>expm1()</code> exist precisely for “log of one-plus-small” and “e-to-small-minus-one” situations; reach for them whenever a probability sits near 0 or 1.</li>
+</ul>
+<p>The general principle: <em>transform to the scale where the computer’s arithmetic is happiest — almost always the log scale — and stay there as long as possible.</em> MCMC will hand us the same lesson from another angle: Metropolis acceptance ratios are computed as differences of log-posteriors, never ratios of posteriors, for exactly this reason (<a href="15_bayes_mnl.html" class="quarto-xref"><span>Chapter 15</span></a>).</p>
 </section>
-<section id="key-learnings" class="level2" data-number="9.7">
-<h2 data-number="9.7" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">9.7</span> Key Learnings</h2>
+<section id="when-r-isnt-enough-a-glimpse-beyond" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="when-r-isnt-enough-a-glimpse-beyond"><span class="header-section-number">9.7</span> When R Isn’t Enough: A Glimpse Beyond</h2>
+<p>Sometimes the hot loop cannot be vectorized — its iterations depend on each other (the Gibbs samplers of Part III update sequentially by construction), or the group-wise logic outgrows <code>rowsum()</code>’s vocabulary. The escape hatch is to write the loop in C++ and call it from R via <strong>Rcpp</strong>. The flavor, for the MNL kernel (display only — compiling C++ requires the Rtools toolchain on Windows):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Rcpp<span class="sc">::</span><span class="fu">cppFunction</span>(<span class="st">'</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">double loglik_mnl_cpp(NumericVector beta, IntegerVector y,</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">                      NumericMatrix X, IntegerVector task_id) {</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="st">    // one pass over rows: accumulate per-task max, log-sum, chosen V</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="st">    // ... a dozen lines of straightforward C++ ...</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="st">}'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Rcpp typically buys another factor of 2–20 over well-vectorized R — valuable, not transformative, precisely <em>because</em> good vectorized R already spends most of its time in compiled code. The production-grade example in our domain is the <code>mixl</code> package <span class="citation" data-cites="molloy2021">(<a href="references.html#ref-molloy2021" role="doc-biblioref">Molloy et al. 2021</a>)</span>, which compiles each model’s likelihood to C++ with OpenMP parallelism and estimates mixed logits on huge datasets; its design — specify the model at a high level, generate compiled code underneath — shows where the craft goes at industrial scale. For this book, we stay in plain R: our vectorized kernels keep every chapter’s computation in the minutes-not-hours regime, and transparency is the whole point of the exercise. But know the door exists, and know that everything on this chapter’s checklist — measure, vectorize, precompute, preallocate — applies unchanged on the other side of it.</p>
+</section>
+<section id="key-learnings" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="key-learnings"><span class="header-section-number">9.8</span> Key Learnings</h2>
+<ul>
+<li>The likelihood kernel is the bottom of a multiplication stack (<a href="#tbl-eval-count" class="quarto-xref">Table&nbsp;<span>9.1</span></a>): optimizers call it hundreds of times, MSL multiplies by draws, MCMC by tens of thousands of iterations. Kernel speed is research feasibility.</li>
+<li>Measure before optimizing — <code>system.time()</code> medians for comparisons, <code>profvis</code> for anatomy. Intuition lies.</li>
+<li>Vectorization moves loops from interpreted R into compiled code: the grouped MNL kernel (matrix product + <code>rowsum()</code> + broadcast) beats the per-task loop by orders of magnitude, and the hybrid version shows which part of the win comes from where.</li>
+<li>Precompute the invariant: model matrices, index vectors — and later, MSL draws — are built once outside the loop. Functions inside optimization loops take prepared numeric objects.</li>
+<li>Preallocate known-size results (<code>matrix(NA, S, K)</code> atop every sampler to come); growing objects in loops is quadratic copying.</li>
+<li>Numerical hygiene is performance: log-sum-exp guards, <code>log1p()</code>/<code>expm1()</code>, and staying on the log scale prevent the failures that cost real time. Rcpp is the escape hatch when an unvectorizable loop truly binds — <code>mixl</code> shows the industrial version — but transparent, vectorized R carries this entire book comfortably.</li>
+</ul>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
+<div id="ref-molloy2021" class="csl-entry" role="listitem">
+Molloy, Joseph, Felix Becker, Basil Schmid, and Kay W. Axhausen. 2021. <span>“Mixl: An Open-Source <span>R</span> Package for Estimating Complex Choice Models on Large Datasets.”</span> <em>Journal of Choice Modelling</em> 39.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>A subtlety worth stealing: R evaluates function arguments lazily and caches the result, so a naive <code>replicate(times, system.time(expr))</code> would time the real computation once and a cached lookup thereafter — the classic way to convince yourself your code is infinitely fast. <code>substitute()</code> captures the unevaluated expression so each repetition genuinely recomputes. Measurement code deserves the same skepticism as model code.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The v2 hybrid shows the technique’s anatomy: vectorizing the matrix product (the arithmetic bulk) captures much of the win; eliminating the residual R-level loop over groups captures the rest. When full vectorization is awkward, the hybrid is often the right stopping point — <a href="13_mixed_msl.html" class="quarto-xref"><span>Chapter 13</span></a>’s per-person structure will put us exactly there, and knowing which loop is expensive (per-task, thousands) versus tolerable (per-draw, hundreds) is the judgment this measurement builds.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->
