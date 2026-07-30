@@ -29,7 +29,7 @@ book:
       orcid: 0000-0003-4095-6405
       email: dyavorsky@gmail.com
   #date: last-modified
-  site-url: dcme-r.danyavorsky.com
+  site-url: https://dcme-r.danyavorsky.com
   repo-url: https://github.com/dyavorsky/dcme-r
   repo-actions: edit
   bread-crumbs: true

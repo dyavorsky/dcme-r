@@ -32,7 +32,7 @@ Five parts, 22 chapters + appendix (see `_quarto.yml`): I Foundations (1–6) �
 - PDF (pdflatex + scrreprt + mathastext): no `\rm`-style old font commands (use `\mathrm`); no literal Unicode math (`≈` → `$\approx$`); brace `\hat{...}` over bold macros. MathJax tolerates all three, so HTML success does not imply PDF success.
 - `gmnl`'s latent-class model is broken against current mlogit (fails on its own docs example) — ch 11 validates EM vs direct BFGS instead, documented in a footnote.
 - `bayesm::rmnpGibbs` differencing base is alternative *p* (last), and this dev version wants `lgtdata[[i]]$X` as a list of per-task matrices — both handled in ch 17/19.
-- Site domain: root `CNAME` says dcms-r.danyavorsky.com but `_quarto.yml` site-url and index colophon still say dcme-r — unreconciled, ask Dan.
+- Site domain: `dcme-r.danyavorsky.com` everywhere (root `CNAME`, `_quarto.yml` site-url, index colophon). The `CNAME` previously read `dcms-r`, which has no DNS record and left Pages serving a 404 — reconciled 2026-07-30.
 - R's lazy argument evaluation breaks naive timing harnesses (`system.time(expr)` inside `replicate`) — ch 9 documents the fix.
 
 ## Progress ledger
